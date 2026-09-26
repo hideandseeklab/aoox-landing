@@ -105,14 +105,41 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
             <Code key="2">REGISTRY_PUBLIC_HOST</Code>,
             "localhost",
             <>
-              Host yang dipakai <Code>docker push</Code>. <Code>localhost</Code>{" "}
-              dikecualikan dari aturan insecure-registry Docker; host lain butuh
-              TLS (reverse proxy) atau entri <Code>insecure-registries</Code> di{" "}
+              Host yang dipakai <Code>docker push</Code> saat <strong>tanpa</strong>{" "}
+              domain kustom (lihat di bawah). <Code>localhost</Code> dikecualikan
+              dari aturan insecure-registry Docker; host lain butuh TLS (reverse
+              proxy) atau entri <Code>insecure-registries</Code> di{" "}
               <Code>daemon.json</Code> setiap daemon yang mem-push.
             </>,
           ],
         ]}
       />
+
+      <H3>Domain kustom</H3>
+      <P>
+        Alternatif dari <Code>REGISTRY_PUBLIC_HOST</Code> + <Code>insecure-registries</Code>{" "}
+        manual: arahkan registry lewat reverse proxy bawaan (Traefik) dengan
+        sertifikat Let&apos;s Encrypt asli — <Code>docker push</Code>/<Code>login</Code>{" "}
+        langsung percaya tanpa konfigurasi tambahan di daemon mana pun,
+        termasuk node lain di Swarm.
+      </P>
+      <Ul>
+        <li>Butuh proxy sudah di-provision (lihat <DocLink href="/docs/domain">Proxy &amp; domain</DocLink>) dengan <Code>PROXY_ACME_EMAIL</Code> terisi.</li>
+        <li>
+          Isi field <strong>Domain kustom</strong> di kartu Registry lokal
+          (owner/admin) lalu <strong>Terapkan</strong> — container di-recreate
+          dengan label Traefik (router <Code>aoox-registry</Code>), data &amp;
+          kredensial tidak berubah. Bisa juga lewat CLI:
+        </li>
+      </Ul>
+      <Pre>{`aoox registry domain --set registry.example.com`}</Pre>
+      <P>
+        Setelah domain aktif, <Code>docker login registry.example.com</Code>{" "}
+        (tanpa port — HTTPS standar). Port host tetap terbuka untuk akses via
+        IP:port seperti sebelumnya. Hapus dengan{" "}
+        <Code>aoox registry domain --clear</Code> atau tombol{" "}
+        <strong>Hapus domain</strong> di dashboard.
+      </P>
 
       <H3>Melihat & membersihkan isi</H3>
       <Ul>

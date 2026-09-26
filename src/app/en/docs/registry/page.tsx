@@ -107,7 +107,8 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
             <Code key="2">REGISTRY_PUBLIC_HOST</Code>,
             "localhost",
             <>
-              The host used by <Code>docker push</Code>. <Code>localhost</Code>{" "}
+              The host used by <Code>docker push</Code> when there&apos;s{" "}
+              <strong>no</strong> custom domain (see below). <Code>localhost</Code>{" "}
               is exempt from Docker&apos;s insecure-registry rule; any other host
               needs TLS (a reverse proxy) or an{" "}
               <Code>insecure-registries</Code> entry in{" "}
@@ -116,6 +117,34 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
           ],
         ]}
       />
+
+      <H3>Custom domain</H3>
+      <P>
+        An alternative to manually juggling <Code>REGISTRY_PUBLIC_HOST</Code> and{" "}
+        <Code>insecure-registries</Code>: route the registry through the
+        built-in reverse proxy (Traefik) with a real Let&apos;s Encrypt
+        certificate — <Code>docker push</Code>/<Code>login</Code> trust it out
+        of the box, no extra config needed on any daemon, including other
+        Swarm nodes.
+      </P>
+      <Ul>
+        <li>Needs the proxy already provisioned (see <DocLink href="/en/docs/domain">Proxy &amp; domain</DocLink>) with <Code>PROXY_ACME_EMAIL</Code> set.</li>
+        <li>
+          Fill in the <strong>Custom domain</strong> field on the Local
+          registry card (owner/admin), then <strong>Apply</strong> — the
+          container is recreated with Traefik labels (router{" "}
+          <Code>aoox-registry</Code>), data and credentials are untouched. Or
+          from the CLI:
+        </li>
+      </Ul>
+      <Pre>{`aoox registry domain --set registry.example.com`}</Pre>
+      <P>
+        Once the domain is active, <Code>docker login registry.example.com</Code>{" "}
+        (no port — standard HTTPS). The host port stays open for IP:port
+        access as before. Remove it with{" "}
+        <Code>aoox registry domain --clear</Code> or the{" "}
+        <strong>Remove domain</strong> button in the dashboard.
+      </P>
 
       <H3>Browsing & cleaning up contents</H3>
       <Ul>

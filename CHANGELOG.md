@@ -24,6 +24,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   panel itself (`aoox domain set`), alongside the existing manual `docker-compose.domain.yml` steps.
 - CLI docs updated for the published `@hideandseeklab/aoox` npm package and the new `aoox domain
   set` command.
+- Registry doc updated with a "Custom domain" section covering the new Traefik-routed registry
+  domain feature (dashboard field + `aoox registry domain` CLI command).
 - CI (`.github/workflows/ci.yml`): typecheck + lint + build on every pull request and push to
   `main` — previously the only workflow ran on push to `main` for deploy (`deploy-pages.yml`),
   with no check at all on pull requests.
