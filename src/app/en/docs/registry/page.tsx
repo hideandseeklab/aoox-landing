@@ -85,6 +85,14 @@ export default function Page() {
             The card shows a <em>Registry ready</em> status, the container,
             and the URL.
           </P>
+          <P>
+            Before provisioning, pick where images are stored:{" "}
+            <strong>Local</strong> (VPS disk, the default) or one of the S3
+            destinations already added under{" "}
+            <DocLink href="/en/docs/backup#s3">Instance backup</DocLink>. It
+            can&apos;t be changed afterward without removing and
+            re-provisioning.
+          </P>
         </Step>
         <Step title="Save the credentials shown once">
           <P>

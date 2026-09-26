@@ -84,6 +84,12 @@ export default function Page() {
             diaktifkan. Kartu menampilkan status <em>Registry siap</em>,
             container, dan URL.
           </P>
+          <P>
+            Sebelum provision, pilih tempat penyimpanan image: <strong>Lokal</strong>{" "}
+            (disk VPS, default) atau salah satu tujuan S3 yang sudah ditambahkan
+            di <DocLink href="/docs/backup#s3">Backup instance</DocLink>. Tidak
+            bisa diganti setelahnya tanpa hapus lalu provision ulang.
+          </P>
         </Step>
         <Step title="Simpan kredensial yang ditampilkan sekali">
           <P>

@@ -26,6 +26,9 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   set` command.
 - Registry doc updated with a "Custom domain" section covering the new Traefik-routed registry
   domain feature (dashboard field + `aoox registry domain` CLI command).
+- Installation and CLI docs updated with the new "Update aoox" feature (Settings button and
+  `aoox update` command) as the primary upgrade path, manual SSH steps kept as an alternative.
+- Registry doc updated with a note on the optional S3 storage backend for the self-hosted registry.
 - CI (`.github/workflows/ci.yml`): typecheck + lint + build on every pull request and push to
   `main` — previously the only workflow ran on push to `main` for deploy (`deploy-pages.yml`),
   with no check at all on pull requests.

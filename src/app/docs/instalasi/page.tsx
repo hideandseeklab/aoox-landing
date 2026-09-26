@@ -245,13 +245,22 @@ curl -s http://localhost:3001/auth/setup-status
       </div>
 
       <H2 id="update">Memperbarui versi</H2>
+      <P>
+        Cara tercepat (butuh <Code>INSTALL_DIR</Code> terisi, sama seperti{" "}
+        <DocLink href="/docs/domain-panel">Domain panel</DocLink>): Settings →{" "}
+        <strong>Update aoox</strong> → Cek update → Terapkan. Atau dari CLI:
+      </P>
+      <Pre>{`aoox update            # cek saja
+aoox update --apply    # terapkan kalau ada update`}</Pre>
+      <P>Manual lewat SSH, kalau <Code>INSTALL_DIR</Code> belum diisi:</P>
       <Pre>{`docker compose -f docker-compose.dist.yml --env-file .env.dist pull
 docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
       <P>
         Migrasi database berjalan otomatis saat API boot. Untuk mengunci versi,
         isi <Code>API_IMAGE</Code> dan <Code>WEB_IMAGE</Code> di{" "}
         <Code>.env.dist</Code>, mis. <Code>hideandseeklab/aoox-api:0.1.0-alpha.0</Code>{" "}
-        (lihat tag yang tersedia di Docker Hub).
+        (lihat tag yang tersedia di Docker Hub) — kedua cara di atas membaca
+        variabel yang sama.
       </P>
 
       <H2 id="dari-source">Build dari source</H2>

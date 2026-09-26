@@ -247,13 +247,22 @@ curl -s http://localhost:3001/auth/setup-status
       </div>
 
       <H2 id="update">Upgrading</H2>
+      <P>
+        The fastest way (needs <Code>INSTALL_DIR</Code> set, same as{" "}
+        <DocLink href="/en/docs/domain-panel">Domain panel</DocLink>): Settings →{" "}
+        <strong>Update aoox</strong> → Check for updates → Apply. Or from the CLI:
+      </P>
+      <Pre>{`aoox update            # check only
+aoox update --apply    # apply if an update is available`}</Pre>
+      <P>Manual, over SSH, if <Code>INSTALL_DIR</Code> isn&apos;t set:</P>
       <Pre>{`docker compose -f docker-compose.dist.yml --env-file .env.dist pull
 docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
       <P>
         Database migrations run automatically when the API boots. To pin a
         version, set <Code>API_IMAGE</Code> and <Code>WEB_IMAGE</Code> in{" "}
         <Code>.env.dist</Code>, e.g. <Code>hideandseeklab/aoox-api:0.1.0-alpha.0</Code>{" "}
-        (see the available tags on Docker Hub).
+        (see the available tags on Docker Hub) — both paths above read the
+        same variables.
       </P>
 
       <H2 id="dari-source">Building from source</H2>

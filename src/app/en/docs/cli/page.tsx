@@ -57,6 +57,16 @@ const COMMANDS = [
     flags: "--web, --api, --acme-email",
   },
   {
+    cmd: "aoox registry domain",
+    what: "Sets or clears a custom domain for the self-hosted registry.",
+    flags: "--set, --clear",
+  },
+  {
+    cmd: "aoox update",
+    what: "Checks or applies an update for the aoox panel itself.",
+    flags: "--apply",
+  },
+  {
     cmd: "aoox help [COMMAND]",
     what: "Lists commands, or shows help for one.",
     flags: "—",
@@ -279,11 +289,32 @@ Deployed: localhost:5000/shop/shop:a1b2c3d`}</Pre>
 Domain saved: panel.example.com (dashboard), api.panel.example.com (API).
 The panel will restart for a few seconds to apply it — the connection to this API will drop briefly.`}</Pre>
       <Callout>
-        The panel must already have <Code>INSTALL_DIR</Code> set in{" "}
-        <Code>.env.dist</Code> (the absolute path of the{" "}
-        <Code>docker-compose.dist.yml</Code> folder on that host) — without
-        it the command fails with a 400.
+        Needs <Code>INSTALL_DIR</Code> already set in the panel&apos;s{" "}
+        <Code>.env.dist</Code> (the absolute path of the folder containing{" "}
+        <Code>docker-compose.dist.yml</Code> on that host) — without it the
+        command fails with a 400.
       </Callout>
+
+      <H2 id="update">Updating aoox</H2>
+      <P>
+        Checks and applies an update for the panel itself (not the
+        applications it deploys) — compares the <Code>aoox-api</Code>/
+        <Code>aoox-web</Code> image digests on the registry, not just a
+        version number.
+      </P>
+      <Pre>{`$ aoox update
+Running version: 0.1.0-alpha.1
+  api: hideandseeklab/aoox-api:latest (update available)
+  web: hideandseeklab/aoox-web:latest (up to date)
+Update available. Run with --apply to apply it.
+
+$ aoox update --apply
+Update applied — the panel will restart in a few seconds to apply it.`}</Pre>
+      <P>
+        Same as <Code>aoox domain set</Code>, needs <Code>INSTALL_DIR</Code>{" "}
+        set. See <DocLink href="/en/docs/instalasi#update">Upgrading</DocLink>{" "}
+        for the manual, over-SSH alternative.
+      </P>
 
       <H2 id="perintah">Command reference</H2>
       <div className="overflow-x-auto border border-border">

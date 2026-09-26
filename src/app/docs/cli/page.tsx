@@ -57,6 +57,16 @@ const COMMANDS = [
     flags: "--web, --api, --acme-email",
   },
   {
+    cmd: "aoox registry domain",
+    what: "Set atau hapus domain kustom untuk registry self-hosted.",
+    flags: "--set, --clear",
+  },
+  {
+    cmd: "aoox update",
+    what: "Cek atau terapkan update untuk panel aoox itu sendiri.",
+    flags: "--apply",
+  },
+  {
     cmd: "aoox help [PERINTAH]",
     what: "Daftar perintah, atau bantuan satu perintah.",
     flags: "—",
@@ -278,6 +288,26 @@ Panel akan restart beberapa detik untuk menerapkannya — koneksi ke API ini aka
         <Code>.env.dist</Code> (path absolut folder <Code>docker-compose.dist.yml</Code>{" "}
         di host itu) — tanpa itu perintah gagal dengan 400.
       </Callout>
+
+      <H2 id="update">Update aoox</H2>
+      <P>
+        Cek dan terapkan update untuk panel itu sendiri (bukan aplikasi yang
+        di-deploy) — bandingkan digest image <Code>aoox-api</Code>/
+        <Code>aoox-web</Code> di registry, bukan sekadar nomor versi.
+      </P>
+      <Pre>{`$ aoox update
+Versi berjalan: 0.1.0-alpha.1
+  api: hideandseeklab/aoox-api:latest (update tersedia)
+  web: hideandseeklab/aoox-web:latest (terbaru)
+Update tersedia. Jalankan dengan --apply untuk menerapkannya.
+
+$ aoox update --apply
+Update diterapkan — panel akan restart beberapa detik untuk menerapkannya.`}</Pre>
+      <P>
+        Sama seperti <Code>aoox domain set</Code>, butuh <Code>INSTALL_DIR</Code>{" "}
+        terisi. Lihat <DocLink href="/docs/instalasi#update">Memperbarui versi</DocLink>{" "}
+        untuk cara manual lewat SSH sebagai alternatif.
+      </P>
 
       <H2 id="perintah">Referensi perintah</H2>
       <div className="overflow-x-auto border border-border">
