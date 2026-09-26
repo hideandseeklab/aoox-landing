@@ -2,15 +2,21 @@
 
 import * as React from "react"
 
+import type { Lang } from "@/lib/lang"
 import { cn } from "@/lib/utils"
 
 type Heading = { id: string; text: string }
+
+const COPY: Record<Lang, string> = {
+  id: "Di halaman ini",
+  en: "On this page",
+}
 
 /**
  * Daftar isi per halaman: membaca h2[id] di dalam <article> setelah mount,
  * lalu menyorot heading yang sedang terlihat lewat IntersectionObserver.
  */
-function DocToc() {
+function DocToc({ lang = "id" }: { lang?: Lang }) {
   const [headings, setHeadings] = React.useState<Heading[]>([])
   const [active, setActive] = React.useState<string | null>(null)
 
@@ -18,6 +24,8 @@ function DocToc() {
     const nodes = Array.from(
       document.querySelectorAll<HTMLHeadingElement>("article h2[id]")
     )
+    // Headings only exist in the DOM after mount, so this can't be derived at render time.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHeadings(nodes.map((n) => ({ id: n.id, text: n.textContent ?? "" })))
     if (nodes.length === 0) return
 
@@ -37,9 +45,9 @@ function DocToc() {
   if (headings.length < 2) return null
 
   return (
-    <nav aria-label="Di halaman ini" className="flex flex-col gap-2 text-xs">
+    <nav aria-label={COPY[lang]} className="flex flex-col gap-2 text-xs">
       <span className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">
-        Di halaman ini
+        {COPY[lang]}
       </span>
       <ul className="flex flex-col">
         {headings.map((h) => (

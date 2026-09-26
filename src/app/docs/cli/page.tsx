@@ -52,6 +52,11 @@ const COMMANDS = [
     flags: "--tag, --dockerfile/-f, --context, --registry",
   },
   {
+    cmd: "aoox domain set",
+    what: "Set domain kustom untuk panel itu sendiri (dashboard + API) tanpa SSH.",
+    flags: "--web, --api, --acme-email",
+  },
+  {
     cmd: "aoox help [PERINTAH]",
     what: "Daftar perintah, atau bantuan satu perintah.",
     flags: "—",
@@ -92,8 +97,16 @@ export default function Page() {
 
       <H2 id="instalasi-cli">Memasang CLI</H2>
       <P>
-        Paket npm belum dirilis, jadi untuk sekarang pasang dari source. Butuh{" "}
-        <strong>Node.js 20+</strong>.
+        Butuh <strong>Node.js 20+</strong>. Masih rilis <Code>alpha</Code> —
+        pasang eksplisit dengan tag itu.
+      </P>
+      <Pre title="Dari npm">{`npm install -g @hideandseeklab/aoox@alpha
+
+aoox --version`}</Pre>
+      <P>
+        Perintah terpasang sebagai <Code>aoox</Code> meski nama paketnya{" "}
+        <Code>@hideandseeklab/aoox</Code>. Untuk ikut <Code>main</Code> sebelum
+        dirilis, pasang dari source:
       </P>
       <Pre title="Dari source">{`git clone https://github.com/hideandseeklab/aoox-cli.git
 cd aoox-cli
@@ -102,9 +115,6 @@ npm run build
 npm link          # menyediakan perintah aoox secara global
 
 aoox --version`}</Pre>
-      <P>
-        Perintah terpasang sebagai <Code>aoox</Code>.
-      </P>
 
       <H2 id="install">Memasang aoox lewat aoox install</H2>
       <P>
@@ -252,6 +262,23 @@ Deployed: localhost:5000/toko/shop:a1b2c3d`}</Pre>
         tunggu selesai dulu.
       </Callout>
 
+      <H2 id="domain">Ganti domain panel</H2>
+      <P>
+        Alternatif dari Settings → Domain panel di dashboard — cocok untuk
+        skrip provisioning. Lihat{" "}
+        <DocLink href="/docs/domain-panel">Domain untuk panel</DocLink> untuk
+        detail apa yang terjadi di baliknya.
+      </P>
+      <Pre>{`$ aoox domain set --web panel.example.com --api api.panel.example.com \\
+  --acme-email kamu@example.com
+Domain disimpan: panel.example.com (dashboard), api.panel.example.com (API).
+Panel akan restart beberapa detik untuk menerapkannya — koneksi ke API ini akan sempat terputus.`}</Pre>
+      <Callout>
+        Panel harus sudah punya <Code>INSTALL_DIR</Code> terisi di{" "}
+        <Code>.env.dist</Code> (path absolut folder <Code>docker-compose.dist.yml</Code>{" "}
+        di host itu) — tanpa itu perintah gagal dengan 400.
+      </Callout>
+
       <H2 id="perintah">Referensi perintah</H2>
       <div className="overflow-x-auto border border-border">
         <table className="w-full text-xs">
@@ -320,7 +347,7 @@ Deployed: localhost:5000/toko/shop:a1b2c3d`}</Pre>
   variables:
     AOOX_URL: https://panel.example.com
   script:
-    - npx aoox whoami            # AOOX_TOKEN dari CI variable (masked)`}</Pre>
+    - npx -p @hideandseeklab/aoox aoox whoami   # AOOX_TOKEN dari CI variable (masked)`}</Pre>
       <Callout>
         Simpan token sebagai variabel CI yang <em>masked</em>, dan buat token
         terpisah per pipeline agar bisa dicabut tanpa mengganggu yang lain.

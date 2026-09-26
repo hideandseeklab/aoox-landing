@@ -7,31 +7,25 @@ import type { Lang } from "@/lib/lang"
 import { cn } from "@/lib/utils"
 
 const REQUIREMENTS_ID = [
-  { k: "Docker 24+ & Compose v2", v: "satu-satunya dependensi" },
-  { k: "VPS Linux", v: "1 vCPU / 1 GB cukup untuk mulai" },
+  { k: "VPS Linux + root", v: "1 vCPU / 1 GB cukup untuk mulai" },
+  { k: "Docker", v: "dipasang otomatis oleh installer bila belum ada" },
   { k: "Port 3000 & 3001", v: "dashboard & API; 80/443 bila pakai domain" },
 ]
 
 const REQUIREMENTS_EN = [
-  { k: "Docker 24+ & Compose v2", v: "the only dependency" },
-  { k: "Linux VPS", v: "1 vCPU / 1 GB is enough to start" },
+  { k: "Linux VPS + root", v: "1 vCPU / 1 GB is enough to start" },
+  { k: "Docker", v: "installed automatically by the installer if missing" },
   { k: "Port 3000 & 3001", v: "dashboard & API; 80/443 if you use a domain" },
 ]
 
 const INSTALL: { prompt?: boolean; text: string; comment?: boolean }[] = [
-  { prompt: true, text: "git clone https://github.com/hideandseeklab/aoox-api.git" },
-  { prompt: true, text: "cd aoox-api && cp .env.dist.example .env.dist" },
-  { text: "# isi POSTGRES_PASSWORD, JWT_SECRET, ENCRYPTION_KEY, DOCKER_GID", comment: true },
-  { prompt: true, text: "docker compose -f docker-compose.dist.yml --env-file .env.dist up -d" },
+  { prompt: true, text: "curl -fsSL https://aoox.dev/install.sh | sh" },
   { text: "" },
   { text: "→ buka http://<server>:3000/setup" },
 ]
 
 const INSTALL_EN: typeof INSTALL = [
-  { prompt: true, text: "git clone https://github.com/hideandseeklab/aoox-api.git" },
-  { prompt: true, text: "cd aoox-api && cp .env.dist.example .env.dist" },
-  { text: "# fill in POSTGRES_PASSWORD, JWT_SECRET, ENCRYPTION_KEY, DOCKER_GID", comment: true },
-  { prompt: true, text: "docker compose -f docker-compose.dist.yml --env-file .env.dist up -d" },
+  { prompt: true, text: "curl -fsSL https://aoox.dev/install.sh | sh" },
   { text: "" },
   { text: "→ open http://<server>:3000/setup" },
 ]
@@ -105,10 +99,12 @@ function SelfHostSection({ lang = "id" }: { lang?: Lang }) {
 
           <div className="flex flex-wrap gap-3">
             <Button asChild>
-              <Link href="/docs/instalasi">{t.ctaPrimary}</Link>
+              <Link href={lang === "en" ? "/en/docs/instalasi" : "/docs/instalasi"}>
+                {t.ctaPrimary}
+              </Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link href="/docs/domain-panel">
+              <Link href={lang === "en" ? "/en/docs/domain-panel" : "/docs/domain-panel"}>
                 {t.ctaSecondary}
                 <ArrowRight data-icon="inline-end" />
               </Link>

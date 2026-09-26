@@ -5,8 +5,7 @@ import { CopyButton } from "@/components/copy-button"
 import { Button } from "@/components/ui/button"
 import type { Lang } from "@/lib/lang"
 
-const INSTALL =
-  "git clone https://github.com/hideandseeklab/aoox-api.git && cd aoox-api && cp .env.dist.example .env.dist"
+const INSTALL = "curl -fsSL https://aoox.dev/install.sh | sh"
 
 const POINTS_ID = ["Satu file compose", "Tanpa telemetri", "Open source"]
 const POINTS_EN = ["One compose file", "No telemetry", "Open source"]
@@ -87,7 +86,7 @@ function CtaSection({ lang = "id" }: { lang?: Lang }) {
 
         <div className="flex flex-wrap justify-center gap-3">
           <Button size="lg" asChild>
-            <Link href="/docs/instalasi">
+            <Link href={lang === "en" ? "/en/docs/instalasi" : "/docs/instalasi"}>
               {t.ctaPrimary}
               <ArrowRight data-icon="inline-end" />
             </Link>

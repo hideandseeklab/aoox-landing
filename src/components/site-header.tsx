@@ -23,7 +23,7 @@ const NAV_EN = [
   { href: "/en#cara-kerja", label: "How it works" },
   { href: "/en#self-host", label: "Self-host" },
   { href: "/en#faq", label: "FAQ" },
-  { href: "/docs", label: "Docs (ID)" },
+  { href: "/en/docs", label: "Docs" },
 ]
 
 const REPO = "https://github.com/hideandseeklab/aoox-api"
@@ -65,7 +65,7 @@ function SiteHeader() {
           <LangSwitch pathname={pathname} lang={lang} />
           <ThemeToggle lang={lang} />
           <Button size="sm" className="hidden sm:inline-flex" asChild>
-            <Link href="/docs/instalasi">{cta}</Link>
+            <Link href={lang === "en" ? "/en/docs/instalasi" : "/docs/instalasi"}>{cta}</Link>
           </Button>
           {/* key = pathname: menu otomatis tertutup saat pindah halaman */}
           <MobileMenu key={pathname} pathname={pathname} lang={lang} nav={nav} cta={cta} />
@@ -110,18 +110,30 @@ function NavLink({
   )
 }
 
-/** Landing page only has two languages — hidden on /docs, which stays Indonesian. */
+/** Toggles between the landing page and its /en mirror, or between /docs/x and its /en/docs/x mirror. */
 function LangSwitch({ pathname, lang }: { pathname: string; lang: Lang }) {
-  if (pathname !== "/" && pathname !== "/en") return null
+  const target = otherLangPath(pathname, lang)
+  if (!target) return null
   return (
     <Link
-      href={lang === "en" ? "/" : "/en"}
+      href={target}
       className="inline-flex h-7 items-center px-2 text-xs text-muted-foreground transition-colors hover:border-border hover:text-foreground"
       title={lang === "en" ? "Lihat dalam Bahasa Indonesia" : "View in English"}
     >
       {lang === "en" ? "ID" : "EN"}
     </Link>
   )
+}
+
+function otherLangPath(pathname: string, lang: Lang): string | null {
+  if (pathname === "/" || pathname === "/en") return lang === "en" ? "/" : "/en"
+  if (lang === "id" && (pathname === "/docs" || pathname.startsWith("/docs/"))) {
+    return `/en${pathname}`
+  }
+  if (lang === "en" && (pathname === "/en/docs" || pathname.startsWith("/en/docs/"))) {
+    return pathname.slice("/en".length)
+  }
+  return null
 }
 
 function ThemeToggle({ lang }: { lang: Lang }) {
@@ -180,7 +192,7 @@ function MobileMenu({
             ))}
             <div className="mt-3 flex items-center gap-3 border-t border-border pt-3">
               <Button size="sm" asChild>
-                <Link href="/docs/instalasi">{cta}</Link>
+                <Link href={lang === "en" ? "/en/docs/instalasi" : "/docs/instalasi"}>{cta}</Link>
               </Button>
               <a
                 href={REPO}

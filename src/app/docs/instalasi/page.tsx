@@ -66,15 +66,39 @@ export default function Page() {
         ))}
       </dl>
 
-      <Callout title="Cara lebih cepat: aoox install">
-        Langkah manual di bawah ini cocok kalau kamu ingin lihat setiap
-        bagiannya. Untuk VPS baru yang belum terpasang apa pun, CLI{" "}
-        <DocLink href="/docs/cli#install">aoox install</DocLink> melakukan
-        semuanya dalam satu perintah — termasuk memasang Docker bila belum
-        ada.
+      <H2 id="satu-perintah">Cara tercepat: satu perintah</H2>
+      <P>
+        Untuk VPS Linux baru yang masih kosong — memasang Docker (bila belum
+        ada), membuat semua secret, dan menjalankan stack. Tidak perlu
+        Node.js atau <Code>git clone</Code> apa pun dulu.
+      </P>
+      <Pre>{`curl -fsSL https://aoox.dev/install.sh | sh`}</Pre>
+      <P>Dengan domain + HTTPS otomatis dan owner langsung dibuat:</P>
+      <Pre>{`curl -fsSL https://aoox.dev/install.sh \\
+  | WEB_DOMAIN=panel.example.com API_DOMAIN=api.panel.example.com \\
+    ACME_EMAIL=kamu@example.com \\
+    ADMIN_EMAIL=kamu@example.com ADMIN_PASSWORD='kata-sandi-kuat' \\
+    sh`}</Pre>
+      <Callout>
+        Skrip ini di-serve dari domain aoox sendiri (bukan pihak ketiga) dan
+        mengambil file compose langsung dari repo <Code>aoox-cli</Code> —
+        source-nya bisa dibaca dulu di{" "}
+        <a
+          href="https://github.com/hideandseeklab/aoox-landing/blob/main/public/install.sh"
+          target="_blank"
+          rel="noreferrer"
+          className="text-foreground underline underline-offset-4"
+        >
+          public/install.sh
+        </a>{" "}
+        sebelum menjalankannya. Perlu perintah yang meminta konfirmasi dan
+        mendukung flag, bukan env var? Pakai{" "}
+        <DocLink href="/docs/cli#install">aoox install</DocLink> dari CLI —
+        logikanya sama persis, tinggal preferensi.
       </Callout>
 
-      <H2 id="prasyarat">Prasyarat</H2>
+      <H2 id="prasyarat">Manual: prasyarat</H2>
+      <P>Langkah di bawah ini cocok kalau kamu ingin lihat/kendalikan setiap bagian sendiri.</P>
       <Ul>
         <li>
           Server Linux dengan <strong>Docker 24+</strong> dan{" "}
@@ -96,7 +120,7 @@ export default function Page() {
         pertama butuh ± 1 GB ruang disk tambahan untuk base image.
       </Callout>
 
-      <H2 id="langkah">Langkah</H2>
+      <H2 id="langkah">Manual: langkah demi langkah</H2>
       <Steps>
         <Step title="Clone repo API dan salin file env">
           <P>

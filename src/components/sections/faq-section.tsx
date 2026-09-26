@@ -109,7 +109,7 @@ const FAQ_EN: Faq[] = [
       <>
         The concept is similar: a self-hosted PaaS on top of Docker. aoox
         focuses on a lean flow — project, application, database — and code
-        that's easy to read (NestJS + Next.js), with no extra agent on the
+        that&apos;s easy to read (NestJS + Next.js), with no extra agent on the
         server.
       </>
     ),
@@ -120,7 +120,7 @@ const FAQ_EN: Faq[] = [
       <>
         No. A single host with the Docker Engine is enough. For several
         machines there are two paths without Kubernetes: connect a server over
-        SSH as a separate deploy target (<A href="/docs/server-remote">Remote
+        SSH as a separate deploy target (<A href="/en/docs/server-remote">Remote
         server</A>), or turn on <strong>Docker Swarm</strong> and run apps as
         a service with replicas, rolling updates, and per-node placement.
       </>
@@ -133,7 +133,7 @@ const FAQ_EN: Faq[] = [
         Yes, pick the <strong>Nixpacks</strong> build method: the stack is
         auto-detected and a Dockerfile is generated for you. The first build
         is slower and has no dependency cache —{" "}
-        <A href="/docs/build">details in the build docs</A>.
+        <A href="/en/docs/build">details in the build docs</A>.
       </>
     ),
   },
@@ -145,7 +145,7 @@ const FAQ_EN: Faq[] = [
         mounts for config. Databases and volumes can be backed up manually or
         on a schedule with copies to S3 — and so can the aoox panel
         itself, so an instance can be restored on a new server —{" "}
-        <A href="/docs/backup">Backup &amp; restore</A>.
+        <A href="/en/docs/backup">Backup &amp; restore</A>.
       </>
     ),
   },
@@ -156,8 +156,8 @@ const FAQ_EN: Faq[] = [
         Yes, via a GitHub/GitLab webhook with an optional secret. Pull
         requests can also get a preview on their own subdomain, and an app run
         from an image can update itself when its tag changes —{" "}
-        <A href="/docs/webhook">Webhook</A> and{" "}
-        <A href="/docs/preview">PR previews</A>.
+        <A href="/en/docs/webhook">Webhook</A> and{" "}
+        <A href="/en/docs/preview">PR previews</A>.
       </>
     ),
   },

@@ -49,7 +49,7 @@ const FEATURES_ID: Feature[] = [
     description:
       "Jadikan host manager, gabungkan node lain, jalankan aplikasi sebagai service dengan replika. Rolling update, rollback otomatis, dan penempatan per node atau label.",
     tags: ["swarm", "replika", "rolling update"],
-    href: "/docs/deploy",
+    href: "/docs/swarm",
   },
   {
     icon: Database,
@@ -87,7 +87,7 @@ const FEATURES_ID: Feature[] = [
     icon: Activity,
     title: "Monitoring & notifikasi",
     description:
-      "Log realtime, metrik CPU/RAM host dan container dengan riwayat 1 jam sampai 30 hari, notifikasi ke Telegram, Slack, Discord, email.",
+      "Log realtime, metrik CPU/RAM host dan container dengan riwayat 1 jam sampai 30 hari, notifikasi ke Telegram, Slack, Discord, webhook, email.",
     tags: ["metrics", "alerts"],
     href: "/docs/monitoring",
   },
@@ -100,7 +100,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "Connect a GitHub/GitLab repo — Dockerfile, Nixpacks, Railpack (with cache between deploys), or a static site — and a webhook triggers a deploy on every push. Or pull a ready-made image from a registry, with auto-update when its tag changes. No repo? The aoox CLI builds and pushes straight from your machine.",
     tags: ["dockerfile", "nixpacks", "railpack", "image", "cli"],
-    href: "/docs/deploy",
+    href: "/en/docs/deploy",
     span: true,
   },
   {
@@ -109,7 +109,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "A health check decides success or failure. Blue/green swaps without downtime, one-click rollback to the previous image.",
     tags: ["blue/green", "healthcheck"],
-    href: "/docs/deploy#health-check",
+    href: "/en/docs/deploy#health-check",
   },
   {
     icon: Boxes,
@@ -117,7 +117,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "Turn the host into a manager, join other nodes, run apps as a service with replicas. Rolling updates, automatic rollback, and placement per node or label.",
     tags: ["swarm", "replicas", "rolling update"],
-    href: "/docs/deploy",
+    href: "/en/docs/swarm",
   },
   {
     icon: Database,
@@ -125,7 +125,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "PostgreSQL, MySQL, MariaDB, Redis per project. Reference credentials in env, browse tables and run queries from the dashboard.",
     tags: ["postgres", "mysql", "redis"],
-    href: "/docs/database",
+    href: "/en/docs/database",
   },
   {
     icon: HardDriveDownload,
@@ -133,7 +133,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "Database and app volumes, manual or scheduled, with retention and copies to S3. The panel itself can be backed up and restored too.",
     tags: ["cron", "s3", "instance"],
-    href: "/docs/backup",
+    href: "/en/docs/backup",
   },
   {
     icon: Globe,
@@ -141,7 +141,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "Point a domain at your app through Traefik, automatic Let's Encrypt certificates, DNS checks from the dashboard — on the host or a remote server.",
     tags: ["traefik", "acme"],
-    href: "/docs/domain",
+    href: "/en/docs/domain",
   },
   {
     icon: Terminal,
@@ -149,19 +149,20 @@ const FEATURES_EN: Feature[] = [
     description:
       "Shell into the host or another server over SSH, right from the browser. Deploy to a remote server without an extra agent.",
     tags: ["ssh", "xterm"],
-    href: "/docs/terminal",
+    href: "/en/docs/terminal",
   },
   {
     icon: Activity,
     title: "Monitoring & notifications",
     description:
-      "Realtime logs, host and container CPU/RAM metrics with 1-hour-to-30-day history, notifications to Telegram, Slack, Discord, email.",
+      "Realtime logs, host and container CPU/RAM metrics with 1-hour-to-30-day history, notifications to Telegram, Slack, Discord, webhook, email.",
     tags: ["metrics", "alerts"],
-    href: "/docs/monitoring",
+    href: "/en/docs/monitoring",
   },
 ]
 
 const MORE_ID = [
+  { label: "Domain sendiri untuk panel (bukan cuma aplikasi)", href: "/docs/domain-panel" },
   { label: "Preview pull request", href: "/docs/preview" },
   { label: "Scheduled jobs", href: "/docs/jobs" },
   { label: "Stack compose: riwayat, webhook, metrik", href: "/docs/compose" },
@@ -175,16 +176,17 @@ const MORE_ID = [
 ]
 
 const MORE_EN = [
-  { label: "Pull request previews", href: "/docs/preview" },
-  { label: "Scheduled jobs", href: "/docs/jobs" },
-  { label: "Compose stacks: history, webhook, metrics", href: "/docs/compose" },
-  { label: "One-click templates", href: "/docs/template" },
-  { label: "Project export & import", href: "/docs/project" },
-  { label: "Volumes & mounts", href: "/docs/mount" },
-  { label: "Data browser: row edit & CSV", href: "/docs/data-browser" },
-  { label: "2FA, scoped API tokens, audit log", href: "/docs/pengguna-peran#akun" },
-  { label: "Local registry & disk cleanup", href: "/docs/registry" },
-  { label: "aoox CLI: install, link, deploy", href: "/docs/cli" },
+  { label: "Your own domain for the panel (not just apps)", href: "/en/docs/domain-panel" },
+  { label: "Pull request previews", href: "/en/docs/preview" },
+  { label: "Scheduled jobs", href: "/en/docs/jobs" },
+  { label: "Compose stacks: history, webhook, metrics", href: "/en/docs/compose" },
+  { label: "One-click templates", href: "/en/docs/template" },
+  { label: "Project export & import", href: "/en/docs/project" },
+  { label: "Volumes & mounts", href: "/en/docs/mount" },
+  { label: "Data browser: row edit & CSV", href: "/en/docs/data-browser" },
+  { label: "2FA, scoped API tokens, audit log", href: "/en/docs/pengguna-peran#akun" },
+  { label: "Local registry & disk cleanup", href: "/en/docs/registry" },
+  { label: "aoox CLI: install, link, deploy", href: "/en/docs/cli" },
 ]
 
 const COPY_ID = {

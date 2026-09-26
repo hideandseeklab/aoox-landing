@@ -51,13 +51,13 @@ const GROUPS_EN: Group[] = [
     ],
   },
   {
-    title: "Docs (Indonesian)",
+    title: "Docs",
     links: [
-      { label: "Overview", href: "/docs" },
-      { label: "Installation", href: "/docs/instalasi" },
-      { label: "Creating an app", href: "/docs/aplikasi" },
-      { label: "Managed database", href: "/docs/database" },
-      { label: "Troubleshooting", href: "/docs/troubleshooting" },
+      { label: "Overview", href: "/en/docs" },
+      { label: "Installation", href: "/en/docs/instalasi" },
+      { label: "Creating an app", href: "/en/docs/aplikasi" },
+      { label: "Managed database", href: "/en/docs/database" },
+      { label: "Troubleshooting", href: "/en/docs/troubleshooting" },
     ],
   },
   {

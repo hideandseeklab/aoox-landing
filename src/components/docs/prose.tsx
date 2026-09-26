@@ -2,26 +2,48 @@ import Link from "next/link"
 
 import { CopyButton } from "@/components/copy-button"
 import { DocToc } from "@/components/docs/doc-toc"
+import { docsNavFor, getDocNeighbors } from "@/lib/docs-nav"
+import type { Lang } from "@/lib/lang"
 import { cn } from "@/lib/utils"
-import { DOCS_NAV, getDocNeighbors } from "@/lib/docs-nav"
 
 const EDIT_BASE =
   "https://github.com/hideandseeklab/aoox-landing/blob/main/src/app"
+
+const DOC_PAGE_COPY: Record<Lang, { wrong: string; edit: string; prev: string; next: string }> = {
+  id: {
+    wrong: "Ada yang keliru?",
+    edit: "Edit halaman ini di GitLab ↗",
+    prev: "← Sebelumnya",
+    next: "Berikutnya →",
+  },
+  en: {
+    wrong: "Found a mistake?",
+    edit: "Edit this page on GitLab ↗",
+    prev: "← Previous",
+    next: "Next →",
+  },
+}
 
 function DocPage({
   href,
   title,
   description,
+  lang = "id",
   children,
 }: {
   href: string
   title: string
   description: string
+  lang?: Lang
   children: React.ReactNode
 }) {
-  const { prev, next } = getDocNeighbors(href)
-  const group = DOCS_NAV.find((g) => g.items.some((i) => i.href === href))
-  const editHref = `${EDIT_BASE}${href === "/docs" ? "/docs" : href}/page.tsx`
+  const t = DOC_PAGE_COPY[lang]
+  const { prev, next } = getDocNeighbors(href, lang)
+  const nav = docsNavFor(lang)
+  const group = nav.find((g) => g.items.some((i) => i.href === href))
+  const docsRoot = lang === "en" ? "/en/docs" : "/docs"
+  // The URL already mirrors the file path 1:1 (src/app/docs/* or src/app/en/docs/*).
+  const editHref = `${EDIT_BASE}${href}/page.tsx`
 
   return (
     <div className="grid min-w-0 gap-10 xl:grid-cols-[1fr_11rem]">
@@ -29,7 +51,7 @@ function DocPage({
       <header className="flex flex-col gap-3 border-b border-border pb-6">
         {group ? (
           <p className="flex items-center gap-1.5 text-[0.7rem] text-muted-foreground">
-            <Link href="/docs" className="hover:text-foreground">
+            <Link href={docsRoot} className="hover:text-foreground">
               Docs
             </Link>
             <span aria-hidden>/</span>
@@ -45,14 +67,14 @@ function DocPage({
       </header>
       <div className="flex flex-col gap-8">{children}</div>
       <p className="text-[0.7rem] text-muted-foreground">
-        Ada yang keliru?{" "}
+        {t.wrong}{" "}
         <a
           href={editHref}
           target="_blank"
           rel="noreferrer"
           className="text-foreground underline underline-offset-4 hover:no-underline"
         >
-          Edit halaman ini di GitLab ↗
+          {t.edit}
         </a>
       </p>
       <nav className="grid gap-3 border-t border-border pt-6 sm:grid-cols-2">
@@ -61,7 +83,7 @@ function DocPage({
             href={prev.href}
             className="flex flex-col gap-1 border border-border p-4 transition-colors hover:bg-muted"
           >
-            <span className="text-xs text-muted-foreground">← Sebelumnya</span>
+            <span className="text-xs text-muted-foreground">{t.prev}</span>
             <span className="text-sm font-medium">{prev.title}</span>
           </Link>
         ) : (
@@ -72,7 +94,7 @@ function DocPage({
             href={next.href}
             className="flex flex-col gap-1 border border-border p-4 text-right transition-colors hover:bg-muted"
           >
-            <span className="text-xs text-muted-foreground">Berikutnya →</span>
+            <span className="text-xs text-muted-foreground">{t.next}</span>
             <span className="text-sm font-medium">{next.title}</span>
           </Link>
         ) : null}
@@ -80,7 +102,7 @@ function DocPage({
     </article>
     <aside className="hidden xl:block">
       <div className="sticky top-24">
-        <DocToc />
+        <DocToc lang={lang} />
       </div>
     </aside>
     </div>

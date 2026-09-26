@@ -121,7 +121,7 @@ const OPTIONS_EN: Option[] = [
     file: "./Dockerfile",
     description: "Full control. Point at the Dockerfile in your repo, Docker handles the rest.",
     fit: "Production, lean images",
-    href: "/docs/build#dockerfile",
+    href: "/en/docs/build#dockerfile",
     snippet: (
       <Code
         lines={[
@@ -139,7 +139,7 @@ const OPTIONS_EN: Option[] = [
     file: "(no Dockerfile)",
     description: "The stack is auto-detected from your repo's contents, a Dockerfile is generated for you.",
     fit: "Prototypes, repos without a Dockerfile",
-    href: "/docs/build#nixpacks",
+    href: "/en/docs/build#nixpacks",
     snippet: (
       <div className="flex flex-col gap-1">
         <Row k="detected" v="node · npm" ok />
@@ -154,7 +154,7 @@ const OPTIONS_EN: Option[] = [
     file: "dist/ → nginx",
     description: "An optional Node build stage, then nginx serves the output folder. SPA mode for client-side routing.",
     fit: "Vite, Astro, docs sites",
-    href: "/docs/build#static",
+    href: "/en/docs/build#static",
     snippet: (
       <div className="flex flex-col gap-1">
         <Row k="build" v="npm ci && npm run build" />
@@ -169,7 +169,7 @@ const OPTIONS_EN: Option[] = [
     file: "registry → pull",
     description: "No build: pull an image from Docker Hub, GHCR, or your own registry. Auto-updates when the tag's digest changes.",
     fit: "n8n, Uptime Kuma, internal images",
-    href: "/docs/deploy",
+    href: "/en/docs/deploy",
     snippet: (
       <div className="flex flex-col gap-1">
         <Row k="image" v="ghcr.io/acme/api:latest" />
@@ -184,7 +184,7 @@ const OPTIONS_EN: Option[] = [
     file: "./docker-compose.yml",
     description: "Deploy a multi-service stack from an existing compose file.",
     fit: "web + worker + queue",
-    href: "/docs/compose",
+    href: "/en/docs/compose",
     snippet: (
       <Code
         lines={[
@@ -201,7 +201,7 @@ const OPTIONS_EN: Option[] = [
     file: "built-in catalog",
     description: "Ready-made apps, run as a compose stack in a few clicks.",
     fit: "WordPress, Ghost, n8n, …",
-    href: "/docs/template",
+    href: "/en/docs/template",
     snippet: (
       <ul className="grid grid-cols-2 gap-1">
         {["wordpress", "ghost", "n8n", "uptime-kuma", "minio", "gitea"].map((t) => (

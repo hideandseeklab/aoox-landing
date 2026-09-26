@@ -5,16 +5,32 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Search } from "lucide-react"
 
-import { DOCS_NAV } from "@/lib/docs-nav"
+import { docsNavFor } from "@/lib/docs-nav"
+import type { Lang } from "@/lib/lang"
 import { cn } from "@/lib/utils"
 
-function DocsSidebar() {
+const COPY: Record<Lang, { placeholder: string; ariaLabel: string; empty: (q: string) => string }> = {
+  id: {
+    placeholder: "Cari halaman…",
+    ariaLabel: "Cari halaman dokumentasi",
+    empty: (q) => `Tidak ada halaman untuk "${q}".`,
+  },
+  en: {
+    placeholder: "Search pages…",
+    ariaLabel: "Search documentation pages",
+    empty: (q) => `No pages found for "${q}".`,
+  },
+}
+
+function DocsSidebar({ lang = "id" }: { lang?: Lang }) {
   const pathname = usePathname()
   const [query, setQuery] = React.useState("")
   const q = query.trim().toLowerCase()
+  const t = COPY[lang]
+  const docsNav = docsNavFor(lang)
 
   const groups = q
-    ? DOCS_NAV.map((g) => ({
+    ? docsNav.map((g) => ({
         ...g,
         items: g.items.filter(
           (i) =>
@@ -22,7 +38,7 @@ function DocsSidebar() {
             i.description.toLowerCase().includes(q)
         ),
       })).filter((g) => g.items.length > 0)
-    : DOCS_NAV
+    : docsNav
 
   return (
     <div className="flex flex-col gap-5">
@@ -32,16 +48,14 @@ function DocsSidebar() {
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Cari halaman…"
-          aria-label="Cari halaman dokumentasi"
+          placeholder={t.placeholder}
+          aria-label={t.ariaLabel}
           className="min-w-0 flex-1 bg-transparent text-foreground outline-none placeholder:text-muted-foreground"
         />
       </label>
 
       {groups.length === 0 ? (
-        <p className="text-xs text-muted-foreground">
-          Tidak ada halaman untuk &quot;{query}&quot;.
-        </p>
+        <p className="text-xs text-muted-foreground">{t.empty(query)}</p>
       ) : null}
 
       <nav className="flex flex-col gap-6 text-xs">

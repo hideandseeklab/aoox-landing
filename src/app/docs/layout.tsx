@@ -24,11 +24,11 @@ export default function DocsLayout({
               Daftar isi ▾
             </summary>
             <div className="pt-4">
-              <DocsSidebar />
+              <DocsSidebar lang="id" />
             </div>
           </details>
           <div className="hidden lg:block">
-            <DocsSidebar />
+            <DocsSidebar lang="id" />
           </div>
         </aside>
         <main className="min-w-0 py-10 lg:py-10">{children}</main>

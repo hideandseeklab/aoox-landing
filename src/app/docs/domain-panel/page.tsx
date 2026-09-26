@@ -21,7 +21,7 @@ export const metadata: Metadata = { title: "Domain untuk panel" }
 
 const SUMMARY = [
   { k: "Hasil", v: "https://panel.example.com + https://api.panel.example.com" },
-  { k: "Cara", v: "Override compose + Traefik bawaan" },
+  { k: "Cara", v: "Dashboard/CLI (otomatis) atau override compose manual — Traefik bawaan" },
   { k: "Butuh", v: "2 record DNS, port 80/443, PROXY_ACME_EMAIL" },
 ]
 
@@ -98,7 +98,47 @@ api.panel.example.com.   A   203.0.113.10`}</Pre>
         menjawab IP itu — sertifikat baru bisa terbit setelah DNS benar.
       </P>
 
-      <H2 id="langkah">Langkah</H2>
+      <H2 id="dashboard">Lewat dashboard atau CLI (tanpa SSH)</H2>
+      <P>
+        Cara tercepat: isi <Code>INSTALL_DIR</Code> sekali di <Code>.env.dist</Code>{" "}
+        (path absolut folder yang berisi <Code>docker-compose.dist.yml</Code> di
+        server ini), lalu domain bisa diganti kapan saja tanpa SSH. Proxy
+        (Traefik) tetap harus sudah di-provision lewat Settings terlebih dahulu
+        — lihat <DocLink href="/docs/domain">Proxy &amp; domain</DocLink>.
+      </P>
+      <Steps>
+        <Step title="Isi INSTALL_DIR lalu restart stack">
+          <Pre title=".env.dist">{`INSTALL_DIR=/opt/aoox   # path absolut folder docker-compose.dist.yml di host ini`}</Pre>
+          <Pre>{`docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
+        </Step>
+        <Step title="Settings → Domain panel (owner)">
+          <P>
+            Isi domain dashboard, domain API, dan email ACME, lalu{" "}
+            <strong>Simpan &amp; terapkan</strong>. Panel menulis{" "}
+            <Code>docker-compose.override.yml</Code> lewat container helper dan
+            menjalankan ulang <Code>docker compose up -d</Code> — koneksi ke
+            dashboard sempat terputus beberapa detik saat container{" "}
+            <Code>web</Code>/<Code>api</Code> di-recreate, itu wajar.
+          </P>
+        </Step>
+        <Step title="Atau dari CLI">
+          <Pre>{`aoox domain set --web panel.example.com --api api.panel.example.com \\
+  --acme-email kamu@example.com`}</Pre>
+          <P>Memanggil endpoint yang sama, untuk operator yang lebih suka terminal.</P>
+        </Step>
+      </Steps>
+      <Callout>
+        Karena file yang ditulis bernama <Code>docker-compose.override.yml</Code>{" "}
+        (bukan <Code>docker-compose.domain.yml</Code>), Compose otomatis
+        menyertakannya di setiap <Code>up</Code> berikutnya — beda dari cara
+        manual di bawah yang mengharuskan flag <Code>-f</Code> disebut setiap kali.
+      </Callout>
+
+      <H2 id="langkah">Manual lewat SSH</H2>
+      <P>
+        Alternatif bila <Code>INSTALL_DIR</Code> belum/tidak ingin diisi, atau
+        ingin kendali penuh atas file compose.
+      </P>
       <Steps>
         <Step title="Isi variabel domain di .env.dist">
           <Pre title=".env.dist">{`WEB_DOMAIN=panel.example.com
@@ -210,8 +250,10 @@ curl -s https://api.panel.example.com/auth/setup-status   # {"needsSetup":false}
       />
 
       <Callout kind="warn" title="Belum tersedia">
-        Satu hostname untuk web+API (path-based); sertifikat wildcard; ganti
-        domain dari UI (masih lewat env + restart).
+        Satu hostname untuk web+API (path-based); sertifikat wildcard;
+        validasi DNS sebelum menerapkan (beda dari domain aplikasi yang punya
+        cek DNS tersendiri); rollback otomatis kalau <Code>docker compose up</Code>{" "}
+        gagal setelah domain diganti.
       </Callout>
 
       <H2 id="berikutnya">Langkah berikutnya</H2>

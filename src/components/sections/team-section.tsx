@@ -234,7 +234,7 @@ function TeamSection({ lang = "id" }: { lang?: Lang }) {
           </div>
 
           <Link
-            href="/docs/pengguna-peran"
+            href={lang === "en" ? "/en/docs/pengguna-peran" : "/docs/pengguna-peran"}
             className="inline-flex items-center gap-1 text-xs text-foreground underline underline-offset-4 hover:no-underline"
           >
             {t.more}

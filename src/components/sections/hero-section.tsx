@@ -79,7 +79,9 @@ function HeroSection({ lang = "id" }: { lang?: Lang }) {
 
           <div className="flex flex-wrap gap-3">
             <Button size="lg" asChild>
-              <Link href="/docs/instalasi">{t.ctaPrimary}</Link>
+              <Link href={lang === "en" ? "/en/docs/instalasi" : "/docs/instalasi"}>
+                {t.ctaPrimary}
+              </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
               <a href="#fitur">{t.ctaSecondary}</a>

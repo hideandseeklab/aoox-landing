@@ -85,7 +85,7 @@ export default function Page() {
         <li>
           Hanya <strong>satu statement</strong> per query — <Code>;</Code> di
           luar tanda kutip ditolak (400). Komentar <Code>--</Code> dan{" "}
-          <Code>/* */</Code> dibersihkan lebih dulu.
+          <Code>{"/* */"}</Code> dibersihkan lebih dulu.
         </li>
         <li>
           <Code>SELECT</Code>/<Code>WITH</Code> tanpa <Code>LIMIT</Code>{" "}

@@ -118,7 +118,7 @@ function HowItWorksSection({ lang = "id" }: { lang?: Lang }) {
 
       <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
         <Link
-          href="/docs/aplikasi"
+          href={lang === "en" ? "/en/docs/aplikasi" : "/docs/aplikasi"}
           className="inline-flex items-center gap-1 text-foreground underline underline-offset-4 hover:no-underline"
         >
           {t.guide}
