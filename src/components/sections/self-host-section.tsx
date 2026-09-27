@@ -19,13 +19,13 @@ const REQUIREMENTS_EN = [
 ]
 
 const INSTALL: { prompt?: boolean; text: string; comment?: boolean }[] = [
-  { prompt: true, text: "curl -fsSL https://aoox.dev/install.sh | sh" },
+  { prompt: true, text: "curl -fsSL https://aoox.dev/install.sh | sudo sh" },
   { text: "" },
   { text: "→ buka http://<server>:3000/setup" },
 ]
 
 const INSTALL_EN: typeof INSTALL = [
-  { prompt: true, text: "curl -fsSL https://aoox.dev/install.sh | sh" },
+  { prompt: true, text: "curl -fsSL https://aoox.dev/install.sh | sudo sh" },
   { text: "" },
   { text: "→ open http://<server>:3000/setup" },
 ]

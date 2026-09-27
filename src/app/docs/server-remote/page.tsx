@@ -162,7 +162,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
         rows={[
           ["Build", "Di daemon server tujuan — Dockerfile, Nixpacks, situs statis (helper image dibangun di sana)."],
           ["Registry", <><strong>Tanpa push</strong>. Image tersimpan di server dengan ref <Code>{"aoox/<project>/<app>:<tag>"}</Code>; rollback memakai yang masih ada di sana.</>],
-          ["Domain / Traefik", <><strong>Ya</strong> — provision proxy di server itu (kartu <em>Proxy (Traefik) di server ini</em>), lalu tambahkan domain seperti biasa. Alternatifnya tetap bisa pakai <strong>Port host</strong>.</>],
+          ["Domain / Traefik", <><strong>Ya</strong> — aktifkan proxy di server itu (kartu <em>Proxy (Traefik) di server ini</em>), lalu tambahkan domain seperti biasa. Alternatifnya tetap bisa pakai <strong>Port host</strong>.</>],
           ["Blue/green", "Ya bila server punya proxy dan aplikasi tanpa port host; tanpa proxy → replace biasa."],
           ["Log container", "Ada (realtime, lewat tunnel)."],
           ["Metrik CPU/RAM", <><strong>Tidak</strong> — sampler hanya membaca daemon host aoox.</>],
@@ -189,7 +189,7 @@ DATABASE_URL=postgresql://app:PASSWORD@203.0.113.5:15432/app_db`}</Pre>
         bagian <strong>Proxy (Traefik) di server ini</strong>: atur port{" "}
         <strong>HTTP</strong>/<strong>HTTPS</strong> (default 80/443) dan{" "}
         <strong>Email ACME</strong> bila ingin sertifikat Let&apos;s Encrypt,
-        lalu provision.
+        lalu aktifkan.
       </P>
       <Ul>
         <li>

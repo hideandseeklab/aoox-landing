@@ -69,8 +69,8 @@ const INSTALASI: Row[] = [
 const DEPLOY: Row[] = [
   [
     <>Deploy gagal: <em>No self-hosted registry</em></>,
-    "Registry lokal belum di-provision.",
-    <><DocLink href="/docs/registry">Provision registry</DocLink> dulu.</>,
+    "Registry lokal belum diaktifkan.",
+    <><DocLink href="/docs/registry">Aktifkan registry</DocLink> dulu.</>,
   ],
   [
     <>Build: <em>repository not found</em> / 128</>,
@@ -112,13 +112,28 @@ const DEPLOY: Row[] = [
     "Base image ± 350 MB + helper dibangun sekali.",
     "Tunggu; untuk build cepat pakai Dockerfile.",
   ],
+  [
+    <>Deploy berhasil (Running) tapi aplikasi tidak bisa diakses</>,
+    "Belum ada port host maupun domain — dulu keduanya kosong secara default dan tersembunyi di tab edit, jadi aplikasi baru bisa diam-diam tidak bisa diakses.",
+    <>
+      Tambahkan salah satunya dari tab Pengaturan atau Domain. Untuk aplikasi
+      baru, pilih IP+port atau Domain di langkah{" "}
+      <DocLink href="/docs/aplikasi#langkah">Akses</DocLink> saat membuat,
+      supaya tidak perlu diperbaiki belakangan.
+    </>,
+  ],
 ]
 
 const DOMAIN: Row[] = [
   [
     <>Tab Domain: <em>Proxy belum berjalan</em></>,
-    "Traefik belum di-provision.",
-    <>Settings → Reverse proxy → provision (owner).</>,
+    "Traefik belum diaktifkan.",
+    <>Settings → Reverse proxy → aktifkan (owner).</>,
+  ],
+  [
+    <>Domain panel disimpan, DNS & <Code>ufw</Code> sudah OK, browser tetap <em>unable to connect</em></>,
+    <>Proxy belum jalan saat itu (kini otomatis dinyalakan saat simpan domain), atau port 80/443 diblokir <strong>firewall/security group provider VPS</strong> — <Code>ufw inactive</Code> ≠ port terbuka ke publik.</>,
+    <><Code>docker ps --filter name=aoox-proxy</Code> harus <Code>Up</Code>; buka 80/443 di panel provider VPS. Lihat <DocLink href="/docs/domain-panel#jebakan">Domain untuk panel → Jebakan umum</DocLink>.</>,
   ],
   [
     <>404 page not found dari Traefik</>,
@@ -127,7 +142,7 @@ const DOMAIN: Row[] = [
   ],
   [
     <>Sertifikat self-signed / <em>TRAEFIK DEFAULT CERT</em></>,
-    "ACME gagal: DNS belum benar, port 80 tertutup, rate limit, atau email kosong saat provision.",
+    "ACME gagal: DNS belum benar, port 80 tertutup, rate limit, atau email kosong saat diaktifkan.",
     <><Code>docker logs -f aoox-proxy</Code>; uji dengan <Code>PROXY_ACME_STAGING=true</Code>.</>,
   ],
   [
@@ -189,7 +204,7 @@ const SERVER: Row[] = [
   [
     <>Terminal: <Code>TERMINAL_SSH_USER is not set</Code></>,
     "Env kosong.",
-    <>Isi di <Code>.env.dist</Code>, restart stack.</>,
+    <>Isi lewat Settings → Infrastruktur → <strong>Environment</strong> (owner, tanpa SSH), atau manual di <Code>.env.dist</Code> lalu restart stack.</>,
   ],
   [
     <>Terminal: <Code>ECONNREFUSED</Code> ke host.docker.internal</>,

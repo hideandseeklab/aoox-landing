@@ -183,6 +183,45 @@ export default function Page() {
           </div>
         </Step>
 
+        <Step title="Choose Access">
+          <P>
+            Before saving, the dialog asks how this application will be
+            reachable — so a freshly created application doesn&apos;t
+            silently end up unreachable once the deploy finishes.
+          </P>
+          <Table
+            head={["Option", "What happens"]}
+            rows={[
+              [
+                <strong key="ip">IP + port</strong>,
+                <>
+                  A host port is assigned automatically (checked for
+                  conflicts against other applications/databases/compose
+                  stacks/containers before saving) — immediately reachable at{" "}
+                  <Code>{"http://<server-ip>:<port>"}</Code>.
+                </>,
+              ],
+              [
+                <strong key="d">Domain</strong>,
+                <>
+                  A host + HTTPS toggle is added right now, instead of later
+                  from the Domain tab. If the reverse proxy hasn&apos;t been
+                  provisioned yet, it&apos;s started automatically — the same
+                  behavior as setting the panel domain, see{" "}
+                  <DocLink href="/en/docs/domain-panel#dashboard">
+                    Domain for the panel → Via the dashboard
+                  </DocLink>
+                  .
+                </>,
+              ],
+              [
+                <strong key="n">Set up later</strong>,
+                "No port or domain yet. The application still gets deployed, but isn't reachable until one is added later from the Settings or Domain tab.",
+              ],
+            ]}
+          />
+        </Step>
+
         <Step title="Save, then fill in environment variables (if needed)">
           <P>
             The <strong>Settings</strong> tab → env editor, one{" "}

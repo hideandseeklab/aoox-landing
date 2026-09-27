@@ -30,7 +30,7 @@ const CAPABILITIES_ID: { label: string; roles: Role[] }[] = [
   { label: "Web terminal & bind mount", roles: ["owner", "admin"] },
   { label: "Audit log", roles: ["owner", "admin"] },
   { label: "Ubah peran, hapus & reset password pengguna", roles: ["owner"] },
-  { label: "Provision registry & proxy, backup instance", roles: ["owner"] },
+  { label: "Aktifkan registry & proxy, backup instance", roles: ["owner"] },
 ]
 
 const CAPABILITIES_EN: { label: string; roles: Role[] }[] = [

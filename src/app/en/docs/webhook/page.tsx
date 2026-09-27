@@ -157,6 +157,17 @@ export default function Page() {
             push. On the provider&apos;s side, the <em>Recent Deliveries</em> page
             shows the API&apos;s response — see the table below to read it.
           </P>
+          <P>
+            Without waiting on the provider, test straight from the server
+            first — a <Code>ping</Code> event is always <Code>ignored</Code>,
+            safe to use just to confirm the URL and token before touching
+            GitHub/GitLab:
+          </P>
+          <Pre>{`curl -i -X POST https://<API_DOMAIN>/webhooks/<token> \\
+  -H "Content-Type: application/json" \\
+  -H "X-GitHub-Event: ping" \\
+  -d "{}"
+# should be 200 with body {"result":"ignored","reason":"event ping"}`}</Pre>
         </Step>
       </Steps>
 
@@ -179,6 +190,48 @@ export default function Page() {
         succession, get in the habit of waiting for the deployment to finish,
         or push once more afterward.
       </Callout>
+
+      <H2 id="redeliver">Redeliver: retest without a new push</H2>
+      <Callout title="This is what actually fixes it, most of the time">
+        After fixing the Payload URL, the secret, or something on the
+        API/proxy side, <strong>don&apos;t just wait</strong> — the provider
+        doesn&apos;t resend on its own. Resend the same delivery with{" "}
+        <strong>Redeliver</strong> (GitHub) / <strong>Resend request</strong>{" "}
+        (GitLab) to find out right away whether the fix worked, with no need
+        for a new commit.
+      </Callout>
+      <H3>GitHub</H3>
+      <Steps>
+        <Step title="Repo → Settings → Webhooks">
+          <P>Click the webhook aoox uses (Edit).</P>
+        </Step>
+        <Step title="Recent Deliveries tab">
+          <P>Click the topmost (most recent) delivery.</P>
+        </Step>
+        <Step title="Redeliver button">
+          <P>
+            Then open the <strong>Response</strong> tab — it should say{" "}
+            <Code>200</Code>. The <em>&quot;Last delivery was not
+            successful&quot;</em> status on the webhook list only updates
+            after a new delivery (a redeliver or a fresh push); fixing the
+            underlying cause alone doesn&apos;t clear that red status until
+            something new is attempted.
+          </P>
+        </Step>
+      </Steps>
+      <H3>GitLab</H3>
+      <Steps>
+        <Step title="Settings → Webhooks → Edit">
+          <P>Open the <strong>Recent events</strong> section below the form.</P>
+        </Step>
+        <Step title="Resend request">
+          <P>
+            On the failed event&apos;s row. To trigger a fresh delivery with no
+            old event at all: the <strong>Test</strong> button → pick{" "}
+            <strong>Push events</strong>, no real push needed.
+          </P>
+        </Step>
+      </Steps>
 
       <H2 id="secret">Secret (signature)</H2>
       <P>
@@ -203,7 +256,11 @@ export default function Page() {
           </Ul>
         </Step>
         <Step title="Redeliver the last delivery from the provider">
-          <P>Should return 200. If it&apos;s 401, the secret at the provider doesn&apos;t match.</P>
+          <P>
+            See <DocLink href="/en/docs/webhook#redeliver">Redeliver</DocLink>{" "}
+            above. Should return 200. If it&apos;s 401, the secret at the
+            provider doesn&apos;t match.
+          </P>
         </Step>
       </Steps>
       <Ul>
@@ -228,6 +285,53 @@ export default function Page() {
           ["200 ignored even though the push is to the right branch", <>The branch in the application form differs (e.g. <Code>master</Code> vs <Code>main</Code>), or the event sent isn&apos;t a push.</>],
           ["Always 401 after enabling the secret", "GitHub's content type isn't application/json, or the secret hasn't been pasted/differs."],
           ["Deploy runs but the build fails: repository not found", "The repo is private with no Git credential set, or the token expired."],
+          [
+            "The Webhook tab still shows localhost:3001 even though the panel already has a domain",
+            <>
+              On older installs, <Code>PUBLIC_API_URL</Code> used to only be
+              passed to the <Code>web</Code> container, not <Code>api</Code>.
+              Add{" "}
+              <Code>{"PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:3001}"}</Code>{" "}
+              to the <Code>api</Code> service&apos;s <Code>environment:</Code>{" "}
+              block in <Code>docker-compose.dist.yml</Code>, then{" "}
+              <Code>docker compose -f docker-compose.dist.yml -f docker-compose.override.yml --env-file .env.dist up -d</Code>
+              . <Code>aoox update</Code> never rewrites the compose file, so
+              older installs need this manual step once.
+            </>,
+          ],
+          [
+            <>GitHub: <Code>Invalid HTTP Response: 404</Code></>,
+            <>
+              The Payload URL uses the <strong>dashboard/web</strong> domain
+              (e.g. <Code>panel.example.com/webhooks/…</Code>) instead of the{" "}
+              <strong>API</strong> domain — the webhook endpoint lives on the
+              API; the web app (Next.js) is what answers with 404. Use{" "}
+              <Code>https://&lt;API_DOMAIN&gt;/webhooks/&lt;token&gt;</Code>{" "}
+              (copy it from the Webhook tab), not the panel&apos;s domain.
+            </>,
+          ],
+          [
+            "“Last delivery was not successful” stays red after a fix",
+            <>
+              That status only updates after a new delivery — see{" "}
+              <DocLink href="/en/docs/webhook#redeliver">
+                Redeliver: retest without a new push
+              </DocLink>
+              .
+            </>,
+          ],
+          [
+            "Telling the two kinds of 404 apart",
+            <>
+              A plain-text <Code>404 page not found</Code> body means Traefik
+              rejected it (the API domain&apos;s router doesn&apos;t match, or
+              that domain never reaches the API container); a JSON{" "}
+              <Code>{'{"statusCode":404,...}'}</Code> body means it reached
+              the API but the token in the URL isn&apos;t recognized (an old
+              token after &quot;Generate new URL&quot;, or a copy-paste
+              mistake).
+            </>,
+          ],
         ]}
       />
 

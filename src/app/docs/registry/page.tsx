@@ -67,7 +67,7 @@ export default function Page() {
       </ol>
       <P>
         Setiap deploy mem-push image ke registry lokal dan rollback menariknya
-        kembali dari sana. Karena itu registry harus di-provision{" "}
+        kembali dari sana. Karena itu registry harus diaktifkan{" "}
         <strong>sebelum deploy pertama</strong> — tanpa itu deploy gagal dengan
         pesan <em>No self-hosted registry</em>. Aplikasi di{" "}
         <DocLink href="/docs/server-remote">server remote</DocLink> tidak
@@ -76,7 +76,7 @@ export default function Page() {
 
       <H2 id="lokal">Registry lokal</H2>
       <Steps>
-        <Step title="Menu Registry → tab Registry lokal → Provision registry (owner)">
+        <Step title="Menu Registry → tab Registry lokal → Aktifkan registry (owner)">
           <P>
             aoox menjalankan <Code>registry:3</Code> sebagai container{" "}
             <Code>aoox-registry</Code> dengan autentikasi htpasswd, data di
@@ -85,10 +85,10 @@ export default function Page() {
             container, dan URL.
           </P>
           <P>
-            Sebelum provision, pilih tempat penyimpanan image: <strong>Lokal</strong>{" "}
+            Sebelum diaktifkan, pilih tempat penyimpanan image: <strong>Lokal</strong>{" "}
             (disk VPS, default) atau salah satu tujuan S3 yang sudah ditambahkan
             di <DocLink href="/docs/backup#s3">Backup instance</DocLink>. Tidak
-            bisa diganti setelahnya tanpa hapus lalu provision ulang.
+            bisa diganti setelahnya tanpa hapus lalu aktifkan ulang.
           </P>
         </Step>
         <Step title="Simpan kredensial yang ditampilkan sekali">
@@ -130,7 +130,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         termasuk node lain di Swarm.
       </P>
       <Ul>
-        <li>Butuh proxy sudah di-provision (lihat <DocLink href="/docs/domain">Proxy &amp; domain</DocLink>) dengan <Code>PROXY_ACME_EMAIL</Code> terisi.</li>
+        <li>Butuh proxy sudah diaktifkan (lihat <DocLink href="/docs/domain">Proxy &amp; domain</DocLink>) dengan <Code>PROXY_ACME_EMAIL</Code> terisi.</li>
         <li>
           Isi field <strong>Domain kustom</strong> di kartu Registry lokal
           (owner/admin) lalu <strong>Terapkan</strong> — container di-recreate
@@ -170,7 +170,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         </li>
         <li>
           <strong>Hapus registry</strong> (owner) menghentikan container; volume
-          data ditanyakan. Deploy tidak bisa dilakukan sampai di-provision lagi.
+          data ditanyakan. Deploy tidak bisa dilakukan sampai diaktifkan lagi.
         </li>
       </Ul>
 
@@ -243,7 +243,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
       <Table
         head={["Gejala", "Penyebab & solusi"]}
         rows={[
-          ["Deploy gagal: No self-hosted registry", "Provision registry lokal dulu."],
+          ["Deploy gagal: No self-hosted registry", "Aktifkan registry lokal dulu."],
           ["Push manual: http: server gave HTTP response to HTTPS client", <><Code>REGISTRY_PUBLIC_HOST</Code> bukan localhost tanpa TLS. Tambahkan ke <Code>insecure-registries</Code> atau pasang reverse proxy TLS.</>],
           ["Disk tetap penuh setelah hapus tag", "Jalankan Garbage collect, atau Bersihkan sekarang di Settings → Disk Docker."],
           ["Rollback gagal: image not found", "Tag sudah dipangkas oleh retensi atau dihapus manual. Deploy ulang commit tersebut."],

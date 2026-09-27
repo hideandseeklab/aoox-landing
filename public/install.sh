@@ -24,6 +24,9 @@
 #   ADMIN_EMAIL     Create the first owner account non-interactively
 #   ADMIN_PASSWORD  Required with ADMIN_EMAIL (min. 8 characters)
 #   ADMIN_NAME      Optional, defaults to "Admin"
+#   TERMINAL_SSH_USER  SSH user the web terminal uses to reach this host (default: root,
+#                      since this script itself requires root). Still needs the one-time
+#                      authorize command shown in Settings -> Terminal to actually connect.
 #
 # Without ADMIN_EMAIL, create the owner account yourself at /setup afterwards.
 # Everything this script does is also available as `aoox install` from
@@ -129,7 +132,7 @@ ADMIN_NAME=${ADMIN_NAME:-}
 
 TERMINAL_SSH_HOST=host.docker.internal
 TERMINAL_SSH_PORT=22
-TERMINAL_SSH_USER=
+TERMINAL_SSH_USER=${TERMINAL_SSH_USER:-root}
 TERMINAL_SSH_PRIVATE_KEY_FILE=
 TERMINAL_SSH_PASSPHRASE=
 TERMINAL_SSH_PASSWORD=

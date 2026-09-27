@@ -127,6 +127,7 @@ export default function Page() {
       <Table
         head={["Toggle", "Terpicu saat", "Isi pesan"]}
         rows={[
+          [<>Deploy dimulai <Code key="1">(nonaktif default)</Code></>, "Deployment aplikasi baru dimulai (build, webhook, auto-update, atau rollback — bukan penyesuaian runtime seperti ganti replika/limit).", "Aplikasi, project, pemicu (manual/webhook/auto-update, + commit & pengirim bila dari webhook), tautan ke halaman aplikasi."],
           ["Deploy sukses", "Deployment aplikasi berakhir success (termasuk rollback).", "Aplikasi, project, image, durasi, tautan ke halaman aplikasi."],
           ["Deploy gagal", "Deployment aplikasi atau stack compose gagal.", "Sama + potongan pesan error (500 karakter)."],
           ["Backup gagal", "Backup database/volume (manual atau terjadwal) gagal, termasuk gagal unggah ke S3.", "Database/aplikasi, pemicu (manual/terjadwal), error."],
@@ -137,6 +138,14 @@ export default function Page() {
         ]}
       />
       <Ul>
+        <li>
+          <strong>Deploy dimulai</strong> nonaktif secara default (beda dari
+          event lain) — deploy bisa sering terjadi (auto-update, webhook), jadi
+          harus dinyalakan sendiri per channel yang memang ingin tahu. Juga
+          tidak terpicu untuk deployment <Code>kind: config</Code> (ganti mode
+          swarm/replika/limit sumber daya pada image yang sama) — itu bukan
+          deploy baru yang perlu ditunggu.
+        </li>
         <li>
           Tautan ke halaman aplikasi disertakan bila <Code>WEB_ORIGIN</Code>{" "}
           terisi.
@@ -157,6 +166,21 @@ export default function Page() {
         <Code>failure</Code> / <Code>info</Code>), <Code>url</Code>, lalu
         field khusus event:
       </P>
+      <Pre title="deployment.started">{`{
+  "title": "Deployment started: shop",
+  "level": "info",
+  "url": "https://panel.example.com/applications/…",
+  "event": "deployment.started",
+  "deploymentId": "…",
+  "kind": "build",
+  "applicationId": "…",
+  "application": "shop",
+  "project": "Toko",
+  "trigger": "webhook",
+  "commitSha": "a1b2c3d4e5f6",
+  "commitMessage": "fix: checkout bug",
+  "triggeredBy": "octocat"
+}`}</Pre>
       <Pre title="deployment.success / deployment.failure">{`{
   "title": "Deployment succeeded: shop",
   "level": "success",

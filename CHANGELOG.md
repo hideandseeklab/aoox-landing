@@ -8,6 +8,45 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.2] - 2026-09-27
+
+### Added
+
+- `install.sh` now defaults `TERMINAL_SSH_USER` to `root` in the generated `.env.dist` (override by
+  piping `TERMINAL_SSH_USER=<user>` like the other env vars), instead of leaving it blank — the
+  script itself already requires root, so the web terminal is ready to use against the host right
+  after install (still needs the one-time authorize command from Settings → Terminal).
+- Creating an application doc (ID + EN) now covers the new Akses/Access step in the New Application
+  dialog (IP+port / Domain / set up later), and troubleshooting gets a matching entry for "deploy
+  succeeded but the app isn't reachable" pointing at the missing host port/domain.
+- Installation doc (ID + EN) now documents that `aoox update` / the "Terapkan update"/"Apply update"
+  button only `pull`s and restarts the existing `docker-compose.dist.yml` on the server — it never
+  rewrites that file, so a release that adds a new compose variable needs a manual edit to
+  `docker-compose.dist.yml` in `INSTALL_DIR` before the update actually takes effect.
+- Webhook doc (ID + EN) gets a curl-based ping test (no need to wait on GitHub/GitLab), a dedicated
+  "Redeliver" section with full click-by-click steps for GitHub (Settings → Webhooks → Recent
+  Deliveries → Redeliver → check the Response tab) and GitLab (Recent events → Resend request, or
+  Test → Push events) — called out as the step that actually resolves most webhook issues, since
+  neither provider resends automatically after a fix and the "Last delivery was not successful"
+  status only clears once a new delivery is attempted — plus three more common-pitfalls rows found
+  testing a real GitHub webhook against a VPS: the Webhook tab showing `localhost:3001` after a
+  domain was set (with the manual `docker-compose.dist.yml` fix for older installs), GitHub's
+  `Invalid HTTP Response: 404` from pointing the Payload URL at the dashboard domain instead of the
+  API domain, and telling apart Traefik's plain-text 404 from the API's JSON 404.
+
+### Fixed
+
+- Installation doc and landing sections now show `curl -fsSL https://aoox.dev/install.sh | sudo sh`
+  (was missing `sudo`) with a callout explaining the script needs root to install Docker and write
+  to `/opt/aoox` — otherwise it fails with `must be run as root`.
+- Domain for the panel doc corrected: Compose does **not** auto-include `docker-compose.override.yml`
+  when the base file is named explicitly (`-f docker-compose.dist.yml`) — only when it's the
+  implicit default `docker-compose.yml`. Also documents that the reverse proxy is now
+  auto-provisioned when saving the panel domain, and adds a pitfall entry (in both the panel-domain
+  and troubleshooting pages, ID + EN) for "DNS and `ufw` look fine but the domain is still
+  unreachable" pointing at the VPS provider's own firewall/security group — found testing this
+  exact scenario on a real VPS.
+
 ## [0.1.0-alpha.1] - 2026-09-26
 
 ### Added
@@ -60,6 +99,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.1...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.2...HEAD
+[0.1.0-alpha.2]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.1...v0.1.0-alpha.2
 [0.1.0-alpha.1]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.0...v0.1.0-alpha.1
 [0.1.0-alpha.0]: https://github.com/hideandseeklab/aoox-landing/releases/tag/v0.1.0-alpha.0

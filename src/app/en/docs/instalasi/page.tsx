@@ -73,13 +73,18 @@ export default function Page() {
         (if it&apos;s missing), generates every secret, and starts the stack. No
         Node.js or <Code>git clone</Code> needed first.
       </P>
-      <Pre>{`curl -fsSL https://aoox.dev/install.sh | sh`}</Pre>
+      <Pre>{`curl -fsSL https://aoox.dev/install.sh | sudo sh`}</Pre>
       <P>With a domain + automatic HTTPS, and creating the owner right away:</P>
       <Pre>{`curl -fsSL https://aoox.dev/install.sh \\
-  | WEB_DOMAIN=panel.example.com API_DOMAIN=api.panel.example.com \\
+  | sudo WEB_DOMAIN=panel.example.com API_DOMAIN=api.panel.example.com \\
     ACME_EMAIL=you@example.com \\
     ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='a-strong-password' \\
     sh`}</Pre>
+      <Callout>
+        Needs <Code>sudo</Code> (or being logged in as <Code>root</Code>) —
+        the script installs Docker and writes to <Code>/opt/aoox</Code>.
+        Forgetting it fails with <Code>must be run as root</Code>.
+      </Callout>
       <Callout>
         This script is served from aoox&apos;s own domain (not a third party) and
         pulls the compose files straight from the <Code>aoox-cli</Code> repo —
@@ -263,6 +268,25 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         <Code>.env.dist</Code>, e.g. <Code>hideandseeklab/aoox-api:0.1.0-alpha.0</Code>{" "}
         (see the available tags on Docker Hub) — both paths above read the
         same variables.
+      </P>
+      <P>
+        <strong>Important limitation</strong>: both <Code>aoox update</Code> and
+        the &ldquo;Apply update&rdquo; button only run <Code>pull</Code> +{" "}
+        <Code>up -d</Code> against the <Code>docker-compose.dist.yml</Code> that
+        is <strong>already on the server</strong> — neither one ever rewrites
+        that compose file itself. If a release adds a new variable to the
+        compose file (for example a new env var that needs to reach a
+        service), an existing install won&apos;t pick it up through an
+        update. The fix is manual: edit{" "}
+        <Code>docker-compose.dist.yml</Code> in <Code>INSTALL_DIR</Code>{" "}
+        (default <Code>/opt/aoox</Code>) per the release notes, then:
+      </P>
+      <Pre>{`docker compose -f docker-compose.dist.yml -f docker-compose.override.yml --env-file .env.dist up -d`}</Pre>
+      <P>
+        (<Code>-f docker-compose.override.yml</Code> only if that file
+        exists — it&apos;s created automatically when you set a{" "}
+        <DocLink href="/en/docs/domain-panel">Domain panel</DocLink> from the
+        dashboard).
       </P>
 
       <H2 id="dari-source">Building from source</H2>

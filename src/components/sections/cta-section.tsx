@@ -5,7 +5,7 @@ import { CopyButton } from "@/components/copy-button"
 import { Button } from "@/components/ui/button"
 import type { Lang } from "@/lib/lang"
 
-const INSTALL = "curl -fsSL https://aoox.dev/install.sh | sh"
+const INSTALL = "curl -fsSL https://aoox.dev/install.sh | sudo sh"
 
 const POINTS_ID = ["Satu file compose", "Tanpa telemetri", "Open source"]
 const POINTS_EN = ["One compose file", "No telemetry", "Open source"]

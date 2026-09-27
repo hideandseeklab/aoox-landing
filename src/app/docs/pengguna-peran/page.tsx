@@ -42,7 +42,7 @@ const CAPABILITIES: { label: string; roles: Role[] }[] = [
   { label: "Audit log", roles: ["owner", "admin"] },
   { label: "Undang owner, ubah peran, hapus pengguna", roles: ["owner"] },
   { label: "Reset password & nonaktifkan 2FA anggota", roles: ["owner"] },
-  { label: "Provision/hapus registry & proxy, GC, cleanup disk", roles: ["owner"] },
+  { label: "Aktifkan/hapus registry & proxy, GC, cleanup disk", roles: ["owner"] },
   { label: "Init/keluar Swarm & kelola node, backup instance", roles: ["owner"] },
 ]
 

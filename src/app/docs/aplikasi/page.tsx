@@ -63,7 +63,7 @@ export default function Page() {
         <li>
           Untuk aplikasi dari repo Git:{" "}
           <DocLink href="/docs/registry">registry lokal</DocLink> sudah
-          di-provision — image hasil build di-push ke sana. Tanpa ini deploy
+          diaktifkan — image hasil build di-push ke sana. Tanpa ini deploy
           pertama gagal.
         </li>
         <li>
@@ -179,6 +179,45 @@ export default function Page() {
           </div>
         </Step>
 
+        <Step title="Pilih Akses">
+          <P>
+            Sebelum menyimpan, dialog meminta cara aplikasi ini akan bisa
+            diakses — supaya aplikasi baru tidak diam-diam tidak bisa dibuka
+            begitu deploy selesai.
+          </P>
+          <Table
+            head={["Opsi", "Yang terjadi"]}
+            rows={[
+              [
+                <strong key="ip">IP + port</strong>,
+                <>
+                  Port host diisi otomatis (dicek dulu bentrok dengan port
+                  aplikasi/database/stack compose/container lain sebelum
+                  disimpan) — langsung bisa diakses di{" "}
+                  <Code>{"http://<ip-server>:<port>"}</Code>.
+                </>,
+              ],
+              [
+                <strong key="d">Domain</strong>,
+                <>
+                  Host + toggle HTTPS langsung ditambahkan saat ini juga,
+                  bukan belakangan lewat tab Domain. Kalau reverse proxy belum
+                  pernah diaktifkan, ia dinyalakan otomatis — perilaku yang
+                  sama dengan set domain panel, lihat{" "}
+                  <DocLink href="/docs/domain-panel#dashboard">
+                    Domain untuk panel → Lewat dashboard
+                  </DocLink>
+                  .
+                </>,
+              ],
+              [
+                <strong key="n">Nanti saja</strong>,
+                "Tanpa port maupun domain. Aplikasi tetap ter-deploy, tapi belum bisa diakses sampai salah satunya ditambahkan lewat tab Pengaturan atau Domain.",
+              ],
+            ]}
+          />
+        </Step>
+
         <Step title="Simpan, lalu isi Environment variables (bila perlu)">
           <P>
             Tab <strong>Pengaturan</strong> → editor env, satu <Code>KEY=VALUE</Code>{" "}
@@ -239,7 +278,7 @@ success   container lama diganti · status aplikasi Running`}</Pre>
         rows={[
           [
             "Deploy gagal di tahap pushing",
-            <>Registry lokal belum di-provision, atau <Code>REGISTRY_PUBLIC_HOST</Code> bukan localhost tanpa TLS.</>,
+            <>Registry lokal belum diaktifkan, atau <Code>REGISTRY_PUBLIC_HOST</Code> bukan localhost tanpa TLS.</>,
           ],
           [
             "Build gagal: repository not found",

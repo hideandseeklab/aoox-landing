@@ -78,7 +78,7 @@ export default function Page() {
         perlu diedit — aoox menulis label saat container dibuat.
       </P>
 
-      <H2 id="proxy">Provision reverse proxy</H2>
+      <H2 id="proxy">Aktifkan reverse proxy</H2>
       <P>
         Traefik berjalan per <em>daemon</em>: satu di host aoox, dan
         opsional satu di tiap <DocLink href="/docs/server-remote#proxy">server
@@ -101,10 +101,10 @@ PROXY_ACME_STAGING=false     # true saat uji coba, agar tidak kena rate limit`}<
           <P>
             Tanpa email, Traefik berjalan tanpa resolver ACME: domain hanya
             dilayani lewat http dan toggle HTTPS di UI nonaktif. Mengubah nilai
-            ini setelah provision → hapus proxy lalu provision lagi.
+            ini setelah aktif → hapus proxy lalu aktifkan lagi.
           </P>
         </Step>
-        <Step title="Settings → Reverse proxy (Traefik) → provision (owner)">
+        <Step title="Settings → Reverse proxy (Traefik) → aktifkan (owner)">
           <P>
             Container <Code>aoox-proxy</Code> dibuat di network{" "}
             <Code>aoox</Code> dengan volume <Code>aoox_proxy_acme</Code>{" "}
@@ -220,7 +220,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
           ["Hapus domain", "Container dibuat ulang tanpa label host itu; sertifikat tetap di volume ACME."],
           ["Toggle HTTPS", "Container dibuat ulang; router -secure/-redirect ditambah/dihapus."],
           ["Hapus proxy (owner)", "Semua domain berhenti dilayani; container aplikasi tidak disentuh. Volume ACME ditanyakan."],
-          ["Ganti PROXY_ACME_EMAIL / port", "Ubah .env.dist → hapus proxy → provision lagi."],
+          ["Ganti PROXY_ACME_EMAIL / port", "Ubah .env.dist → hapus proxy → aktifkan lagi."],
         ]}
       />
 
@@ -228,7 +228,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
       <Ul>
         <li>
           Aplikasi di <strong>server remote</strong> memakai proxy milik server
-          itu sendiri: provision dari kartu server (port + email ACME), lalu
+          itu sendiri: aktifkan dari kartu server (port + email ACME), lalu
           arahkan DNS ke IP server tersebut — lihat{" "}
           <DocLink href="/docs/server-remote#proxy">Server remote</DocLink>.
           Tanpa proxy di sana, pakai port host.
@@ -253,8 +253,8 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
       <Table
         head={["Gejala", "Penyebab & solusi"]}
         rows={[
-          ["Tab Domain: Proxy belum berjalan", "Provision di Settings dulu."],
-          ["Toggle HTTPS nonaktif", <><Code>PROXY_ACME_EMAIL</Code> kosong saat provision. Isi, hapus proxy, provision lagi.</>],
+          ["Tab Domain: Proxy belum berjalan", "Aktifkan di Settings dulu."],
+          ["Toggle HTTPS nonaktif", <><Code>PROXY_ACME_EMAIL</Code> kosong saat diaktifkan. Isi, hapus proxy, aktifkan lagi.</>],
           ["404 page not found dari Traefik", "Container belum healthy, atau domain ditambahkan tapi container belum dibuat ulang (cek log deploy)."],
           ["Sertifikat self-signed / TRAEFIK DEFAULT CERT", "ACME gagal: DNS belum benar, port 80 tertutup, atau rate limit. Lihat log container aoox-proxy di terminal; uji dengan PROXY_ACME_STAGING=true."],
           ["Redirect loop", "Cloudflare mode Flexible, atau reverse proxy lain di depan yang men-terminate TLS. Pakai Full (strict) atau matikan HTTPS di aoox."],

@@ -30,7 +30,7 @@ const START: { icon: LucideIcon; title: string; description: string; href: strin
   {
     icon: Globe,
     title: "Pasang domain & HTTPS",
-    description: "Provision Traefik, arahkan DNS, sertifikat otomatis.",
+    description: "Aktifkan Traefik, arahkan DNS, sertifikat otomatis.",
     href: "/docs/domain",
   },
 ]
@@ -163,7 +163,7 @@ export default function Page() {
             → buka <Code>/setup</Code>.
           </P>
         </Step>
-        <Step title="Provision registry lokal (dan proxy bila pakai domain)">
+        <Step title="Aktifkan registry lokal (dan proxy bila pakai domain)">
           <P>
             Menu <strong>Registry</strong> dan <strong>Settings → Reverse proxy</strong>.
             Registry wajib sebelum deploy pertama —{" "}

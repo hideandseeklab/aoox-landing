@@ -102,9 +102,11 @@ api.panel.example.com.   A   203.0.113.10`}</Pre>
       <P>
         Cara tercepat: isi <Code>INSTALL_DIR</Code> sekali di <Code>.env.dist</Code>{" "}
         (path absolut folder yang berisi <Code>docker-compose.dist.yml</Code> di
-        server ini), lalu domain bisa diganti kapan saja tanpa SSH. Proxy
-        (Traefik) tetap harus sudah di-provision lewat Settings terlebih dahulu
-        — lihat <DocLink href="/docs/domain">Proxy &amp; domain</DocLink>.
+        server ini), lalu domain bisa diganti kapan saja tanpa SSH. Reverse
+        proxy (Traefik) <strong>tidak perlu</strong> diaktifkan manual dulu —
+        kalau belum jalan saat domain disimpan, panel akan menyalakannya
+        otomatis (lihat <DocLink href="/docs/domain">Proxy &amp; domain</DocLink>{" "}
+        untuk detail Traefik itu sendiri).
       </P>
       <Steps>
         <Step title="Isi INSTALL_DIR lalu restart stack">
@@ -118,20 +120,30 @@ api.panel.example.com.   A   203.0.113.10`}</Pre>
             <Code>docker-compose.override.yml</Code> lewat container helper dan
             menjalankan ulang <Code>docker compose up -d</Code> — koneksi ke
             dashboard sempat terputus beberapa detik saat container{" "}
-            <Code>web</Code>/<Code>api</Code> di-recreate, itu wajar.
+            <Code>web</Code>/<Code>api</Code> di-recreate, itu wajar. Kalau
+            proxy belum pernah diaktifkan, muncul peringatan bahwa proxy
+            baru saja dinyalakan otomatis, plus tiga hal yang tetap perlu
+            dicek manual sebelum domain benar-benar bisa diakses — lihat{" "}
+            <DocLink href="#jebakan">Jebakan umum</DocLink>.
           </P>
         </Step>
         <Step title="Atau dari CLI">
           <Pre>{`aoox domain set --web panel.example.com --api api.panel.example.com \\
   --acme-email kamu@example.com`}</Pre>
-          <P>Memanggil endpoint yang sama, untuk operator yang lebih suka terminal.</P>
+          <P>Memanggil endpoint yang sama (termasuk peringatan proxy di atas kalau berlaku), untuk operator yang lebih suka terminal.</P>
         </Step>
       </Steps>
       <Callout>
-        Karena file yang ditulis bernama <Code>docker-compose.override.yml</Code>{" "}
-        (bukan <Code>docker-compose.domain.yml</Code>), Compose otomatis
-        menyertakannya di setiap <Code>up</Code> berikutnya — beda dari cara
-        manual di bawah yang mengharuskan flag <Code>-f</Code> disebut setiap kali.
+        Compose hanya otomatis menyertakan <Code>docker-compose.override.yml</Code>{" "}
+        kalau file utamanya bernama persis <Code>docker-compose.yml</Code> —
+        karena stack ini memakai <Code>-f docker-compose.dist.yml</Code> secara
+        eksplisit, override <strong>tidak</strong> otomatis ikut kecuali disebut
+        juga. Panel (dan <Code>aoox update</Code>) sudah menyertakannya sendiri
+        secara internal; ini hanya relevan kalau kamu menjalankan{" "}
+        <Code>docker compose up</Code>/<Code>pull</Code> manual lewat SSH setelah
+        set domain dari dashboard — tambahkan{" "}
+        <Code>-f docker-compose.override.yml</Code> juga, atau domain yang
+        sudah diset akan hilang.
       </Callout>
 
       <H2 id="langkah">Manual lewat SSH</H2>
@@ -177,12 +189,12 @@ PUBLIC_API_URL=https://api.panel.example.com`}</Pre>
           </Callout>
         </Step>
 
-        <Step title="Provision reverse proxy (bila belum)">
+        <Step title="Aktifkan reverse proxy (bila belum)">
           <P>
             Login (masih via IP:3000 bila perlu) → <strong>Settings → Reverse
-            proxy (Traefik)</strong> → provision (owner). Proxy yang sudah ada
-            tapi di-provision <em>tanpa</em> <Code>PROXY_ACME_EMAIL</Code> harus
-            dihapus dan di-provision lagi agar resolver ACME aktif.
+            proxy (Traefik)</strong> → aktifkan (owner). Proxy yang sudah ada
+            tapi diaktifkan <em>tanpa</em> <Code>PROXY_ACME_EMAIL</Code> harus
+            dihapus dan diaktifkan lagi agar resolver ACME aktif.
           </P>
         </Step>
 
@@ -215,7 +227,7 @@ curl -s https://api.panel.example.com/auth/setup-status   # {"needsSetup":false}
       <P>
         <Code>PROXY_ACME_STAGING=true</Code> memakai CA staging Let&apos;s Encrypt
         (tanpa rate limit; sertifikat tidak dipercaya browser). Setelah yakin
-        DNS dan port benar, ganti ke <Code>false</Code>, hapus proxy, provision
+        DNS dan port benar, ganti ke <Code>false</Code>, hapus proxy, aktifkan
         lagi — volume ACME akan meminta sertifikat produksi.
       </P>
       <H3>Di belakang Cloudflare</H3>
@@ -244,8 +256,21 @@ curl -s https://api.panel.example.com/auth/setup-status   # {"needsSetup":false}
           ["Domain jalan, lalu hilang setelah update", "up -d tanpa -f docker-compose.domain.yml. Selalu sertakan kedua file."],
           ["Login berhasil tapi langsung logout / 401", "WEB_ORIGIN masih http atau beda host — cookie Secure/origin tidak cocok. Samakan, up -d, login ulang."],
           ["Terminal: origin not allowed", "Sama seperti di atas: WEB_ORIGIN ≠ URL browser."],
-          ["Sertifikat default Traefik", "PROXY_ACME_EMAIL kosong saat provision, DNS belum benar, atau port 80 tertutup. Hapus proxy → provision lagi setelah diperbaiki."],
+          ["Sertifikat default Traefik", "PROXY_ACME_EMAIL kosong saat diaktifkan, DNS belum benar, atau port 80 tertutup. Hapus proxy → aktifkan lagi setelah diperbaiki."],
           ["Log/terminal tidak mengalir, halaman lain normal", "PUBLIC_API_URL tidak bisa dijangkau dari browser (WebSocket diblokir oleh proxy di depan)."],
+          [
+            "Domain sudah disimpan, DNS & firewall OS (ufw) sudah benar, tapi browser \"unable to connect\"",
+            <>
+              Cek <Code>docker ps --filter name=aoox-proxy</Code> — kalau tidak
+              muncul, proxy belum jalan (dashboard/CLI sekarang otomatis
+              menyalakannya saat domain disimpan, tapi apply yang lama sebelum
+              fitur ini tidak). Kalau proxy sudah <Code>Up</Code> tapi tetap
+              gagal, port 80/443 kemungkinan diblokir <strong>firewall/security
+              group provider VPS</strong> — <Code>ufw inactive</Code> hanya
+              berarti firewall level OS tidak memblokir, bukan jaminan port
+              terbuka ke publik.
+            </>,
+          ],
         ]}
       />
 

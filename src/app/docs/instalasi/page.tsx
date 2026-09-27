@@ -27,12 +27,12 @@ const SUMMARY = [
 
 const NEXT = [
   {
-    title: "Provision registry lokal",
+    title: "Aktifkan registry lokal",
     description: "Wajib sebelum deploy aplikasi pertama.",
     href: "/docs/registry",
   },
   {
-    title: "Provision reverse proxy",
+    title: "Aktifkan reverse proxy",
     description: "Supaya aplikasi bisa diakses lewat domain + HTTPS.",
     href: "/docs/domain",
   },
@@ -72,13 +72,18 @@ export default function Page() {
         ada), membuat semua secret, dan menjalankan stack. Tidak perlu
         Node.js atau <Code>git clone</Code> apa pun dulu.
       </P>
-      <Pre>{`curl -fsSL https://aoox.dev/install.sh | sh`}</Pre>
+      <Pre>{`curl -fsSL https://aoox.dev/install.sh | sudo sh`}</Pre>
       <P>Dengan domain + HTTPS otomatis dan owner langsung dibuat:</P>
       <Pre>{`curl -fsSL https://aoox.dev/install.sh \\
-  | WEB_DOMAIN=panel.example.com API_DOMAIN=api.panel.example.com \\
+  | sudo WEB_DOMAIN=panel.example.com API_DOMAIN=api.panel.example.com \\
     ACME_EMAIL=kamu@example.com \\
     ADMIN_EMAIL=kamu@example.com ADMIN_PASSWORD='kata-sandi-kuat' \\
     sh`}</Pre>
+      <Callout>
+        Butuh <Code>sudo</Code> (atau login sebagai <Code>root</Code>) —
+        skrip memasang Docker dan menulis ke <Code>/opt/aoox</Code>. Kalau
+        lupa, gagal dengan pesan <Code>must be run as root</Code>.
+      </Callout>
       <Callout>
         Skrip ini di-serve dari domain aoox sendiri (bukan pihak ketiga) dan
         mengambil file compose langsung dari repo <Code>aoox-cli</Code> —
@@ -261,6 +266,23 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         <Code>.env.dist</Code>, mis. <Code>hideandseeklab/aoox-api:0.1.0-alpha.0</Code>{" "}
         (lihat tag yang tersedia di Docker Hub) — kedua cara di atas membaca
         variabel yang sama.
+      </P>
+      <P>
+        <strong>Catatan penting</strong>: baik <Code>aoox update</Code> maupun tombol
+        &ldquo;Terapkan update&rdquo; hanya menjalankan <Code>pull</Code> +{" "}
+        <Code>up -d</Code> dengan file <Code>docker-compose.dist.yml</Code> yang
+        <strong> sudah ada</strong> di server — keduanya tidak pernah menulis ulang
+        file compose itu sendiri. Kalau sebuah rilis menambahkan variabel baru ke
+        file compose (misalnya env baru yang harus diteruskan ke sebuah service),
+        instalasi lama tidak otomatis mendapatkannya lewat update. Perbaikannya
+        manual: edit <Code>docker-compose.dist.yml</Code> di <Code>INSTALL_DIR</Code>{" "}
+        (default <Code>/opt/aoox</Code>) sesuai catatan rilis, lalu:
+      </P>
+      <Pre>{`docker compose -f docker-compose.dist.yml -f docker-compose.override.yml --env-file .env.dist up -d`}</Pre>
+      <P>
+        (<Code>-f docker-compose.override.yml</Code> hanya kalau file itu ada —
+        dibuat otomatis saat memakai <DocLink href="/docs/domain-panel">Domain panel</DocLink>{" "}
+        dari dashboard).
       </P>
 
       <H2 id="dari-source">Build dari source</H2>

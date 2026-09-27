@@ -105,9 +105,12 @@ api.panel.example.com.   A   203.0.113.10`}</Pre>
         The fastest path: set <Code>INSTALL_DIR</Code> once in{" "}
         <Code>.env.dist</Code> (the absolute path of the folder containing{" "}
         <Code>docker-compose.dist.yml</Code> on this host), and the domain can
-        then be changed anytime without SSH. The proxy (Traefik) still needs
-        to already be provisioned from Settings — see{" "}
-        <DocLink href="/en/docs/domain">Proxy &amp; domain</DocLink>.
+        then be changed anytime without SSH. The reverse proxy (Traefik){" "}
+        <strong>doesn&apos;t need</strong> to be provisioned manually first —
+        if it isn&apos;t running yet when the domain is saved, the panel starts
+        it automatically (see{" "}
+        <DocLink href="/en/docs/domain">Proxy &amp; domain</DocLink> for
+        details on Traefik itself).
       </P>
       <Steps>
         <Step title="Set INSTALL_DIR, then restart the stack">
@@ -122,20 +125,30 @@ api.panel.example.com.   A   203.0.113.10`}</Pre>
             container and re-runs <Code>docker compose up -d</Code> — the
             connection to the dashboard drops for a few seconds while the{" "}
             <Code>web</Code>/<Code>api</Code> containers are recreated, which
-            is expected.
+            is expected. If the proxy had never been provisioned, a warning
+            appears saying it was just started automatically, plus three
+            things still worth checking manually before the domain is
+            actually reachable — see{" "}
+            <DocLink href="#jebakan">Common pitfalls</DocLink>.
           </P>
         </Step>
         <Step title="Or from the CLI">
           <Pre>{`aoox domain set --web panel.example.com --api api.panel.example.com \\
   --acme-email you@example.com`}</Pre>
-          <P>Calls the same endpoint, for operators who prefer a terminal.</P>
+          <P>Calls the same endpoint (including the proxy warning above when it applies), for operators who prefer a terminal.</P>
         </Step>
       </Steps>
       <Callout>
-        Because the file written is named <Code>docker-compose.override.yml</Code>{" "}
-        (not <Code>docker-compose.domain.yml</Code>), Compose automatically
-        includes it on every future <Code>up</Code> — unlike the manual method
-        below, which requires the <Code>-f</Code> flag to be given every time.
+        Compose only auto-includes <Code>docker-compose.override.yml</Code>{" "}
+        when the base file is named exactly <Code>docker-compose.yml</Code> —
+        since this stack uses <Code>-f docker-compose.dist.yml</Code>{" "}
+        explicitly, the override is <strong>not</strong> picked up
+        automatically unless it&apos;s also named explicitly. The panel (and{" "}
+        <Code>aoox update</Code>) already do this internally; it only matters
+        if you run <Code>docker compose up</Code>/<Code>pull</Code> by hand
+        over SSH after setting a domain from the dashboard — add{" "}
+        <Code>-f docker-compose.override.yml</Code> too, or the domain you set
+        will disappear.
       </Callout>
 
       <H2 id="langkah">Manual, over SSH</H2>
@@ -255,6 +268,20 @@ curl -s https://api.panel.example.com/auth/setup-status   # {"needsSetup":false}
           ["Terminal: origin not allowed", "Same as above: WEB_ORIGIN ≠ the browser's URL."],
           ["Traefik's default certificate", "PROXY_ACME_EMAIL was empty at provision time, DNS isn't correct yet, or port 80 is closed. Remove the proxy → provision again once fixed."],
           ["Logs/terminal don't stream, other pages are fine", "PUBLIC_API_URL isn't reachable from the browser (WebSockets blocked by a proxy in front)."],
+          [
+            "Domain saved, DNS & the OS firewall (ufw) are fine, but the browser says \"unable to connect\"",
+            <>
+              Check <Code>docker ps --filter name=aoox-proxy</Code> — if it&apos;s
+              missing, the proxy wasn&apos;t running (the dashboard/CLI now starts
+              it automatically when a domain is saved, but an older apply from
+              before this feature won&apos;t have). If the proxy is already{" "}
+              <Code>Up</Code> but it still fails, ports 80/443 are likely
+              blocked by your <strong>VPS provider&apos;s firewall/security
+              group</strong> — <Code>ufw inactive</Code> only means the OS
+              firewall isn&apos;t blocking, not that the ports are open to the
+              public.
+            </>,
+          ],
         ]}
       />
 

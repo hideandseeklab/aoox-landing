@@ -112,6 +112,16 @@ const DEPLOY: Row[] = [
     "The base image (~350 MB) plus the helper is built once.",
     "Wait it out; use a Dockerfile for faster builds.",
   ],
+  [
+    <>Deploy succeeded (Running) but the app isn&apos;t reachable</>,
+    "No host port and no domain are configured — both used to default to empty and lived in edit-only tabs, so a freshly deployed app could silently end up unreachable.",
+    <>
+      Add either one from the Settings or Domain tab. For new applications,
+      pick IP+port or Domain in the{" "}
+      <DocLink href="/en/docs/aplikasi#langkah">Access step</DocLink> when
+      creating it, so it doesn&apos;t need fixing afterward.
+    </>,
+  ],
 ]
 
 const DOMAIN: Row[] = [
@@ -119,6 +129,11 @@ const DOMAIN: Row[] = [
     <>Domain tab: <em>Proxy isn&apos;t running</em></>,
     "Traefik hasn't been provisioned.",
     <>Settings → Reverse proxy → provision (owner).</>,
+  ],
+  [
+    <>Panel domain saved, DNS & <Code>ufw</Code> are fine, browser still says <em>unable to connect</em></>,
+    <>The proxy wasn&apos;t running at the time (now started automatically when the domain is saved), or ports 80/443 are blocked by your <strong>VPS provider&apos;s firewall/security group</strong> — <Code>ufw inactive</Code> ≠ ports open to the public.</>,
+    <><Code>docker ps --filter name=aoox-proxy</Code> should show <Code>Up</Code>; open 80/443 in your VPS provider&apos;s panel. See <DocLink href="/en/docs/domain-panel#jebakan">Domain for the panel → Common pitfalls</DocLink>.</>,
   ],
   [
     <>404 page not found from Traefik</>,
@@ -188,7 +203,7 @@ const SERVER: Row[] = [
   [
     <>Terminal: <Code>TERMINAL_SSH_USER is not set</Code></>,
     "The env var is empty.",
-    <>Fill it in in <Code>.env.dist</Code>, restart the stack.</>,
+    <>Fill it in from Settings → Infrastructure → <strong>Environment</strong> (owner, no SSH needed), or manually in <Code>.env.dist</Code> then restart the stack.</>,
   ],
   [
     <>Terminal: <Code>ECONNREFUSED</Code> to host.docker.internal</>,

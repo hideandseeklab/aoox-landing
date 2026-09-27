@@ -155,6 +155,16 @@ export default function Page() {
             Di provider, halaman <em>Recent Deliveries</em> menampilkan respons
             API — lihat tabel di bawah untuk membacanya.
           </P>
+          <P>
+            Tanpa menunggu provider, tes langsung dari server dulu — event{" "}
+            <Code>ping</Code> selalu <Code>ignored</Code>, aman dipakai untuk
+            memastikan URL & token benar sebelum menyentuh GitHub/GitLab:
+          </P>
+          <Pre>{`curl -i -X POST https://<API_DOMAIN>/webhooks/<token> \\
+  -H "Content-Type: application/json" \\
+  -H "X-GitHub-Event: ping" \\
+  -d "{}"
+# harus 200 dengan body {"result":"ignored","reason":"event ping"}`}</Pre>
         </Step>
       </Steps>
 
@@ -177,6 +187,49 @@ export default function Page() {
         beruntun, biasakan menunggu deployment selesai, atau push sekali lagi
         setelahnya.
       </Callout>
+
+      <H2 id="redeliver">Redeliver: uji ulang tanpa push baru</H2>
+      <Callout title="Paling sering menyelesaikan masalah">
+        Setelah memperbaiki Payload URL, secret, atau masalah di sisi
+        API/proxy, <strong>jangan hanya menunggu</strong> — provider tidak
+        mengirim ulang sendiri. Kirim ulang delivery yang sama lewat{" "}
+        <strong>Redeliver</strong> (GitHub) / <strong>Resend request</strong>{" "}
+        (GitLab) untuk langsung tahu apakah perbaikannya berhasil, tanpa perlu
+        push commit baru.
+      </Callout>
+      <H3>GitHub</H3>
+      <Steps>
+        <Step title="Repo → Settings → Webhooks">
+          <P>Klik webhook yang dipakai aoox (Edit).</P>
+        </Step>
+        <Step title="Tab Recent Deliveries">
+          <P>Klik delivery paling atas (yang terbaru).</P>
+        </Step>
+        <Step title="Tombol Redeliver">
+          <P>
+            Buka tab <strong>Response</strong> setelahnya — harus{" "}
+            <Code>200</Code>. Status <em>&quot;Last delivery was not
+            successful&quot;</em> di daftar webhook hanya diperbarui setelah
+            ada delivery baru (redeliver atau push baru); memperbaiki
+            penyebabnya saja tidak menghapus status merah itu sampai ada
+            percobaan baru.
+          </P>
+        </Step>
+      </Steps>
+      <H3>GitLab</H3>
+      <Steps>
+        <Step title="Settings → Webhooks → Edit">
+          <P>Buka bagian <strong>Recent events</strong> di bawah form.</P>
+        </Step>
+        <Step title="Resend request">
+          <P>
+            Pada baris event yang gagal. Alternatif tanpa event lama sama
+            sekali: tombol <strong>Test</strong> → pilih <strong>Push
+            events</strong> untuk memicu pengiriman baru tanpa perlu push
+            sungguhan.
+          </P>
+        </Step>
+      </Steps>
 
       <H2 id="secret">Secret (tanda tangan)</H2>
       <P>
@@ -201,7 +254,10 @@ export default function Page() {
           </Ul>
         </Step>
         <Step title="Kirim ulang delivery terakhir dari provider">
-          <P>Harus 200. Bila 401, secret di provider tidak cocok.</P>
+          <P>
+            Lihat <DocLink href="/docs/webhook#redeliver">Redeliver</DocLink>{" "}
+            di atas. Harus 200. Bila 401, secret di provider tidak cocok.
+          </P>
         </Step>
       </Steps>
       <Ul>
@@ -226,6 +282,52 @@ export default function Page() {
           ["200 ignored padahal push ke branch benar", <>Branch di form aplikasi berbeda (mis. <Code>master</Code> vs <Code>main</Code>), atau event yang dikirim bukan push.</>],
           ["Selalu 401 setelah mengaktifkan secret", "Content type GitHub bukan application/json, atau secret belum ditempel/berbeda."],
           ["Deploy jalan tapi build gagal: repository not found", "Repo privat tanpa Kredensial Git, atau token kedaluwarsa."],
+          [
+            "URL di tab Webhook masih menampilkan localhost:3001 padahal panel sudah pakai domain",
+            <>
+              Instalasi lama: <Code>PUBLIC_API_URL</Code> dulu hanya
+              diteruskan ke container <Code>web</Code>, bukan <Code>api</Code>.
+              Tambahkan{" "}
+              <Code>{"PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:3001}"}</Code>{" "}
+              ke <Code>environment:</Code> service <Code>api</Code> di{" "}
+              <Code>docker-compose.dist.yml</Code>, lalu{" "}
+              <Code>docker compose -f docker-compose.dist.yml -f docker-compose.override.yml --env-file .env.dist up -d</Code>
+              . <Code>aoox update</Code> tidak menulis ulang file compose, jadi
+              instalasi lama butuh langkah manual ini sekali.
+            </>,
+          ],
+          [
+            <>GitHub: <Code>Invalid HTTP Response: 404</Code></>,
+            <>
+              Payload URL memakai domain <strong>dashboard/web</strong>{" "}
+              (mis. <Code>panel.example.com/webhooks/…</Code>), bukan domain{" "}
+              <strong>API</strong> — endpoint webhook ada di API; web
+              (Next.js) yang membalas 404. Pakai{" "}
+              <Code>https://&lt;API_DOMAIN&gt;/webhooks/&lt;token&gt;</Code>{" "}
+              (salin dari tab Webhook), bukan domain panel.
+            </>,
+          ],
+          [
+            "“Last delivery was not successful” masih merah setelah diperbaiki",
+            <>
+              Status itu hanya diperbarui setelah ada delivery baru — lihat{" "}
+              <DocLink href="/docs/webhook#redeliver">
+                Redeliver: uji ulang tanpa push baru
+              </DocLink>
+              .
+            </>,
+          ],
+          [
+            "Membedakan dua jenis 404",
+            <>
+              Body teks polos <Code>404 page not found</Code> = ditolak
+              Traefik (router domain API tidak cocok, atau domain itu belum
+              menjangkau container API); body JSON{" "}
+              <Code>{'{"statusCode":404,...}'}</Code> = sampai ke API tapi
+              token di URL tidak dikenal (token lama setelah &quot;Buat URL
+              baru&quot;, atau salah salin).
+            </>,
+          ],
         ]}
       />
 
