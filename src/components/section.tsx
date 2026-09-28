@@ -33,7 +33,7 @@ function SectionHeading({
         <span className="select-none">## </span>
         {label}
       </span>
-      <h2 className="text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
+      <h2 className="text-2xl font-semibold text-balance sm:text-3xl">
         {title}
       </h2>
       {description ? (

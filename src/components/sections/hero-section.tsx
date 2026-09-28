@@ -66,7 +66,7 @@ function HeroSection({ lang = "id" }: { lang?: Lang }) {
             {t.badge}
           </span>
 
-          <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05]">
+          <h1 className="text-4xl font-semibold tracking-tighter text-balance sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05]">
             {t.titleLead}
             <span className="text-primary-foreground dark:text-primary">
               {t.titleHighlight}

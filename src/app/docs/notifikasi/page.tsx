@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react"
 import {
   Callout,
   Code,
+  DocLink,
   DocPage,
   H2,
   H3,
@@ -20,12 +21,12 @@ export const metadata: Metadata = { title: "Notifikasi" }
 
 const SUMMARY = [
   { k: "Channel", v: "Telegram · Slack · Discord · Webhook · Email" },
-  { k: "Event", v: "7 toggle per channel" },
+  { k: "Event", v: "10 toggle per channel" },
   { k: "Lingkup", v: "Platform-wide, owner/admin" },
 ]
 
 const FLOW = [
-  { s: "event", d: "deploy, backup, job, container mati, disk, sertifikat" },
+  { s: "event", d: "deploy, backup, job, container mati, disk, sertifikat, DNS, error log" },
   { s: "filter", d: "channel dengan toggle event itu aktif" },
   { s: "format", d: "payload per platform: HTML, attachments, embeds, JSON, email" },
   { s: "kirim", d: "fetch dengan timeout 10 detik; gagal hanya dicatat di log" },
@@ -36,6 +37,7 @@ const NEXT = [
   { title: "Backup & restore", description: "Event backup gagal.", href: "/docs/backup" },
   { title: "Scheduled jobs", description: "Event job gagal/timeout.", href: "/docs/jobs" },
   { title: "Monitoring", description: "Aturan deteksi container mati.", href: "/docs/monitoring#container-mati" },
+  { title: "Domain & TLS", description: "Cek DNS manual dan watcher-nya.", href: "/docs/domain" },
 ]
 
 export default function Page() {
@@ -43,7 +45,7 @@ export default function Page() {
     <DocPage
       href="/docs/notifikasi"
       title="Notifikasi"
-      description="Mengirim kabar deploy, backup, job, container mati, disk menipis, dan sertifikat gagal ke Telegram, Slack, Discord, webhook, atau email."
+      description="Mengirim kabar deploy, backup, job, container mati, disk menipis, sertifikat gagal, dan DNS domain bermasalah ke Telegram, Slack, Discord, webhook, atau email."
     >
       <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
         {SUMMARY.map((item) => (
@@ -135,6 +137,8 @@ export default function Page() {
           ["Container mati", "Container aplikasi/database berhenti tak terduga — lihat aturan di Monitoring.", "Nama container, exit code, apakah sedang restart."],
           ["Disk hampir penuh", <>Pemakaian filesystem Docker melewati ambang (default 90 %, <Code>DISK_ALERT_PERCENT</Code>); diperiksa sekali sehari.</>, "Persentase terpakai, ambang, ruang tersisa."],
           ["Sertifikat gagal", "Traefik gagal menerbitkan/memperbarui sertifikat sebuah domain (diperiksa tiap 10 menit).", "Domain dan pesan error dari ACME."],
+          ["DNS domain bermasalah", "DNS sebuah domain tidak lagi mengarah ke IP yang benar — diperiksa tiap 15 menit, terpicu setelah dua kali cek berturut-turut gagal (mismatch/tidak bisa di-resolve).", "Domain, status (mismatch/unresolved), pesan penjelasan."],
+          [<>Error aplikasi <Code key="2">(nonaktif default)</Code></>, "Log container aplikasi yang sedang running cocok dengan pola error umum (traceback, panic, exception, level=error, dll — diperiksa tiap menit).", "Aplikasi, project, jumlah error, maksimal 3 contoh baris (disensor), tautan ke halaman aplikasi."],
         ]}
       />
       <Ul>
@@ -156,6 +160,22 @@ export default function Page() {
           pernah gagal karena notifikasi).
         </li>
         <li>Container mati: maksimal 1 notifikasi per container per 10 menit.</li>
+        <li>
+          <strong>DNS domain bermasalah</strong>: dua kali cek gagal berturut-turut
+          (meredam gangguan DNS sesaat) sebelum notifikasi pertama dikirim,
+          lalu maksimal 1 kali per hari per domain selama status tetap
+          bermasalah. Domain yang tidak bisa dibandingkan sama sekali (tidak
+          ada IP pembanding) tidak pernah mengirim.
+        </li>
+        <li>
+          <strong>Error aplikasi</strong> nonaktif secara default — deteksi
+          dari teks log rawan salah tebak. Maksimal 1 notifikasi per aplikasi
+          per 15 menit, kecuali muncul bentuk error yang belum pernah terlihat
+          sejak API terakhir start, yang tetap langsung dikirim. Bisa
+          dinonaktifkan per aplikasi lewat switch{" "}
+          <strong>Abaikan error di log</strong> di tab Pengaturan aplikasi —
+          lihat <DocLink href="/docs/aplikasi#error-log">Aplikasi</DocLink>.
+        </li>
       </Ul>
 
       <H2 id="webhook">Payload webhook generik</H2>
@@ -201,6 +221,15 @@ export default function Page() {
   "container": "aoox-app-shop",
   "exitCode": 137,
   "restarting": true
+}`}</Pre>
+      <Pre title="app.error">{`{
+  "title": "Application error detected: shop",
+  "level": "failure",
+  "url": "https://panel.example.com/applications/…",
+  "event": "app.error",
+  "applicationId": "…",
+  "count": 2,
+  "fingerprints": ["TypeError: Cannot read <n>", "FATAL: <n>"]
 }`}</Pre>
       <H3>Contoh penerima (Node.js)</H3>
       <Pre>{`app.post("/hooks/aoox", express.json(), (req, res) => {

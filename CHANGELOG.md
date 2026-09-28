@@ -8,6 +8,55 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.3] - 2026-09-28
+
+### Added
+
+- Registry doc (ID + EN) gets a new **"Hapus image"/"Delete image"** bullet under "Browsing &
+  cleaning up contents" explaining the difference from deleting a single tag — it removes the whole
+  repository (every tag/manifest, its storage folder, then an automatic garbage collect) — and why
+  it's needed for a repository stuck showing "0 tags" that garbage collect alone never clears
+  (garbage collect only reclaims unused blobs, never the repository's own folder). A matching row is
+  added to the "Common pitfalls" table for that exact "0 tags won't go away" symptom.
+- Application doc (ID + EN) gets a new **Console** row in the tabs table and a "Console" section:
+  what it is (`docker exec -it` into the running container, distinct from the host-level Terminal
+  page), access (project developer+, audit-logged), the swarm task picker, bash-vs-sh shell selection
+  with a note on distroless/shell-less images, and that file changes made through it don't survive a
+  redeploy unless they're on a mounted volume.
+- Notifications doc (ID + EN) gets a new "Application error" event row (off by default, log-pattern
+  detection + cooldown explained) and an `app.error` webhook payload example. Application doc (ID +
+  EN) gets a new "Log error detection"/"Deteksi error di log" section explaining the per-app "Ignore
+  error logs" switch.
+- Managed database doc (ID + EN) gets a new engine row for **Valkey** (drop-in Redis, same
+  `redis://` URL/CLI/backup path) and a new "PostgreSQL variants" section covering pgvector,
+  PostGIS, and TimescaleDB — verified image/tag table, what stays identical to plain Postgres
+  (protocol, backups, env references), and that switching engine/variant after creation isn't
+  supported yet.
+- Notifications doc (ID + EN) gets a new **"DNS domain bermasalah"/"DNS domain issue"** event row
+  (checked every 15 minutes, fires after two consecutive failed checks, capped at once a day per
+  domain) — the toggle already existed in the dashboard and API, it just wasn't documented; the
+  event-count summary and the intro line are updated from 9 to 10 toggles, and a "Domain & TLS" link
+  is added to Next steps.
+- Managed database doc (ID + EN) gets a new engine row for **MongoDB** and two callouts: one
+  explaining that Mongo creates databases lazily so aoox writes a placeholder document right after
+  provisioning (so the primary database shows up immediately instead of only after the app's first
+  write), and an updated "Not available yet" callout listing the query box's current find()-only,
+  read-only limitation and that extended-JSON operators like `{"$oid":"..."}` aren't specially
+  interpreted in filters yet.
+
+### Changed
+
+- Site font switched from Geist to **Inter** for both body text and headings (`layout.tsx`'s
+  `--font-sans`, and `globals.css`'s `--font-heading` now points at it too). Code blocks and inline
+  `<code>` keep JetBrains Mono unchanged.
+- Headings now carry tight letter-spacing (helipod.io-style), scaled to size: the hero title gets
+  a `-0.05em` "display" tier (`tracking-tighter`), other `h1`/`h2` (section headings, docs page
+  titles) get `-0.03em`, and `h3` (feature card titles) gets `-0.015em`. Rules live centrally in
+  `globals.css` as low-specificity element selectors, so a `tracking-*` utility on one element can
+  still override them; redundant `tracking-tight` classes on individual headings were removed in
+  favor of this. Body text, buttons, labels, and badges are untouched, and any `.font-mono` element
+  is explicitly reset to normal tracking.
+
 ## [0.1.0-alpha.2] - 2026-09-27
 
 ### Added
@@ -99,7 +148,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.2...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.3...HEAD
+[0.1.0-alpha.3]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.2...v0.1.0-alpha.3
 [0.1.0-alpha.2]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.1...v0.1.0-alpha.2
 [0.1.0-alpha.1]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.0...v0.1.0-alpha.1
 [0.1.0-alpha.0]: https://github.com/hideandseeklab/aoox-landing/releases/tag/v0.1.0-alpha.0

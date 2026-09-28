@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: var(--font-mono);
+    --font-heading: var(--font-sans);
     --font-mono: var(--font-mono);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
@@ -127,7 +127,22 @@
     cursor: pointer;
     }
   html {
-    @apply font-mono;
+    @apply font-sans;
+    }
+  /* Tight tracking on headings, helipod.io-style — scaled to size so small
+     text (body, buttons, labels, inputs, badges) stays untouched. Low-
+     specificity selectors so a `tracking-*` utility on a specific element
+     (e.g. the hero title) still wins. Monospace text never carries these. */
+  h1, h2 {
+    letter-spacing: -0.03em;
+    }
+  h3 {
+    letter-spacing: -0.015em;
+    }
+  /* Belt-and-suspenders: text that opts into font-mono never gets tight
+     tracking, even inside a heading. */
+  .font-mono {
+    letter-spacing: normal;
     }
 }
 /* Hero terminal */

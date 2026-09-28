@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react"
 import {
   Callout,
   Code,
+  DocLink,
   DocPage,
   H2,
   H3,
@@ -20,12 +21,12 @@ export const metadata: Metadata = { title: "Notifications" }
 
 const SUMMARY = [
   { k: "Channels", v: "Telegram · Slack · Discord · Webhook · Email" },
-  { k: "Events", v: "7 toggles per channel" },
+  { k: "Events", v: "10 toggles per channel" },
   { k: "Scope", v: "Platform-wide, owner/admin" },
 ]
 
 const FLOW = [
-  { s: "event", d: "deploy, backup, job, container down, disk, certificate" },
+  { s: "event", d: "deploy, backup, job, container down, disk, certificate, DNS, log errors" },
   { s: "filter", d: "channels with that event's toggle enabled" },
   { s: "format", d: "a per-platform payload: HTML, attachments, embeds, JSON, email" },
   { s: "send", d: "fetch with a 10-second timeout; failures are only logged" },
@@ -36,6 +37,7 @@ const NEXT = [
   { title: "Backup & restore", description: "The backup-failure event.", href: "/en/docs/backup" },
   { title: "Scheduled jobs", description: "Job failure/timeout events.", href: "/en/docs/jobs" },
   { title: "Monitoring", description: "The container-down detection rules.", href: "/en/docs/monitoring#container-mati" },
+  { title: "Domain & TLS", description: "Manual DNS checks and the watcher.", href: "/en/docs/domain" },
 ]
 
 export default function Page() {
@@ -44,7 +46,7 @@ export default function Page() {
       href="/en/docs/notifikasi"
       title="Notifications"
       lang="en"
-      description="Send word of deploys, backups, jobs, dead containers, low disk, and failed certificates to Telegram, Slack, Discord, a webhook, or email."
+      description="Send word of deploys, backups, jobs, dead containers, low disk, failed certificates, and DNS issues to Telegram, Slack, Discord, a webhook, or email."
     >
       <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
         {SUMMARY.map((item) => (
@@ -137,6 +139,8 @@ export default function Page() {
           ["Container down", "An application/database container stops unexpectedly — see the rules under Monitoring.", "Container name, exit code, whether it's restarting."],
           ["Disk almost full", <>Docker filesystem usage crosses a threshold (default 90%, <Code>DISK_ALERT_PERCENT</Code>); checked once a day.</>, "Percentage used, threshold, space remaining."],
           ["Certificate failure", "Traefik fails to issue/renew a domain's certificate (checked every 10 minutes).", "The domain and the ACME error message."],
+          ["DNS domain issue", "A domain's DNS no longer points at the right IP — checked every 15 minutes, fires after two consecutive failed checks (mismatch/unresolved).", "Domain, status (mismatch/unresolved), an explanatory message."],
+          [<>Application error <Code key="2">(off by default)</Code></>, "A running application's container log matches a common error pattern (traceback, panic, exception, level=error, etc — checked every minute).", "Application, project, error count, up to 3 example lines (redacted), a link to the application page."],
         ]}
       />
       <Ul>
@@ -158,6 +162,22 @@ export default function Page() {
           deploy never fails because of a notification).
         </li>
         <li>Container down: at most 1 notification per container every 10 minutes.</li>
+        <li>
+          <strong>DNS domain issue</strong>: two consecutive failed checks
+          (to dampen transient DNS blips) before the first notification,
+          then at most once a day per domain while the status stays bad. A
+          domain with nothing to compare against (no expected IP) never
+          sends.
+        </li>
+        <li>
+          <strong>Application error</strong> is off by default — detection
+          from plain-text logs is prone to false positives. At most 1
+          notification per application every 15 minutes, except an error
+          shape never seen since the API last started, which is always sent
+          right away. Can be disabled per application with the{" "}
+          <strong>Ignore error logs</strong> switch on the application&apos;s
+          Settings tab — see <DocLink href="/en/docs/aplikasi#error-log">Applications</DocLink>.
+        </li>
       </Ul>
 
       <H2 id="webhook">Generic webhook payload</H2>
@@ -203,6 +223,15 @@ export default function Page() {
   "container": "aoox-app-shop",
   "exitCode": 137,
   "restarting": true
+}`}</Pre>
+      <Pre title="app.error">{`{
+  "title": "Application error detected: shop",
+  "level": "failure",
+  "url": "https://panel.example.com/applications/…",
+  "event": "app.error",
+  "applicationId": "…",
+  "count": 2,
+  "fingerprints": ["TypeError: Cannot read <n>", "FATAL: <n>"]
 }`}</Pre>
       <H3>Example receiver (Node.js)</H3>
       <Pre>{`app.post("/hooks/aoox", express.json(), (req, res) => {

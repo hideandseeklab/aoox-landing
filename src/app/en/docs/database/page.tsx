@@ -20,7 +20,7 @@ import {
 export const metadata: Metadata = { title: "Managed database" }
 
 const SUMMARY = [
-  { k: "Engines", v: "PostgreSQL · MySQL · MariaDB · Redis" },
+  { k: "Engines", v: "PostgreSQL · MySQL · MariaDB · Redis · Valkey · MongoDB" },
   { k: "Shape", v: "One container + volume per database" },
   { k: "Connect", v: "${{database.<slug>.url}} in the application's env" },
 ]
@@ -30,6 +30,14 @@ const ENGINES = [
   { e: "MySQL", img: "mysql", tag: "8", port: 3306, url: "mysql://app:pass@host:3306/<db>" },
   { e: "MariaDB", img: "mariadb", tag: "11", port: 3306, url: "mysql://app:pass@host:3306/<db>" },
   { e: "Redis", img: "redis", tag: "7-alpine", port: 6379, url: "redis://:pass@host:6379/0" },
+  { e: "Valkey", img: "valkey/valkey", tag: "8-alpine", port: 6379, url: "redis://:pass@host:6379/0" },
+  { e: "MongoDB", img: "mongo", tag: "7", port: 27017, url: "mongodb://app:pass@host:27017/<db>?authSource=admin" },
+]
+
+const POSTGRES_VARIANTS = [
+  { v: "pgvector", img: "pgvector/pgvector", tag: "pg16", d: "Vector similarity search for embeddings (AI/ML)." },
+  { v: "PostGIS", img: "postgis/postgis", tag: "16-3.4", d: "Geographic/spatial data types and queries." },
+  { v: "TimescaleDB", img: "timescale/timescaledb", tag: "latest-pg16", d: "Time-series data: hypertables, continuous aggregates." },
 ]
 
 const LIFECYCLE = [
@@ -52,7 +60,7 @@ export default function Page() {
       href="/en/docs/database"
       title="Managed database"
       lang="en"
-      description="Create a PostgreSQL, MySQL, MariaDB, or Redis database per project and connect it to an application."
+      description="Create a PostgreSQL, MySQL, MariaDB, Redis, Valkey, or MongoDB database per project and connect it to an application."
     >
       <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
         {SUMMARY.map((item) => (
@@ -93,6 +101,68 @@ export default function Page() {
         the database name is the slug with <Code>-</Code> replaced by{" "}
         <Code>_</Code>. The password is random and stored encrypted.
       </P>
+      <Callout>
+        <strong>Valkey</strong> is a Redis drop-in (a Linux Foundation fork) —
+        same protocol, commands, and persistence format (AOF). Backup, the
+        data browser, and the connection URL all use the exact same path as
+        Redis (<Code>redis://</Code> scheme, any Redis client is compatible).
+      </Callout>
+      <Callout>
+        <strong>MongoDB</strong> has no <Code>CREATE DATABASE</Code> — a new
+        database only &quot;exists&quot; once it holds data. aoox writes a single
+        placeholder document (collection <Code>_aoox_init</Code>) right after
+        the container is ready, so the primary database shows up in the
+        collection list (Data tab) immediately instead of only after the
+        application&apos;s first write.
+      </Callout>
+
+      <H2 id="varian-postgres">PostgreSQL variants</H2>
+      <P>
+        When creating a database with Engine <strong>PostgreSQL</strong>,
+        pick a <strong>Variant</strong> for an image with an extension
+        preinstalled — the protocol, credentials, backups, and env
+        references stay exactly the same as plain PostgreSQL (only the image
+        and default tag differ). The extension is activated automatically
+        (<Code>CREATE EXTENSION IF NOT EXISTS</Code>) as soon as the
+        container accepts connections.
+      </P>
+      <div className="overflow-x-auto border border-border">
+        <table className="w-full text-xs">
+          <thead className="bg-muted text-muted-foreground">
+            <tr>
+              <th className="px-3 py-2 text-left font-medium">Variant</th>
+              <th className="px-3 py-2 text-left font-medium">Image (default tag)</th>
+              <th className="px-3 py-2 text-left font-medium">Use case</th>
+            </tr>
+          </thead>
+          <tbody>
+            {POSTGRES_VARIANTS.map((row) => (
+              <tr key={row.v} className="border-t border-border">
+                <td className="px-3 py-2 text-foreground">{row.v}</td>
+                <td className="px-3 py-2"><Code>{row.img}:{row.tag}</Code></td>
+                <td className="px-3 py-2 text-muted-foreground">{row.d}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <Ul>
+        <li>
+          No variant (default) = the plain <Code>postgres</Code> image, no
+          extra extension.
+        </li>
+        <li>
+          Changing the variant after creation isn&apos;t supported from the
+          dashboard — delete it and create a new one (optionally restore
+          from a backup into the new database).
+        </li>
+        <li>
+          PostGIS and TimescaleDB already activate their own extension the
+          first time the image starts; aoox still calls{" "}
+          <Code>CREATE EXTENSION IF NOT EXISTS</Code> as a safety net (safe
+          to repeat, doesn&apos;t error).
+        </li>
+      </Ul>
 
       <H2 id="langkah">Creating a database</H2>
       <Steps>
@@ -101,7 +171,7 @@ export default function Page() {
             head={["Field", "Notes"]}
             rows={[
               ["Name", <>Becomes a unique slug (global, not per project). Container <Code>{"aoox-db-<slug>"}</Code>, volume <Code>{"aoox_db_<slug>"}</Code>.</>],
-              ["Engine", "postgres / mysql / mariadb / redis."],
+              ["Engine", "postgres / mysql / mariadb / redis / valkey / mongodb. For postgres, also pick a Variant (optional): pgvector / PostGIS / TimescaleDB."],
               ["Version (image tag)", <>A Docker Hub tag. Blank = the default in the table above. Examples: <Code>17</Code>, <Code>8.4</Code>, <Code>7.2</Code>.</>],
               [
                 "Host port",
@@ -170,8 +240,8 @@ export default function Page() {
 
       <H2 id="database-tambahan">Extra databases on the same server</H2>
       <P>
-        A single PostgreSQL/MySQL/MariaDB container can hold several
-        databases (schemas). Under the <strong>Data</strong> tab, an
+        A single PostgreSQL/MySQL/MariaDB/MongoDB container can hold several
+        databases. Under the <strong>Data</strong> tab, an
         owner/admin can create a new database named{" "}
         <Code>[A-Za-z_][A-Za-z0-9_]*</Code>; the one created at provisioning
         time is the <em>primary</em> one and can&apos;t be deleted.
@@ -181,7 +251,8 @@ export default function Page() {
         <li>The host, user, and password are the same — only the database name part differs.</li>
         <li>The Overview tab shows a <strong>Connection for database</strong> per name when there&apos;s more than one.</li>
         <li>Backups have an option to include every database on the server (see Backup).</li>
-        <li>Redis doesn&apos;t have this feature (use the DB number in the URL if needed).</li>
+        <li>Redis/Valkey don&apos;t have this feature (use the DB number in the URL if needed).</li>
+        <li>MongoDB: a new database is immediately populated with a placeholder document, same as the primary one.</li>
       </Ul>
 
       <H2 id="operasi">Operations</H2>
@@ -235,8 +306,14 @@ export default function Page() {
       />
 
       <Callout kind="warn" title="Not available yet">
-        Changing the engine version from the UI; replicas/HA; databases on a
-        remote server; automatic env injection.
+        Changing the engine version (or the PostgreSQL variant) from the UI after creation;
+        replicas/HA; databases on a remote server; automatic env injection. For MongoDB:
+        the query box only supports <Code>{"<collection>.find({...})"}</Code>{" "}
+        (read-only — no insert/update/delete/aggregate from the query box yet;
+        use a backup restore or the application itself to write), no
+        Structure tab/create-collection/edit-delete row yet, and extended-JSON
+        operators like <Code>{'{"$oid":"..."}'}</Code> aren&apos;t specially
+        interpreted in filters yet.
       </Callout>
 
       <H2 id="berikutnya">Next steps</H2>

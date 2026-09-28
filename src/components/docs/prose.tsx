@@ -58,7 +58,7 @@ function DocPage({
             <span>{group.title}</span>
           </p>
         ) : null}
-        <h1 className="text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
+        <h1 className="text-2xl font-semibold text-balance sm:text-3xl">
           {title}
         </h1>
         <p className="text-sm leading-relaxed text-muted-foreground">
@@ -113,7 +113,7 @@ function H2({ id, children }: { id: string; children: React.ReactNode }) {
   return (
     <h2
       id={id}
-      className="scroll-mt-20 text-lg font-semibold tracking-tight"
+      className="scroll-mt-20 text-lg font-semibold"
     >
       <a href={`#${id}`} className="hover:underline">
         {children}

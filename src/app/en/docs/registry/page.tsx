@@ -171,6 +171,19 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
           there&apos;s a <em>dry run</em> mode to preview what would be removed.
         </li>
         <li>
+          <strong>Delete image</strong> (the button on each repository&apos;s
+          header row) removes the whole repository, not just one tag: every
+          tag and manifest, its folder in storage, then an automatic garbage
+          collect — different from deleting tags one at a time, and this is
+          what you need when a repository still shows{" "}
+          <strong>&ldquo;0 tags&rdquo;</strong> and won&apos;t disappear from
+          the list no matter how many times garbage collect runs (garbage
+          collect only reclaims unused blobs, never the repository&apos;s own
+          folder). Its confirmation dialog shows which applications&apos;
+          current image looks like it came from this repository — a rollback
+          or a build-free redeploy to that image will fail once it&apos;s gone.
+        </li>
+        <li>
           Deleting a tag still used by a running container doesn&apos;t stop it,
           but rolling back to that version is no longer possible.
         </li>
@@ -256,6 +269,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
           ["Deploy fails: No self-hosted registry", "Provision the local registry first."],
           ["Manual push: http: server gave HTTP response to HTTPS client", <><Code>REGISTRY_PUBLIC_HOST</Code> isn&apos;t localhost, without TLS. Add it to <Code>insecure-registries</Code>, or set up a TLS reverse proxy.</>],
           ["Disk still full after deleting tags", "Run Garbage collect, or Clean up now in Settings → Docker disk."],
+          ["A “0 tags” repository won’t disappear even after Garbage collect", "Garbage collect never deletes the repository itself, only unused blobs. Use the Delete image button on that repository's header row."],
           ["Rollback fails: image not found", "The tag was already pruned by retention or deleted manually. Redeploy that commit."],
           ["Registry card: Docker unreachable", <><Code>DOCKER_GID</Code> is wrong or the socket isn&apos;t mounted — see <DocLink href="/en/docs/troubleshooting">Troubleshooting</DocLink>.</>],
         ]}

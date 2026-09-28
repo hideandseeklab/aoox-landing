@@ -20,7 +20,7 @@ import {
 export const metadata: Metadata = { title: "Managed database" }
 
 const SUMMARY = [
-  { k: "Engine", v: "PostgreSQL · MySQL · MariaDB · Redis" },
+  { k: "Engine", v: "PostgreSQL · MySQL · MariaDB · Redis · Valkey · MongoDB" },
   { k: "Bentuk", v: "Container + volume per database" },
   { k: "Hubungkan", v: "${{database.<slug>.url}} di env aplikasi" },
 ]
@@ -30,6 +30,14 @@ const ENGINES = [
   { e: "MySQL", img: "mysql", tag: "8", port: 3306, url: "mysql://app:pass@host:3306/<db>" },
   { e: "MariaDB", img: "mariadb", tag: "11", port: 3306, url: "mysql://app:pass@host:3306/<db>" },
   { e: "Redis", img: "redis", tag: "7-alpine", port: 6379, url: "redis://:pass@host:6379/0" },
+  { e: "Valkey", img: "valkey/valkey", tag: "8-alpine", port: 6379, url: "redis://:pass@host:6379/0" },
+  { e: "MongoDB", img: "mongo", tag: "7", port: 27017, url: "mongodb://app:pass@host:27017/<db>?authSource=admin" },
+]
+
+const POSTGRES_VARIANTS = [
+  { v: "pgvector", img: "pgvector/pgvector", tag: "pg16", d: "Pencarian similarity vector untuk embedding (AI/ML)." },
+  { v: "PostGIS", img: "postgis/postgis", tag: "16-3.4", d: "Tipe data & query geografis/spasial." },
+  { v: "TimescaleDB", img: "timescale/timescaledb", tag: "latest-pg16", d: "Data time-series: hypertable, continuous aggregate." },
 ]
 
 const LIFECYCLE = [
@@ -51,7 +59,7 @@ export default function Page() {
     <DocPage
       href="/docs/database"
       title="Managed database"
-      description="Membuat PostgreSQL, MySQL, MariaDB, atau Redis per project dan menghubungkannya ke aplikasi."
+      description="Membuat PostgreSQL, MySQL, MariaDB, Redis, Valkey, atau MongoDB per project dan menghubungkannya ke aplikasi."
     >
       <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
         {SUMMARY.map((item) => (
@@ -91,6 +99,65 @@ export default function Page() {
         Username SQL selalu <Code>app</Code>; nama database = slug dengan{" "}
         <Code>-</Code> diganti <Code>_</Code>. Password acak, disimpan terenkripsi.
       </P>
+      <Callout>
+        <strong>Valkey</strong> adalah drop-in Redis (fork Linux Foundation) —
+        protokol, perintah, dan format persistensi (AOF) sama persis. Backup,
+        data browser, dan URL koneksi Valkey memakai jalur yang identik dengan
+        Redis (skema <Code>redis://</Code>, klien Redis apa pun kompatibel).
+      </Callout>
+      <Callout>
+        <strong>MongoDB</strong> tidak punya <Code>CREATE DATABASE</Code> —
+        database baru &quot;ada&quot; begitu punya isi. aoox otomatis menulis satu
+        dokumen placeholder (koleksi <Code>_aoox_init</Code>) setelah
+        container siap, jadi database utama langsung muncul di daftar
+        (tab Data) tanpa menunggu tulisan pertama dari aplikasi.
+      </Callout>
+
+      <H2 id="varian-postgres">Varian PostgreSQL</H2>
+      <P>
+        Saat membuat database dengan Engine <strong>PostgreSQL</strong>,
+        pilih <strong>Varian</strong> untuk image dengan ekstensi
+        sudah terpasang — protokol, kredensial, backup, dan referensi env
+        tetap sama seperti PostgreSQL polos (hanya image dan tag default yang
+        beda). Ekstensinya diaktifkan otomatis (<Code>CREATE EXTENSION IF NOT
+        EXISTS</Code>) begitu container siap menerima koneksi.
+      </P>
+      <div className="overflow-x-auto border border-border">
+        <table className="w-full text-xs">
+          <thead className="bg-muted text-muted-foreground">
+            <tr>
+              <th className="px-3 py-2 text-left font-medium">Varian</th>
+              <th className="px-3 py-2 text-left font-medium">Image (tag default)</th>
+              <th className="px-3 py-2 text-left font-medium">Kegunaan</th>
+            </tr>
+          </thead>
+          <tbody>
+            {POSTGRES_VARIANTS.map((row) => (
+              <tr key={row.v} className="border-t border-border">
+                <td className="px-3 py-2 text-foreground">{row.v}</td>
+                <td className="px-3 py-2"><Code>{row.img}:{row.tag}</Code></td>
+                <td className="px-3 py-2 text-muted-foreground">{row.d}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <Ul>
+        <li>
+          Tanpa varian (default) = image <Code>postgres</Code> polos, tanpa
+          ekstensi tambahan.
+        </li>
+        <li>
+          Ganti varian setelah dibuat tidak didukung dari dashboard — hapus
+          lalu buat ulang (opsional: pulihkan dari backup ke database baru).
+        </li>
+        <li>
+          PostGIS dan TimescaleDB sudah mengaktifkan ekstensinya sendiri saat
+          image pertama kali start; aoox tetap memanggil{" "}
+          <Code>CREATE EXTENSION IF NOT EXISTS</Code> sebagai jaring pengaman
+          (aman diulang, tidak menimbulkan error).
+        </li>
+      </Ul>
 
       <H2 id="langkah">Membuat database</H2>
       <Steps>
@@ -99,7 +166,7 @@ export default function Page() {
             head={["Field", "Keterangan"]}
             rows={[
               ["Nama", <>Jadi slug unik (global, bukan per project). Container <Code>{"aoox-db-<slug>"}</Code>, volume <Code>{"aoox_db_<slug>"}</Code>.</>],
-              ["Engine", "postgres / mysql / mariadb / redis."],
+              ["Engine", "postgres / mysql / mariadb / redis / valkey / mongodb. Untuk postgres, pilih juga Varian (opsional): pgvector / PostGIS / TimescaleDB."],
               ["Versi (tag image)", <>Tag Docker Hub. Kosong = default di tabel atas. Contoh: <Code>17</Code>, <Code>8.4</Code>, <Code>7.2</Code>.</>],
               [
                 "Port host",
@@ -166,8 +233,8 @@ export default function Page() {
 
       <H2 id="database-tambahan">Database tambahan di server yang sama</H2>
       <P>
-        Satu container PostgreSQL/MySQL/MariaDB bisa menampung beberapa
-        database (schema). Di tab <strong>Data</strong>, owner/admin bisa
+        Satu container PostgreSQL/MySQL/MariaDB/MongoDB bisa menampung
+        beberapa database. Di tab <strong>Data</strong>, owner/admin bisa
         membuat database baru dengan nama <Code>[A-Za-z_][A-Za-z0-9_]*</Code>;
         yang dibuat saat provisioning adalah <em>primary</em> dan tidak bisa
         dihapus.
@@ -177,7 +244,8 @@ export default function Page() {
         <li>Host, user, dan password sama — hanya bagian nama database yang berbeda.</li>
         <li>Tab Ringkasan menampilkan <strong>Koneksi untuk database</strong> per nama bila ada lebih dari satu.</li>
         <li>Backup punya opsi menyertakan semua database di server (lihat Backup).</li>
-        <li>Redis tidak punya fitur ini (pakai nomor DB di URL bila perlu).</li>
+        <li>Redis/Valkey tidak punya fitur ini (pakai nomor DB di URL bila perlu).</li>
+        <li>MongoDB: database baru dibuat langsung terisi dokumen placeholder, sama seperti database utama.</li>
       </Ul>
 
       <H2 id="operasi">Operasi</H2>
@@ -230,8 +298,13 @@ export default function Page() {
       />
 
       <Callout kind="warn" title="Belum tersedia">
-        Ganti versi engine dari UI; replika/HA; database di server remote;
-        injeksi env otomatis.
+        Ganti versi engine (atau varian PostgreSQL) dari UI setelah dibuat; replika/HA; database di
+        server remote; injeksi env otomatis. Untuk MongoDB: query box hanya{" "}
+        <Code>{"<koleksi>.find({...})"}</Code> (baca saja, belum insert/update/
+        delete/aggregate lewat query box — pakai backup restore atau aplikasi
+        untuk menulis), belum ada tab Struktur/buat koleksi/edit-hapus baris,
+        dan operator extended-JSON seperti <Code>{'{"$oid":"..."}'}</Code> belum
+        diterjemahkan khusus di filter query.
       </Callout>
 
       <H2 id="berikutnya">Langkah berikutnya</H2>

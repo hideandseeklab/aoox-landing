@@ -185,7 +185,7 @@ export default function Page() {
 
         <Step title="Choose Access">
           <P>
-            Before saving, the dialog asks how this application will be
+            Before saving, the form asks how this application will be
             reachable — so a freshly created application doesn&apos;t
             silently end up unreachable once the deploy finishes.
           </P>
@@ -273,8 +273,65 @@ success   old container replaced · application status Running`}</Pre>
           ["Mount", "Volumes, binds, files — and volume backups."],
           ["Jobs", "Scheduled commands."],
           ["Webhook", "Webhook URL, secret, and pull request previews."],
+          ["Console", "Interactive shell straight into the running container."],
         ]}
       />
+
+      <H2 id="console">Console</H2>
+      <P>
+        The <strong>Console</strong> tab opens a <Code>docker exec -it</Code>{" "}
+        into the application&apos;s running container, right from the dashboard —
+        different from the <DocLink href="/en/docs/terminal">Terminal</DocLink>{" "}
+        page, which opens a shell on the <em>host</em> over SSH. Handy for
+        inspecting files, running a debug command, or checking the
+        environment without needing SSH access to the server.
+      </P>
+      <Ul>
+        <li>
+          <strong>Access</strong>: project role <strong>developer</strong> and
+          up (including platform admin/owner) — a viewer never sees this tab,
+          and the API rejects it too if tried directly. A read-only API token
+          is rejected as well.
+        </li>
+        <li>
+          <strong>Logged in the audit log</strong> — every console session
+          opened is its own row in Settings → Audit log, with who and when.
+        </li>
+        <li>
+          <strong>service</strong> mode (Swarm) with more than one replica:
+          pick a task from the dropdown above the terminal; only tasks
+          running on this node are reachable.
+        </li>
+        <li>
+          Shell used: <Code>bash</Code> if the image has it, otherwise{" "}
+          <Code>sh</Code>. A <strong>distroless</strong>/shell-less image
+          shows Docker&apos;s own error message and the session ends right
+          away — not a bug, there simply is no shell to open.
+        </li>
+        <li>
+          <strong>Changes made in this shell are temporary</strong>: files
+          edited through Console are lost on the next redeploy, unless
+          they live on a{" "}
+          <DocLink href="/en/docs/mount">mounted volume</DocLink>.
+        </li>
+      </Ul>
+
+      <H2 id="error-log">Log error detection</H2>
+      <P>
+        Every minute, the API scans the container log of every{" "}
+        <strong>Running</strong> application for common error patterns
+        (traceback, panic, exception, <Code>level=error</Code>, and similar)
+        and sends an <strong>Application error</strong> notification when it
+        finds one — see <DocLink href="/en/docs/notifikasi#event">Notifications</DocLink>{" "}
+        for the pattern list, cooldown, and how to turn it on (off by default,
+        per channel).
+      </P>
+      <P>
+        For an application whose normal output just happens to look like
+        errors (e.g. a verbose framework), turn on{" "}
+        <strong>Ignore error logs</strong> on the Settings tab — that
+        application is skipped from the scan entirely, not just muted.
+      </P>
 
       <H2 id="jebakan">Common pitfalls</H2>
       <Table

@@ -67,7 +67,7 @@ function CtaSection({ lang = "id" }: { lang?: Lang }) {
           {t.badge}
         </span>
 
-        <h2 className="max-w-2xl text-3xl font-semibold tracking-tight text-balance sm:text-5xl">
+        <h2 className="max-w-2xl text-3xl font-semibold text-balance sm:text-5xl">
           {t.titleLead}
           <span className="text-primary-foreground dark:text-primary">
             {t.titleHighlight}

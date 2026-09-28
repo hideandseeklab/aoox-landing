@@ -181,7 +181,7 @@ export default function Page() {
 
         <Step title="Pilih Akses">
           <P>
-            Sebelum menyimpan, dialog meminta cara aplikasi ini akan bisa
+            Sebelum menyimpan, form meminta cara aplikasi ini akan bisa
             diakses — supaya aplikasi baru tidak diam-diam tidak bisa dibuka
             begitu deploy selesai.
           </P>
@@ -269,8 +269,66 @@ success   container lama diganti · status aplikasi Running`}</Pre>
           ["Mount", "Volume, bind, file — dan backup volume."],
           ["Jobs", "Perintah terjadwal."],
           ["Webhook", "URL webhook, secret, dan preview pull request."],
+          ["Console", "Shell interaktif langsung ke dalam container yang berjalan."],
         ]}
       />
+
+      <H2 id="console">Console</H2>
+      <P>
+        Tab <strong>Console</strong> membuka <Code>docker exec -it</Code> ke
+        dalam container aplikasi yang sedang berjalan, langsung dari
+        dashboard — berbeda dari halaman <DocLink href="/docs/terminal">
+        Terminal</DocLink> yang membuka shell di <em>host</em> lewat SSH.
+        Cocok untuk memeriksa file, menjalankan perintah debug, atau mengecek
+        environment tanpa perlu akses SSH ke server.
+      </P>
+      <Ul>
+        <li>
+          <strong>Akses</strong>: role project <strong>developer</strong> ke
+          atas (termasuk admin/owner platform) — viewer tidak melihat tab ini
+          sama sekali, dan API menolaknya juga bila dicoba langsung. Token API
+          <Code>read-only</Code> juga ditolak.
+        </li>
+        <li>
+          <strong>Tercatat di audit log</strong> — setiap pembukaan sesi
+          console adalah baris tersendiri di Settings → Audit log, dengan
+          siapa dan kapan.
+        </li>
+        <li>
+          Mode <strong>service</strong> (Swarm) dengan lebih dari satu
+          replika: pilih task lewat dropdown yang muncul di atas terminal;
+          hanya task yang berjalan di node ini yang bisa dijangkau.
+        </li>
+        <li>
+          Shell yang dipakai: <Code>bash</Code> bila tersedia di image, kalau
+          tidak <Code>sh</Code>. Image <strong>distroless</strong>/tanpa shell
+          sama sekali akan menampilkan pesan error dari Docker sendiri
+          lalu sesi langsung berakhir — bukan bug, memang tidak ada shell untuk dibuka.
+        </li>
+        <li>
+          <strong>Perubahan di dalam shell ini bersifat sementara</strong>:
+          file yang diubah lewat Console hilang saat aplikasi di-redeploy,
+          kecuali disimpan di{" "}
+          <DocLink href="/docs/mount">volume yang di-mount</DocLink>.
+        </li>
+      </Ul>
+
+      <H2 id="error-log">Deteksi error di log</H2>
+      <P>
+        Tiap menit, API memindai log container aplikasi yang sedang{" "}
+        <strong>Running</strong> untuk pola error umum (traceback, panic,
+        exception, <Code>level=error</Code>, dan sejenisnya) dan mengirim
+        notifikasi <strong>Error aplikasi</strong> kalau ditemukan — lihat{" "}
+        <DocLink href="/docs/notifikasi#event">Notifikasi</DocLink> untuk
+        detail pola, cooldown, dan cara menyalakannya (nonaktif secara
+        default, per channel).
+      </P>
+      <P>
+        Untuk aplikasi yang output normalnya memang terlihat seperti error
+        (mis. framework yang verbose), nyalakan{" "}
+        <strong>Abaikan error di log</strong> di tab Pengaturan — aplikasi itu
+        dilewati sepenuhnya dari pemindaian, tidak cuma dibisukan.
+      </P>
 
       <H2 id="jebakan">Jebakan umum</H2>
       <Table

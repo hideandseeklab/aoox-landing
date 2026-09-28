@@ -165,6 +165,20 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
           akan dihapus.
         </li>
         <li>
+          <strong>Hapus image</strong> (tombol di header tiap repository)
+          membuang repository itu <em>sepenuhnya</em>, bukan cuma satu tag:
+          semua tag &amp; manifest-nya, foldernya di storage, lalu garbage
+          collect otomatis — beda dari hapus tag satu-satu, dan ini yang
+          dibutuhkan kalau sebuah repository menunjukkan{" "}
+          <strong>&ldquo;0 tag&rdquo;</strong> tapi tidak mau hilang dari
+          daftar walau garbage collect sudah dijalankan berkali-kali
+          (garbage collect hanya membuang blob yang tidak terpakai, tidak
+          pernah folder repository itu sendiri). Dialog konfirmasinya
+          menampilkan aplikasi mana saja yang &ldquo;current image&rdquo;-nya
+          tampak berasal dari repository ini — rollback atau redeploy tanpa
+          build ke image itu akan gagal setelah dihapus.
+        </li>
+        <li>
           Menghapus tag yang masih dipakai container berjalan tidak
           menghentikannya, tapi rollback ke versi itu tidak lagi bisa.
         </li>
@@ -246,6 +260,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
           ["Deploy gagal: No self-hosted registry", "Aktifkan registry lokal dulu."],
           ["Push manual: http: server gave HTTP response to HTTPS client", <><Code>REGISTRY_PUBLIC_HOST</Code> bukan localhost tanpa TLS. Tambahkan ke <Code>insecure-registries</Code> atau pasang reverse proxy TLS.</>],
           ["Disk tetap penuh setelah hapus tag", "Jalankan Garbage collect, atau Bersihkan sekarang di Settings → Disk Docker."],
+          ["Repository “0 tag” tidak hilang walau sudah Garbage collect", "Garbage collect tidak pernah menghapus repository itu sendiri, hanya blob yang tidak terpakai. Pakai tombol Hapus image di header repository tersebut."],
           ["Rollback gagal: image not found", "Tag sudah dipangkas oleh retensi atau dihapus manual. Deploy ulang commit tersebut."],
           ["Kartu Registry: Docker tidak terjangkau", <><Code>DOCKER_GID</Code> salah atau socket tidak di-mount — lihat <DocLink href="/docs/troubleshooting">Troubleshooting</DocLink>.</>],
         ]}
