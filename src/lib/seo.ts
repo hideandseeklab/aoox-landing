@@ -5,6 +5,23 @@ export const SITE_URL = "https://aoox.dev"
 export const SITE_NAME = "aoox"
 
 /**
+ * Icons, declared explicitly on every root layout (both language groups and
+ * `not-found.tsx`). They live in `public/` as plain files: the
+ * `app/icon.svg` file convention only reaches pages under the layout in the
+ * same folder, and this site has no root `app/layout.tsx` (each route group
+ * has its own), so that convention rendered no `<link rel="icon">` at all.
+ * ICO first (48x48 is what Google search results want, and the fallback for
+ * crawlers and `/favicon.ico` requests), then the SVG for browsers that use it.
+ */
+export const ICONS: NonNullable<Metadata["icons"]> = {
+  icon: [
+    { url: "/favicon.ico", sizes: "48x48" },
+    { url: "/icon.svg", sizes: "any", type: "image/svg+xml" },
+  ],
+  apple: "/apple-touch-icon.png",
+}
+
+/**
  * Static file, not the `next/og`-generated route it replaced — GitHub Pages
  * serves a static `public/og.png` as `image/png`, but served the generated
  * `/opengraph-image` route (no file extension) as

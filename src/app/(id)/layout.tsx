@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import "../globals.css"
 import { fontMono, fontSans } from "../fonts"
 import { ThemeProvider } from "@/components/theme-provider"
-import { SITE_URL } from "@/lib/seo"
+import { ICONS, SITE_URL } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = {
@@ -14,10 +14,10 @@ export const metadata: Metadata = {
   },
   description:
     "Deploy aplikasi dari Git ke server sendiri. Build, database, domain, dan log dalam satu dashboard di atas Docker — alternatif self-hosted untuk Heroku/Vercel.",
-  // Static file, not a generated `apple-icon` route — GitHub Pages serves a
-  // static PNG as `image/png`; the generated route had no extension and was
-  // served as `application/octet-stream`.
-  icons: { apple: "/apple-touch-icon.png" },
+  // Plain files in public/ (see ICONS in seo.ts): GitHub Pages serves a static
+  // file with an extension under the right MIME type, and unlike the
+  // `app/icon.svg` convention they work under these route-group layouts.
+  icons: ICONS,
 }
 
 // Root layout for every Indonesian-language route (`/`, `/docs/**`) — see

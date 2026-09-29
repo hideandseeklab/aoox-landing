@@ -8,6 +8,18 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Favicon missing on aoox.dev.** Since the SEO work split the root layout into the `(id)`/`(en)` route groups,
+  no page rendered a `<link rel="icon">` (only `apple-touch-icon`): the `app/icon.svg` file convention only reaches
+  pages under the layout in the same folder, and this site has no root `app/layout.tsx` any more; there was no
+  `favicon.ico` fallback either, so browsers found nothing. Both layouts and `not-found.tsx` now declare the icons
+  explicitly from one shared `ICONS` constant in `src/lib/seo.ts`, pointing at plain files in `public/` (static files
+  with an extension are served with the right MIME type by GitHub Pages, and do not depend on the file convention):
+  `/favicon.ico` (16/32/48 px, generated from the same `$` mark by a one-off script, no new dependency) with
+  `sizes="48x48"` first, then `/icon.svg`, then the existing `apple-touch-icon.png`. `icon.svg` moved from
+  `src/app/` to `public/` (same file). Checked across every built page (60, including `404.html`).
+
 ## [0.1.0-alpha.4] - 2026-09-29
 
 ### Added

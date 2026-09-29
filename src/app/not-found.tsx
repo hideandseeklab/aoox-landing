@@ -5,7 +5,7 @@ import "./globals.css"
 import { fontMono, fontSans } from "./fonts"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Button } from "@/components/ui/button"
-import { SITE_URL } from "@/lib/seo"
+import { ICONS, SITE_URL } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
 // Global 404 — `output: "export"` turns this into a plain `404.html` at the
@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "Halaman tidak ditemukan · aoox",
   robots: { index: false, follow: false },
+  icons: ICONS,
 }
 
 export default function NotFound() {
