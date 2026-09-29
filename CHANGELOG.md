@@ -31,10 +31,15 @@ Versions below 1.0.0 may include breaking changes in a minor release.
     all) is removed, since the real `<html lang="en">` now covers the whole `/en` subtree
     server-side. `metadataBase` (`https://aoox.dev`) now lives on these two layouts.
   - Open Graph + Twitter: every page gets `openGraph`/`twitter` metadata with a shared 1200×630
-    image. `src/app/opengraph-image.tsx` (and a matching `src/app/apple-icon.tsx`, 180×180)
-    generate that image via `next/og`'s `ImageResponse` at build time — no new dependency, and
-    compatible with static export the same way `sitemap.ts` is. This is a **placeholder** design
-    (dark background, lime "$ aoox" mark, tagline) meant to be swapped for a real graphic.
+    `public/og.png` and a 180×180 `public/apple-touch-icon.png` — both static files, referenced
+    via `icons.apple` and `pageMetadata()`'s `images`. Both started out generated at build time
+    via `next/og`'s `ImageResponse` (`opengraph-image.tsx`/`apple-icon.tsx`, no extra dependency),
+    but GitHub Pages serves those extensionless generated routes as
+    `Content-Type: application/octet-stream`, which some social crawlers (WhatsApp, Twitter,
+    Facebook) reject outright — confirmed live on aoox.dev before switching. A static file with a
+    real extension is served with the correct MIME type instead, so both routes are now removed
+    in favor of the two `public/` files (the touch icon regenerated from `icon.svg` via a one-off
+    `next/og` script, same visual mark; the OG image is the real designed graphic).
   - JSON-LD on both homepages (`src/components/json-ld.tsx` + `homeJsonLd()` in `seo.ts`):
     `SoftwareApplication`, `Organization`, and `WebSite` under one `@graph`, `<` escaped in the
     serialized JSON so a description containing a stray tag-like string can't break out of the

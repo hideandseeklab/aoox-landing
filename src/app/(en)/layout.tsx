@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   },
   description:
     "Deploy applications from Git to your own server. Build, database, domain, and logs in one dashboard on top of Docker — a self-hosted alternative to Heroku/Vercel.",
+  // Static file, not a generated `apple-icon` route — GitHub Pages serves a
+  // static PNG as `image/png`; the generated route had no extension and was
+  // served as `application/octet-stream`.
+  icons: { apple: "/apple-touch-icon.png" },
 }
 
 // Root layout for every English-language route (`/en`, `/en/docs/**`) — see

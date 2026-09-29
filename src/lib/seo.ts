@@ -5,6 +5,22 @@ export const SITE_URL = "https://aoox.dev"
 export const SITE_NAME = "aoox"
 
 /**
+ * Static file, not the `next/og`-generated route it replaced — GitHub Pages
+ * serves a static `public/og.png` as `image/png`, but served the generated
+ * `/opengraph-image` route (no file extension) as
+ * `application/octet-stream`, which some social crawlers (WhatsApp, Twitter,
+ * Facebook) reject outright. Confirmed live on aoox.dev before switching.
+ */
+const OG_IMAGE = {
+  url: "/og.png",
+  width: 1200,
+  height: 630,
+  type: "image/png",
+  // Describes the (single, shared) image itself, not the current page.
+  alt: "aoox — self-hosted PaaS",
+}
+
+/**
  * Given a pathname and the language it's written in, returns the same page's
  * path in the *other* language, or `null` if there isn't one. Single source
  * of truth for the ID⇄EN URL mapping — reused by the header's language
@@ -91,17 +107,13 @@ export function pageMetadata({
       url,
       title,
       description,
-      // `opengraph-image.tsx`'s file-convention auto-discovery doesn't reach
-      // pages nested under the (id)/(en) route groups, so its generated
-      // route is referenced explicitly here instead — same image for every
-      // page for now (temporary, see that file's comment).
-      images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+      images: [OG_IMAGE],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: ["/opengraph-image"],
+      images: [OG_IMAGE],
     },
   }
 }
