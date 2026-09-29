@@ -93,7 +93,7 @@ function HowItWorksSection({ lang = "id" }: { lang?: Lang }) {
           <li key={item.step} className="relative flex flex-col gap-4 pl-10 md:pl-0">
             <span
               className={cn(
-                "absolute top-0 left-0 flex size-6 items-center justify-center border bg-background text-[0.65rem] md:relative md:mx-auto md:mb-2",
+                "absolute top-0 left-0 flex size-6 items-center justify-center border bg-background text-[0.65rem] md:relative md:mx-auto md:mb-2 rounded-md",
                 i === t.steps.length - 1
                   ? "border-primary text-primary-foreground dark:text-primary"
                   : "border-border text-muted-foreground"
@@ -109,7 +109,7 @@ function HowItWorksSection({ lang = "id" }: { lang?: Lang }) {
               </p>
             </div>
 
-            <div className="flex-1 border border-border bg-card p-3 text-[0.7rem] text-card-foreground">
+            <div className="flex-1 border border-border bg-card p-3 text-[0.7rem] text-card-foreground rounded-md">
               {item.visual}
             </div>
           </li>
@@ -134,7 +134,7 @@ function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-1">
       <span className="text-[0.6rem] text-muted-foreground">{label}</span>
-      <span className="truncate border border-border bg-background px-2 py-1 text-foreground">
+      <span className="truncate border border-border bg-background px-2 py-1 text-foreground rounded-md">
         {value}
       </span>
     </div>
@@ -157,7 +157,7 @@ function BuildChoice({ label, auto }: { label: string; auto: string }) {
   return (
     <div className="flex flex-col gap-2">
       <span className="text-[0.6rem] text-muted-foreground">{label}</span>
-      <div className="grid grid-cols-2 gap-px border border-border bg-border">
+      <div className="grid grid-cols-2 gap-px border border-border bg-border rounded-md overflow-hidden">
         <div className="flex flex-col gap-0.5 bg-background p-2">
           <span className="text-foreground">Dockerfile</span>
           <span className="text-muted-foreground">./Dockerfile</span>
@@ -165,14 +165,14 @@ function BuildChoice({ label, auto }: { label: string; auto: string }) {
         <div className="flex flex-col gap-0.5 bg-primary/10 p-2">
           <span className="flex items-center justify-between text-foreground">
             Nixpacks
-            <span className="size-1.5 bg-primary" />
+            <span className="size-1.5 bg-primary rounded-full" />
           </span>
           <span className="text-muted-foreground">{auto}</span>
         </div>
       </div>
       <div className="flex gap-2 text-muted-foreground">
-        <span className="border border-border px-1.5 py-px">NODE_ENV=production</span>
-        <span className="border border-border px-1.5 py-px">+2 env</span>
+        <span className="border border-border px-1.5 py-px rounded-sm">NODE_ENV=production</span>
+        <span className="border border-border px-1.5 py-px rounded-sm">+2 env</span>
       </div>
     </div>
   )
@@ -196,7 +196,7 @@ function DeployLog({ running }: { running: string }) {
         </div>
       ))}
       <div className="mt-1 flex items-center gap-2 border-t border-border pt-2">
-        <span className="size-1.5 bg-primary" />
+        <span className="size-1.5 bg-primary rounded-full" />
         <span className="text-foreground">{running}</span>
         <span className="ml-auto truncate text-muted-foreground">shop.example.com</span>
       </div>

@@ -79,7 +79,7 @@ const COPY_ID = {
   copyright: (year: number) => `© ${year} aoox. Dibuat untuk dijalankan di server sendiri.`,
   hotkey: (
     <>
-      Tekan <kbd className="border border-border px-1 text-foreground">d</kbd> untuk
+      Tekan <kbd className="border border-border px-1 text-foreground rounded-sm">d</kbd> untuk
       ganti tema.
     </>
   ),
@@ -95,7 +95,7 @@ const COPY: Record<Lang, typeof COPY_ID> = {
     copyright: (year: number) => `© ${year} aoox. Built to run on your own server.`,
     hotkey: (
       <>
-        Press <kbd className="border border-border px-1 text-foreground">d</kbd> to
+        Press <kbd className="border border-border px-1 text-foreground rounded-sm">d</kbd> to
         toggle the theme.
       </>
     ),
@@ -120,7 +120,7 @@ function SiteFooter() {
           </Link>
           <p className="max-w-xs leading-relaxed">{t.tagline}</p>
           <p className="flex items-center gap-1.5 text-[0.7rem]">
-            <span className="size-1.5 bg-primary" />
+            <span className="size-1.5 bg-primary rounded-full" />
             NestJS · Next.js · PostgreSQL · Traefik
           </p>
         </div>

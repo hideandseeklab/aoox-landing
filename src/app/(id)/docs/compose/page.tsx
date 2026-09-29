@@ -60,7 +60,7 @@ export default function Page() {
       title="Stack compose"
       description="Men-deploy file docker-compose dari repo sebagai satu stack multi-service, lengkap dengan domain per service."
     >
-      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
+      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
           <div key={item.k} className="flex flex-col gap-0.5 bg-background px-4 py-3">
             <dt className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">{item.k}</dt>
@@ -70,7 +70,7 @@ export default function Page() {
       </dl>
 
       <H2 id="kapan">Aplikasi, stack compose, atau template?</H2>
-      <div className="border border-border text-xs">
+      <div className="border border-border text-xs rounded-lg overflow-hidden">
         {DECISION.map((row, i) => (
           <div
             key={row.q}
@@ -123,7 +123,7 @@ export default function Page() {
           />
         </Step>
         <Step title="Klik Deploy">
-          <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4">
+          <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
             {FLOW.map((item, i) => (
               <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
                 <span className="text-[0.6rem] text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
@@ -348,7 +348,7 @@ networks:
       </P>
 
       <H2 id="berikutnya">Langkah berikutnya</H2>
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link
             key={item.href}

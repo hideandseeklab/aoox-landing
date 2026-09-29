@@ -62,7 +62,7 @@ export default function Page() {
       description="Panduan lengkap memasang dan memakai aoox: dari instalasi di server sendiri sampai deploy, database, backup, dan notifikasi."
     >
       {/* mulai dari sini */}
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-3">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-3 rounded-lg overflow-hidden">
         {START.map((item) => (
           <Link
             key={item.href}
@@ -94,7 +94,7 @@ export default function Page() {
       </P>
 
       <H2 id="arsitektur">Arsitektur</H2>
-      <div className="flex flex-col gap-px border border-border bg-border text-xs">
+      <div className="flex flex-col gap-px border border-border bg-border text-xs rounded-lg overflow-hidden">
         <div className="flex items-center justify-between bg-muted/40 px-4 py-2 text-muted-foreground">
           <span>browser</span>
           <span>→ WEB_ORIGIN (:3000) · PUBLIC_API_URL (:3001)</span>
@@ -103,7 +103,7 @@ export default function Page() {
           {ARCH.map((svc) => (
             <div key={svc.name} className="flex flex-col gap-0.5 bg-background px-4 py-3">
               <span className="flex items-center gap-1.5 text-foreground">
-                <span className="size-1.5 bg-primary" />
+                <span className="size-1.5 bg-primary rounded-full" />
                 {svc.name}
               </span>
               <span className="text-muted-foreground">{svc.sub}</span>
@@ -113,7 +113,7 @@ export default function Page() {
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 bg-background px-4 py-3">
           <span className="text-muted-foreground">Docker Engine di host →</span>
           {MANAGED.map((c) => (
-            <span key={c} className="border border-border px-1.5 py-px text-muted-foreground">
+            <span key={c} className="border border-border px-1.5 py-px text-muted-foreground rounded-sm">
               aoox-{c}
             </span>
           ))}
@@ -205,7 +205,7 @@ export default function Page() {
       <H2 id="peta">Peta dokumentasi</H2>
       <div className="grid gap-4 sm:grid-cols-2">
         {DOCS_NAV.map((group) => (
-          <div key={group.title} className="flex flex-col border border-border">
+          <div key={group.title} className="flex flex-col overflow-hidden border border-border rounded-lg">
             <span className="border-b border-border bg-muted/40 px-4 py-2 text-[0.65rem] tracking-wider text-muted-foreground uppercase">
               {group.title}
             </span>

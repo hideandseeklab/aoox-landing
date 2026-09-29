@@ -67,14 +67,14 @@ function HeroSection({ lang = "id" }: { lang?: Lang }) {
       <div className="relative mx-auto grid w-full max-w-6xl gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16">
         <div className="flex flex-col gap-7">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex w-fit items-center gap-2 border border-border bg-card px-2.5 py-1 text-[0.7rem] text-muted-foreground">
-              <span className="size-1.5 bg-primary" />
+            <span className="inline-flex w-fit items-center gap-2 border border-border bg-card px-2.5 py-1 text-[0.7rem] text-muted-foreground rounded-md">
+              <span className="size-1.5 bg-primary rounded-full" />
               {t.badge}
             </span>
             <Link
               href={lang === "en" ? "/en/changelog" : "/changelog"}
               aria-label={`${t.releaseLabel} v${LATEST_RELEASE.version} — Changelog`}
-              className="inline-flex w-fit items-center gap-1.5 border border-primary/60 bg-card px-2.5 py-1 font-mono text-[0.7rem] text-foreground transition-colors hover:bg-primary/15"
+              className="inline-flex w-fit items-center gap-1.5 border border-primary/60 bg-card px-2.5 py-1 font-mono text-[0.7rem] text-foreground transition-colors hover:bg-primary/15 rounded-md"
             >
               v{LATEST_RELEASE.version}
               <span aria-hidden className="text-muted-foreground">→</span>
@@ -129,11 +129,11 @@ function Terminal() {
         aria-hidden
         className="absolute -inset-px bg-primary/20 blur-2xl dark:bg-primary/10"
       />
-      <div className="relative border border-border bg-card text-card-foreground shadow-[0_0_0_1px_var(--background)]">
+      <div className="relative border border-border bg-card text-card-foreground shadow-[0_0_0_1px_var(--background)] rounded-lg overflow-hidden">
         <div className="flex items-center gap-2 border-b border-border px-3 py-2">
-          <span className="size-2 border border-border" />
-          <span className="size-2 border border-border" />
-          <span className="size-2 bg-primary" />
+          <span className="size-2 border border-border rounded-full" />
+          <span className="size-2 border border-border rounded-full" />
+          <span className="size-2 bg-primary rounded-full" />
           <span className="ml-2 text-[0.65rem] text-muted-foreground">
             deploy — aoox
           </span>

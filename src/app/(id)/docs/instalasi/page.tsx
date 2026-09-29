@@ -63,7 +63,7 @@ export default function Page() {
       title="Instalasi"
       description="Menjalankan aoox di server sendiri dengan Docker Compose, lalu membuat akun owner pertama."
     >
-      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
+      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
           <div key={item.k} className="flex flex-col gap-0.5 bg-background px-4 py-3">
             <dt className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">
@@ -249,7 +249,7 @@ curl -s http://localhost:3001/auth/setup-status
       </Ul>
 
       <H2 id="setelah-instalasi">Langkah berikutnya</H2>
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link
             key={item.href}

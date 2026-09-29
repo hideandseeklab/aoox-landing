@@ -221,7 +221,7 @@ function FeaturesSection({ lang = "id" }: { lang?: Lang }) {
   return (
     <Section id="fitur">
       <SectionHeading label={t.label} title={t.title} description={t.description} />
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3 rounded-lg overflow-hidden">
         {t.features.map((feature) => (
           <FeatureCard key={feature.title} feature={feature} readDocs={t.readDocs} />
         ))}
@@ -274,7 +274,7 @@ function FeatureCard({ feature, readDocs }: { feature: Feature; readDocs: string
           {feature.tags.map((tag) => (
             <li
               key={tag}
-              className="border border-border px-1.5 py-px text-[0.6rem] text-muted-foreground"
+              className="border border-border px-1.5 py-px text-[0.6rem] text-muted-foreground rounded-sm"
             >
               {tag}
             </li>
@@ -317,7 +317,7 @@ function Pipeline() {
         <li key={stage} className="flex items-center gap-1">
           <span
             className={cn(
-              "border px-2 py-1",
+              "border px-2 py-1 rounded-md",
               i === STAGES.length - 1
                 ? "border-primary bg-primary/10 text-foreground"
                 : "border-border text-muted-foreground"

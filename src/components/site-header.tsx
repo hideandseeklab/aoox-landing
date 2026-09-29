@@ -101,7 +101,7 @@ function NavLink({
       onClick={onClick}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "px-2 py-1 transition-colors",
+        "rounded-md px-2 py-1 transition-colors",
         active
           ? "bg-muted text-foreground"
           : "text-muted-foreground hover:text-foreground",
@@ -120,7 +120,7 @@ function LangSwitch({ pathname, lang }: { pathname: string; lang: Lang }) {
   return (
     <Link
       href={target}
-      className="inline-flex h-7 items-center px-2 text-xs text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+      className="inline-flex h-7 items-center rounded-md px-2 text-xs text-muted-foreground transition-colors hover:border-border hover:text-foreground"
       title={lang === "en" ? "Lihat dalam Bahasa Indonesia" : "View in English"}
     >
       {lang === "en" ? "ID" : "EN"}
@@ -136,7 +136,7 @@ function ThemeToggle({ lang }: { lang: Lang }) {
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       aria-label={lang === "en" ? "Toggle theme" : "Ganti tema"}
       title={lang === "en" ? "Toggle theme (d)" : "Ganti tema (d)"}
-      className="inline-flex size-7 items-center justify-center border border-transparent text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+      className="inline-flex size-7 items-center justify-center border border-transparent text-muted-foreground transition-colors hover:border-border hover:text-foreground rounded-md"
     >
       {/* dua ikon, dipilih lewat CSS agar tidak ada hydration mismatch */}
       <Sun className="size-3.5 dark:hidden" />
@@ -165,7 +165,7 @@ function MobileMenu({
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? (lang === "en" ? "Close menu" : "Tutup menu") : (lang === "en" ? "Open menu" : "Buka menu")}
         aria-expanded={open}
-        className="inline-flex size-7 items-center justify-center border border-transparent text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+        className="inline-flex size-7 items-center justify-center border border-transparent text-muted-foreground transition-colors hover:border-border hover:text-foreground rounded-md"
       >
         {open ? <X className="size-4" /> : <Menu className="size-4" />}
       </button>

@@ -53,7 +53,7 @@ export default function Page() {
       lang="en"
       description="Application env, shared project env, and references to managed database credentials — all resolved when the container is created."
     >
-      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
+      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
           <div key={item.k} className="flex flex-col gap-0.5 bg-background px-4 py-3">
             <dt className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">{item.k}</dt>
@@ -85,7 +85,7 @@ MESSAGE=values may contain spaces and = in the middle
 EMPTY=`}</Pre>
 
       <H2 id="alur">How env gets merged</H2>
-      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4">
+      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {RESOLVE.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
             <span className="text-[0.6rem] text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
@@ -196,7 +196,7 @@ PORT=3000`}</Pre>
       />
 
       <H2 id="berikutnya">Next steps</H2>
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link
             key={item.href}

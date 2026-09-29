@@ -147,7 +147,7 @@ function TeamSection({ lang = "id" }: { lang?: Lang }) {
           <span className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">
             {t.instanceRoles}
           </span>
-          <div className="min-w-0 overflow-x-auto border border-border">
+          <div className="min-w-0 overflow-x-auto border border-border rounded-lg">
             <table className="w-full text-xs">
               <thead>
                 <tr className="border-b border-border">
@@ -198,7 +198,7 @@ function TeamSection({ lang = "id" }: { lang?: Lang }) {
             <span className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">
               {t.projectRoles}
             </span>
-            <ol className="flex flex-col border border-border bg-card text-xs">
+            <ol className="flex flex-col border border-border bg-card text-xs rounded-lg overflow-hidden">
               {t.projectRoleList.map((item) => (
                 <li
                   key={item.role}
@@ -216,13 +216,13 @@ function TeamSection({ lang = "id" }: { lang?: Lang }) {
             <span className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">
               {t.inviteTitle}
             </span>
-            <ol className="flex flex-col border border-border bg-card text-xs">
+            <ol className="flex flex-col border border-border bg-card text-xs rounded-lg overflow-hidden">
               {t.inviteFlow.map((step, i) => (
                 <li
                   key={step.k}
                   className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-border px-4 py-3 last:border-b-0"
                 >
-                  <span className="flex size-5 shrink-0 items-center justify-center border border-border text-[0.6rem] text-muted-foreground">
+                  <span className="flex size-5 shrink-0 items-center justify-center border border-border text-[0.6rem] text-muted-foreground rounded-md">
                     {i + 1}
                   </span>
                   <span className="text-foreground">{step.k}</span>

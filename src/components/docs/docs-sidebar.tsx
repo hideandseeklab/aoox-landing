@@ -42,7 +42,7 @@ function DocsSidebar({ lang = "id" }: { lang?: Lang }) {
 
   return (
     <div className="flex flex-col gap-5">
-      <label className="flex h-8 items-center gap-2 border border-border bg-card px-2 text-xs focus-within:border-ring">
+      <label className="flex h-8 items-center gap-2 border border-border bg-card px-2 text-xs focus-within:border-ring rounded-md">
         <Search className="size-3.5 shrink-0 text-muted-foreground" />
         <input
           type="search"

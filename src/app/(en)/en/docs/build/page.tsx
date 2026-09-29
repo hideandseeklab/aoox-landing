@@ -69,7 +69,7 @@ export default function Page() {
       lang="en"
       description="Three ways to turn a repo into an image: your own Dockerfile, automatic detection by Nixpacks, or a static site served by nginx."
     >
-      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
+      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
           <div key={item.k} className="flex flex-col gap-0.5 bg-background px-4 py-3">
             <dt className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">{item.k}</dt>
@@ -86,7 +86,7 @@ export default function Page() {
       </Callout>
 
       <H2 id="memilih">Which one should I pick?</H2>
-      <div className="border border-border text-xs">
+      <div className="border border-border text-xs rounded-lg overflow-hidden">
         {DECISION.map((row, i) => (
           <div
             key={row.q}
@@ -163,7 +163,7 @@ CMD ["node", "server.js"]`}</Pre>
         Dockerfile. There&apos;s no nixpacks binary on the host or in the API image —
         everything runs in a container:
       </P>
-      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4">
+      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {NIXPACKS_FLOW.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
             <span className="text-[0.6rem] text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
@@ -211,7 +211,7 @@ NIXPACKS_START_CMD=node server.js`}</Pre>
         plan through a long-lived <Code>moby/buildkit</Code> container with its
         own volume — dependency layers survive between deploys.
       </P>
-      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4">
+      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {RAILPACK_FLOW.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
             <span className="text-[0.6rem] text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
@@ -358,7 +358,7 @@ RUN npm run build`}</Pre>
       />
 
       <H2 id="berikutnya">Next steps</H2>
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link
             key={item.href}

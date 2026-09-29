@@ -295,7 +295,7 @@ function Area({ id, title, rows }: { id: string; title: string; rows: Row[] }) {
   return (
     <>
       <H2 id={id}>{title}</H2>
-      <div className="overflow-x-auto border border-border">
+      <div className="overflow-x-auto border border-border rounded-lg">
         <table className="w-full text-xs">
           <thead className="bg-muted text-muted-foreground">
             <tr>
@@ -326,7 +326,7 @@ export default function Page() {
       title="Troubleshooting"
       description="Masalah yang paling sering muncul, dikelompokkan per area, dengan cara diagnosis cepat."
     >
-      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
+      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
           <div key={item.k} className="flex flex-col gap-0.5 bg-background px-4 py-3">
             <dt className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">{item.k}</dt>
@@ -373,7 +373,7 @@ curl -s http://localhost:3001/auth/setup-status`}</Pre>
           <a
             key={a.id}
             href={`#${a.id}`}
-            className="border border-border px-2 py-1 text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground"
+            className="border border-border px-2 py-1 text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground rounded-md"
           >
             {a.title}
           </a>
@@ -432,7 +432,7 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
       </Ul>
 
       <H2 id="berikutnya">Langkah berikutnya</H2>
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link
             key={item.href}

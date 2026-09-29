@@ -8,6 +8,30 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Changed
+
+- **Full-bleed favicon.** Google Search crops favicons to a circle on a white background, and the old icon (a dark
+  rounded tile with a transparent margin around it) showed up as a small dark square inside a white circle, with white
+  gaps at the edges. `public/favicon.ico` (16/32/48 px), `public/icon.svg` and `public/apple-touch-icon.png` are now
+  regenerated with the whole square canvas filled with the same dark color (`#0c1013`), no rounded corners and no
+  transparent margin, and the `$` glyph (same outline, only scaled and re-centered) at about 59% of the canvas so it stays
+  inside the inscribed circle; it still reads at 16 px. Checked by rendering the icons cropped to a circle on white, dark and
+  light-grey backgrounds. `icon.svg` is only used as the favicon here (the header logo is text and the JSON-LD has no
+  logo), so it was changed in place; the panel keeps its own rounded logo. Browsers and Google cache favicons, so the new
+  one can take a while to show up.
+- **Medium border radius across the whole site.** `--radius` goes from `0` (every corner square) to `0.5rem`,
+  using the existing scale (`sm` 0.6×, `md` 0.8×, `lg` 1×, `xl` 1.4×), the same values as aoox-web. Most of the site
+  is hand-built markup that never used the radius variable, so the change is applied to it explicitly, by role:
+  panels, cards, tables, code blocks, the terminal mockups and the grid-of-cells sections (`gap-px` lines) are
+  `rounded-lg` (with `overflow-hidden` where children have their own background or border, so nothing pokes out of a
+  corner); boxes nested inside a card, version/badge pills, icon boxes, the docs search field, header links,
+  copy/theme/language buttons and the numbered step markers are `rounded-md`; tiny tags, inline code, `kbd` and the
+  changelog badges are `rounded-sm`; the small status dots are circles. Left square on purpose: full-width bars
+  (header, footer, section dividers, docs sidebar rules), rules/accents that are a single side border (docs table of
+  contents, timeline, changelog group headings), the callout's left edge (its accent bar; only the right corners are
+  rounded), the terminal cursor block, the FAQ list (dividers only), the logo, icons and images. Colors, spacing and
+  layout are unchanged.
+
 ### Fixed
 
 - **Favicon missing on aoox.dev.** Since the SEO work split the root layout into the `(id)`/`(en)` route groups,

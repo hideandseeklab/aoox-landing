@@ -57,7 +57,7 @@ function Inline({ text }: { text: string }) {
         }
         if (part.startsWith("`")) {
           return (
-            <code key={i} className="border border-border bg-muted px-1 py-0.5 font-mono text-[0.85em] text-foreground">
+            <code key={i} className="border border-border bg-muted px-1 py-0.5 font-mono text-[0.85em] text-foreground rounded-sm">
               {part.slice(1, -1)}
             </code>
           )
@@ -100,11 +100,11 @@ function ChangelogPage({ lang }: { lang: Lang }) {
                   v{release.version}
                 </h2>
                 {index === 0 ? (
-                  <span className="border border-primary bg-primary px-1.5 py-0.5 text-[0.65rem] font-medium text-primary-foreground">
+                  <span className="border border-primary bg-primary px-1.5 py-0.5 text-[0.65rem] font-medium text-primary-foreground rounded-sm">
                     {t.latest}
                   </span>
                 ) : null}
-                <span className="border border-border px-1.5 py-0.5 font-mono text-[0.65rem] text-muted-foreground">
+                <span className="border border-border px-1.5 py-0.5 font-mono text-[0.65rem] text-muted-foreground rounded-sm">
                   {t.alpha}
                 </span>
                 <time
@@ -129,7 +129,7 @@ function ChangelogPage({ lang }: { lang: Lang }) {
                     <ul className="flex flex-col gap-2 text-sm leading-relaxed text-muted-foreground">
                       {group.items.map((item, i) => (
                         <li key={i} className="flex gap-2.5">
-                          <span aria-hidden className="mt-2 size-1 shrink-0 bg-primary" />
+                          <span aria-hidden className="mt-2 size-1 shrink-0 bg-primary rounded-full" />
                           <span className="min-w-0 break-words">
                             <Inline text={item[lang]} />
                           </span>

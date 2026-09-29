@@ -56,7 +56,7 @@ export default function Page() {
       lang="en"
       description="Send word of deploys, backups, jobs, dead containers, low disk, failed certificates, and DNS issues to Telegram, Slack, Discord, a webhook, or email."
     >
-      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
+      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
           <div key={item.k} className="flex flex-col gap-0.5 bg-background px-4 py-3">
             <dt className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">{item.k}</dt>
@@ -66,7 +66,7 @@ export default function Page() {
       </dl>
 
       <H2 id="alur">Flow</H2>
-      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4">
+      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {FLOW.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
             <span className="text-[0.6rem] text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
@@ -293,7 +293,7 @@ if (!sig || !timingSafeEqual(Buffer.from(sig), Buffer.from(mine))) return res.se
       </Callout>
 
       <H2 id="berikutnya">Next steps</H2>
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link
             key={item.href}

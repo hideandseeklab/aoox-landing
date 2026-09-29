@@ -58,7 +58,7 @@ export default function Page() {
       title="Scheduled jobs"
       description="Menjalankan perintah terjadwal (cron) atau manual di konteks aplikasi, managed database, atau stack compose — migrasi, pembersihan, laporan."
     >
-      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
+      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
           <div key={item.k} className="flex flex-col gap-0.5 bg-background px-4 py-3">
             <dt className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">{item.k}</dt>
@@ -107,7 +107,7 @@ export default function Page() {
           ],
         ]}
       />
-      <div className="border border-border text-xs">
+      <div className="border border-border text-xs rounded-lg overflow-hidden">
         {DECISION.map((row, i) => (
           <div
             key={row.q}
@@ -164,7 +164,7 @@ export default function Page() {
       </Steps>
 
       <H2 id="contoh">Contoh job</H2>
-      <div className="overflow-x-auto border border-border">
+      <div className="overflow-x-auto border border-border rounded-lg">
         <table className="w-full text-xs">
           <thead className="bg-muted text-muted-foreground">
             <tr>
@@ -255,7 +255,7 @@ export default function Page() {
       </Callout>
 
       <H2 id="berikutnya">Langkah berikutnya</H2>
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link
             key={item.href}

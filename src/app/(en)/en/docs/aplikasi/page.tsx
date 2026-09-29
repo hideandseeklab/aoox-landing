@@ -58,7 +58,7 @@ export default function Page() {
       lang="en"
       description="Connect a Git repo or a ready-made image to a project and control how its container is run."
     >
-      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
+      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
           <div key={item.k} className="flex flex-col gap-0.5 bg-background px-4 py-3">
             <dt className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">{item.k}</dt>
@@ -176,7 +176,7 @@ export default function Page() {
               ],
             ]}
           />
-          <div className="border border-border bg-card text-xs">
+          <div className="border border-border bg-card text-xs rounded-lg overflow-hidden">
             <div className="border-b border-border px-3 py-1.5 text-[0.7rem] text-muted-foreground">
               Example — a Next.js application in a public repo
             </div>
@@ -385,7 +385,7 @@ success   old container replaced · application status Running`}</Pre>
       </Callout>
 
       <H2 id="berikutnya">Next steps</H2>
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link
             key={item.href}

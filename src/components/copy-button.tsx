@@ -27,7 +27,7 @@ function CopyButton({
       onClick={onCopy}
       aria-label={copied ? "Tersalin" : "Salin perintah"}
       className={cn(
-        "inline-flex size-7 shrink-0 items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+        "inline-flex size-7 shrink-0 items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground rounded-md",
         copied && "border-primary text-primary-foreground dark:text-primary",
         className
       )}

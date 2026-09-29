@@ -260,7 +260,7 @@ function FaqSection({ lang = "id" }: { lang?: Lang }) {
           {t.items.map((item, i) => (
             <details key={item.q} className="group" open={i === 0}>
               <summary className="flex cursor-pointer list-none items-center gap-4 py-4 text-sm font-medium transition-colors hover:text-foreground [&::-webkit-details-marker]:hidden">
-                <span className="flex size-5 shrink-0 items-center justify-center border border-border text-xs text-muted-foreground transition-colors group-open:border-primary group-open:text-primary-foreground dark:group-open:text-primary">
+                <span className="flex size-5 shrink-0 items-center justify-center border border-border text-xs text-muted-foreground transition-colors group-open:border-primary group-open:text-primary-foreground dark:group-open:text-primary rounded-md">
                   <span className="transition-transform group-open:rotate-45">+</span>
                 </span>
                 {item.q}

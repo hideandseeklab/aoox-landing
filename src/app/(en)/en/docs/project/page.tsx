@@ -55,7 +55,7 @@ export default function Page() {
       lang="en"
       description="A project is a container for related applications, compose stacks, and managed databases, complete with a shared environment."
     >
-      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
+      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
           <div key={item.k} className="flex flex-col gap-0.5 bg-background px-4 py-3">
             <dt className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">{item.k}</dt>
@@ -304,7 +304,7 @@ docker volume rm aoox_app_<slug>_<name> aoox_db_<slug>`}</Pre>
       </Callout>
 
       <H2 id="berikutnya">Next steps</H2>
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link
             key={item.href}

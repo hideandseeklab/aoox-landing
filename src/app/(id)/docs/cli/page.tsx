@@ -100,7 +100,7 @@ export default function Page() {
       title="Mulai dengan CLI"
       description="aoox adalah CLI resmi aoox: menyimpan kredensial panel di mesinmu dan berbicara ke API yang sama dengan dashboard."
     >
-      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
+      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
           <div key={item.k} className="flex flex-col gap-0.5 bg-background px-4 py-3">
             <dt className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">{item.k}</dt>
@@ -392,7 +392,7 @@ $ sudo aoox reinstall`}</Pre>
       </P>
 
       <H2 id="perintah">Referensi perintah</H2>
-      <div className="overflow-x-auto border border-border">
+      <div className="overflow-x-auto border border-border rounded-lg">
         <table className="w-full text-xs">
           <thead className="bg-muted text-muted-foreground">
             <tr>
@@ -515,7 +515,7 @@ $ sudo aoox reinstall`}</Pre>
       </Callout>
 
       <H2 id="berikutnya">Langkah berikutnya</H2>
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link
             key={item.href}

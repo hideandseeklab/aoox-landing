@@ -81,7 +81,7 @@ function DocPage({
         {prev ? (
           <Link
             href={prev.href}
-            className="flex flex-col gap-1 border border-border p-4 transition-colors hover:bg-muted"
+            className="flex flex-col gap-1 border border-border p-4 transition-colors hover:bg-muted rounded-lg"
           >
             <span className="text-xs text-muted-foreground">{t.prev}</span>
             <span className="text-sm font-medium">{prev.title}</span>
@@ -92,7 +92,7 @@ function DocPage({
         {next ? (
           <Link
             href={next.href}
-            className="flex flex-col gap-1 border border-border p-4 text-right transition-colors hover:bg-muted"
+            className="flex flex-col gap-1 border border-border p-4 text-right transition-colors hover:bg-muted rounded-lg"
           >
             <span className="text-xs text-muted-foreground">{t.next}</span>
             <span className="text-sm font-medium">{next.title}</span>
@@ -136,7 +136,7 @@ function P({ children }: { children: React.ReactNode }) {
 
 function Code({ children }: { children: React.ReactNode }) {
   return (
-    <code className="border border-border bg-muted px-1 py-px text-[0.8em] text-foreground">
+    <code className="border border-border bg-muted px-1 py-px text-[0.8em] text-foreground rounded-sm">
       {children}
     </code>
   )
@@ -144,7 +144,7 @@ function Code({ children }: { children: React.ReactNode }) {
 
 function Pre({ children, title }: { children: string; title?: string }) {
   return (
-    <div className="group/pre relative border border-border bg-card text-card-foreground">
+    <div className="group/pre relative border border-border bg-card text-card-foreground rounded-lg overflow-hidden">
       {title ? (
         <div className="border-b border-border px-3 py-1.5 text-[0.7rem] text-muted-foreground">
           {title}
@@ -185,7 +185,7 @@ function Step({
   children?: React.ReactNode
 }) {
   return (
-    <li className="relative flex flex-col gap-2 [counter-increment:step] before:absolute before:-left-[1.9rem] before:flex before:size-6 before:items-center before:justify-center before:border before:border-border before:bg-background before:text-[0.65rem] before:text-primary-foreground before:content-[counter(step,decimal-leading-zero)] dark:before:text-primary">
+    <li className="relative flex flex-col gap-2 [counter-increment:step] before:absolute before:-left-[1.9rem] before:flex before:size-6 before:rounded-md before:items-center before:justify-center before:border before:border-border before:bg-background before:text-[0.65rem] before:text-primary-foreground before:content-[counter(step,decimal-leading-zero)] dark:before:text-primary">
       <h3 className="text-sm font-semibold">{title}</h3>
       {children}
     </li>
@@ -204,7 +204,7 @@ function Callout({
   return (
     <div
       className={cn(
-        "flex flex-col gap-1 border-l-2 bg-muted/50 px-4 py-3 text-sm leading-relaxed text-muted-foreground [&_strong]:text-foreground",
+        "flex flex-col gap-1 rounded-r-md border-l-2 bg-muted/50 px-4 py-3 text-sm leading-relaxed text-muted-foreground [&_strong]:text-foreground",
         kind === "warn" ? "border-destructive" : "border-primary"
       )}
     >
@@ -224,7 +224,7 @@ function Table({
   rows: React.ReactNode[][]
 }) {
   return (
-    <div className="overflow-x-auto border border-border">
+    <div className="overflow-x-auto border border-border rounded-lg">
       <table className="w-full text-left text-xs">
         <thead className="bg-muted text-muted-foreground">
           <tr>

@@ -113,11 +113,11 @@ function SelfHostSection({ lang = "id" }: { lang?: Lang }) {
         </div>
 
         <div className="flex min-w-0 flex-col gap-4">
-          <div className="min-w-0 border border-border bg-card text-card-foreground">
+          <div className="min-w-0 border border-border bg-card text-card-foreground rounded-lg overflow-hidden">
             <div className="flex items-center gap-2 border-b border-border px-3 py-2">
-              <span className="size-2 border border-border" />
-              <span className="size-2 border border-border" />
-              <span className="size-2 bg-primary" />
+              <span className="size-2 border border-border rounded-full" />
+              <span className="size-2 border border-border rounded-full" />
+              <span className="size-2 bg-primary rounded-full" />
               <span className="ml-2 text-[0.65rem] text-muted-foreground">
                 {t.terminalTitle}
               </span>
@@ -144,11 +144,11 @@ function SelfHostSection({ lang = "id" }: { lang?: Lang }) {
             </pre>
           </div>
 
-          <div className="grid gap-px border border-border bg-border text-[0.7rem] sm:grid-cols-3">
+          <div className="grid gap-px border border-border bg-border text-[0.7rem] sm:grid-cols-3 rounded-lg overflow-hidden">
             {t.stack.map((svc) => (
               <div key={svc.name} className="flex flex-col gap-0.5 bg-background p-3">
                 <span className="flex items-center gap-1.5 text-foreground">
-                  <span className="size-1.5 bg-primary" />
+                  <span className="size-1.5 bg-primary rounded-full" />
                   {svc.name}
                 </span>
                 <span className="text-muted-foreground">{svc.sub}</span>

@@ -105,7 +105,7 @@ const OPTIONS_ID: Option[] = [
         {["wordpress", "ghost", "n8n", "uptime-kuma", "minio", "gitea"].map((t) => (
           <li
             key={t}
-            className="truncate border border-border px-1.5 py-0.5 text-muted-foreground"
+            className="truncate border border-border px-1.5 py-0.5 text-muted-foreground rounded-sm"
           >
             {t}
           </li>
@@ -207,7 +207,7 @@ const OPTIONS_EN: Option[] = [
         {["wordpress", "ghost", "n8n", "uptime-kuma", "minio", "gitea"].map((t) => (
           <li
             key={t}
-            className="truncate border border-border px-1.5 py-0.5 text-muted-foreground"
+            className="truncate border border-border px-1.5 py-0.5 text-muted-foreground rounded-sm"
           >
             {t}
           </li>
@@ -247,7 +247,7 @@ function BuildOptionsSection({ lang = "id" }: { lang?: Lang }) {
   return (
     <Section id="build">
       <SectionHeading label={t.label} title={t.title} description={t.description} />
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3 rounded-lg overflow-hidden">
         {t.options.map((option) => (
           <Link
             key={option.name}
@@ -262,7 +262,7 @@ function BuildOptionsSection({ lang = "id" }: { lang?: Lang }) {
               <span className="text-[0.65rem] text-muted-foreground">{option.file}</span>
             </div>
 
-            <div className="min-h-[6rem] border border-border bg-card p-2.5 text-[0.65rem] leading-relaxed text-card-foreground">
+            <div className="min-h-[6rem] border border-border bg-card p-2.5 text-[0.65rem] leading-relaxed text-card-foreground rounded-md">
               {option.snippet}
             </div>
 
@@ -271,7 +271,7 @@ function BuildOptionsSection({ lang = "id" }: { lang?: Lang }) {
             </p>
 
             <p className="mt-auto flex items-center gap-1.5 text-[0.65rem] text-muted-foreground">
-              <span className="size-1.5 bg-primary" />
+              <span className="size-1.5 bg-primary rounded-full" />
               {option.fit}
             </p>
           </Link>

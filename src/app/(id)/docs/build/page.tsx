@@ -67,7 +67,7 @@ export default function Page() {
       title="Cara build"
       description="Tiga cara mengubah repo menjadi image: Dockerfile milikmu sendiri, deteksi otomatis oleh Nixpacks, atau situs statis dengan nginx."
     >
-      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3">
+      <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
           <div key={item.k} className="flex flex-col gap-0.5 bg-background px-4 py-3">
             <dt className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">{item.k}</dt>
@@ -84,7 +84,7 @@ export default function Page() {
       </Callout>
 
       <H2 id="memilih">Mana yang dipilih?</H2>
-      <div className="border border-border text-xs">
+      <div className="border border-border text-xs rounded-lg overflow-hidden">
         {DECISION.map((row, i) => (
           <div
             key={row.q}
@@ -161,7 +161,7 @@ CMD ["node", "server.js"]`}</Pre>
         Tidak ada binary nixpacks di host maupun di image API — semuanya
         berjalan di container:
       </P>
-      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4">
+      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {NIXPACKS_FLOW.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
             <span className="text-[0.6rem] text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
@@ -210,7 +210,7 @@ NIXPACKS_START_CMD=node server.js`}</Pre>
         lewat container <Code>moby/buildkit</Code> yang hidup terus dengan
         volume sendiri — layer dependensi bertahan antar deploy.
       </P>
-      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4">
+      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {RAILPACK_FLOW.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
             <span className="text-[0.6rem] text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
@@ -358,7 +358,7 @@ RUN npm run build`}</Pre>
       />
 
       <H2 id="berikutnya">Langkah berikutnya</H2>
-      <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+      <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link
             key={item.href}

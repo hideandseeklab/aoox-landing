@@ -62,8 +62,8 @@ function CtaSection({ lang = "id" }: { lang?: Lang }) {
       />
 
       <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center gap-8 px-4 py-20 text-center sm:px-6 sm:py-28">
-        <span className="inline-flex items-center gap-2 border border-border bg-background px-2.5 py-1 text-[0.7rem] text-muted-foreground">
-          <span className="size-1.5 bg-primary" />
+        <span className="inline-flex items-center gap-2 border border-border bg-background px-2.5 py-1 text-[0.7rem] text-muted-foreground rounded-md">
+          <span className="size-1.5 bg-primary rounded-full" />
           {t.badge}
         </span>
 
@@ -78,7 +78,7 @@ function CtaSection({ lang = "id" }: { lang?: Lang }) {
           {t.description}
         </p>
 
-        <div className="flex w-full max-w-2xl items-center gap-2 border border-border bg-card p-2 text-left text-xs">
+        <div className="flex w-full max-w-2xl items-center gap-2 border border-border bg-card p-2 text-left text-xs rounded-lg">
           <span className="pl-2 text-primary-foreground dark:text-primary">$</span>
           <code className="min-w-0 flex-1 truncate text-card-foreground">{INSTALL}</code>
           <CopyButton text={INSTALL} />
