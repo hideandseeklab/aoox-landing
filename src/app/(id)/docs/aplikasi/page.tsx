@@ -272,7 +272,7 @@ success   container lama diganti · status aplikasi Running`}</Pre>
         head={["Tab", "Isi"]}
         rows={[
           ["Deploy", "Tombol Deploy/Stop/Start, daftar deployment, log deployment & log container streaming, metrik, Rollback."],
-          ["Pengaturan", "Form yang sama dengan saat membuat, plus Environment variables dan Build args."],
+          ["Pengaturan", <>Form yang sama dengan saat membuat, plus Environment variables dan Build args. <strong>Port host, domain, dan limit resource berlaku langsung</strong> pada aplikasi yang berjalan — container dibuat ulang dari image yang sama tanpa build (dengan Port host ada downtime singkat, karena dua container tidak bisa memakai port yang sama). Aplikasi yang sedang berhenti memakai port barunya saat dijalankan lagi, dan perubahan Port host ditolak (409) selama ada deployment aktif. Pengaturan lain berlaku pada deploy berikutnya.</>],
           ["Domain", "Hostname untuk aplikasi + toggle HTTPS + cek DNS."],
           ["Mount", "Volume, bind, file — dan backup volume."],
           ["Jobs", "Perintah terjadwal."],

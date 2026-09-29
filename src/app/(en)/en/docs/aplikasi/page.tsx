@@ -276,7 +276,7 @@ success   old container replaced · application status Running`}</Pre>
         head={["Tab", "Contains"]}
         rows={[
           ["Deploy", "Deploy/Stop/Start buttons, deployment list, deployment & streaming container logs, metrics, Rollback."],
-          ["Settings", "The same form as creation, plus environment variables and build args."],
+          ["Settings", <>The same form as creation, plus environment variables and build args. <strong>Host port, domains, and resource limits apply immediately</strong> to a running application — the container is recreated from the same image without a build (with a host port there is a brief downtime, since two containers cannot bind the same port). A stopped application picks up its new port when started again, and a host port change is rejected (409) while a deployment is active. Other settings take effect on the next deploy.</>],
           ["Domain", "Hostname for the application + HTTPS toggle + DNS check."],
           ["Mount", "Volumes, binds, files — and volume backups."],
           ["Jobs", "Scheduled commands."],

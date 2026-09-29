@@ -43,6 +43,11 @@ type Row = [gejala: React.ReactNode, penyebab: React.ReactNode, solusi: React.Re
 
 const INSTALASI: Row[] = [
   [
+    <>Perbaikan/fitur baru tidak muncul setelah update panel (mis. <Code>PUBLIC_API_URL</Code> di webhook masih <Code>localhost</Code>)</>,
+    <><Code>aoox update</Code> dan tombol &ldquo;Terapkan update&rdquo; hanya <Code>pull</Code> + <Code>up -d</Code>: file compose dan variabel baru di <Code>.env.dist</Code> tidak diperbarui.</>,
+    <>Jalankan <DocLink href="/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (<Code>--dry-run</Code> dulu untuk melihat perubahannya). Alternatif tanpa CLI: edit <Code>.env.dist</Code> / halaman Environment, atau sesuaikan compose manual sesuai catatan rilis — lihat <DocLink href="/docs/instalasi#update">Memperbarui versi</DocLink>. Jangan pakai <Code>aoox install --force</Code> (secret baru memutus akses ke data lama).</>,
+  ],
+  [
     <>Web terbuka, tapi sign-in / API gagal (network error)</>,
     <><Code>PUBLIC_API_URL</Code> tidak bisa dijangkau browser (IP/port salah, firewall 3001).</>,
     <>Samakan dengan alamat yang bisa dibuka dari browser; <Code>curl &lt;PUBLIC_API_URL&gt;/auth/setup-status</Code> dari laptop harus menjawab.</>,
@@ -210,9 +215,9 @@ const SERVER: Row[] = [
     "Jalankan perintah yang ditampilkan di host sebagai user itu.",
   ],
   [
-    <>Terminal: <Code>TERMINAL_SSH_USER is not set</Code></>,
-    "Env kosong.",
-    <>Isi lewat Settings → Infrastruktur → <strong>Environment</strong> (owner, tanpa SSH), atau manual di <Code>.env.dist</Code> lalu restart stack.</>,
+    <>Terminal: <Code>TERMINAL_SSH_USER is not set</Code> (versi lama)</>,
+    <>Instalasi lama tidak punya baris ini di <Code>.env.dist</Code>, dan update tidak menyentuh file itu. Versi terbaru otomatis memakai <Code>root</Code> bila kosong.</>,
+    <>Jalankan <DocLink href="/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (menambah baris yang hilang tanpa menyentuh data). Tanpa CLI: tambah <Code>TERMINAL_SSH_USER=root</Code> di <Code>.env.dist</Code> atau pakai halaman Environment. Kalau login harus user lain, isi lewat Settings → Infrastruktur → <strong>Environment</strong> (owner, tanpa SSH), atau manual di <Code>.env.dist</Code> lalu restart stack.</>,
   ],
   [
     <>Terminal: <Code>ECONNREFUSED</Code> ke host.docker.internal</>,

@@ -109,9 +109,12 @@ export default function Page() {
 TERMINAL_SSH_PORT=22
 TERMINAL_SSH_USER=deploy        # user host yang dipakai terminal`}</Pre>
           <P>
-            Jalankan <Code>up -d</Code> lagi setelah mengubah env. Tanpa{" "}
-            <Code>TERMINAL_SSH_USER</Code> kartu Terminal menampilkan{" "}
-            <em>Perlu perhatian</em>.
+            Jalankan <Code>up -d</Code> lagi setelah mengubah env. Bila{" "}
+            <Code>TERMINAL_SSH_USER</Code> kosong, terminal masuk sebagai{" "}
+            <Code>root</Code> (default installer) — kartu Terminal menandainya
+            sebagai user default. Kalau koneksi gagal, terminal menampilkan
+            tautan ke <strong>Infrastruktur → Environment</strong> untuk
+            memperbaiki pengaturannya.
           </P>
         </Step>
         <Step title="Otorisasi key platform">
@@ -173,7 +176,6 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
         rows={[
           ["auth failed + perintah otorisasi", "Key belum ada di authorized_keys user itu. Jalankan perintah yang ditampilkan di terminal/Settings."],
           ["origin not allowed", <><Code>WEB_ORIGIN</Code> tidak sama persis dengan URL di browser (skema/host/port). Samakan, <Code>up -d</Code> ulang.</>],
-          ["TERMINAL_SSH_USER is not set", "Isi env, restart stack."],
           ["connect ECONNREFUSED / timeout", "sshd tidak jalan, port salah, atau host.docker.internal tidak resolve (Linux tanpa extra_hosts — pakai IP gateway docker0, mis. 172.17.0.1)."],
           ["Direktori key tidak writable (uid 1000)", <>Perbaiki kepemilikan folder <Code>./secrets</Code>: <Code>sudo chown -R 1000:1000 ./secrets</Code>.</>],
           ["403 saat membuka terminal", "Peran member. Hanya owner/admin."],

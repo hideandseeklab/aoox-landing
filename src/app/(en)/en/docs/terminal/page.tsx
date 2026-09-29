@@ -110,9 +110,12 @@ export default function Page() {
 TERMINAL_SSH_PORT=22
 TERMINAL_SSH_USER=deploy        # the host user the terminal will use`}</Pre>
           <P>
-            Run <Code>up -d</Code> again after changing the env. Without{" "}
-            <Code>TERMINAL_SSH_USER</Code> the Terminal card shows{" "}
-            <em>Needs attention</em>.
+            Run <Code>up -d</Code> again after changing the env. When{" "}
+            <Code>TERMINAL_SSH_USER</Code> is empty, the terminal logs in as{" "}
+            <Code>root</Code> (the installer default) — the Terminal card marks
+            it as the default user. If the connection fails, the terminal shows
+            a link to <strong>Infrastructure → Environment</strong> to fix the
+            settings.
           </P>
         </Step>
         <Step title="Authorize the platform key">
@@ -174,7 +177,6 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
         rows={[
           ["auth failed + an authorization command", "The key isn't in that user's authorized_keys yet. Run the command shown in the terminal/Settings."],
           ["origin not allowed", <><Code>WEB_ORIGIN</Code> doesn&apos;t exactly match the browser&apos;s URL (scheme/host/port). Fix it, then <Code>up -d</Code> again.</>],
-          ["TERMINAL_SSH_USER is not set", "Fill in the env, restart the stack."],
           ["connect ECONNREFUSED / timeout", "sshd isn't running, the port is wrong, or host.docker.internal doesn't resolve (Linux without extra_hosts — use the docker0 gateway IP, e.g. 172.17.0.1)."],
           ["Key directory not writable (uid 1000)", <>Fix ownership of the <Code>./secrets</Code> folder: <Code>sudo chown -R 1000:1000 ./secrets</Code>.</>],
           ["403 when opening the terminal", "A member role. Owner/admin only."],

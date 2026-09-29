@@ -249,7 +249,9 @@ NIXPACKS_START_CMD=node server.js`}</Pre>
         Choose <strong>Build method → Static site (nginx)</strong> for repos
         whose final output is just static files. aoox builds a two-stage
         Dockerfile: an (optional) build stage on <Code>node:22-alpine</Code>, then{" "}
-        <Code>nginx:1.27-alpine</Code> serving the output folder on port 80.
+        <Code>nginx:1.27-alpine</Code> serving the output folder on port 80 — the create form fills in
+        Container port 80 for you when you pick Static site (you can change it,
+        but nginx still listens on 80).
       </P>
       <Table
         head={["Field", "Details"]}

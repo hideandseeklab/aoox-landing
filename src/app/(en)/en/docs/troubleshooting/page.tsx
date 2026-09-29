@@ -43,6 +43,11 @@ type Row = [symptom: React.ReactNode, cause: React.ReactNode, fix: React.ReactNo
 
 const INSTALASI: Row[] = [
   [
+    <>Fixes/new features don&apos;t show up after a panel update (e.g. the webhook <Code>PUBLIC_API_URL</Code> is still <Code>localhost</Code>)</>,
+    <><Code>aoox update</Code> and the &ldquo;Apply update&rdquo; button only run <Code>pull</Code> + <Code>up -d</Code>: the compose file and new variables in <Code>.env.dist</Code> are not updated.</>,
+    <>Run <DocLink href="/en/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (<Code>--dry-run</Code> first to see what changes). Without the CLI: edit <Code>.env.dist</Code> / use the Environment page, or adjust the compose file manually per the release notes — see <DocLink href="/en/docs/instalasi#update">Upgrading</DocLink>. Don&apos;t use <Code>aoox install --force</Code> (new secrets cut off the old data).</>,
+  ],
+  [
     <>The web app loads, but sign-in / the API fails (network error)</>,
     <><Code>PUBLIC_API_URL</Code> isn&apos;t reachable from the browser (wrong IP/port, firewall blocking 3001).</>,
     <>Match it to an address the browser can actually open; <Code>curl &lt;PUBLIC_API_URL&gt;/auth/setup-status</Code> from your laptop should respond.</>,
@@ -209,9 +214,9 @@ const SERVER: Row[] = [
     "Run the command shown, on the host, as that same user.",
   ],
   [
-    <>Terminal: <Code>TERMINAL_SSH_USER is not set</Code></>,
-    "The env var is empty.",
-    <>Fill it in from Settings → Infrastructure → <strong>Environment</strong> (owner, no SSH needed), or manually in <Code>.env.dist</Code> then restart the stack.</>,
+    <>Terminal: <Code>TERMINAL_SSH_USER is not set</Code> (older versions)</>,
+    <>Older installs have no such line in <Code>.env.dist</Code>, and updates never touch that file. Recent versions fall back to <Code>root</Code> when it&apos;s empty.</>,
+    <>Run <DocLink href="/en/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (adds the missing line without touching data). Without the CLI: add <Code>TERMINAL_SSH_USER=root</Code> to <Code>.env.dist</Code> or use the Environment page. If the login must be another user, set it from Settings → Infrastructure → <strong>Environment</strong> (owner, no SSH needed), or manually in <Code>.env.dist</Code> then restart the stack.</>,
   ],
   [
     <>Terminal: <Code>ECONNREFUSED</Code> to host.docker.internal</>,

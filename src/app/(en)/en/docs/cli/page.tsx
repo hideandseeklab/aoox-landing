@@ -75,6 +75,11 @@ const COMMANDS = [
     flags: "--apply",
   },
   {
+    cmd: "aoox reinstall",
+    what: "Repairs/refreshes an existing panel install without losing data (rewrites compose, merges .env.dist, pull + recreate).",
+    flags: "--dir, --dry-run, --yes, --no-pull, --terminal-ssh-user",
+  },
+  {
     cmd: "aoox help [COMMAND]",
     what: "Lists commands, or shows help for one.",
     flags: "—",
@@ -339,6 +344,61 @@ Update applied — the panel will restart in a few seconds to apply it.`}</Pre>
         for the manual, over-SSH alternative.
       </P>
 
+      <H2 id="reinstall">Repairing an install (aoox reinstall)</H2>
+      <P>
+        <Code>aoox update</Code> only runs <Code>pull</Code> + <Code>up -d</Code>:
+        it doesn&apos;t rewrite <Code>docker-compose.dist.yml</Code> and doesn&apos;t
+        add new variables to <Code>.env.dist</Code>. An existing install
+        therefore misses fixes that need a compose or env change (a real
+        example: Terminal failing with <Code>TERMINAL_SSH_USER is not set</Code>{" "}
+        after an update, because older installs never wrote that variable).{" "}
+        <Code>aoox reinstall</Code> repairs that <strong>without touching your
+        data</strong>. Run it on the panel server, as root:
+      </P>
+      <Pre title="See what would change first, then apply">{`$ sudo aoox reinstall --dry-run
+$ sudo aoox reinstall`}</Pre>
+      <Table
+        head={["Step", "What happens"]}
+        rows={[
+          [
+            "Backup",
+            <>Files that will change are copied to <Code>&lt;dir&gt;/backups/&lt;timestamp&gt;/</Code> (<Code>.env.dist</Code> stays mode 600).</>,
+          ],
+          [
+            "Compose",
+            <><Code>docker-compose.dist.yml</Code> (and <Code>docker-compose.domain.yml</Code> if present) is rewritten from the copy bundled in the CLI. <Code>docker-compose.override.yml</Code>, owned by the Domain panel/Environment features, is <strong>not touched</strong>.</>,
+          ],
+          [
+            ".env.dist",
+            <>Merged, never regenerated: every value, the order, comments and unknown keys are kept; only keys that are missing and have a safe default are added (e.g. <Code>TERMINAL_SSH_USER=root</Code>, <Code>INSTALL_DIR</Code>). <Code>POSTGRES_PASSWORD</Code>, <Code>JWT_SECRET</Code> and <Code>ENCRYPTION_KEY</Code> are never changed — if one is missing the command stops with a clear error.</>,
+          ],
+          [
+            "Restart",
+            <><Code>docker compose pull</Code> then <Code>up -d --force-recreate</Code>, using the same compose file list as the running stack. Volumes (the database) are not touched. It then waits for the API to be healthy and prints a summary.</>,
+          ],
+        ]}
+      />
+      <P>
+        Safe to run repeatedly: when nothing needs changing, no file is written
+        and no backup is made — the containers are still refreshed. Options:{" "}
+        <Code>--dir</Code> (default <Code>/opt/aoox</Code>), <Code>--yes</Code>{" "}
+        (no prompt), <Code>--no-pull</Code>,{" "}
+        <Code>--terminal-ssh-user &lt;user&gt;</Code> (fills in or overrides that
+        value), and <Code>--dry-run</Code> (print the plan only).
+      </P>
+      <Callout kind="warn" title="Don&apos;t use aoox install --force to repair">
+        <Code>aoox install --force</Code> writes a fresh <Code>.env.dist</Code>{" "}
+        with new random secrets: the old database becomes unreachable and every
+        stored credential can no longer be decrypted. For an install that is
+        already running, always use <Code>aoox reinstall</Code>.
+      </Callout>
+      <P>
+        Without the CLI: edit <Code>.env.dist</Code> directly (e.g. add{" "}
+        <Code>TERMINAL_SSH_USER=root</Code>) or use the{" "}
+        <DocLink href="/en/docs/environment">Environment</DocLink> page in
+        Settings, then <Code>docker compose … up -d</Code>.
+      </P>
+
       <H2 id="perintah">Command reference</H2>
       <div className="overflow-x-auto border border-border">
         <table className="w-full text-xs">
@@ -453,7 +513,7 @@ Update applied — the panel will restart in a few seconds to apply it.`}</Pre>
           ],
           [
             <>aoox install: an install already exists at …</>,
-            <>The <Code>--dir</Code> folder (default <Code>/opt/aoox</Code>) is already populated. Pass <Code>--force</Code> to overwrite it, or use a different <Code>--dir</Code>.</>,
+            <>The <Code>--dir</Code> folder (default <Code>/opt/aoox</Code>) is already populated. To repair that install, use <Code>aoox reinstall</Code>. <Code>--force</Code> is only for a from-scratch reinstall (it generates new secrets — the old data becomes unreadable), or use a different <Code>--dir</Code>.</>,
           ],
         ]}
       />

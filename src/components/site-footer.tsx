@@ -16,6 +16,7 @@ const GROUPS_ID: Group[] = [
       { label: "Cara build", href: "/#build" },
       { label: "Self-host", href: "/#self-host" },
       { label: "FAQ", href: "/#faq" },
+      { label: "Changelog", href: "/changelog" },
     ],
   },
   {
@@ -48,6 +49,7 @@ const GROUPS_EN: Group[] = [
       { label: "Build methods", href: "/en#build" },
       { label: "Self-host", href: "/en#self-host" },
       { label: "FAQ", href: "/en#faq" },
+      { label: "Changelog", href: "/en/changelog" },
     ],
   },
   {

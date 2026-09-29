@@ -62,6 +62,10 @@ came out empty or duplicated.
 
 Versioned independently from `aoox-api`, `aoox-web`, and `aoox-cli` — see [CHANGELOG.md](CHANGELOG.md).
 
+The public `/changelog` page and the homepage version badge read `src/content/changelog.ts` (the aoox
+product release history). Add an entry there before each release and run `npm run check-release` — see
+[RELEASING.md](RELEASING.md).
+
 ## License
 
 [Apache 2.0](LICENSE)

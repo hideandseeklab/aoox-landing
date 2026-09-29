@@ -249,7 +249,9 @@ NIXPACKS_START_CMD=node server.js`}</Pre>
         Pilih <strong>Cara build → Situs statis (nginx)</strong> untuk repo
         yang hasil akhirnya hanya file statis. aoox membuat Dockerfile
         dua tahap: (opsional) tahap build di <Code>node:22-alpine</Code>, lalu{" "}
-        <Code>nginx:1.27-alpine</Code> yang melayani folder output di port 80.
+        <Code>nginx:1.27-alpine</Code> yang melayani folder output di port 80 — form membuat aplikasi mengisi
+        Port container 80 otomatis saat memilih Situs statis (bisa diubah, tetapi
+        nginx tetap mendengarkan port 80).
       </P>
       <Table
         head={["Field", "Keterangan"]}

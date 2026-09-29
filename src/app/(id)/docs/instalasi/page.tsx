@@ -282,6 +282,17 @@ curl -s http://localhost:3001/auth/setup-status
         dari prosesnya. Kalau lebih dari 5 menit panel belum juga kembali,
         kartu menampilkan langkah cek manual lewat SSH.
       </P>
+      <P>
+        Saat ada versi aoox yang lebih baru dipublikasikan, owner melihat tombol{" "}
+        <strong>Update tersedia</strong> (dengan nomor versinya) di bagian bawah
+        sidebar — klik untuk membuka halaman Update aoox. Peran lain tidak melihatnya.
+        Server memeriksa versi terbaru di Docker Hub sendiri (sekali setelah
+        panel menyala, lalu tiap beberapa jam); kalau server tidak punya akses
+        internet, tombolnya tidak muncul dan tidak ada error. Tombol hanya muncul
+        untuk instalasi yang mengikuti tag <Code>:latest</Code> — kalau image
+        dikunci ke tag lain, halaman Update aoox hanya menampilkan versi terbaru
+        sebagai informasi.
+      </P>
       <Pre>{`aoox update            # cek saja
 aoox update --apply    # terapkan kalau ada update`}</Pre>
       <P>Manual lewat SSH, kalau <Code>INSTALL_DIR</Code> belum diisi:</P>
@@ -301,8 +312,16 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         <strong> sudah ada</strong> di server — keduanya tidak pernah menulis ulang
         file compose itu sendiri. Kalau sebuah rilis menambahkan variabel baru ke
         file compose (misalnya env baru yang harus diteruskan ke sebuah service),
-        instalasi lama tidak otomatis mendapatkannya lewat update. Perbaikannya
-        manual: edit <Code>docker-compose.dist.yml</Code> di <Code>INSTALL_DIR</Code>{" "}
+        instalasi lama tidak otomatis mendapatkannya lewat update — begitu juga
+        variabel baru di <Code>.env.dist</Code> (contohnya Terminal yang error{" "}
+        <Code>TERMINAL_SSH_USER is not set</Code> setelah update). Perbaikan
+        paling mudah dan aman untuk data:{" "}
+        <DocLink href="/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink>{" "}
+        — menulis ulang compose dari salinan terbaru, menggabungkan{" "}
+        <Code>.env.dist</Code> (secret tidak pernah dibuat ulang), lalu pull +
+        recreate tanpa menyentuh volume. Jangan pakai{" "}
+        <Code>aoox install --force</Code> untuk ini (secret baru memutus akses
+        ke data lama). Cara manual: edit <Code>docker-compose.dist.yml</Code> di <Code>INSTALL_DIR</Code>{" "}
         (default <Code>/opt/aoox</Code>) sesuai catatan rilis, lalu:
       </P>
       <Pre>{`docker compose -f docker-compose.dist.yml -f docker-compose.override.yml --env-file .env.dist up -d`}</Pre>

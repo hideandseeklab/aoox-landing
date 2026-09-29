@@ -8,12 +8,22 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.4] - 2026-09-29
+
 ### Added
 
+- **Changelog page and version badge** (ID + EN): `/changelog` and `/en/changelog` list the aoox product releases (newest first, "Latest" + "alpha" labels, Added/Changed/Fixed highlights in both languages, links to the GitHub
+  release and each repo's CHANGELOG at that tag), built from a single typed source `src/content/changelog.ts`. Both
+  homepages get a version pill (`v0.1.0-alpha.4` at this release) in the hero (read from that same file's newest entry, not hard-coded) and a
+  "Changelog" button next to the existing CTAs; "Changelog" also joins the header nav (desktop + mobile) and the footer.
+  `otherLangPath()` maps `/changelog` ⇄ `/en/changelog` so hreflang/canonical/OG and the language switcher work, and both
+  pages are in the sitemap (58 URLs). New `scripts/check-release.mjs` (`npm run check-release [-- <version>]`) compares
+  `package.json`'s version with the newest changelog entry — a manual pre-release reminder, deliberately not wired into
+  `build`/CI; documented in RELEASING.md and README.
 - **SEO overhaul** — the site had no sitemap/robots, no per-page description, no canonical/hreflang,
   no Open Graph/Twitter/JSON-LD, and every page (including `/en/**`) rendered `<html lang="id">`.
   - `src/app/sitemap.ts`/`src/app/robots.ts` (`force-static`, required for `output: "export"`):
-    the sitemap lists all 56 ID+EN pages with per-URL `alternates.languages`, generated from
+    the sitemap lists every ID+EN page (56 at the time; 58 with the changelog pages) with per-URL `alternates.languages`, generated from
     `docs-nav.ts` rather than hand-maintained; `robots.txt` allows everything except
     `install.sh`/`install-cli.sh` (installer scripts, not pages) and points at the sitemap.
   - New `src/lib/seo.ts`: `pageMetadata()` builds each page's description, canonical, reciprocal
@@ -51,11 +61,6 @@ Versions below 1.0.0 may include breaking changes in a minor release.
     group's root layout applies to a URL that doesn't match any route.
   - README gets a new "SEO" section explaining how to add a docs page while keeping it in the
     sitemap and correctly cross-linked (single source of truth: `docs-nav.ts` + `pageMetadata()`).
-- Installation doc (ID + EN) "Upgrading"/"Memperbarui versi" section gets a new paragraph describing
-  what actually happens after clicking "Terapkan update"/"Apply update" on the dashboard: the confirm
-  dialog, the "Sedang memperbarui"/"Applying" mode with disabled buttons, automatic polling and page
-  reload once the panel is back on the new version, a connection drop during the restart being
-  expected rather than an error, and the 5-minute manual-recovery fallback.
 - `public/install-cli.sh`: standalone installer for the `aoox` CLI itself (distinct from
   `install.sh`, which installs the panel) — `curl -fsSL https://aoox.dev/install-cli.sh | sh`
   downloads a prebuilt tarball with its own bundled Node.js runtime from aoox-cli's GitHub
@@ -74,10 +79,35 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   correctly rejected with the musl message. CLI docs (ID + EN) now lead with this script for
   Linux/macOS, keeping npm documented for Windows, Alpine, or anyone who already has Node.js
   (corrected to the actual **Node.js 22+** requirement — a "20+" typo from the same change).
+- **Docs for `aoox reinstall`** (ID + EN): new "Memperbaiki instalasi / Repairing an install" section on the CLI page
+  (what it backs up, rewrites, merges, and never touches, flags, idempotency, warning against `aoox install --force`,
+  no-CLI alternative), a row in the command table, a new troubleshooting entry ("fixes/new features don't show up after
+  a panel update") plus the existing `TERMINAL_SSH_USER is not set` row now pointing to it, and the installation
+  page's update note now names the `aoox update` limitation and recommends `aoox reinstall`.
+
+### Changed
+
+- Installation doc (ID + EN), "Memperbarui versi": the "Update tersedia" button in the sidebar — owner
+  only, checked by the server from Docker Hub (after boot, then every few hours), silent without
+  internet, only for installs following `:latest`.
+- Installation doc (ID + EN) "Upgrading"/"Memperbarui versi" section gets a new paragraph describing
+  what actually happens after clicking "Terapkan update"/"Apply update" on the dashboard: the confirm
+  dialog, the "Sedang memperbarui"/"Applying" mode with disabled buttons, automatic polling and page
+  reload once the panel is back on the new version, a connection drop during the restart being
+  expected rather than an error, and the 5-minute manual-recovery fallback.
 - Installation doc (ID + EN): the callout next to `aoox install` now also notes that `aoox install`
   needs the CLI itself already installed on the target server, unlike `install.sh` (which needs
   only `curl`/`sh`), and links to the CLI doc's Node.js-free install script
   (`curl -fsSL https://aoox.dev/install-cli.sh | sh`) for installing the CLI itself.
+- Application doc (ID + EN), Settings row: Port host, domains and resource limits now apply directly to a
+  running application (container recreated from the same image, no build; brief downtime with a host
+  port), a stopped app picks its new port up when started, a host port change is refused (409) while a
+  deployment is active, and everything else still waits for the next deploy.
+- Terminal doc and troubleshooting (ID + EN): `TERMINAL_SSH_USER` left empty now falls back to
+  `root` instead of failing, so the "is not set" row was dropped from the terminal doc and reframed in
+  troubleshooting as an older-versions error (cause: pre-default installs; fix: update, or set it in
+  Environment). The terminal doc also mentions the link to Environment shown on connection errors.
+- Build docs (ID + EN): the static-site section now notes that the create form pre-fills Container port 80.
 
 ## [0.1.0-alpha.3] - 2026-09-28
 
@@ -219,7 +249,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.3...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.4...HEAD
+[0.1.0-alpha.4]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.3...v0.1.0-alpha.4
 [0.1.0-alpha.3]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.2...v0.1.0-alpha.3
 [0.1.0-alpha.2]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.1...v0.1.0-alpha.2
 [0.1.0-alpha.1]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.0...v0.1.0-alpha.1

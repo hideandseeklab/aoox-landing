@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
+import { LATEST_RELEASE } from "@/content/changelog"
 import type { Lang } from "@/lib/lang"
 import { cn } from "@/lib/utils"
 
@@ -30,6 +31,8 @@ const COPY_ID = {
     "aoox menjalankan build, deploy, database, domain, dan log di server milikmu — satu dashboard, tanpa vendor lock-in.",
   ctaPrimary: "Pasang di server",
   ctaSecondary: "Lihat fitur",
+  ctaChangelog: "Changelog",
+  releaseLabel: "Rilis terbaru",
   stackLabel: "Dibangun di atas",
 }
 
@@ -45,6 +48,8 @@ const COPY: Record<Lang, Copy> = {
       "aoox runs your build, deploy, database, domain, and logs on your own server — one dashboard, no vendor lock-in.",
     ctaPrimary: "Install on your server",
     ctaSecondary: "See features",
+    ctaChangelog: "Changelog",
+    releaseLabel: "Latest release",
     stackLabel: "Built on",
   },
 }
@@ -61,10 +66,20 @@ function HeroSection({ lang = "id" }: { lang?: Lang }) {
 
       <div className="relative mx-auto grid w-full max-w-6xl gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16">
         <div className="flex flex-col gap-7">
-          <span className="inline-flex w-fit items-center gap-2 border border-border bg-card px-2.5 py-1 text-[0.7rem] text-muted-foreground">
-            <span className="size-1.5 bg-primary" />
-            {t.badge}
-          </span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex w-fit items-center gap-2 border border-border bg-card px-2.5 py-1 text-[0.7rem] text-muted-foreground">
+              <span className="size-1.5 bg-primary" />
+              {t.badge}
+            </span>
+            <Link
+              href={lang === "en" ? "/en/changelog" : "/changelog"}
+              aria-label={`${t.releaseLabel} v${LATEST_RELEASE.version} — Changelog`}
+              className="inline-flex w-fit items-center gap-1.5 border border-primary/60 bg-card px-2.5 py-1 font-mono text-[0.7rem] text-foreground transition-colors hover:bg-primary/15"
+            >
+              v{LATEST_RELEASE.version}
+              <span aria-hidden className="text-muted-foreground">→</span>
+            </Link>
+          </div>
 
           <h1 className="text-4xl font-semibold tracking-tighter text-balance sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05]">
             {t.titleLead}
@@ -85,6 +100,11 @@ function HeroSection({ lang = "id" }: { lang?: Lang }) {
             </Button>
             <Button size="lg" variant="outline" asChild>
               <a href="#fitur">{t.ctaSecondary}</a>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link href={lang === "en" ? "/en/changelog" : "/changelog"}>
+                {t.ctaChangelog}
+              </Link>
             </Button>
           </div>
 

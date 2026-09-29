@@ -28,13 +28,16 @@ const OG_IMAGE = {
  * can never drift apart.
  *
  * The mapping is purely structural (`/docs/<slug>` ⇄ `/en/docs/<slug>`,
- * `/` ⇄ `/en`) — slugs are never translated. If a page without a real
+ * `/` ⇄ `/en`, `/changelog` ⇄ `/en/changelog`) — slugs are never translated. If a page without a real
  * counterpart is ever added, this must return `null` for it rather than a
  * guessed path, so callers never emit an hreflang link to a 404.
  */
 export function otherLangPath(pathname: string, lang: Lang): string | null {
   if (pathname === "/" || pathname === "/en") {
     return lang === "en" ? "/" : "/en"
+  }
+  if (pathname === "/changelog" || pathname === "/en/changelog") {
+    return lang === "en" ? "/changelog" : "/en/changelog"
   }
   if (lang === "id" && (pathname === "/docs" || pathname.startsWith("/docs/"))) {
     return `/en${pathname}`

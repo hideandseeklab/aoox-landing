@@ -75,6 +75,11 @@ const COMMANDS = [
     flags: "--apply",
   },
   {
+    cmd: "aoox reinstall",
+    what: "Perbaiki/segarkan instalasi panel yang ada tanpa kehilangan data (compose ditulis ulang, .env.dist digabung, pull + recreate).",
+    flags: "--dir, --dry-run, --yes, --no-pull, --terminal-ssh-user",
+  },
+  {
     cmd: "aoox help [PERINTAH]",
     what: "Daftar perintah, atau bantuan satu perintah.",
     flags: "—",
@@ -331,6 +336,61 @@ Update diterapkan — panel akan restart beberapa detik untuk menerapkannya.`}</
         untuk cara manual lewat SSH sebagai alternatif.
       </P>
 
+      <H2 id="reinstall">Memperbaiki instalasi (aoox reinstall)</H2>
+      <P>
+        <Code>aoox update</Code> hanya <Code>pull</Code> + <Code>up -d</Code>: ia
+        tidak menulis ulang <Code>docker-compose.dist.yml</Code> dan tidak
+        menambah variabel baru ke <Code>.env.dist</Code>. Instalasi lama karena
+        itu tidak menerima perbaikan yang butuh perubahan compose atau env
+        (contoh nyata: Terminal error <Code>TERMINAL_SSH_USER is not set</Code>{" "}
+        setelah update, karena instalasi lama tidak pernah menulis variabel
+        itu). <Code>aoox reinstall</Code> memperbaikinya <strong>tanpa
+        menyentuh data</strong>. Jalankan di server panel, sebagai root:
+      </P>
+      <Pre title="Lihat dulu apa yang akan berubah, lalu terapkan">{`$ sudo aoox reinstall --dry-run
+$ sudo aoox reinstall`}</Pre>
+      <Table
+        head={["Langkah", "Yang terjadi"]}
+        rows={[
+          [
+            "Backup",
+            <>File yang akan berubah disalin ke <Code>&lt;dir&gt;/backups/&lt;waktu&gt;/</Code> (<Code>.env.dist</Code> tetap izin 600).</>,
+          ],
+          [
+            "Compose",
+            <><Code>docker-compose.dist.yml</Code> (dan <Code>docker-compose.domain.yml</Code> bila ada) ditulis ulang dari salinan yang dibundel di CLI. <Code>docker-compose.override.yml</Code> milik fitur Domain panel/Environment <strong>tidak disentuh</strong>.</>,
+          ],
+          [
+            ".env.dist",
+            <>Digabung, bukan dibuat ulang: semua nilai, urutan, komentar, dan key tak dikenal dipertahankan; hanya key yang belum ada dan punya default aman yang ditambahkan (mis. <Code>TERMINAL_SSH_USER=root</Code>, <Code>INSTALL_DIR</Code>). <Code>POSTGRES_PASSWORD</Code>, <Code>JWT_SECRET</Code>, <Code>ENCRYPTION_KEY</Code> tidak pernah diubah — bila salah satunya hilang, perintah berhenti dengan pesan jelas.</>,
+          ],
+          [
+            "Jalankan ulang",
+            <><Code>docker compose pull</Code> lalu <Code>up -d --force-recreate</Code> memakai daftar file compose yang sama dengan stack yang sedang berjalan. Volume (database) tidak disentuh. Lalu menunggu API sehat dan mencetak ringkasan.</>,
+          ],
+        ]}
+      />
+      <P>
+        Aman dijalankan berulang: bila tidak ada yang perlu diubah, tidak ada
+        file yang ditulis dan tidak ada backup — container tetap disegarkan.
+        Opsi: <Code>--dir</Code> (default <Code>/opt/aoox</Code>),{" "}
+        <Code>--yes</Code> (tanpa konfirmasi), <Code>--no-pull</Code>,{" "}
+        <Code>--terminal-ssh-user &lt;user&gt;</Code> (mengisi atau menimpa nilai
+        itu), dan <Code>--dry-run</Code> (hanya cetak rencana).
+      </P>
+      <Callout kind="warn" title="Jangan pakai aoox install --force untuk memperbaiki">
+        <Code>aoox install --force</Code> menulis <Code>.env.dist</Code> baru
+        dengan secret acak baru: database lama tidak bisa diakses lagi dan semua
+        kredensial tersimpan tidak bisa didekripsi. Untuk instalasi yang sudah
+        berjalan, selalu pakai <Code>aoox reinstall</Code>.
+      </Callout>
+      <P>
+        Tanpa CLI: edit <Code>.env.dist</Code> langsung (mis. tambah{" "}
+        <Code>TERMINAL_SSH_USER=root</Code>) atau pakai halaman{" "}
+        <DocLink href="/docs/environment">Environment</DocLink> di Settings, lalu{" "}
+        <Code>docker compose … up -d</Code>.
+      </P>
+
       <H2 id="perintah">Referensi perintah</H2>
       <div className="overflow-x-auto border border-border">
         <table className="w-full text-xs">
@@ -443,7 +503,7 @@ Update diterapkan — panel akan restart beberapa detik untuk menerapkannya.`}</
           ],
           [
             <>aoox install: sudah ada instalasi di …</>,
-            <>Folder <Code>--dir</Code> (default <Code>/opt/aoox</Code>) sudah terisi. Beri <Code>--force</Code> untuk menimpanya, atau pakai <Code>--dir</Code> lain.</>,
+            <>Folder <Code>--dir</Code> (default <Code>/opt/aoox</Code>) sudah terisi. Untuk memperbaiki instalasi itu, pakai <Code>aoox reinstall</Code>. <Code>--force</Code> hanya untuk instalasi ulang dari nol (membuat secret baru — data lama tidak terbaca), atau pakai <Code>--dir</Code> lain.</>,
           ],
         ]}
       />

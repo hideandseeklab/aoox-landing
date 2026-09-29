@@ -17,6 +17,7 @@ const NAV_ID = [
   { href: "/#self-host", label: "Self-host" },
   { href: "/#faq", label: "FAQ" },
   { href: "/docs", label: "Docs" },
+  { href: "/changelog", label: "Changelog" },
 ]
 
 const NAV_EN = [
@@ -25,6 +26,7 @@ const NAV_EN = [
   { href: "/en#self-host", label: "Self-host" },
   { href: "/en#faq", label: "FAQ" },
   { href: "/en/docs", label: "Docs" },
+  { href: "/en/changelog", label: "Changelog" },
 ]
 
 const REPO = "https://github.com/hideandseeklab/aoox-api"

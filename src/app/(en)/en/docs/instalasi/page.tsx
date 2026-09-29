@@ -285,6 +285,17 @@ curl -s http://localhost:3001/auth/setup-status
         isn&apos;t shown as an error. If the panel still isn&apos;t back after
         5 minutes, the card shows manual recovery steps over SSH.
       </P>
+      <P>
+        When a newer aoox version has been published, the owner sees an{" "}
+        <strong>Update tersedia</strong> (update available) button, with the
+        version number, at the bottom of the sidebar — click it to open the
+        Update aoox page. Other roles never see it. The server looks up the
+        newest version on Docker Hub by itself (once after the panel starts, then
+        every few hours); with no internet access the button simply doesn&apos;t
+        appear and nothing errors. The button only shows for installs that follow
+        the <Code>:latest</Code> tag — if the image is pinned to another tag, the
+        Update aoox page only lists the newest version for information.
+      </P>
       <Pre>{`aoox update            # check only
 aoox update --apply    # apply if an update is available`}</Pre>
       <P>Manual, over SSH, if <Code>INSTALL_DIR</Code> isn&apos;t set:</P>
@@ -305,7 +316,15 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         that compose file itself. If a release adds a new variable to the
         compose file (for example a new env var that needs to reach a
         service), an existing install won&apos;t pick it up through an
-        update. The fix is manual: edit{" "}
+        update — and neither do new variables in <Code>.env.dist</Code> (for
+        example Terminal failing with <Code>TERMINAL_SSH_USER is not set</Code>{" "}
+        after an update). The easiest fix that is safe for your data:{" "}
+        <DocLink href="/en/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink>{" "}
+        — it rewrites the compose file from the newest copy, merges{" "}
+        <Code>.env.dist</Code> (secrets are never regenerated), then pulls and
+        recreates without touching volumes. Don&apos;t use{" "}
+        <Code>aoox install --force</Code> for this (new secrets cut off the old
+        data). The manual way: edit{" "}
         <Code>docker-compose.dist.yml</Code> in <Code>INSTALL_DIR</Code>{" "}
         (default <Code>/opt/aoox</Code>) per the release notes, then:
       </P>
