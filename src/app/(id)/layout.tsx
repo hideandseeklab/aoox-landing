@@ -1,0 +1,39 @@
+import type { Metadata } from "next"
+
+import "../globals.css"
+import { fontMono, fontSans } from "../fonts"
+import { ThemeProvider } from "@/components/theme-provider"
+import { SITE_URL } from "@/lib/seo"
+import { cn } from "@/lib/utils"
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "aoox — self-hosted PaaS untuk deploy dari Git",
+    template: "%s · aoox",
+  },
+  description:
+    "Deploy aplikasi dari Git ke server sendiri. Build, database, domain, dan log dalam satu dashboard di atas Docker — alternatif self-hosted untuk Heroku/Vercel.",
+}
+
+// Root layout for every Indonesian-language route (`/`, `/docs/**`) — see
+// "Multiple root layouts" in the Next.js docs. The (en) group has its own
+// sibling layout with lang="en"; each `<html>` is only ever rendered once
+// per request since the two groups never share a route.
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html
+      lang="id"
+      suppressHydrationWarning
+      className={cn("antialiased", fontSans.variable, fontMono.variable)}
+    >
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
+    </html>
+  )
+}

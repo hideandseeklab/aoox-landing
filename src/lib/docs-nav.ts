@@ -267,7 +267,7 @@ export const DOCS_NAV_EN: DocGroup[] = [
       {
         href: "/en/docs/database",
         title: "Managed databases",
-        description: "PostgreSQL, MySQL, MariaDB, Redis per project.",
+        description: "Run PostgreSQL, MySQL, MariaDB, or Redis as a managed database per project.",
       },
       {
         href: "/en/docs/data-browser",
@@ -327,7 +327,7 @@ export const DOCS_NAV_EN: DocGroup[] = [
       {
         href: "/en/docs/notifikasi",
         title: "Notifications",
-        description: "Telegram, Slack, Discord, webhook, email.",
+        description: "Send deploy and health alerts to Telegram, Slack, Discord, a webhook, or email.",
       },
       {
         href: "/en/docs/troubleshooting",

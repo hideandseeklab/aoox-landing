@@ -8,6 +8,7 @@ import { Menu, Moon, Sun, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import type { Lang } from "@/lib/lang"
+import { otherLangPath } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
 const NAV_ID = [
@@ -123,17 +124,6 @@ function LangSwitch({ pathname, lang }: { pathname: string; lang: Lang }) {
       {lang === "en" ? "ID" : "EN"}
     </Link>
   )
-}
-
-function otherLangPath(pathname: string, lang: Lang): string | null {
-  if (pathname === "/" || pathname === "/en") return lang === "en" ? "/" : "/en"
-  if (lang === "id" && (pathname === "/docs" || pathname.startsWith("/docs/"))) {
-    return `/en${pathname}`
-  }
-  if (lang === "en" && (pathname === "/en/docs" || pathname.startsWith("/en/docs/"))) {
-    return pathname.slice("/en".length)
-  }
-  return null
 }
 
 function ThemeToggle({ lang }: { lang: Lang }) {

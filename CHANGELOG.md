@@ -8,6 +8,72 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Added
+
+- **SEO overhaul** — the site had no sitemap/robots, no per-page description, no canonical/hreflang,
+  no Open Graph/Twitter/JSON-LD, and every page (including `/en/**`) rendered `<html lang="id">`.
+  - `src/app/sitemap.ts`/`src/app/robots.ts` (`force-static`, required for `output: "export"`):
+    the sitemap lists all 56 ID+EN pages with per-URL `alternates.languages`, generated from
+    `docs-nav.ts` rather than hand-maintained; `robots.txt` allows everything except
+    `install.sh`/`install-cli.sh` (installer scripts, not pages) and points at the sitemap.
+  - New `src/lib/seo.ts`: `pageMetadata()` builds each page's description, canonical, reciprocal
+    hreflang (`id`/`en`/`x-default` — only emitted for languages that actually have the page,
+    via `otherLangPath()`, moved here from `site-header.tsx`'s language switcher so the URL
+    mapping has one source of truth), and Open Graph/Twitter card data from one call. Every ID +
+    EN doc page (52 files) and both homepages now call it with a unique ~110–160-character
+    description instead of a bare `{ title }`; the two `/docs`/`/en/docs` index pages, which
+    previously had no `metadata` export at all, now have one too.
+  - **`<html lang>` per language**: split the single root layout into two — `src/app/(id)/layout.tsx`
+    (`lang="id"`) and `src/app/(en)/layout.tsx` (`lang="en"`) — using Next's "Multiple root
+    layouts" route-group pattern, and moved `/`+`/docs/**` under `(id)` and `/en`+`/en/docs/**`
+    under `(en)`. Previously *every* page served `lang="id"`, including all of `/en/**`; the EN
+    homepage's old `<div lang="en">` client-side wrapper (which never reached `/en/docs/**` at
+    all) is removed, since the real `<html lang="en">` now covers the whole `/en` subtree
+    server-side. `metadataBase` (`https://aoox.dev`) now lives on these two layouts.
+  - Open Graph + Twitter: every page gets `openGraph`/`twitter` metadata with a shared 1200×630
+    image. `src/app/opengraph-image.tsx` (and a matching `src/app/apple-icon.tsx`, 180×180)
+    generate that image via `next/og`'s `ImageResponse` at build time — no new dependency, and
+    compatible with static export the same way `sitemap.ts` is. This is a **placeholder** design
+    (dark background, lime "$ aoox" mark, tagline) meant to be swapped for a real graphic.
+  - JSON-LD on both homepages (`src/components/json-ld.tsx` + `homeJsonLd()` in `seo.ts`):
+    `SoftwareApplication`, `Organization`, and `WebSite` under one `@graph`, `<` escaped in the
+    serialized JSON so a description containing a stray tag-like string can't break out of the
+    `<script>` element. Only verifiable facts (no invented ratings/reviews/pricing beyond "free
+    and open source").
+  - `src/app/not-found.tsx`: a real 404 page (`robots: noindex`, links back to the homepage and
+    docs) — `output: "export"` turns this into `out/404.html`, which GitHub Pages serves for any
+    unmatched path under aoox.dev. It sits outside the (id)/(en) groups and needed since neither
+    group's root layout applies to a URL that doesn't match any route.
+  - README gets a new "SEO" section explaining how to add a docs page while keeping it in the
+    sitemap and correctly cross-linked (single source of truth: `docs-nav.ts` + `pageMetadata()`).
+- Installation doc (ID + EN) "Upgrading"/"Memperbarui versi" section gets a new paragraph describing
+  what actually happens after clicking "Terapkan update"/"Apply update" on the dashboard: the confirm
+  dialog, the "Sedang memperbarui"/"Applying" mode with disabled buttons, automatic polling and page
+  reload once the panel is back on the new version, a connection drop during the restart being
+  expected rather than an error, and the 5-minute manual-recovery fallback.
+- `public/install-cli.sh`: standalone installer for the `aoox` CLI itself (distinct from
+  `install.sh`, which installs the panel) — `curl -fsSL https://aoox.dev/install-cli.sh | sh`
+  downloads a prebuilt tarball with its own bundled Node.js runtime from aoox-cli's GitHub
+  Releases (built by its new `release-tarballs.yml` workflow) and installs it with no Node.js on
+  the target machine at all. Detects OS/arch (Linux/macOS, x64/arm64) and musl libc (e.g. Alpine,
+  which the bundled binary can't run on) with a clear error pointing at the npm install instead;
+  verifies a SHA-256 checksum before extracting; installs to `/usr/local/lib/aoox` +
+  `/usr/local/bin/aoox` when root or passwordless `sudo` is available, otherwise
+  `~/.local/lib/aoox` + `~/.local/bin` with a PATH warning (a `curl | sh` pipe can't safely relay
+  an interactive sudo password prompt, so it never tries one); re-running it upgrades in place.
+  Resolves the latest release — prereleases included, since aoox hasn't had a stable one yet — via
+  the GitHub API, or an explicit `AOOX_VERSION` to skip that call entirely. Tested for real in
+  clean `ubuntu`/`debian` containers with no Node.js installed: first install and upgrade
+  (`.tar.xz` and the `.tar.gz` fallback when `xz` is missing), non-root without passwordless sudo
+  falling back to `~/.local`, a corrupted checksum refusing to install, and an `alpine` container
+  correctly rejected with the musl message. CLI docs (ID + EN) now lead with this script for
+  Linux/macOS, keeping npm documented for Windows, Alpine, or anyone who already has Node.js
+  (corrected to the actual **Node.js 22+** requirement — a "20+" typo from the same change).
+- Installation doc (ID + EN): the callout next to `aoox install` now also notes that `aoox install`
+  needs the CLI itself already installed on the target server, unlike `install.sh` (which needs
+  only `curl`/`sh`), and links to the CLI doc's Node.js-free install script
+  (`curl -fsSL https://aoox.dev/install-cli.sh | sh`) for installing the CLI itself.
+
 ## [0.1.0-alpha.3] - 2026-09-28
 
 ### Added
