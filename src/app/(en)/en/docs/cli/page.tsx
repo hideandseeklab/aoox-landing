@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -223,7 +224,7 @@ Create the first owner account at /setup.`}</Pre>
       <Steps>
         <Step title="Create an API token in the panel">
           <P>
-            <strong>Settings → API token</strong>: give it a name (e.g.{" "}
+            <strong>Settings<PathArrow />API token</strong>: give it a name (e.g.{" "}
             <Code>my-laptop</Code>), pick an expiry, then copy the{" "}
             <Code>aoox_…</Code> token — it&apos;s only shown once. A token acts{" "}
             <strong>as its owner</strong>, with the same role — see{" "}
@@ -307,7 +308,7 @@ Deployed: localhost:5000/shop/shop:a1b2c3d`}</Pre>
 
       <H2 id="domain">Changing the panel&apos;s domain</H2>
       <P>
-        An alternative to Settings → Domain panel in the dashboard — good for
+        An alternative to Settings<PathArrow />Domain panel in the dashboard — good for
         provisioning scripts. See{" "}
         <DocLink href="/en/docs/domain-panel">Domain for the panel</DocLink> for
         the details of what happens behind it.
@@ -447,7 +448,7 @@ $ sudo aoox reinstall`}</Pre>
       />
       <Ul>
         <li>
-          Precedence: flag → environment → <Code>config.json</Code> contents.
+          Precedence: flag<PathArrow />environment<PathArrow /><Code>config.json</Code> contents.
           If none is complete, the CLI tells you to run{" "}
           <Code>aoox login</Code>.
         </li>
@@ -481,7 +482,7 @@ $ sudo aoox reinstall`}</Pre>
         rows={[
           [
             <>Token rejected by the panel (401)</>,
-            <>The token expired, was revoked, or was copied wrong. Create a new one in Settings → API token.</>,
+            <>The token expired, was revoked, or was copied wrong. Create a new one in Settings<PathArrow />API token.</>,
           ],
           [
             <>No interactive terminal</>,

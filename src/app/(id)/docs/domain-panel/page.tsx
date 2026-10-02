@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -121,7 +122,7 @@ api.panel.example.com.   A   203.0.113.10`}</Pre>
           <Pre title=".env.dist">{`INSTALL_DIR=/opt/aoox   # path absolut folder docker-compose.dist.yml di host ini`}</Pre>
           <Pre>{`docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         </Step>
-        <Step title="Settings → Domain panel (owner)">
+        <Step title={<>Settings<PathArrow />Domain panel (owner)</>}>
           <P>
             Isi domain dashboard, domain API, dan email ACME, lalu{" "}
             <strong>Simpan &amp; terapkan</strong>. Panel menulis{" "}
@@ -199,8 +200,8 @@ PUBLIC_API_URL=https://api.panel.example.com`}</Pre>
 
         <Step title="Aktifkan reverse proxy (bila belum)">
           <P>
-            Login (masih via IP:3000 bila perlu) → <strong>Settings → Reverse
-            proxy (Traefik)</strong> → aktifkan (owner). Proxy yang sudah ada
+            Login (masih via IP:3000 bila perlu)<PathArrow /><strong>Settings<PathArrow />Reverse
+            proxy (Traefik)</strong> <PathArrow />aktifkan (owner). Proxy yang sudah ada
             tapi diaktifkan <em>tanpa</em> <Code>PROXY_ACME_EMAIL</Code> harus
             dihapus dan diaktifkan lagi agar resolver ACME aktif.
           </P>
@@ -264,7 +265,7 @@ curl -s https://api.panel.example.com/auth/setup-status   # {"needsSetup":false}
           ["Domain jalan, lalu hilang setelah update", "up -d tanpa -f docker-compose.domain.yml. Selalu sertakan kedua file."],
           ["Login berhasil tapi langsung logout / 401", "WEB_ORIGIN masih http atau beda host — cookie Secure/origin tidak cocok. Samakan, up -d, login ulang."],
           ["Terminal: origin not allowed", "Sama seperti di atas: WEB_ORIGIN ≠ URL browser."],
-          ["Sertifikat default Traefik", "PROXY_ACME_EMAIL kosong saat diaktifkan, DNS belum benar, atau port 80 tertutup. Hapus proxy → aktifkan lagi setelah diperbaiki."],
+          ["Sertifikat default Traefik", <>PROXY_ACME_EMAIL kosong saat diaktifkan, DNS belum benar, atau port 80 tertutup. Hapus proxy<PathArrow />aktifkan lagi setelah diperbaiki.</>],
           ["Log/terminal tidak mengalir, halaman lain normal", "PUBLIC_API_URL tidak bisa dijangkau dari browser (WebSocket diblokir oleh proxy di depan)."],
           [
             "Domain sudah disimpan, DNS & firewall OS (ufw) sudah benar, tapi browser \"unable to connect\"",

@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -95,7 +96,7 @@ export default function Page() {
           [
             <strong key="g">Git repository</strong>,
             "URL repo, branch, kredensial (bila privat), cara build",
-            <>Clone → build (<DocLink href="/docs/build">Dockerfile / Nixpacks / statis</DocLink>) → push ke registry → jalankan.</>,
+            <>Clone<PathArrow />build (<DocLink href="/docs/build">Dockerfile / Nixpacks / statis</DocLink>)<PathArrow />push ke registry<PathArrow />jalankan.</>,
           ],
           [
             <strong key="i">Image siap pakai (di-pull)</strong>,
@@ -213,7 +214,7 @@ export default function Page() {
                   pernah diaktifkan, ia dinyalakan otomatis — perilaku yang
                   sama dengan set domain panel, lihat{" "}
                   <DocLink href="/docs/domain-panel#dashboard">
-                    Domain untuk panel → Lewat dashboard
+                    Domain untuk panel<PathArrow />Lewat dashboard
                   </DocLink>
                   .
                 </>,
@@ -228,7 +229,7 @@ export default function Page() {
 
         <Step title="Simpan, lalu isi Environment variables (bila perlu)">
           <P>
-            Tab <strong>Pengaturan</strong> → editor env, satu <Code>KEY=VALUE</Code>{" "}
+            Tab <strong>Environment</strong> <PathArrow />editor env, satu <Code>KEY=VALUE</Code>{" "}
             per baris. Nilai diterapkan saat container dibuat, bukan saat
             build — lihat{" "}
             <DocLink href="/docs/environment">Environment variables</DocLink>.
@@ -272,9 +273,10 @@ success   container lama diganti · status aplikasi Running`}</Pre>
         head={["Tab", "Isi"]}
         rows={[
           ["Deploy", "Tombol Deploy/Stop/Start, daftar deployment, log deployment & log container streaming, metrik, Rollback."],
-          ["Pengaturan", <>Form yang sama dengan saat membuat, plus Environment variables dan Build args. <strong>Port host, domain, dan limit resource berlaku langsung</strong> pada aplikasi yang berjalan — container dibuat ulang dari image yang sama tanpa build (dengan Port host ada downtime singkat, karena dua container tidak bisa memakai port yang sama). Aplikasi yang sedang berhenti memakai port barunya saat dijalankan lagi, dan perubahan Port host ditolak (409) selama ada deployment aktif. Pengaturan lain berlaku pada deploy berikutnya.</>],
+          ["Pengaturan", <>Form yang sama dengan saat membuat, plus Build args (Environment punya tab sendiri). <strong>Port host, domain, dan limit resource berlaku langsung</strong> pada aplikasi yang berjalan — container dibuat ulang dari image yang sama tanpa build (dengan Port host ada downtime singkat, karena dua container tidak bisa memakai port yang sama). Aplikasi yang sedang berhenti memakai port barunya saat dijalankan lagi, dan perubahan Port host ditolak (409) selama ada deployment aktif. Pengaturan lain berlaku pada deploy berikutnya.</>],
           ["Domain", "Hostname untuk aplikasi + toggle HTTPS + cek DNS."],
           ["Mount", "Volume, bind, file — dan backup volume."],
+          ["Environment", "Variabel env aplikasi, disimpan sendiri, plus sumber secret (Infisical). Berlaku pada deploy berikutnya."],
           ["Jobs", "Perintah terjadwal."],
           ["Webhook", "URL webhook, secret, dan preview pull request."],
           ["Console", "Shell interaktif langsung ke dalam container yang berjalan."],
@@ -299,7 +301,7 @@ success   container lama diganti · status aplikasi Running`}</Pre>
         </li>
         <li>
           <strong>Tercatat di audit log</strong> — setiap pembukaan sesi
-          console adalah baris tersendiri di Settings → Audit log, dengan
+          console adalah baris tersendiri di Settings<PathArrow />Audit log, dengan
           siapa dan kapan.
         </li>
         <li>
@@ -342,6 +344,7 @@ success   container lama diganti · status aplikasi Running`}</Pre>
       <Table
         head={["Gejala", "Penyebab & solusi"]}
         rows={[
+          ["Monorepo: build tidak menemukan package.json / Dockerfile", <>Isi <strong>Root directory</strong> (mis. <Code>apps/web</Code>) di bagian Git. Lihat <DocLink href="/docs/build#root-directory">Cara build</DocLink>.</>],
           [
             "Deploy gagal di tahap pushing",
             <>Registry lokal belum diaktifkan, atau <Code>REGISTRY_PUBLIC_HOST</Code> bukan localhost tanpa TLS.</>,

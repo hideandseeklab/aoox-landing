@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -103,7 +104,7 @@ export default function Page() {
 
       <H2 id="membuat">Creating a project</H2>
       <Steps>
-        <Step title="Projects menu → New project">
+        <Step title={<>Projects menu<PathArrow />New project</>}>
           <Table
             head={["Field", "Description"]}
             rows={[
@@ -215,7 +216,7 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
       <Steps>
         <Step title="Import on another instance">
           <P>
-            <strong>Projects → Import project</strong>: choose the file, give
+            <strong>Projects<PathArrow />Import project</strong>: choose the file, give
             it a new name or use the one from the file.
           </P>
         </Step>
@@ -276,7 +277,7 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
           </P>
         </Step>
         <Step title="Then delete the project">
-          <P>The project&apos;s Settings tab → delete. Already-downloaded backups are unaffected.</P>
+          <P>The project&apos;s Settings tab<PathArrow />delete. Already-downloaded backups are unaffected.</P>
         </Step>
       </Steps>
       <P>If it&apos;s already too late, clean up orphans from the terminal:</P>

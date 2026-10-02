@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -63,7 +64,7 @@ export default function Page() {
 
       <H2 id="editor">Editor env</H2>
       <P>
-        Tab <strong>Pengaturan</strong> aplikasi punya editor{" "}
+        Tab <strong>Environment</strong> aplikasi (setelah Mount) punya editor{" "}
         <strong>Environment variables</strong> dengan dua mode:
       </P>
       <Table
@@ -82,6 +83,49 @@ NODE_ENV=production
 # baris komentar diabaikan
 MESSAGE=nilai boleh mengandung spasi dan = di tengah
 EMPTY=`}</Pre>
+
+      <P>
+        Tab ini punya tombol <strong>Simpan</strong> sendiri yang hanya
+        menyimpan env, jadi menyimpan Pengaturan lain tidak pernah menimpanya.
+        Viewer melihat env tanpa bisa mengubahnya.
+      </P>
+
+      <H2 id="secret">Sumber secret (Infisical)</H2>
+      <P>
+        Alih-alih menyalin rahasia ke env, aplikasi bisa mengambilnya dari
+        Infisical saat container dibuat.
+      </P>
+      <Ul>
+        <li>
+          <strong>Koneksi</strong>: owner/admin menambahkannya di Settings
+          <PathArrow />Integrasi
+          <PathArrow />Secret manager (nama, URL opsional untuk instance
+          self-hosted, Client ID, Client secret machine identity). Client
+          secret disimpan terenkripsi dan tidak bisa dilihat lagi; tombol tes
+          memeriksa koneksinya.
+        </li>
+        <li>
+          <strong>Sumber secret</strong> di tab Environment: pilih koneksi,
+          isi project ID, environment, dan path (default <Code>/</Code>).{" "}
+          <strong>Lihat key</strong> menampilkan nama key saja, tidak pernah
+          nilainya.
+        </li>
+        <li>
+          Rujuk satu secret dengan <Code>{"${{secret.KEY}}"}</Code> di env, atau
+          nyalakan <strong>Sync semua secret ke container</strong> untuk
+          meneruskan semuanya sebagai env.
+        </li>
+        <li>
+          Nilai diambil <em>saat container dibuat</em> (deploy, apply config,
+          rollback), bukan saat build. Bila key sama, <strong>env aplikasi
+          menang</strong> atas secret. Preview pull request tidak mewarisi
+          sumber secret.
+        </li>
+        <li>
+          Bila Infisical tidak terjangkau saat deploy, deployment{" "}
+          <strong>gagal</strong> dan container lama tetap berjalan.
+        </li>
+      </Ul>
 
       <H2 id="alur">Bagaimana env digabung</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
@@ -145,12 +189,12 @@ PORT=3000`}</Pre>
           tampil di halaman database.
         </li>
         <li>
-          Referensi tak dikenal → <strong>400</strong> saat menyimpan
-          Pengaturan; bila baru salah saat deploy (mis. database dihapus) →
+          Referensi tak dikenal<PathArrow /><strong>400</strong> saat menyimpan
+          Pengaturan; bila baru salah saat deploy (mis. database dihapus)<PathArrow />
           deployment <Code>failed</Code>.
         </li>
         <li>
-          Memutar password database → berlaku di deploy/rollback berikutnya
+          Memutar password database<PathArrow />berlaku di deploy/rollback berikutnya
           tanpa build ulang.
         </li>
       </Ul>

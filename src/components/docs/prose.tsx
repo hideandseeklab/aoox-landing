@@ -1,3 +1,4 @@
+import { LinkArrow } from "@/components/arrows"
 import Link from "next/link"
 
 import { CopyButton } from "@/components/copy-button"
@@ -12,15 +13,15 @@ const EDIT_BASE =
 const DOC_PAGE_COPY: Record<Lang, { wrong: string; edit: string; prev: string; next: string }> = {
   id: {
     wrong: "Ada yang keliru?",
-    edit: "Edit halaman ini di GitLab ↗",
-    prev: "← Sebelumnya",
-    next: "Berikutnya →",
+    edit: "Edit halaman ini di GitHub ↗",
+    prev: "Sebelumnya",
+    next: "Berikutnya",
   },
   en: {
     wrong: "Found a mistake?",
-    edit: "Edit this page on GitLab ↗",
-    prev: "← Previous",
-    next: "Next →",
+    edit: "Edit this page on GitHub ↗",
+    prev: "Previous",
+    next: "Next",
   },
 }
 
@@ -71,7 +72,7 @@ function DocPage({
         <a
           href={editHref}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener"
           className="text-foreground underline underline-offset-4 hover:no-underline"
         >
           {t.edit}
@@ -81,9 +82,12 @@ function DocPage({
         {prev ? (
           <Link
             href={prev.href}
-            className="flex flex-col gap-1 border border-border p-4 transition-colors hover:bg-muted rounded-lg"
+            className="group/arrow flex flex-col gap-1 border border-border p-4 transition-colors hover:bg-muted rounded-lg"
           >
-            <span className="text-xs text-muted-foreground">{t.prev}</span>
+            <span className="text-xs text-muted-foreground">
+              <LinkArrow dir="left" />
+              {t.prev}
+            </span>
             <span className="text-sm font-medium">{prev.title}</span>
           </Link>
         ) : (
@@ -92,9 +96,12 @@ function DocPage({
         {next ? (
           <Link
             href={next.href}
-            className="flex flex-col gap-1 border border-border p-4 text-right transition-colors hover:bg-muted rounded-lg"
+            className="group/arrow flex flex-col gap-1 border border-border p-4 text-right transition-colors hover:bg-muted rounded-lg"
           >
-            <span className="text-xs text-muted-foreground">{t.next}</span>
+            <span className="text-xs text-muted-foreground">
+              {t.next}
+              <LinkArrow />
+            </span>
             <span className="text-sm font-medium">{next.title}</span>
           </Link>
         ) : null}
@@ -181,7 +188,7 @@ function Step({
   title,
   children,
 }: {
-  title: string
+  title: React.ReactNode
   children?: React.ReactNode
 }) {
   return (

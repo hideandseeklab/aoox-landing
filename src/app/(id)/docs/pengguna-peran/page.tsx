@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -54,7 +55,7 @@ const CAPABILITIES: { label: string; roles: Role[] }[] = [
 ]
 
 const INVITE_FLOW = [
-  { s: "Undang", d: "email + peran → tautan tampil sekali" },
+  { s: "Undang", d: <>email + peran<PathArrow />tautan tampil sekali</> },
   { s: "Kirim", d: "salin tautan, kirim lewat chat" },
   { s: "Bergabung", d: "penerima isi nama + password" },
   { s: "Masuk", d: "langsung login, undangan ditutup" },
@@ -206,7 +207,7 @@ export default function Page() {
         ))}
       </ol>
       <Steps>
-        <Step title="Settings → Anggota → Undang anggota">
+        <Step title={<>Settings<PathArrow />Anggota<PathArrow />Undang anggota</>}>
           <P>
             Isi <strong>Email</strong> dan <strong>Peran</strong>. Admin hanya
             bisa mengundang admin/member; owner bisa mengundang owner.
@@ -263,7 +264,7 @@ export default function Page() {
       </P>
       <H3>Verifikasi dua langkah (2FA)</H3>
       <Steps>
-        <Step title="Aktifkan 2FA → pindai QR">
+        <Step title={<>Aktifkan 2FA<PathArrow />pindai QR</>}>
           <P>Aplikasi TOTP apa pun (Google Authenticator, Aegis, 1Password, Bitwarden).</P>
         </Step>
         <Step title="Masukkan kode 6 digit untuk konfirmasi">
@@ -275,7 +276,7 @@ export default function Page() {
         </Step>
         <Step title="Sign-in berikutnya jadi dua langkah">
           <P>
-            Password → halaman kode (TOTP atau kode cadangan). Langkah kedua
+            Password<PathArrow />halaman kode (TOTP atau kode cadangan). Langkah kedua
             harus selesai dalam <strong>5 menit</strong>.
           </P>
         </Step>
@@ -287,7 +288,7 @@ export default function Page() {
           yang dicuri saja.
         </li>
         <li>
-          Kehilangan authenticator: pakai kode cadangan; habis semua → minta
+          Kehilangan authenticator: pakai kode cadangan; habis semua<PathArrow />minta
           owner menonaktifkan 2FA-mu. Owner terakhir tanpa kode cadangan tidak
           bisa dipulihkan dari UI — jangan sampai.
         </li>
@@ -295,7 +296,7 @@ export default function Page() {
       </Ul>
       <H3>API token</H3>
       <Steps>
-        <Step title="Kartu API token → beri Nama dan Kedaluwarsa">
+        <Step title={<>Kartu API token<PathArrow />beri Nama dan Kedaluwarsa</>}>
           <P>
             Nama mis. <Code>GitLab CI</Code>; kedaluwarsa 30 hari, 90 hari,
             1 tahun, atau tidak kedaluwarsa.
@@ -335,7 +336,7 @@ export default function Page() {
       </Ul>
       <H3>Audit log</H3>
       <P>
-        <strong>Settings → Audit log</strong> (owner/admin): siapa melakukan
+        <strong>Settings<PathArrow />Audit log</strong> (owner/admin): siapa melakukan
         apa, kapan, dari IP mana — termasuk sign-in, deploy, perubahan env,
         undangan. Filter per aksi, mis. <Code>deploy</Code>,{" "}
         <Code>/databases/</Code>, <Code>sign-in</Code>. Body request disimpan
@@ -358,7 +359,7 @@ export default function Page() {
           ["Tautan undangan berisi IP / http", "WEB_ORIGIN masih IP. Tetap bisa dipakai; untuk rapi, pasang domain panel dulu."],
           ["Undangan tidak berlaku", "Sudah dipakai, kedaluwarsa (7 hari), dicabut, atau diganti undangan baru untuk email yang sama."],
           ["Tidak bisa menghapus pengguna", "Owner terakhir, atau masih memiliki project — pindahkan/hapus project dulu."],
-          ["Sign-in minta kode padahal tidak punya authenticator", "Pakai kode cadangan; habis → minta owner menonaktifkan 2FA."],
+          ["Sign-in minta kode padahal tidak punya authenticator", <>Pakai kode cadangan; habis<PathArrow />minta owner menonaktifkan 2FA.</>],
           ["API token 401", "Kedaluwarsa/dicabut, atau header bukan Bearer aoox_…. Buat token baru."],
         ]}
       />

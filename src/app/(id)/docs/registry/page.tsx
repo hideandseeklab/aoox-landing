@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -35,7 +36,7 @@ const SUMMARY = [
 
 const IMAGE_FLOW = [
   { s: "build", d: "image dibuat oleh daemon Docker" },
-  { s: "push", d: "→ localhost:5000/<project>/<app>:<id>" },
+  { s: "push", d: <><PathArrow />{"localhost:5000/<project>/<app>:<id>"}</> },
   { s: "run", d: "container dibuat dari image itu" },
   { s: "rollback", d: "image lama ditarik lagi dari registry" },
 ]
@@ -84,7 +85,7 @@ export default function Page() {
 
       <H2 id="lokal">Registry lokal</H2>
       <Steps>
-        <Step title="Menu Registry → tab Registry lokal → Aktifkan registry (owner)">
+        <Step title={<>Menu Registry<PathArrow />tab Registry lokal<PathArrow />Aktifkan registry (owner)</>}>
           <P>
             aoox menjalankan <Code>registry:3</Code> sebagai container{" "}
             <Code>aoox-registry</Code> dengan autentikasi htpasswd, data di
@@ -158,7 +159,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
       <H3>Melihat & membersihkan isi</H3>
       <Ul>
         <li>
-          Tab Registry lokal menampilkan repository → tag beserta{" "}
+          Tab Registry lokal menampilkan repository<PathArrow />tag beserta{" "}
           <strong>digest</strong> dan <strong>ukuran</strong>. Nama repository ={" "}
           <Code>{"<project-slug>/<app-slug>"}</Code>.
         </li>
@@ -220,7 +221,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         ]}
       />
       <Steps>
-        <Step title="Settings → Disk Docker">
+        <Step title={<>Settings<PathArrow />Disk Docker</>}>
           <P>
             Kartu menampilkan pemakaian image, container, volume, build cache,
             berapa yang bisa direklamasi, jumlah deployment yang bisa dipangkas,
@@ -243,7 +244,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
 
       <H2 id="eksternal">Registry eksternal</H2>
       <P>
-        Tab <strong>Registry eksternal</strong> → <strong>Tambah registry</strong>{" "}
+        Tab <strong>Registry eksternal</strong> <PathArrow /><strong>Tambah registry</strong>{" "}
         (owner/admin): daftarkan kredensial Docker Hub, GHCR, GitLab, dsb.
       </P>
       <Table
@@ -252,7 +253,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
           ["Nama", "GHCR perusahaan"],
           ["URL", <Code key="1">ghcr.io</Code>],
           ["Username / Password / token", "Token dengan akses baca (dan tulis bila perlu); disimpan terenkripsi"],
-          ["Image prefix", <>Opsional, mis. <Code>myorg</Code> → image dirujuk sebagai <Code>{"<url>/<prefix>/<app>"}</Code></>],
+          ["Image prefix", <>Opsional, mis. <Code>myorg</Code> <PathArrow />image dirujuk sebagai <Code>{"<url>/<prefix>/<app>"}</Code></>],
         ]}
       />
       <Callout kind="warn" title="Belum dipakai pipeline">
@@ -267,7 +268,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         rows={[
           ["Deploy gagal: No self-hosted registry", "Aktifkan registry lokal dulu."],
           ["Push manual: http: server gave HTTP response to HTTPS client", <><Code>REGISTRY_PUBLIC_HOST</Code> bukan localhost tanpa TLS. Tambahkan ke <Code>insecure-registries</Code> atau pasang reverse proxy TLS.</>],
-          ["Disk tetap penuh setelah hapus tag", "Jalankan Garbage collect, atau Bersihkan sekarang di Settings → Disk Docker."],
+          ["Disk tetap penuh setelah hapus tag", <>Jalankan Garbage collect, atau Bersihkan sekarang di Settings<PathArrow />Disk Docker.</>],
           ["Repository “0 tag” tidak hilang walau sudah Garbage collect", "Garbage collect tidak pernah menghapus repository itu sendiri, hanya blob yang tidak terpakai. Pakai tombol Hapus image di header repository tersebut."],
           ["Rollback gagal: image not found", "Tag sudah dipangkas oleh retensi atau dihapus manual. Deploy ulang commit tersebut."],
           ["Kartu Registry: Docker tidak terjangkau", <><Code>DOCKER_GID</Code> salah atau socket tidak di-mount — lihat <DocLink href="/docs/troubleshooting">Troubleshooting</DocLink>.</>],

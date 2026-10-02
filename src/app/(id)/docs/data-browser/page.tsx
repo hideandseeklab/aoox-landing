@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -27,7 +28,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const SUMMARY = [
-  { k: "Di mana", v: "Halaman database → tab Data" },
+  { k: "Di mana", v: <>Halaman database<PathArrow />tab Data</> },
   { k: "Bisa", v: "Lihat/edit/hapus baris, struktur tabel, query, CSV, ekspor/impor SQL" },
   { k: "Batas", v: "500 baris, 15 detik, 60 query/menit, riwayat 50 entri" },
 ]
@@ -148,7 +149,7 @@ export default function Page() {
           [
             <strong key="m">member</strong>,
             <>Statement yang diawali <Code>SELECT</Code>, <Code>WITH</Code>, <Code>SHOW</Code>, <Code>EXPLAIN</Code>, <Code>DESCRIBE</Code>, <Code>VALUES</Code>, <Code>TABLE</Code>.</>,
-            <>Selain itu → 403, <em>dan</em> sesi engine dibuat read-only (<Code>default_transaction_read_only</Code> / <Code>SET SESSION TRANSACTION READ ONLY</Code>) — bahkan <Code>WITH … DELETE</Code> gagal di engine.</>,
+            <>Selain itu<PathArrow />403, <em>dan</em> sesi engine dibuat read-only (<Code>default_transaction_read_only</Code> / <Code>SET SESSION TRANSACTION READ ONLY</Code>) — bahkan <Code>WITH … DELETE</Code> gagal di engine.</>,
           ],
           [
             <strong key="oa">owner / admin</strong>,

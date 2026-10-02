@@ -95,7 +95,7 @@ function CtaSection({ lang = "id" }: { lang?: Lang }) {
             <a
               href="https://github.com/hideandseeklab/aoox-api"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener"
             >
               {t.ctaSecondary}
             </a>

@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -64,7 +65,7 @@ export default function Page() {
 
       <H2 id="editor">The env editor</H2>
       <P>
-        An application&apos;s <strong>Settings</strong> tab has an{" "}
+        An application&apos;s <strong>Environment</strong> tab (after Mount) has an{" "}
         <strong>Environment variables</strong> editor with two modes:
       </P>
       <Table
@@ -83,6 +84,49 @@ NODE_ENV=production
 # comment lines are ignored
 MESSAGE=values may contain spaces and = in the middle
 EMPTY=`}</Pre>
+
+      <P>
+        The tab has its own <strong>Save</strong> button that saves only the
+        env, so saving other Settings never overwrites it. Viewers see the env
+        without being able to change it.
+      </P>
+
+      <H2 id="secret">Secret source (Infisical)</H2>
+      <P>
+        Instead of copying secrets into the env, an application can pull them
+        from Infisical when its container is created.
+      </P>
+      <Ul>
+        <li>
+          <strong>Connection</strong>: owner/admin add it under Settings
+          <PathArrow />Integrasi
+          <PathArrow />Secret manager (name, optional URL for a self-hosted
+          instance, the machine identity&apos;s Client ID and Client secret). The
+          client secret is stored encrypted and can&apos;t be seen again; the test
+          button checks the connection.
+        </li>
+        <li>
+          <strong>Secret source</strong> on the Environment tab: pick the
+          connection, then project ID, environment and path (default{" "}
+          <Code>/</Code>). <strong>Lihat key</strong> lists key names only,
+          never their values.
+        </li>
+        <li>
+          Reference one secret with <Code>{"${{secret.KEY}}"}</Code> in the env,
+          or turn on <strong>Sync all secrets to the container</strong> to pass
+          them all as env.
+        </li>
+        <li>
+          Values are read <em>when the container is created</em> (deploy, apply
+          config, rollback), not at build time. On a key clash the{" "}
+          <strong>application&apos;s env wins</strong> over the secret. Pull
+          request previews don&apos;t inherit the secret source.
+        </li>
+        <li>
+          If Infisical is unreachable during a deploy, the deployment{" "}
+          <strong>fails</strong> and the old container keeps running.
+        </li>
+      </Ul>
 
       <H2 id="alur">How env gets merged</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
@@ -147,12 +191,12 @@ PORT=3000`}</Pre>
           the name shown on the database page.
         </li>
         <li>
-          An unknown reference → <strong>400</strong> when saving Settings; if
-          it only breaks at deploy time (e.g. the database was deleted) → the
+          An unknown reference<PathArrow /><strong>400</strong> when saving Settings; if
+          it only breaks at deploy time (e.g. the database was deleted)<PathArrow />the
           deployment is <Code>failed</Code>.
         </li>
         <li>
-          Rotating a database password → takes effect on the next
+          Rotating a database password<PathArrow />takes effect on the next
           deploy/rollback, no rebuild needed.
         </li>
       </Ul>

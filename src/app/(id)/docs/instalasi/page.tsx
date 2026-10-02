@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -268,8 +269,8 @@ curl -s http://localhost:3001/auth/setup-status
       <H2 id="update">Memperbarui versi</H2>
       <P>
         Cara tercepat (butuh <Code>INSTALL_DIR</Code> terisi, sama seperti{" "}
-        <DocLink href="/docs/domain-panel">Domain panel</DocLink>): Settings →{" "}
-        <strong>Update aoox</strong> → Cek update → Terapkan. Atau dari CLI:
+        <DocLink href="/docs/domain-panel">Domain panel</DocLink>): Settings<PathArrow />
+        <strong>Update aoox</strong> <PathArrow />Cek update<PathArrow />Terapkan. Atau dari CLI:
       </P>
       <P>
         Menekan <strong>Terapkan update</strong> memunculkan dialog konfirmasi
@@ -303,7 +304,12 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         isi <Code>API_IMAGE</Code> dan <Code>WEB_IMAGE</Code> di{" "}
         <Code>.env.dist</Code>, mis. <Code>hideandseeklab/aoox-api:0.1.0-alpha.0</Code>{" "}
         (lihat tag yang tersedia di Docker Hub) — kedua cara di atas membaca
-        variabel yang sama.
+        variabel yang sama. Instalasi yang mengunci tag tidak akan melihat tombol{" "}
+        &ldquo;Update tersedia&rdquo; di sidebar; halaman Update aoox tetap menampilkan
+        versi terbaru sebagai informasi. Panel mengenali tag yang terpasang dari
+        variabel <Code>API_IMAGE</Code> yang kini diteruskan compose ke container API
+        (instalasi lama: jalankan <Code>aoox reinstall</Code> supaya compose-nya ikut
+        diperbarui).
       </P>
       <P>
         <strong>Catatan penting</strong>: baik <Code>aoox update</Code> maupun tombol

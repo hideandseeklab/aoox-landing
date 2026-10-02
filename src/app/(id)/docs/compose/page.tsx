@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -30,7 +31,7 @@ export const metadata: Metadata = pageMetadata({
 const SUMMARY = [
   { k: "Sumber", v: "Repo Git (file compose) atau template" },
   { k: "Berjalan sebagai", v: "docker compose project aoox-<slug>" },
-  { k: "Status", v: "idle → deploying → running | stopped | error" },
+  { k: "Status", v: <>idle<PathArrow />deploying<PathArrow />running | stopped | error</> },
 ]
 
 const DECISION = [
@@ -43,7 +44,7 @@ const FLOW = [
   { s: "helper", d: "container docker:29-cli (compose + git) sekali-jalan" },
   { s: "clone", d: "git clone --depth 1 ke volume checkout" },
   { s: "env", d: ".aoox.env ditulis dari env ter-resolve" },
-  { s: "up", d: "docker compose config → up -d --build --remove-orphans" },
+  { s: "up", d: <>docker compose config<PathArrow />up -d --build --remove-orphans</> },
 ]
 
 const NEXT = [
@@ -78,7 +79,7 @@ export default function Page() {
           >
             <span className="text-foreground">{row.q}</span>
             <span className="text-muted-foreground">
-              →{" "}
+              <PathArrow />
               {row.href ? (
                 <Link href={row.href} className="text-foreground underline underline-offset-4">
                   {row.a}
@@ -99,7 +100,7 @@ export default function Page() {
 
       <H2 id="langkah">Membuat stack</H2>
       <Steps>
-        <Step title="Halaman project → Stack compose baru">
+        <Step title={<>Halaman project<PathArrow />Stack compose baru</>}>
           <Table
             head={["Field", "Keterangan"]}
             rows={[

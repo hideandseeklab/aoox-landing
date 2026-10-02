@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -46,7 +47,7 @@ const BLUE_GREEN = [
   { t: "+1 s", old: "serving", next: "starting", note: "The <app>-next container is created with the same Traefik labels." },
   { t: "+3–90 s", old: "serving", next: "healthy", note: "Traefik starts routing to both once -next is healthy." },
   { t: "+3 s", old: "removed", next: "serving", note: "Wait for the proxy to settle, then remove the old one." },
-  { t: "done", old: "—", next: "→ <app>", note: "-next is renamed to the original name. Deployment succeeds." },
+  { t: "done", old: "—", next: <><PathArrow />{"<app>"}</>, note: "-next is renamed to the original name. Deployment succeeds." },
 ]
 
 const NEXT = [
@@ -157,7 +158,7 @@ export default function Page() {
       <Table
         head={["Log", "Contents", "Source"]}
         rows={[
-          ["Deployment log", "Clone, build, push, and start output for one deployment. Kept permanently in history.", "Runner → Socket.IO /logs"],
+          ["Deployment log", "Clone, build, push, and start output for one deployment. Kept permanently in history.", <>Runner<PathArrow />Socket.IO /logs</>],
           ["Container log", "stdout/stderr of the running application (follow).", "docker logs --follow"],
         ]}
       />
@@ -178,8 +179,8 @@ export default function Page() {
       <Pre title="A sufficient endpoint">{`GET /health → 200 OK
 # no body needed; a fast 2xx status is all that matters`}</Pre>
       <Callout kind="warn" title="Prerequisite in the image">
-        The health check command tries <Code>wget</Code> → <Code>curl</Code> →{" "}
-        <Code>node -e fetch</Code> → <Code>python3</Code>. An image with none of
+        The health check command tries <Code>wget</Code> <PathArrow /><Code>curl</Code> <PathArrow />
+        <Code>node -e fetch</Code> <PathArrow /><Code>python3</Code>. An image with none of
         these (e.g. <Code>scratch</Code>, distroless) makes the deployment fail
         with a message naming it. A container that later becomes{" "}
         <Code>unhealthy</Code> is automatically dropped by Traefik (404).

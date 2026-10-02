@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -127,7 +128,7 @@ export default function Page() {
 
       <H2 id="aktifkan">Enabling swarm</H2>
       <Steps>
-        <Step title="Settings → Docker Swarm → Init swarm (owner)">
+        <Step title={<>Settings<PathArrow />Docker Swarm<PathArrow />Init swarm (owner)</>}>
           <P>
             Fill in <strong>Advertise address</strong> if the host has more
             than one IP — this is the address other nodes will use to reach
@@ -245,7 +246,7 @@ export default function Page() {
       <Callout kind="warn">
         First switch every application back to <em>Deploy mode: container</em>{" "}
         — leaving swarm removes any running services. Then{" "}
-        <strong>Settings → Docker Swarm → leave</strong> (owner). Other nodes
+        <strong>Settings<PathArrow />Docker Swarm<PathArrow />leave</strong> (owner). Other nodes
         need to run <Code>docker swarm leave</Code> themselves.
       </Callout>
 

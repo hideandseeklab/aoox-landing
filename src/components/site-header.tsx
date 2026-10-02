@@ -59,10 +59,10 @@ function SiteHeader() {
           <a
             href={REPO}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener"
             className="hidden px-2 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground sm:inline-flex sm:items-center sm:gap-1"
           >
-            GitLab
+            GitHub
             <span aria-hidden className="text-[0.6rem]">↗</span>
           </a>
           <LangSwitch pathname={pathname} lang={lang} />
@@ -189,10 +189,10 @@ function MobileMenu({
               <a
                 href={REPO}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener"
                 className="text-xs text-muted-foreground hover:text-foreground"
               >
-                GitLab ↗
+                GitHub ↗
               </a>
             </div>
           </nav>

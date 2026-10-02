@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -115,7 +116,7 @@ export default function Page() {
           >
             <span className="text-foreground">{row.q}</span>
             <span className="text-muted-foreground">
-              → <span className="text-primary-foreground dark:text-primary">{row.a}</span>
+              <PathArrow /><span className="text-primary-foreground dark:text-primary">{row.a}</span>
             </span>
           </div>
         ))}
@@ -123,7 +124,7 @@ export default function Page() {
 
       <H2 id="langkah">Creating a job</H2>
       <Steps>
-        <Step title="Open the Jobs tab → New job">
+        <Step title={<>Open the Jobs tab<PathArrow />New job</>}>
           <Table
             head={["Field", "Details"]}
             rows={[
@@ -201,7 +202,7 @@ export default function Page() {
       <Ul>
         <li>
           A cron tick is <strong>skipped</strong> (not queued) while the
-          previous run is still going. Running manually while a run is active →
+          previous run is still going. Running manually while a run is active<PathArrow />
           409.
         </li>
         <li>

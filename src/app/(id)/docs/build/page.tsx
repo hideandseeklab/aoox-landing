@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -42,8 +43,8 @@ const DECISION = [
 const NIXPACKS_FLOW = [
   { s: "helper", d: "image aoox-nixpacks dibangun sekali (debian + git + nixpacks CLI)" },
   { s: "clone", d: "container sekali-jalan git clone --depth 1 (kredensial tidak keluar dari helper)" },
-  { s: "plan", d: "nixpacks build → menulis .nixpacks/Dockerfile" },
-  { s: "build", d: "source di-tar → POST /build dengan Dockerfile hasil generate" },
+  { s: "plan", d: <>nixpacks build<PathArrow />menulis .nixpacks/Dockerfile</> },
+  { s: "build", d: <>source di-tar<PathArrow />POST /build dengan Dockerfile hasil generate</> },
 ]
 
 const RAILPACK_FLOW = [
@@ -95,15 +96,15 @@ export default function Page() {
           >
             <span className="text-foreground">{row.q}</span>
             <span className="text-muted-foreground">
-              ya → <span className="text-primary-foreground dark:text-primary">{row.yes}</span>
+              ya<PathArrow /><span className="text-primary-foreground dark:text-primary">{row.yes}</span>
             </span>
             <span className="text-muted-foreground">
               {row.no ? (
                 <>
-                  tidak → <span className="text-foreground">{row.no}</span>
+                  tidak<PathArrow /><span className="text-foreground">{row.no}</span>
                 </>
               ) : (
-                "tidak → lanjut"
+                <>tidak<PathArrow />lanjut</>
               )}
             </span>
           </div>
@@ -124,11 +125,13 @@ export default function Page() {
 
       <H2 id="dockerfile">Dockerfile</H2>
       <P>
-        Pilih <strong>Cara build → Dockerfile</strong> dan isi{" "}
+        Pilih <strong>Cara build<PathArrow />Dockerfile</strong> dan isi{" "}
         <strong>Dockerfile di repo</strong> (default <Code>Dockerfile</Code> di
         root). Build dijalankan daemon Docker langsung dari URL Git
         (<Code>POST /build?remote=…</Code>) — daemon yang meng-clone, API tidak
-        butuh git.
+        butuh git. Untuk monorepo, isi{" "}
+        <DocLink href="#root-directory">Root directory</DocLink>; path Dockerfile
+        lalu dihitung dari folder itu.
       </P>
       <Pre title="Contoh minimal (Node.js)">{`FROM node:22-alpine
 WORKDIR /app
@@ -157,7 +160,7 @@ CMD ["node", "server.js"]`}</Pre>
 
       <H2 id="nixpacks">Nixpacks</H2>
       <P>
-        Pilih <strong>Cara build → Nixpacks</strong> untuk repo tanpa Dockerfile.
+        Pilih <strong>Cara build<PathArrow />Nixpacks</strong> untuk repo tanpa Dockerfile.
         Tidak ada binary nixpacks di host maupun di image API — semuanya
         berjalan di container:
       </P>
@@ -204,7 +207,7 @@ NIXPACKS_START_CMD=node server.js`}</Pre>
 
       <H2 id="railpack">Railpack</H2>
       <P>
-        Pilih <strong>Cara build → Railpack</strong> untuk repo tanpa
+        Pilih <strong>Cara build<PathArrow />Railpack</strong> untuk repo tanpa
         Dockerfile yang di-deploy berulang kali dan ingin cache dependensi
         tetap ada. Berbeda dari Nixpacks, Railpack mengeksekusi build plan-nya
         lewat container <Code>moby/buildkit</Code> yang hidup terus dengan
@@ -246,7 +249,7 @@ NIXPACKS_START_CMD=node server.js`}</Pre>
 
       <H2 id="static">Situs statis (nginx)</H2>
       <P>
-        Pilih <strong>Cara build → Situs statis (nginx)</strong> untuk repo
+        Pilih <strong>Cara build<PathArrow />Situs statis (nginx)</strong> untuk repo
         yang hasil akhirnya hanya file statis. aoox membuat Dockerfile
         dua tahap: (opsional) tahap build di <Code>node:22-alpine</Code>, lalu{" "}
         <Code>nginx:1.27-alpine</Code> yang melayani folder output di port 80 — form membuat aplikasi mengisi
@@ -266,8 +269,8 @@ NIXPACKS_START_CMD=node server.js`}</Pre>
           [
             "Folder output",
             <>
-              Relatif dari root repo: <Code>dist</Code> (default), <Code>build</Code>,{" "}
-              <Code>out</Code>, atau <Code>.</Code> untuk seluruh repo.
+              Relatif dari Root directory (root repo bila kosong): <Code>dist</Code> (default), <Code>build</Code>,{" "}
+              <Code>out</Code>, atau <Code>.</Code> untuk seluruh folder.
             </>,
           ],
           [
@@ -309,6 +312,61 @@ EXPOSE 80`}</Pre>
           Versi Node dipin ke 22 oleh aoox; belum bisa diubah dari UI.
         </li>
       </Ul>
+
+      <H2 id="root-directory">Root directory (monorepo)</H2>
+      <P>
+        Repo monorepo menyimpan beberapa aplikasi dalam satu repository (mis.{" "}
+        <Code>apps/web</Code> dan <Code>services/api</Code>). Isi{" "}
+        <strong>Root directory</strong> di bagian Git pada form aplikasi dengan
+        folder yang ingin di-build; kosong berarti root repo. Berlaku untuk
+        semua cara build, termasuk preview pull request.
+      </P>
+      <Table
+        head={["Cara build", "Yang dihitung dari Root directory"]}
+        rows={[
+          [
+            "Dockerfile",
+            <>
+              Konteks build = folder itu (<Code>POST /build?remote=URL#branch:folder</Code>),
+              dan <strong>Dockerfile</strong> dihitung dari folder yang sama.
+            </>,
+          ],
+          ["Nixpacks", <>Deteksi stack dan build dijalankan di folder itu; <Code>.nixpacks/Dockerfile</Code> ditulis di sana.</>],
+          ["Railpack", <><Code>railpack build</Code> dijalankan di folder itu.</>],
+          ["Situs statis", <>Perintah build berjalan di folder itu dan <strong>Folder output</strong> dihitung dari folder itu juga.</>],
+        ]}
+      />
+      <Pre title="Contoh: satu repo, tiga aplikasi">{`apps/web        Root directory: apps/web       (Nixpacks)
+services/api    Root directory: services/api   (Dockerfile di services/api/Dockerfile)
+apps/site       Root directory: apps/site      (Situs statis, output: .)`}</Pre>
+      <Callout kind="warn" title="Batasannya">
+        <Ul>
+          <li>
+            <strong>File di luar folder tidak tersedia saat build.</strong>{" "}
+            Dockerfile di <Code>apps/web</Code> tidak bisa{" "}
+            <Code>COPY ../../packages/shared</Code>. Paket bersama harus
+            di-bundle lebih dulu, atau pakai Dockerfile di root repo dengan
+            Root directory kosong.
+          </li>
+          <li>
+            Format: folder relatif, hanya huruf, angka, <Code>.</Code>,{" "}
+            <Code>_</Code>, <Code>-</Code> dipisah <Code>/</Code>; tanpa{" "}
+            <Code>..</Code> dan tanpa <Code>/</Code> di awal atau akhir.
+          </li>
+          <li>
+            Folder yang tidak ada di branch itu menggagalkan deployment dengan
+            pesan <em>Root directory … was not found</em>; container lama tetap
+            berjalan.
+          </li>
+          <li>
+            Link simbolis di repo yang menunjuk ke luar clone ditolak.
+          </li>
+        </Ul>
+      </Callout>
+      <P>
+        Mau deploy hanya bila folder itu berubah? Lihat{" "}
+        <DocLink href="/docs/webhook#monorepo">Webhook untuk monorepo</DocLink>.
+      </P>
 
       <H2 id="build-args">Build args</H2>
       <P>

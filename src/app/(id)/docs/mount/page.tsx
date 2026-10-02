@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -83,7 +84,7 @@ export default function Page() {
           >
             <span className="text-foreground">{row.q}</span>
             <span className="text-muted-foreground">
-              → <span className="text-primary-foreground dark:text-primary">{row.a}</span>
+              <PathArrow /><span className="text-primary-foreground dark:text-primary">{row.a}</span>
             </span>
           </div>
         ))}
@@ -118,7 +119,7 @@ export default function Page() {
 
       <H2 id="langkah">Menambah mount</H2>
       <Steps>
-        <Step title="Buka tab Mount → Tambah mount">
+        <Step title={<>Buka tab Mount<PathArrow />Tambah mount</>}>
           <P>
             Pilih <strong>Jenis</strong>, isi <strong>Path di container</strong>{" "}
             (unik per aplikasi), lalu <strong>Nama volume</strong> /{" "}
@@ -156,7 +157,7 @@ export default function Page() {
         </Step>
         <Step title="Verifikasi">
           <P>
-            Tab Deploy → log container menunjukkan aplikasi start ulang. Untuk
+            Tab Deploy<PathArrow />log container menunjukkan aplikasi start ulang. Untuk
             memastikan path terpasang, jalankan{" "}
             <DocLink href="/docs/jobs">job</DocLink> manual{" "}
             <Code>ls -la /app/uploads</Code> dengan target <em>Di container</em>.
@@ -243,7 +244,7 @@ export default function Page() {
       <P>
         Bagian <strong>Backup volume</strong> di tab Mount: backup manual,
         jadwal cron, retensi, dan tujuan S3 per aplikasi. Restore = stop
-        container → kosongkan volume → extract → start. Detail di{" "}
+        container<PathArrow />kosongkan volume<PathArrow />extract<PathArrow />start. Detail di{" "}
         <DocLink href="/docs/backup#volume">Backup &amp; restore</DocLink>.
       </P>
 

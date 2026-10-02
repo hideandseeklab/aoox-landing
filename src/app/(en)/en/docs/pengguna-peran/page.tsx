@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -55,7 +56,7 @@ const CAPABILITIES: { label: string; roles: Role[] }[] = [
 ]
 
 const INVITE_FLOW = [
-  { s: "Invite", d: "email + role → link shown once" },
+  { s: "Invite", d: <>email + role<PathArrow />link shown once</> },
   { s: "Send", d: "copy the link, send it via chat" },
   { s: "Join", d: "recipient fills in name + password" },
   { s: "Sign in", d: "logged in right away, invitation closed" },
@@ -209,7 +210,7 @@ export default function Page() {
         ))}
       </ol>
       <Steps>
-        <Step title="Settings → Members → Invite member">
+        <Step title={<>Settings<PathArrow />Members<PathArrow />Invite member</>}>
           <P>
             Fill in <strong>Email</strong> and <strong>Role</strong>. Admins
             can only invite admins/members; owners can invite owners.
@@ -266,7 +267,7 @@ export default function Page() {
       </P>
       <H3>Two-factor verification (2FA)</H3>
       <Steps>
-        <Step title="Enable 2FA → scan the QR code">
+        <Step title={<>Enable 2FA<PathArrow />scan the QR code</>}>
           <P>Any TOTP app (Google Authenticator, Aegis, 1Password, Bitwarden).</P>
         </Step>
         <Step title="Enter the 6-digit code to confirm">
@@ -278,7 +279,7 @@ export default function Page() {
         </Step>
         <Step title="The next sign-in becomes two steps">
           <P>
-            Password → a code page (TOTP or a backup code). The second step
+            Password<PathArrow />a code page (TOTP or a backup code). The second step
             must be completed within <strong>5 minutes</strong>.
           </P>
         </Step>
@@ -298,7 +299,7 @@ export default function Page() {
       </Ul>
       <H3>API tokens</H3>
       <Steps>
-        <Step title="API token card → give it a Name and an Expiry">
+        <Step title={<>API token card<PathArrow />give it a Name and an Expiry</>}>
           <P>
             E.g. name it <Code>GitLab CI</Code>; expiry of 30 days, 90 days,
             1 year, or never.
@@ -338,7 +339,7 @@ export default function Page() {
       </Ul>
       <H3>Audit log</H3>
       <P>
-        <strong>Settings → Audit log</strong> (owner/admin): who did what,
+        <strong>Settings<PathArrow />Audit log</strong> (owner/admin): who did what,
         when, and from which IP — including sign-ins, deploys, env changes,
         invitations. Filter by action, e.g. <Code>deploy</Code>,{" "}
         <Code>/databases/</Code>, <Code>sign-in</Code>. Request bodies are

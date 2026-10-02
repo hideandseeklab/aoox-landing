@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -88,7 +89,7 @@ export default function Page() {
 
       <H2 id="database">Backup database</H2>
       <P>
-        Halaman database → tab <strong>Backup</strong>.
+        Halaman database<PathArrow />tab <strong>Backup</strong>.
       </P>
       <Table
         head={["Engine", "Cara dump", "Restore"]}
@@ -153,7 +154,7 @@ export default function Page() {
 
       <H3>Restore</H3>
       <Steps>
-        <Step title="Klik restore pada baris backup → konfirmasi">
+        <Step title={<>Klik restore pada baris backup<PathArrow />konfirmasi</>}>
           <P>
             Bila file lokalnya sudah tidak ada (dipangkas retensi, disk baru)
             tapi salinan S3 masih ada, baris ditandai <em>hanya di S3</em> —
@@ -172,7 +173,7 @@ export default function Page() {
 
       <H2 id="volume">Backup volume aplikasi</H2>
       <P>
-        Halaman aplikasi → tab <strong>Mount</strong> → bagian{" "}
+        Halaman aplikasi<PathArrow />tab <strong>Mount</strong> <PathArrow />bagian{" "}
         <strong>Backup volume</strong>. Berlaku untuk mount jenis{" "}
         <strong>volume</strong> saja (bind mount belum). Bila aplikasi punya
         lebih dari satu volume, pilih volumenya dulu.
@@ -181,7 +182,7 @@ export default function Page() {
         head={["Aksi", "Yang terjadi"]}
         rows={[
           ["Backup", <>busybox sekali-jalan, volume di-mount <Code>:ro</Code>, <Code>tar czf</Code> ke <Code>{"<app>/<mount>/<stamp>.tar.gz"}</Code>. Container aplikasi tetap jalan.</>],
-          ["Restore", <><strong>Stop container</strong> → kosongkan volume → extract → start. Ada downtime singkat.</>],
+          ["Restore", <><strong>Stop container</strong> <PathArrow />kosongkan volume<PathArrow />extract<PathArrow />start. Ada downtime singkat.</>],
           ["Jadwal", "Form Jadwal backup volume: frekuensi, jumlah simpan, tujuan S3 — berlaku untuk semua volume aplikasi; prune per volume."],
         ]}
       />
@@ -195,7 +196,7 @@ export default function Page() {
 
       <H2 id="instance">Backup instance (panel sendiri)</H2>
       <P>
-        <strong>Settings → Backup instance</strong> (owner) menyimpan database
+        <strong>Settings<PathArrow />Backup instance</strong> (owner) menyimpan database
         internal aoox: pengguna, project, aplikasi, database, jadwal,
         kredensial terenkripsi — semuanya sebagai satu file JSON ter-gzip di
         volume backup, tanpa <Code>pg_dump</Code>.
@@ -238,7 +239,7 @@ export default function Page() {
 
       <H2 id="s3">Tujuan S3</H2>
       <Steps>
-        <Step title="Settings → Tujuan backup (S3) → Tujuan backup baru (owner/admin)">
+        <Step title={<>Settings<PathArrow />Tujuan backup (S3)<PathArrow />Tujuan backup baru (owner/admin)</>}>
           <Table
             head={["Field", "Keterangan"]}
             rows={[

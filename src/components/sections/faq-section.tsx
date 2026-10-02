@@ -246,7 +246,7 @@ function FaqSection({ lang = "id" }: { lang?: Lang }) {
               <a
                 href="https://github.com/hideandseeklab/aoox-api/issues"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener"
                 className="inline-flex items-center gap-1 text-foreground underline underline-offset-4 hover:no-underline"
               >
                 {t.openIssue}

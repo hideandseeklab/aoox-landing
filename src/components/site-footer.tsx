@@ -34,7 +34,10 @@ const GROUPS_ID: Group[] = [
     links: [
       { label: "aoox-api", href: "https://github.com/hideandseeklab/aoox-api", external: true },
       { label: "aoox-web", href: "https://github.com/hideandseeklab/aoox-web", external: true },
+      { label: "aoox-cli", href: "https://github.com/hideandseeklab/aoox-cli", external: true },
       { label: "aoox-landing", href: "https://github.com/hideandseeklab/aoox-landing", external: true },
+      { label: "npm", href: "https://www.npmjs.com/package/@hideandseeklab/aoox", external: true },
+      { label: "Docker Hub", href: "https://hub.docker.com/u/hideandseeklab", external: true },
       { label: "Laporkan issue", href: "https://github.com/hideandseeklab/aoox-api/issues", external: true },
     ],
   },
@@ -67,7 +70,10 @@ const GROUPS_EN: Group[] = [
     links: [
       { label: "aoox-api", href: "https://github.com/hideandseeklab/aoox-api", external: true },
       { label: "aoox-web", href: "https://github.com/hideandseeklab/aoox-web", external: true },
+      { label: "aoox-cli", href: "https://github.com/hideandseeklab/aoox-cli", external: true },
       { label: "aoox-landing", href: "https://github.com/hideandseeklab/aoox-landing", external: true },
+      { label: "npm", href: "https://www.npmjs.com/package/@hideandseeklab/aoox", external: true },
+      { label: "Docker Hub", href: "https://hub.docker.com/u/hideandseeklab", external: true },
       { label: "Report an issue", href: "https://github.com/hideandseeklab/aoox-api/issues", external: true },
     ],
   },
@@ -137,7 +143,7 @@ function SiteFooter() {
                     <a
                       href={link.href}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener"
                       className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
                     >
                       {link.label}

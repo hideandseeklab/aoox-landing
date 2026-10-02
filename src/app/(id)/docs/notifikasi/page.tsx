@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -29,12 +30,12 @@ export const metadata: Metadata = pageMetadata({
 
 const SUMMARY = [
   { k: "Channel", v: "Telegram · Slack · Discord · Webhook · Email" },
-  { k: "Event", v: "10 toggle per channel" },
+  { k: "Event", v: "12 toggle per channel" },
   { k: "Lingkup", v: "Platform-wide, owner/admin" },
 ]
 
 const FLOW = [
-  { s: "event", d: "deploy, backup, job, container mati, disk, sertifikat, DNS, error log" },
+  { s: "event", d: "deploy, backup, job, container mati, disk, sertifikat, DNS, error log, server remote, monitor HTTP" },
   { s: "filter", d: "channel dengan toggle event itu aktif" },
   { s: "format", d: "payload per platform: HTML, attachments, embeds, JSON, email" },
   { s: "kirim", d: "fetch dengan timeout 10 detik; gagal hanya dicatat di log" },
@@ -87,12 +88,12 @@ export default function Page() {
           [
             <strong key="s">Slack</strong>,
             "Webhook URL",
-            "Slack app → Incoming Webhooks → Add New Webhook to Workspace → pilih channel.",
+            <>Slack app<PathArrow />Incoming Webhooks<PathArrow />Add New Webhook to Workspace<PathArrow />pilih channel.</>,
           ],
           [
             <strong key="d">Discord</strong>,
             "Webhook URL",
-            "Channel → Edit → Integrations → Webhooks → New Webhook → Copy URL.",
+            <>Channel<PathArrow />Edit<PathArrow />Integrations<PathArrow />Webhooks<PathArrow />New Webhook<PathArrow />Copy URL.</>,
           ],
           [
             <strong key="w">Webhook</strong>,
@@ -109,7 +110,7 @@ export default function Page() {
 
       <H2 id="langkah">Menambahkan channel</H2>
       <Steps>
-        <Step title="Settings → Notifikasi → Channel notifikasi baru (owner/admin)">
+        <Step title={<>Settings<PathArrow />Notifikasi<PathArrow />Channel notifikasi baru (owner/admin)</>}>
           <P>
             Isi <strong>Nama</strong>, pilih <strong>Tipe</strong>, isi
             field-nya, dan nyalakan toggle event yang diinginkan. Token/URL/
@@ -142,11 +143,13 @@ export default function Page() {
           ["Deploy gagal", "Deployment aplikasi atau stack compose gagal.", "Sama + potongan pesan error (500 karakter)."],
           ["Backup gagal", "Backup database/volume (manual atau terjadwal) gagal, termasuk gagal unggah ke S3.", "Database/aplikasi, pemicu (manual/terjadwal), error."],
           ["Job gagal", "Scheduled job berstatus failed atau timeout.", "Nama job, perintah (200 karakter), 500 karakter terakhir output."],
-          ["Container mati", "Container aplikasi/database berhenti tak terduga — lihat aturan di Monitoring.", "Nama container, exit code, apakah sedang restart."],
+          ["Container mati", "Container aplikasi/database berhenti tak terduga — lihat aturan di Monitoring. Berlaku juga untuk aplikasi di server remote.", "Nama container, exit code, apakah sedang restart; nama server bila di server remote."],
           ["Disk hampir penuh", <>Pemakaian filesystem Docker melewati ambang (default 90 %, <Code>DISK_ALERT_PERCENT</Code>); diperiksa sekali sehari.</>, "Persentase terpakai, ambang, ruang tersisa."],
           ["Sertifikat gagal", "Traefik gagal menerbitkan/memperbarui sertifikat sebuah domain (diperiksa tiap 10 menit).", "Domain dan pesan error dari ACME."],
           ["DNS domain bermasalah", "DNS sebuah domain tidak lagi mengarah ke IP yang benar — diperiksa tiap 15 menit, terpicu setelah dua kali cek berturut-turut gagal (mismatch/tidak bisa di-resolve).", "Domain, status (mismatch/unresolved), pesan penjelasan."],
           [<>Error aplikasi <Code key="2">(nonaktif default)</Code></>, "Log container aplikasi yang sedang running cocok dengan pola error umum (traceback, panic, exception, level=error, dll — diperiksa tiap menit).", "Aplikasi, project, jumlah error, maksimal 3 contoh baris (disensor), tautan ke halaman aplikasi."],
+          [<>Server remote tidak terjangkau <Code key="3">(aktif default)</Code></>, "Server remote tidak menjawab (SSH/Docker) dua kali cek berturut-turut (cek tiap menit). Satu pesan pulih dikirim saat terjangkau lagi; pengingat maksimal sekali per jam selama down.", "Nama server, alamat, galat; lama down pada pesan pulih."],
+          [<>Monitor HTTP gagal <Code key="4">(aktif default)</Code></>, "Pemeriksaan HTTP sebuah aplikasi gagal N kali berturut-turut (monitor opsional per aplikasi, lihat Monitoring). Satu pesan pulih saat sehat lagi; pengingat maksimal tiap 6 jam selama down.", "Aplikasi, project, target, kode/galat, berapa kali gagal; lama down pada pesan pulih; tautan ke halaman aplikasi."],
         ]}
       />
       <Ul>
@@ -168,6 +171,17 @@ export default function Page() {
           pernah gagal karena notifikasi).
         </li>
         <li>Container mati: maksimal 1 notifikasi per container per 10 menit.</li>
+        <li>
+          <strong>Server remote tidak terjangkau</strong> dan{" "}
+          <strong>Monitor HTTP gagal</strong> aktif secara default, tetapi hanya
+          bekerja bila kamu memakai fiturnya (menambah server remote / menyalakan
+          monitor di sebuah aplikasi), jadi tidak berisik untuk yang tidak
+          memakainya. Keduanya memakai satu toggle untuk pesan gagal{" "}
+          <em>dan</em> pesan pulih (dibedakan lewat level dan{" "}
+          <Code>event</Code> di payload webhook: <Code>server.down</Code>/
+          <Code>server.recovered</Code>, <Code>http.down</Code>/
+          <Code>http.recovered</Code>).
+        </li>
         <li>
           <strong>DNS domain bermasalah</strong>: dua kali cek gagal berturut-turut
           (meredam gangguan DNS sesaat) sebelum notifikasi pertama dikirim,

@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -35,15 +36,15 @@ const SUMMARY = [
 
 const REQUEST_FLOW = [
   { s: "browser", d: "https://app.example.com" },
-  { s: "DNS", d: "A record → server IP" },
+  { s: "DNS", d: <>A record<PathArrow />server IP</> },
   { s: "Traefik :443", d: "the <app>-secure router, ACME certificate" },
-  { s: "container", d: "the aoox network → :<container port>" },
+  { s: "container", d: <>the aoox network<PathArrow />{":<container port>"}</> },
 ]
 
 const ROUTERS = [
   { name: "<app>", entry: "web (:80)", when: "Always", does: "Serves http for hosts without HTTPS" },
   { name: "<app>-secure", entry: "websecure (:443)", when: "When HTTPS is on", does: "TLS via the le certresolver" },
-  { name: "<app>-redirect", entry: "web (:80)", when: "HTTPS on + ACME set up", does: "301 http → https" },
+  { name: "<app>-redirect", entry: "web (:80)", when: "HTTPS on + ACME set up", does: <>301 http<PathArrow />https</> },
 ]
 
 const NEXT = [
@@ -110,11 +111,11 @@ PROXY_ACME_STAGING=false     # true while testing, to avoid the rate limit`}</Pr
           <P>
             Without an email, Traefik runs without an ACME resolver: domains
             are served over http only and the HTTPS toggle in the UI is
-            disabled. Changing this value after provisioning → remove the
+            disabled. Changing this value after provisioning<PathArrow />remove the
             proxy then provision it again.
           </P>
         </Step>
-        <Step title="Settings → Reverse proxy (Traefik) → provision (owner)">
+        <Step title={<>Settings<PathArrow />Reverse proxy (Traefik)<PathArrow />provision (owner)</>}>
           <P>
             The <Code>aoox-proxy</Code> container is created on the{" "}
             <Code>aoox</Code> network with the <Code>aoox_proxy_acme</Code>{" "}
@@ -135,7 +136,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
             certificate can only be issued once DNS is correct.
           </P>
         </Step>
-        <Step title="Application page → Domain tab → add">
+        <Step title={<>Application page<PathArrow />Domain tab<PathArrow />add</>}>
           <P>
             Fill in the <strong>Hostname</strong> (<Code>app.example.com</Code>,
             no scheme/path) and turn on <strong>HTTPS</strong> if the proxy
@@ -200,7 +201,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
           automatically.
         </li>
         <li>
-          The http → https redirect is only created when ACME is active, so
+          The http<PathArrow />https redirect is only created when ACME is active, so
           that without <Code>PROXY_ACME_EMAIL</Code> (dev) a host is still
           reachable over http, rather than redirected to Traefik&apos;s
           self-signed certificate.
@@ -235,7 +236,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
           ["Remove a domain", "The container is recreated without that host's label; the certificate stays on the ACME volume."],
           ["Toggle HTTPS", "The container is recreated; the -secure/-redirect routers are added/removed."],
           ["Remove the proxy (owner)", "All domains stop being served; application containers aren't touched. You'll be asked about the ACME volume."],
-          ["Change PROXY_ACME_EMAIL / port", "Change .env.dist → remove the proxy → provision it again."],
+          ["Change PROXY_ACME_EMAIL / port", <>Change .env.dist<PathArrow />remove the proxy<PathArrow />provision it again.</>],
         ]}
       />
 

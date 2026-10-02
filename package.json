@@ -1,6 +1,23 @@
 {
   "name": "aoox-landing",
   "version": "0.1.0-alpha.4",
+  "description": "Marketing site and documentation for aoox, a self-hosted PaaS (Next.js static export)",
+  "keywords": [
+    "self-hosted",
+    "paas",
+    "docker",
+    "deploy",
+    "documentation",
+    "nextjs"
+  ],
+  "homepage": "https://aoox.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hideandseeklab/aoox-landing.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hideandseeklab/aoox-landing/issues"
+  },
   "type": "module",
   "private": true,
   "license": "Apache-2.0",

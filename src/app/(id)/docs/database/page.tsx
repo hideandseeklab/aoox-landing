@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -169,7 +170,7 @@ export default function Page() {
 
       <H2 id="langkah">Membuat database</H2>
       <Steps>
-        <Step title="Halaman project → Database baru">
+        <Step title={<>Halaman project<PathArrow />Database baru</>}>
           <Table
             head={["Field", "Keterangan"]}
             rows={[
@@ -271,20 +272,20 @@ export default function Page() {
       <H3>Tab lain</H3>
       <Ul>
         <li>
-          <strong>Data</strong> → <DocLink href="/docs/data-browser">Data browser</DocLink>:
+          <strong>Data</strong> <PathArrow /><DocLink href="/docs/data-browser">Data browser</DocLink>:
           tabel, query, database tambahan.
         </li>
         <li>
-          <strong>Backup</strong> → <DocLink href="/docs/backup#database">Backup &amp; restore</DocLink>:
+          <strong>Backup</strong> <PathArrow /><DocLink href="/docs/backup#database">Backup &amp; restore</DocLink>:
           manual, jadwal, retensi, S3.
         </li>
         <li>
-          <strong>Jobs</strong> → perintah terjadwal di container database atau
+          <strong>Jobs</strong> <PathArrow />perintah terjadwal di container database atau
           container terpisah dari image engine dengan env <Code>DB_*</Code> —{" "}
           <DocLink href="/docs/jobs#pemilik">Scheduled jobs</DocLink>.
         </li>
         <li>
-          <strong>Mount</strong> → file konfigurasi engine (<Code>my.cnf</Code>,{" "}
+          <strong>Mount</strong> <PathArrow />file konfigurasi engine (<Code>my.cnf</Code>,{" "}
           <Code>redis.conf</Code>) atau volume tambahan —{" "}
           <DocLink href="/docs/mount#database">Mount</DocLink>.
         </li>

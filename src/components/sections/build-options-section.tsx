@@ -98,11 +98,11 @@ const OPTIONS_ID: Option[] = [
     name: "Template",
     file: "katalog bawaan",
     description: "Aplikasi siap pakai, dijalankan sebagai stack compose dalam beberapa klik.",
-    fit: "WordPress, Ghost, n8n, …",
+    fit: "WordPress, Nextcloud, Vaultwarden, …",
     href: "/docs/template",
     snippet: (
       <ul className="grid grid-cols-2 gap-1">
-        {["wordpress", "ghost", "n8n", "uptime-kuma", "minio", "gitea"].map((t) => (
+        {["wordpress", "nextcloud", "vaultwarden", "grafana", "n8n", "gitea"].map((t) => (
           <li
             key={t}
             className="truncate border border-border px-1.5 py-0.5 text-muted-foreground rounded-sm"
@@ -200,11 +200,11 @@ const OPTIONS_EN: Option[] = [
     name: "Template",
     file: "built-in catalog",
     description: "Ready-made apps, run as a compose stack in a few clicks.",
-    fit: "WordPress, Ghost, n8n, …",
+    fit: "WordPress, Nextcloud, Vaultwarden, …",
     href: "/en/docs/template",
     snippet: (
       <ul className="grid grid-cols-2 gap-1">
-        {["wordpress", "ghost", "n8n", "uptime-kuma", "minio", "gitea"].map((t) => (
+        {["wordpress", "nextcloud", "vaultwarden", "grafana", "n8n", "gitea"].map((t) => (
           <li
             key={t}
             className="truncate border border-border px-1.5 py-0.5 text-muted-foreground rounded-sm"

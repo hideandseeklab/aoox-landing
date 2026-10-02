@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -98,11 +99,16 @@ host      : https://shop-pr42.preview.example.com`}</Pre>
 
       <H2 id="langkah">Mengaktifkan</H2>
       <Steps>
-        <Step title="Pengaturan aplikasi → Preview pull request">
+        <Step title={<>Pengaturan aplikasi<PathArrow />Preview pull request</>}>
           <P>
             Nyalakan toggle dan isi <strong>Preview domain</strong>, mis.{" "}
             <Code>preview.example.com</Code>. Kosong = memakai env{" "}
-            <Code>PREVIEW_DOMAIN</Code> di API (bila diset).
+            <Code>PREVIEW_DOMAIN</Code> di API (bila diset). Untuk mengisinya
+            sekali untuk semua aplikasi, tulis <Code>PREVIEW_DOMAIN=preview.example.com</Code>{" "}
+            di <Code>.env.dist</Code> lalu <Code>docker compose up -d</Code>. Instalasi
+            yang dibuat sebelum variabel ini diteruskan ke container API belum
+            menerimanya sampai <Code>aoox reinstall</Code> dijalankan —{" "}
+            <Code>aoox update</Code> tidak menulis ulang file compose.
           </P>
         </Step>
         <Step title="Buka pull request di provider">
@@ -111,9 +117,9 @@ host      : https://shop-pr42.preview.example.com`}</Pre>
             build yang sama (Dockerfile/Nixpacks) dan tag khusus preview.
           </P>
         </Step>
-        <Step title="Pantau di tab Webhook → Preview pull request">
+        <Step title={<>Pantau di tab Webhook<PathArrow />Preview pull request</>}>
           <P>
-            Daftar preview: nomor PR, status (<Code>building</Code> →{" "}
+            Daftar preview: nomor PR, status (<Code>building</Code> <PathArrow />
             <Code>running</Code> | <Code>failed</Code>), host + tautan buka,
             log build, dan tombol hapus manual. Daftar menyegarkan tiap 5 detik
             selama ada yang <Code>building</Code>.

@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -99,11 +100,17 @@ host      : https://shop-pr42.preview.example.com`}</Pre>
 
       <H2 id="langkah">Enabling it</H2>
       <Steps>
-        <Step title="Application settings → Pull request previews">
+        <Step title={<>Application settings<PathArrow />Pull request previews</>}>
           <P>
             Turn on the toggle and fill in the <strong>Preview domain</strong>,
             e.g. <Code>preview.example.com</Code>. Leaving it blank falls back
-            to the API&apos;s <Code>PREVIEW_DOMAIN</Code> env var (if set).
+            to the API&apos;s <Code>PREVIEW_DOMAIN</Code> env var (if set). To set
+            it once for every application, put{" "}
+            <Code>PREVIEW_DOMAIN=preview.example.com</Code> in <Code>.env.dist</Code>{" "}
+            and run <Code>docker compose up -d</Code>. An install created before this
+            variable was forwarded to the API container won&apos;t receive it until{" "}
+            <Code>aoox reinstall</Code> is run — <Code>aoox update</Code> doesn&apos;t
+            rewrite the compose file.
           </P>
         </Step>
         <Step title="Open a pull request at the provider">
@@ -113,9 +120,9 @@ host      : https://shop-pr42.preview.example.com`}</Pre>
             preview-specific tag.
           </P>
         </Step>
-        <Step title="Watch it under the Webhook tab → Pull request previews">
+        <Step title={<>Watch it under the Webhook tab<PathArrow />Pull request previews</>}>
           <P>
-            The list of previews shows: PR number, status (<Code>building</Code> →{" "}
+            The list of previews shows: PR number, status (<Code>building</Code> <PathArrow />
             <Code>running</Code> | <Code>failed</Code>), host + an open link,
             build logs, and a manual delete button. The list refreshes every
             5 seconds while anything is <Code>building</Code>.

@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
@@ -74,10 +75,13 @@ function HeroSection({ lang = "id" }: { lang?: Lang }) {
             <Link
               href={lang === "en" ? "/en/changelog" : "/changelog"}
               aria-label={`${t.releaseLabel} v${LATEST_RELEASE.version} — Changelog`}
-              className="inline-flex w-fit items-center gap-1.5 border border-primary/60 bg-card px-2.5 py-1 font-mono text-[0.7rem] text-foreground transition-colors hover:bg-primary/15 rounded-md"
+              className="group inline-flex w-fit items-center gap-1.5 border border-primary/60 bg-card px-2.5 py-1 font-mono text-[0.7rem] text-foreground transition-colors hover:bg-primary/15 rounded-md"
             >
               v{LATEST_RELEASE.version}
-              <span aria-hidden className="text-muted-foreground">→</span>
+              <ArrowRight
+                aria-hidden="true"
+                className="size-3 text-muted-foreground transition-transform group-hover:translate-x-0.5"
+              />
             </Link>
           </div>
 

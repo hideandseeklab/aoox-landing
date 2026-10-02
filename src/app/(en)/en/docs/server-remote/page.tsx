@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -28,7 +29,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const SUMMARY = [
-  { k: "Transport", v: "SSH → docker system dial-stdio" },
+  { k: "Transport", v: <>SSH<PathArrow />docker system dial-stdio</> },
   { k: "Needed on the server", v: "sshd + Docker CLI, no agent" },
   { k: "Who", v: "Owner/admin registers it; anyone can select it" },
 ]
@@ -118,7 +119,7 @@ docker system dial-stdio --help     # must exist (Docker 20.10+)`}</Pre>
 
       <H2 id="langkah">Adding a server</H2>
       <Steps>
-        <Step title="Settings → Remote servers → New remote server (owner/admin)">
+        <Step title={<>Settings<PathArrow />Remote servers<PathArrow />New remote server (owner/admin)</>}>
           <Table
             head={["Field", "Notes"]}
             rows={[
@@ -162,7 +163,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
 
       <H2 id="deploy">Deploying to a remote server</H2>
       <P>
-        In the application form, pick <strong>Server</strong> → the target
+        In the application form, pick <strong>Server</strong> <PathArrow />the target
         server (the select only appears if a server is registered; members
         see an empty list because the server endpoint is restricted to
         owner/admin). The application shows the server&apos;s name as a badge.
@@ -190,7 +191,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
 DATABASE_URL=postgresql://app:PASSWORD@203.0.113.5:15432/app_db`}</Pre>
       <Ul>
         <li>Set a <strong>host port</strong> on the database (e.g. 15432) and restrict that port on the host&apos;s firewall to the remote server&apos;s IP.</li>
-        <li>Copy the password from the database&apos;s Overview tab (unmask → copy).</li>
+        <li>Copy the password from the database&apos;s Overview tab (unmask<PathArrow />copy).</li>
       </Ul>
 
       <H2 id="proxy">Proxy & domain on a remote server</H2>
@@ -230,11 +231,56 @@ DATABASE_URL=postgresql://app:PASSWORD@203.0.113.5:15432/app_db`}</Pre>
         <DocLink href="/en/docs/terminal">Web terminal</DocLink>.
       </P>
 
+      <H2 id="pemantauan">Metrics, notifications and server status</H2>
+      <P>
+        Applications on a remote server are monitored through the same SSH
+        tunnel deploys use:
+      </P>
+      <Ul>
+        <li>
+          <strong>Metrics</strong>: an application&apos;s CPU, memory and
+          network show on the Deploy tab (1 hour live, plus 24 h/7 d/30 d
+          history) and in the project&apos;s resource usage card, like local
+          applications. Remote servers are sampled every 30 seconds (local
+          every 15) because each sample is two <Code>stats</Code> calls over
+          SSH.
+        </li>
+        <li>
+          <strong>Container down</strong>: the server&apos;s <Code>die</Code>{" "}
+          events are streamed through the tunnel, with the same rules as on
+          the host (5-second grace, ignored when replaced by a deploy/stopped/
+          exit 0, at most 1 message per container per 10 minutes). The message
+          names the server.
+        </li>
+        <li>
+          <strong>Server status</strong>: every minute the API asks the server
+          for its container list. The server list shows an{" "}
+          <em>reachable</em>/<em>unreachable</em>/<em>not checked</em> badge,
+          when it was checked, since when it has been down, and how many
+          containers are monitored — read from the last result, so opening the
+          page calls no server.
+        </li>
+        <li>
+          <strong>Server unreachable</strong>: a notification is sent after{" "}
+          <em>two</em> failed checks in a row (about 2 minutes, so a flaky link
+          wakes nobody up), repeated at most once an hour while it stays down,
+          and one &quot;reachable again&quot; message (with the downtime) on
+          recovery. Toggle: <strong>remote server unreachable</strong> in{" "}
+          <DocLink href="/en/docs/notifikasi">Notifications</DocLink>.
+        </li>
+      </Ul>
+      <Callout kind="warn" title="Limits">
+        The disk warning, disk cleanup/retention, certificate monitoring and
+        the DNS check still cover the local host only. A newly added server
+        starts being monitored within about 30 seconds; while a server is
+        unreachable its metrics are empty (stale numbers are not shown).
+      </Callout>
+
       <H2 id="hapus">Removing a server</H2>
       <Callout kind="warn">
         A server that still has applications on it can&apos;t be deleted (409).
         Delete or move its applications first (change <strong>Server</strong>{" "}
-        in Settings → the next deploy builds on the new target; the container
+        in Settings<PathArrow />the next deploy builds on the new target; the container
         on the old server isn&apos;t removed automatically).
       </Callout>
 

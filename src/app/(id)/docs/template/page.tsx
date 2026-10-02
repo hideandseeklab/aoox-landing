@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -27,7 +28,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const SUMMARY = [
-  { k: "Katalog", v: "6 template, dibundel di dalam aoox" },
+  { k: "Katalog", v: "14 template, dibundel di dalam aoox" },
   { k: "Hasil", v: "Stack compose (source: template)" },
   { k: "Rahasia", v: "Password/secret di-generate otomatis" },
 ]
@@ -39,6 +40,14 @@ const CATALOG = [
   { id: "uptime-kuma", ver: "1", untuk: "Monitoring uptime", isi: "—", service: "uptime-kuma :3001" },
   { id: "minio", ver: "latest", untuk: "Object storage S3 — bisa jadi tujuan backup", isi: "Root user punya default", service: "Console :9001 · API S3 :9000" },
   { id: "gitea", ver: "1.24", untuk: "Git hosting ringan", isi: "URL publik", service: "gitea :3000" },
+  { id: "vaultwarden", ver: "1.37", untuk: "Password manager (kompatibel Bitwarden)", isi: "URL publik (HTTPS)", service: "vaultwarden :80" },
+  { id: "umami", ver: "2.20", untuk: "Analitik web ramah privasi + PostgreSQL", isi: "—", service: "umami :3000" },
+  { id: "grafana", ver: "13.0", untuk: "Dashboard metrik & log", isi: "URL publik", service: "grafana :3000" },
+  { id: "metabase", ver: "0.63", untuk: "Business intelligence + PostgreSQL", isi: "URL publik", service: "metabase :3000" },
+  { id: "directus", ver: "12.4", untuk: "Headless CMS / API data + PostgreSQL", isi: "URL publik, email admin", service: "directus :8055" },
+  { id: "mattermost", ver: "11.11", untuk: "Chat tim + PostgreSQL", isi: "URL publik", service: "mattermost :8065" },
+  { id: "nextcloud", ver: "32", untuk: "File & kolaborasi + PostgreSQL, Redis, cron", isi: "Domain", service: "nextcloud :80" },
+  { id: "odoo", ver: "19.0", untuk: "ERP / bisnis all-in-one (Community) + PostgreSQL", isi: "— (master password di-generate)", service: "odoo :8069" },
 ]
 
 const NEXT = [
@@ -96,9 +105,32 @@ export default function Page() {
         (alfanumerik) bila dikosongkan.
       </P>
 
+      <H2 id="catatan">Catatan per template</H2>
+      <P>
+        Template yang memakai database membawa <strong>PostgreSQL sendiri di
+        dalam stack</strong> (bukan managed database), dengan volume bernama
+        untuk data dan health check agar aplikasi baru start setelah database
+        siap. Versi image dipin ke tag tertentu, bukan <Code>latest</Code>.
+        Lisensi tiap proyek berbeda; cek di situs proyeknya sebelum dipakai
+        untuk keperluan komersial.
+      </P>
+      <Table
+        head={["Template", "Isi stack & hal yang perlu diketahui"]}
+        rows={[
+          ["vaultwarden", <>Satu container, data di SQLite. Web vault butuh HTTPS (kecuali localhost) — isi URL publik dengan <Code>https://…</Code>. Token <Code>/admin</Code> di-generate; matikan pendaftaran (<Code>SIGNUPS_ALLOWED=false</Code>) setelah akun dibuat.</>],
+          ["umami", <>Umami + PostgreSQL. Login awal bawaan Umami <Code>admin</Code> / <Code>umami</Code> — ganti segera.</>],
+          ["grafana", <>Satu container (SQLite bawaan). Username dan password admin ada di env stack.</>],
+          ["metabase", <>Metabase + PostgreSQL untuk data aplikasinya (bukan data yang kamu analisis). Berbasis Java, jadi start pertama beberapa menit dan memakai RAM cukup besar. Kunci enkripsi kredensial di-generate; jangan diganti setelah dipakai.</>],
+          ["directus", <>Directus + PostgreSQL. Akun admin pertama dibuat dari email yang kamu isi dan password di env stack; <Code>KEY</Code> dan <Code>SECRET</Code> di-generate.</>],
+          ["mattermost", <>Mattermost Team Edition + PostgreSQL. Akun pertama dibuat lewat web dan otomatis jadi admin sistem.</>],
+          ["nextcloud", <>Nextcloud (Apache) + PostgreSQL + Redis (cache dan file locking) + container <Code>cron</Code> untuk tugas latar. Isi domain tanpa <Code>https://</Code>. Protokol publik default <Code>https</Code>; <Code>http</Code> hanya untuk uji lokal. Install pertama lebih lama dan paling berat di antara template.</>],
+          ["odoo", <>Odoo <strong>Community</strong> 19.0 (LGPLv3; tanpa modul Enterprise, yang proprietary) + PostgreSQL 16. Buka situsnya: halaman awal meminta <em>Master Password</em>, nama database, email, dan password admin. <strong>Master password</strong> dibuat otomatis; lihat di halaman stack, tab <strong>Pengaturan</strong>, bagian environment, <strong>Tampilkan nilai</strong> (variabel <Code>MASTER_PASSWORD</Code>). Berjalan <strong>satu proses tanpa worker</strong> (<Code>workers = 0</Code>), cukup untuk pemakaian kecil; banyak worker dengan jalur websocket terpisah belum disiapkan. <Code>proxy_mode</Code> menyala agar skema https dan pengalihan benar di belakang Traefik. Daftar database tetap terbuka supaya database pertama bisa dibuat lewat web; master password melindungi pembuatan, penyalinan, backup, dan penghapusan database. Setelah database dibuat, amankan <Code>/web/database/manager</Code>: edit compose stack (tab Pengaturan), tambahkan <Code>list_db = False</Code> dan <Code>dbfilter = ^nama_db$</Code> pada bagian konfigurasi Odoo, lalu deploy ulang. Image memakai tag bertanggal (<Code>19.0-20260926</Code>) agar tidak bergeser tiap malam; untuk pembaruan keamanan, ganti tag-nya dan deploy ulang. Data ada di volume <Code>odoo_data</Code> (filestore) dan database.</>],
+        ]}
+      />
+
       <H2 id="langkah">Men-deploy template</H2>
       <Steps>
-        <Step title="Menu Templates → pilih template">
+        <Step title={<>Menu Templates<PathArrow />pilih template</>}>
           <P>
             Atau dari halaman project klik <strong>Dari template</strong> agar
             project sudah terpilih. Ada kotak pencarian untuk katalog.
@@ -125,7 +157,7 @@ export default function Page() {
                 "Variabel",
                 <>
                   Field dengan label dan hint dari template. Yang bertanda wajib
-                  harus diisi (mis. <em>URL publik</em> untuk Ghost/Gitea,{" "}
+                  harus diisi (mis. <em>URL publik</em> untuk Ghost/Gitea/Grafana,{" "}
                   <em>Host publik</em> untuk n8n). Sisanya: kosong = default /
                   di-generate.
                 </>,
@@ -133,7 +165,7 @@ export default function Page() {
             ]}
           />
           <Callout kind="warn" title="URL publik harus sama dengan domain">
-            Ghost, Gitea, dan n8n memakai URL/host publik untuk membangun tautan
+            Ghost, Gitea, n8n, Grafana, Metabase, Directus, Mattermost, Vaultwarden, dan Nextcloud memakai URL/host publik untuk membangun tautan
             dan webhook-nya sendiri. Isi persis sesuai hostname yang kamu
             pasang, termasuk skema (<Code>https://blog.example.com</Code>) —
             kalau berbeda, halaman admin/tautan akan salah arah.
@@ -195,7 +227,7 @@ Variabel    : DB_PASSWORD (kosong → di-generate)
       <Table
         head={["Gejala", "Penyebab & solusi"]}
         rows={[
-          ["400: variabel wajib kosong", "URL/Host publik belum diisi (Ghost, Gitea, n8n)."],
+          ["400: variabel wajib kosong", "URL/Host/Domain publik atau email admin (Directus) belum diisi."],
           ["Tautan admin mengarah ke localhost / http", "URL publik tidak sama dengan domain, atau protokol n8n masih http. Perbaiki env stack, deploy ulang."],
           ["Deploy lama di deploying", "Pull image pertama kali. Tunggu; cek Log aksi terakhir untuk progres."],
           ["MinIO tidak bisa dipakai sebagai tujuan backup", <>Pasang domain/hostname untuk service <em>API S3</em> (port 9000), atau pakai endpoint internal <Code>http://&lt;container&gt;:9000</Code> — stack harus di network <Code>aoox</Code>.</>],

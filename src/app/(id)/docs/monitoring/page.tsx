@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -33,9 +34,9 @@ const SUMMARY = [
 
 const SOURCES = [
   { s: "Dashboard", d: "CPU/RAM/Storage host live + kartu Host & Disk Docker (owner/admin)" },
-  { s: "Aplikasi → Deploy", d: "KPI CPU / memori / jaringan + sparkline" },
+  { s: <>Aplikasi<PathArrow />Deploy</>, d: "KPI CPU / memori / jaringan + sparkline" },
   { s: "Database", d: "KPI yang sama di atas panel" },
-  { s: "Settings → Disk Docker", d: "rincian image/volume/container/cache + cleanup" },
+  { s: <>Settings<PathArrow />Disk Docker</>, d: "rincian image/volume/container/cache + cleanup" },
 ]
 
 const NEXT = [
@@ -64,7 +65,7 @@ export default function Page() {
       <H2 id="di-mana">Di mana melihatnya</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {SOURCES.map((item, i) => (
-          <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
+          <li key={i} className="flex flex-col gap-1 bg-background px-3 py-3">
             <span className="text-[0.6rem] text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
             <span className="font-medium text-foreground">{item.s}</span>
             <span className="text-muted-foreground">{item.d}</span>
@@ -184,7 +185,7 @@ Memori 512 → limit keras 512 MiB, tanpa swap (MemorySwap = Memory)`}</Pre>
       <Ul>
         <li>
           Container yang melewati limit memori di-<strong>OOM-kill</strong>{" "}
-          oleh kernel → restart oleh Docker → notifikasi container mati bila
+          oleh kernel<PathArrow />restart oleh Docker<PathArrow />notifikasi container mati bila
           berulang. Cek sparkline memori sebelum menurunkan limit.
         </li>
         <li>Preview PR dan job <em>Container terpisah</em> mewarisi limit aplikasinya.</li>
@@ -210,8 +211,81 @@ Memori 512 → limit keras 512 MiB, tanpa swap (MemorySwap = Memory)`}</Pre>
         ]}
       />
       <P>
-        Aktifkan di <DocLink href="/docs/notifikasi">Notifikasi</DocLink> →
-        toggle <strong>Container mati</strong>. Hanya untuk host lokal.
+        Aktifkan di <DocLink href="/docs/notifikasi">Notifikasi</DocLink> <PathArrow />
+        toggle <strong>Container mati</strong>. Berlaku untuk host lokal dan untuk
+        aplikasi di <DocLink href="/docs/server-remote#pemantauan">server remote</DocLink>{" "}
+        (pesannya menyebut nama server).
+      </P>
+
+      <H2 id="http">Monitor HTTP (opsional)</H2>
+      <P>
+        Container yang hidup belum tentu sehat: aplikasi bisa mengembalikan
+        5xx atau macet tanpa pernah mati. Nyalakan pemeriksaan HTTP per aplikasi
+        di tab <strong>Monitor</strong> (developer ke atas mengubah, viewer
+        hanya melihat).
+      </P>
+      <Table
+        head={["Pengaturan", "Keterangan"]}
+        rows={[
+          ["Path", <>Default <Code key="1">/</Code>, mis. <Code key="2">/health</Code>. Satu-satunya yang kamu tentukan — harus diawali satu <Code key="3">/</Code>, tanpa spasi/karakter kontrol, tanpa <Code key="4">..</Code>, maksimal 200 karakter.</>],
+          ["Interval", "1–60 menit (default 5)."],
+          ["Batas waktu", "5–30 detik (default 10)."],
+          ["Status sehat", <>Default <Code key="5">200-399</Code>; bisa daftar kode/rentang, mis. <Code key="6">200,204</Code>.</>],
+          ["Gagal berturut-turut", "Berapa kali gagal beruntun sebelum alert (default 2)."],
+          ["Alamat internal", "Lewati domain publik dan periksa lewat port host / nama container."],
+        ]}
+      />
+      <H3>Yang diperiksa, dan dari mana</H3>
+      <Ul>
+        <li>
+          <strong>Host tidak pernah kamu ketik</strong>. Targetnya diturunkan dari
+          aplikasi itu sendiri: domain pertamanya (URL publik lewat proxy, jadi
+          jalur proxy ikut teruji); bila tidak ada, port host (
+          <Code>host:port</Code>, untuk server remote alamat server itu); bila
+          tidak ada juga, nama container di jaringan <Code>aoox</Code> (hanya bila API
+          berjalan di jaringan itu, yaitu stack distribusi). Target yang dipakai
+          ditampilkan di tab. Dengan begitu panel tidak bisa diarahkan untuk
+          memindai jaringan internal atau metadata cloud.
+        </li>
+        <li>
+          Pengalihan diikuti maksimal 3 kali dan hanya ke host dan port yang
+          sama; pengalihan ke tempat lain tidak diikuti (status 3xx-nya yang
+          dinilai). Isi respons dibaca sampai batas kecil lalu dibuang — tidak
+          pernah disimpan.
+        </li>
+        <li>
+          Pemeriksaan berjalan <strong>dari mesin panel</strong>: itu tidak
+          membuktikan aplikasi bisa dijangkau dari internet luar, dan dengan
+          domain publik hasilnya bisa terpengaruh hairpin NAT.
+        </li>
+      </Ul>
+      <H3>Kapan dicek, kapan diam</H3>
+      <Ul>
+        <li>
+          Hanya aplikasi yang <em>running</em>. Aplikasi yang di-stop bukan
+          &quot;down&quot;: monitornya hanya kembali ke &quot;belum dicek&quot;.
+        </li>
+        <li>
+          Tidak dicek selama deploy berjalan dan 60 detik sesudahnya, dan deret
+          gagal yang melewati deploy dimulai dari nol — jadi deploy tidak
+          memicu alert.
+        </li>
+        <li>
+          Status terakhir disimpan di database, jadi API yang restart di tengah
+          gangguan tidak mengumumkannya lagi dan tidak mengirim &quot;down&quot;
+          palsu untuk aplikasi yang sehat.
+        </li>
+      </Ul>
+      <H3>Notifikasi, uptime, dan riwayat</H3>
+      <P>
+        Setelah jumlah kegagalan beruntun tercapai, satu notifikasi{" "}
+        <strong>Monitor HTTP gagal</strong> dikirim (pengingat maksimal tiap 6
+        jam selama masih down) dan satu pesan pulih dengan lama down saat sehat
+        lagi — lihat <DocLink href="/docs/notifikasi">Notifikasi</DocLink>. Tab
+        Monitor menampilkan status, uptime 24 jam dan 7 hari, latensi
+        rata-rata dan p95, grafik latensi 24 jam, dan daftar kejadian down
+        terakhir. Hasil disimpan 7 hari; isi respons tidak pernah disimpan.
+        Konfigurasi monitor ikut ekspor/impor project (tanpa riwayat).
       </P>
 
       <H2 id="disk">Peringatan disk menipis</H2>

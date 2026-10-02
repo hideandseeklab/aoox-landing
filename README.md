@@ -3,6 +3,12 @@
 Marketing site and documentation for [aoox](https://github.com/hideandseeklab/aoox-api), a
 self-hosted PaaS. Built with Next.js and Tailwind CSS.
 
+Website: [aoox.dev](https://aoox.dev) · Docs: [aoox.dev/docs](https://aoox.dev/docs) · Changelog: [aoox.dev/changelog](https://aoox.dev/changelog)
+
+Related repos: [aoox-api](https://github.com/hideandseeklab/aoox-api) (backend) ·
+[aoox-web](https://github.com/hideandseeklab/aoox-web) (dashboard) ·
+[aoox-cli](https://github.com/hideandseeklab/aoox-cli) (CLI).
+
 ## Development
 
 ```bash

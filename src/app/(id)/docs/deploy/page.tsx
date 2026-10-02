@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -45,7 +46,7 @@ const BLUE_GREEN = [
   { t: "+1 s", old: "melayani", next: "starting", note: "Container <app>-next dibuat dengan label Traefik yang sama." },
   { t: "+3–90 s", old: "melayani", next: "healthy", note: "Traefik mulai merutekan ke keduanya setelah -next healthy." },
   { t: "+3 s", old: "dihapus", next: "melayani", note: "Tunggu proxy settle, hapus yang lama." },
-  { t: "selesai", old: "—", next: "→ <app>", note: "-next di-rename ke nama asli. Deployment success." },
+  { t: "selesai", old: "—", next: <><PathArrow />{"<app>"}</>, note: "-next di-rename ke nama asli. Deployment success." },
 ]
 
 const NEXT = [
@@ -155,7 +156,7 @@ export default function Page() {
       <Table
         head={["Log", "Isi", "Sumber"]}
         rows={[
-          ["Log deployment", "Output clone, build, push, start untuk satu deployment. Tersimpan permanen di riwayat.", "Runner → Socket.IO /logs"],
+          ["Log deployment", "Output clone, build, push, start untuk satu deployment. Tersimpan permanen di riwayat.", <>Runner<PathArrow />Socket.IO /logs</>],
           ["Log container", "stdout/stderr aplikasi yang sedang berjalan (follow).", "docker logs --follow"],
         ]}
       />
@@ -176,8 +177,8 @@ export default function Page() {
       <Pre title="Endpoint yang cukup">{`GET /health → 200 OK
 # tidak perlu body; yang penting status 2xx dan cepat`}</Pre>
       <Callout kind="warn" title="Prasyarat di image">
-        Perintah health check mencoba <Code>wget</Code> → <Code>curl</Code> →{" "}
-        <Code>node -e fetch</Code> → <Code>python3</Code>. Image yang tidak
+        Perintah health check mencoba <Code>wget</Code> <PathArrow /><Code>curl</Code> <PathArrow />
+        <Code>node -e fetch</Code> <PathArrow /><Code>python3</Code>. Image yang tidak
         punya satu pun (mis. <Code>scratch</Code>, distroless) membuat
         deployment gagal dengan pesan yang menyebutkannya. Container yang
         kemudian menjadi <Code>unhealthy</Code> otomatis dilepas Traefik (404).

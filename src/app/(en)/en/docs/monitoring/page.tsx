@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -33,9 +34,9 @@ const SUMMARY = [
 
 const SOURCES = [
   { s: "Dashboard", d: "Live host CPU/RAM/Storage + Host & Docker disk cards (owner/admin)" },
-  { s: "Application → Deploy", d: "CPU / memory / network KPIs + sparkline" },
+  { s: <>Application<PathArrow />Deploy</>, d: "CPU / memory / network KPIs + sparkline" },
   { s: "Database", d: "The same KPIs above the panel" },
-  { s: "Settings → Docker disk", d: "Image/volume/container/cache breakdown + cleanup" },
+  { s: <>Settings<PathArrow />Docker disk</>, d: "Image/volume/container/cache breakdown + cleanup" },
 ]
 
 const NEXT = [
@@ -65,7 +66,7 @@ export default function Page() {
       <H2 id="di-mana">Where to find it</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {SOURCES.map((item, i) => (
-          <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
+          <li key={i} className="flex flex-col gap-1 bg-background px-3 py-3">
             <span className="text-[0.6rem] text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
             <span className="font-medium text-foreground">{item.s}</span>
             <span className="text-muted-foreground">{item.d}</span>
@@ -190,7 +191,7 @@ Memory 512 → hard limit of 512 MiB, no swap (MemorySwap = Memory)`}</Pre>
       <Ul>
         <li>
           A container that exceeds its memory limit gets{" "}
-          <strong>OOM-killed</strong> by the kernel → restarted by Docker →
+          <strong>OOM-killed</strong> by the kernel<PathArrow />restarted by Docker<PathArrow />
           a container-down notification if it keeps happening. Check the
           memory sparkline before lowering a limit.
         </li>
@@ -219,7 +220,83 @@ Memory 512 → hard limit of 512 MiB, no swap (MemorySwap = Memory)`}</Pre>
       />
       <P>
         Enable it in <DocLink href="/en/docs/notifikasi">Notifications</DocLink>{" "}
-        → the <strong>Container down</strong> toggle. Local host only.
+        <PathArrow />the <strong>Container down</strong> toggle. Applies to the
+        local host and to applications on a{" "}
+        <DocLink href="/en/docs/server-remote#pemantauan">remote server</DocLink>{" "}
+        (the message names the server).
+      </P>
+
+      <H2 id="http">HTTP monitor (optional)</H2>
+      <P>
+        A running container isn&apos;t necessarily healthy: an application can
+        return 5xx or hang without ever dying. Turn on an HTTP check per
+        application on the <strong>Monitor</strong> tab (developers and up edit,
+        viewers only read).
+      </P>
+      <Table
+        head={["Setting", "Notes"]}
+        rows={[
+          ["Path", <>Default <Code key="1">/</Code>, e.g. <Code key="2">/health</Code>. The only thing you choose — it must start with a single <Code key="3">/</Code>, no spaces/control characters, no <Code key="4">..</Code>, at most 200 characters.</>],
+          ["Interval", "1–60 minutes (default 5)."],
+          ["Timeout", "5–30 seconds (default 10)."],
+          ["Healthy status", <>Default <Code key="5">200-399</Code>; can be a list of codes/ranges, e.g. <Code key="6">200,204</Code>.</>],
+          ["Consecutive failures", "How many failures in a row before an alert (default 2)."],
+          ["Internal address", "Skip the public domain and check through the host port / container name."],
+        ]}
+      />
+      <H3>What is checked, and from where</H3>
+      <Ul>
+        <li>
+          <strong>You never type the host</strong>. The target is derived from
+          the application itself: its first domain (the public URL through the
+          proxy, so the proxy path is tested too); if there is none, its host
+          port (<Code>host:port</Code>, the server&apos;s address for a remote
+          server); if there is none either, the container&apos;s name on the{" "}
+          <Code>aoox</Code> network (only when the API runs in that network, i.e.
+          the distribution stack). The target in use is shown on the tab. That way
+          the panel cannot be pointed at scanning an internal network or cloud
+          metadata.
+        </li>
+        <li>
+          Redirects are followed at most 3 times and only to the same host and
+          port; a redirect anywhere else is not followed (its 3xx status is what
+          is judged). The response body is read up to a small cap and dropped —
+          it is never stored.
+        </li>
+        <li>
+          The check runs <strong>from the panel machine</strong>: it does not
+          prove the application is reachable from the wider internet, and with a
+          public domain the result can be affected by hairpin NAT.
+        </li>
+      </Ul>
+      <H3>When it checks, when it stays quiet</H3>
+      <Ul>
+        <li>
+          Only <em>running</em> applications. A stopped application is not
+          &quot;down&quot;: its monitor just goes back to &quot;not checked&quot;.
+        </li>
+        <li>
+          No checks while a deploy runs and for 60 seconds after, and a streak of
+          failures that spans a deploy starts over — so a deploy doesn&apos;t
+          trigger an alert.
+        </li>
+        <li>
+          The last status is stored in the database, so an API restart in the
+          middle of an outage doesn&apos;t announce it again and doesn&apos;t send
+          a false &quot;down&quot; for a healthy application.
+        </li>
+      </Ul>
+      <H3>Notifications, uptime and history</H3>
+      <P>
+        Once the consecutive-failure count is reached, one{" "}
+        <strong>HTTP monitor failing</strong> notification is sent (reminders at
+        most every 6 hours while it stays down) and one recovery message with the
+        downtime when it is healthy again — see{" "}
+        <DocLink href="/en/docs/notifikasi">Notifications</DocLink>. The Monitor
+        tab shows the status, 24-hour and 7-day uptime, average and p95 latency, a
+        24-hour latency chart, and the latest down incidents. Results are kept for
+        7 days; the response body is never stored. The monitor&apos;s settings
+        travel with project export/import (without history).
       </P>
 
       <H2 id="disk">Low disk warning</H2>

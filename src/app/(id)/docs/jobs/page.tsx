@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -115,7 +116,7 @@ export default function Page() {
           >
             <span className="text-foreground">{row.q}</span>
             <span className="text-muted-foreground">
-              → <span className="text-primary-foreground dark:text-primary">{row.a}</span>
+              <PathArrow /><span className="text-primary-foreground dark:text-primary">{row.a}</span>
             </span>
           </div>
         ))}
@@ -123,7 +124,7 @@ export default function Page() {
 
       <H2 id="langkah">Membuat job</H2>
       <Steps>
-        <Step title="Buka tab Jobs → Job baru">
+        <Step title={<>Buka tab Jobs<PathArrow />Job baru</>}>
           <Table
             head={["Field", "Keterangan"]}
             rows={[
@@ -201,7 +202,7 @@ export default function Page() {
       <Ul>
         <li>
           Tick cron <strong>dilewati</strong> (tidak antre) bila run sebelumnya
-          masih berjalan. Menjalankan manual saat masih ada run aktif → 409.
+          masih berjalan. Menjalankan manual saat masih ada run aktif<PathArrow />409.
         </li>
         <li>
           Status run: <Code>success</Code> (exit 0) / <Code>failed</Code> (exit

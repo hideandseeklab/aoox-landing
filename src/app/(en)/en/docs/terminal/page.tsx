@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -30,7 +31,7 @@ export const metadata: Metadata = pageMetadata({
 const SUMMARY = [
   { k: "Who", v: "Owner & admin only" },
   { k: "To where", v: "The aoox host (SSH) or a remote server" },
-  { k: "Client", v: "xterm.js in the browser → Socket.IO → SSH" },
+  { k: "Client", v: <>xterm.js in the browser<PathArrow />Socket.IO<PathArrow />SSH</> },
 ]
 
 const FLOW = [
@@ -114,14 +115,14 @@ TERMINAL_SSH_USER=deploy        # the host user the terminal will use`}</Pre>
             <Code>TERMINAL_SSH_USER</Code> is empty, the terminal logs in as{" "}
             <Code>root</Code> (the installer default) — the Terminal card marks
             it as the default user. If the connection fails, the terminal shows
-            a link to <strong>Infrastructure → Environment</strong> to fix the
+            a link to <strong>Infrastructure<PathArrow />Environment</strong> to fix the
             settings.
           </P>
         </Step>
         <Step title="Authorize the platform key">
           <P>
             The API generates an ed25519 keypair in <Code>./secrets</Code> the
-            first time it&apos;s needed. <strong>Settings → Terminal</strong> shows
+            first time it&apos;s needed. <strong>Settings<PathArrow />Terminal</strong> shows
             the public key and the command to run <strong>once</strong> on the
             host as <Code>TERMINAL_SSH_USER</Code>:
           </P>
@@ -148,7 +149,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
           [<Code key="3">TERMINAL_SSH_PASSWORD</Code>, "An SSH password", "Less secure — for quick testing only."],
         ]}
       />
-      <P>Priority: an explicit key → password → the platform key (default).</P>
+      <P>Priority: an explicit key<PathArrow />password<PathArrow />the platform key (default).</P>
 
       <H2 id="pakai">Usage tips</H2>
       <Ul>

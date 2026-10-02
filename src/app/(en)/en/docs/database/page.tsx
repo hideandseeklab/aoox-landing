@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -174,7 +175,7 @@ export default function Page() {
 
       <H2 id="langkah">Creating a database</H2>
       <Steps>
-        <Step title="Project page → New database">
+        <Step title={<>Project page<PathArrow />New database</>}>
           <Table
             head={["Field", "Notes"]}
             rows={[
@@ -278,21 +279,21 @@ export default function Page() {
       <H3>Other tabs</H3>
       <Ul>
         <li>
-          <strong>Data</strong> → <DocLink href="/en/docs/data-browser">Data browser</DocLink>:
+          <strong>Data</strong> <PathArrow /><DocLink href="/en/docs/data-browser">Data browser</DocLink>:
           tables, queries, extra databases.
         </li>
         <li>
-          <strong>Backup</strong> → <DocLink href="/en/docs/backup#database">Backup &amp; restore</DocLink>:
+          <strong>Backup</strong> <PathArrow /><DocLink href="/en/docs/backup#database">Backup &amp; restore</DocLink>:
           manual, schedule, retention, S3.
         </li>
         <li>
-          <strong>Jobs</strong> → scheduled commands in the database container
+          <strong>Jobs</strong> <PathArrow />scheduled commands in the database container
           or a separate container from the engine image with{" "}
           <Code>DB_*</Code> env — {" "}
           <DocLink href="/en/docs/jobs#pemilik">Scheduled jobs</DocLink>.
         </li>
         <li>
-          <strong>Mount</strong> → engine config files (<Code>my.cnf</Code>,{" "}
+          <strong>Mount</strong> <PathArrow />engine config files (<Code>my.cnf</Code>,{" "}
           <Code>redis.conf</Code>) or extra volumes —{" "}
           <DocLink href="/en/docs/mount#database">Mounts</DocLink>.
         </li>

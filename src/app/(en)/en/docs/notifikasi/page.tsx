@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -29,7 +30,7 @@ export const metadata: Metadata = pageMetadata({
 
 const SUMMARY = [
   { k: "Channels", v: "Telegram · Slack · Discord · Webhook · Email" },
-  { k: "Events", v: "10 toggles per channel" },
+  { k: "Events", v: "12 toggles per channel" },
   { k: "Scope", v: "Platform-wide, owner/admin" },
 ]
 
@@ -88,12 +89,12 @@ export default function Page() {
           [
             <strong key="s">Slack</strong>,
             "Webhook URL",
-            "Slack app → Incoming Webhooks → Add New Webhook to Workspace → pick a channel.",
+            <>Slack app<PathArrow />Incoming Webhooks<PathArrow />Add New Webhook to Workspace<PathArrow />pick a channel.</>,
           ],
           [
             <strong key="d">Discord</strong>,
             "Webhook URL",
-            "Channel → Edit → Integrations → Webhooks → New Webhook → Copy URL.",
+            <>Channel<PathArrow />Edit<PathArrow />Integrations<PathArrow />Webhooks<PathArrow />New Webhook<PathArrow />Copy URL.</>,
           ],
           [
             <strong key="w">Webhook</strong>,
@@ -110,7 +111,7 @@ export default function Page() {
 
       <H2 id="langkah">Adding a channel</H2>
       <Steps>
-        <Step title="Settings → Notifications → New notification channel (owner/admin)">
+        <Step title={<>Settings<PathArrow />Notifications<PathArrow />New notification channel (owner/admin)</>}>
           <P>
             Fill in a <strong>Name</strong>, pick a <strong>Type</strong>, fill
             in its fields, and enable the toggles for the events you want.
@@ -144,11 +145,13 @@ export default function Page() {
           ["Deploy failure", "An application or compose stack deployment fails.", "Same, plus a snippet of the error message (500 characters)."],
           ["Backup failure", "A database/volume backup (manual or scheduled) fails, including a failed S3 upload.", "Database/application, trigger (manual/scheduled), error."],
           ["Job failure", "A scheduled job ends up failed or timeout.", "Job name, command (200 characters), the last 500 characters of output."],
-          ["Container down", "An application/database container stops unexpectedly — see the rules under Monitoring.", "Container name, exit code, whether it's restarting."],
+          ["Container down", "An application/database container stops unexpectedly — see the rules under Monitoring. Also applies to applications on a remote server.", "Container name, exit code, whether it's restarting; the server name for a remote server."],
           ["Disk almost full", <>Docker filesystem usage crosses a threshold (default 90%, <Code>DISK_ALERT_PERCENT</Code>); checked once a day.</>, "Percentage used, threshold, space remaining."],
           ["Certificate failure", "Traefik fails to issue/renew a domain's certificate (checked every 10 minutes).", "The domain and the ACME error message."],
           ["DNS domain issue", "A domain's DNS no longer points at the right IP — checked every 15 minutes, fires after two consecutive failed checks (mismatch/unresolved).", "Domain, status (mismatch/unresolved), an explanatory message."],
           [<>Application error <Code key="2">(off by default)</Code></>, "A running application's container log matches a common error pattern (traceback, panic, exception, level=error, etc — checked every minute).", "Application, project, error count, up to 3 example lines (redacted), a link to the application page."],
+          [<>Remote server unreachable <Code key="3">(on by default)</Code></>, "A remote server stops answering (SSH/Docker) on two consecutive checks (checked every minute). One recovery message is sent when it is reachable again; reminders at most once an hour while down.", "Server name, address, error; the downtime on the recovery message."],
+          [<>HTTP monitor failing <Code key="4">(on by default)</Code></>, "An application&apos;s HTTP check fails N times in a row (an optional per-application monitor, see Monitoring). One recovery message when healthy again; reminders at most every 6 hours while down.", "Application, project, target, status code/error, how many checks failed; the downtime on the recovery message; a link to the application page."],
         ]}
       />
       <Ul>
@@ -170,6 +173,17 @@ export default function Page() {
           deploy never fails because of a notification).
         </li>
         <li>Container down: at most 1 notification per container every 10 minutes.</li>
+        <li>
+          <strong>Remote server unreachable</strong> and{" "}
+          <strong>HTTP monitor failing</strong> are on by default, but only do
+          anything when you use the feature (adding a remote server / turning
+          on a monitor for an application), so they are not noisy for anyone
+          who doesn&apos;t. Each uses a single toggle for the failure{" "}
+          <em>and</em> the recovery message (told apart by the level and by{" "}
+          <Code>event</Code> in the webhook payload: <Code>server.down</Code>/
+          <Code>server.recovered</Code>, <Code>http.down</Code>/
+          <Code>http.recovered</Code>).
+        </li>
         <li>
           <strong>DNS domain issue</strong>: two consecutive failed checks
           (to dampen transient DNS blips) before the first notification,

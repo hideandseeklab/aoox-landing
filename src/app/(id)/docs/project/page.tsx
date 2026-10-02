@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -101,7 +102,7 @@ export default function Page() {
 
       <H2 id="membuat">Membuat project</H2>
       <Steps>
-        <Step title="Menu Projects → Project baru">
+        <Step title={<>Menu Projects<PathArrow />Project baru</>}>
           <Table
             head={["Field", "Keterangan"]}
             rows={[
@@ -210,7 +211,7 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
       <Steps>
         <Step title="Impor di instance lain">
           <P>
-            <strong>Projects → Impor project</strong>: pilih file, beri nama
+            <strong>Projects<PathArrow />Impor project</strong>: pilih file, beri nama
             baru atau pakai nama dari file.
           </P>
         </Step>
@@ -269,7 +270,7 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
           </P>
         </Step>
         <Step title="Baru hapus project">
-          <P>Tab Pengaturan project → hapus. Backup yang sudah diunduh tidak terpengaruh.</P>
+          <P>Tab Pengaturan project<PathArrow />hapus. Backup yang sudah diunduh tidak terpengaruh.</P>
         </Step>
       </Steps>
       <P>Bila terlanjur, bersihkan yatim dari terminal:</P>

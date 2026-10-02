@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -85,7 +86,7 @@ export default function Page() {
           >
             <span className="text-foreground">{row.q}</span>
             <span className="text-muted-foreground">
-              → <span className="text-primary-foreground dark:text-primary">{row.a}</span>
+              <PathArrow /><span className="text-primary-foreground dark:text-primary">{row.a}</span>
             </span>
           </div>
         ))}
@@ -120,7 +121,7 @@ export default function Page() {
 
       <H2 id="langkah">Adding a mount</H2>
       <Steps>
-        <Step title="Open the Mount tab → Add mount">
+        <Step title={<>Open the Mount tab<PathArrow />Add mount</>}>
           <P>
             Pick a <strong>Kind</strong>, set the <strong>Container path</strong>{" "}
             (unique per application), then <strong>Volume name</strong> /{" "}
@@ -248,8 +249,8 @@ export default function Page() {
       <P>
         The <strong>Volume backup</strong> section on the Mount tab: manual
         backups, a cron schedule, retention, and an S3 destination per
-        application. Restore = stop the container → empty the volume → extract
-        → start. Details in{" "}
+        application. Restore = stop the container<PathArrow />empty the volume<PathArrow />extract
+       <PathArrow />start. Details in{" "}
         <DocLink href="/en/docs/backup#volume">Backup &amp; restore</DocLink>.
       </P>
 

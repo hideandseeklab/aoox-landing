@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -98,7 +99,7 @@ export default function Page() {
           [
             <strong key="g">Git repository</strong>,
             "Repo URL, branch, credential (if private), build method",
-            <>Clone → build (<DocLink href="/en/docs/build">Dockerfile / Nixpacks / static</DocLink>) → push to registry → run.</>,
+            <>Clone<PathArrow />build (<DocLink href="/en/docs/build">Dockerfile / Nixpacks / static</DocLink>)<PathArrow />push to registry<PathArrow />run.</>,
           ],
           [
             <strong key="i">Ready-made image (pulled)</strong>,
@@ -217,7 +218,7 @@ export default function Page() {
                   provisioned yet, it&apos;s started automatically — the same
                   behavior as setting the panel domain, see{" "}
                   <DocLink href="/en/docs/domain-panel#dashboard">
-                    Domain for the panel → Via the dashboard
+                    Domain for the panel<PathArrow />Via the dashboard
                   </DocLink>
                   .
                 </>,
@@ -232,7 +233,7 @@ export default function Page() {
 
         <Step title="Save, then fill in environment variables (if needed)">
           <P>
-            The <strong>Settings</strong> tab → env editor, one{" "}
+            The <strong>Environment</strong> tab<PathArrow />env editor, one{" "}
             <Code>KEY=VALUE</Code> per line. Values are applied when the
             container is created, not at build time — see{" "}
             <DocLink href="/en/docs/environment">Environment variables</DocLink>.
@@ -276,9 +277,10 @@ success   old container replaced · application status Running`}</Pre>
         head={["Tab", "Contains"]}
         rows={[
           ["Deploy", "Deploy/Stop/Start buttons, deployment list, deployment & streaming container logs, metrics, Rollback."],
-          ["Settings", <>The same form as creation, plus environment variables and build args. <strong>Host port, domains, and resource limits apply immediately</strong> to a running application — the container is recreated from the same image without a build (with a host port there is a brief downtime, since two containers cannot bind the same port). A stopped application picks up its new port when started again, and a host port change is rejected (409) while a deployment is active. Other settings take effect on the next deploy.</>],
+          ["Settings", <>The same form as creation, plus build args (environment has its own tab). <strong>Host port, domains, and resource limits apply immediately</strong> to a running application — the container is recreated from the same image without a build (with a host port there is a brief downtime, since two containers cannot bind the same port). A stopped application picks up its new port when started again, and a host port change is rejected (409) while a deployment is active. Other settings take effect on the next deploy.</>],
           ["Domain", "Hostname for the application + HTTPS toggle + DNS check."],
           ["Mount", "Volumes, binds, files — and volume backups."],
+          ["Environment", "The application's env variables, saved on their own, plus the secret source (Infisical). Applies on the next deploy."],
           ["Jobs", "Scheduled commands."],
           ["Webhook", "Webhook URL, secret, and pull request previews."],
           ["Console", "Interactive shell straight into the running container."],
@@ -303,7 +305,7 @@ success   old container replaced · application status Running`}</Pre>
         </li>
         <li>
           <strong>Logged in the audit log</strong> — every console session
-          opened is its own row in Settings → Audit log, with who and when.
+          opened is its own row in Settings<PathArrow />Audit log, with who and when.
         </li>
         <li>
           <strong>service</strong> mode (Swarm) with more than one replica:
@@ -345,6 +347,7 @@ success   old container replaced · application status Running`}</Pre>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
+          ["Monorepo: build cannot find package.json / Dockerfile", <>Set <strong>Root directory</strong> (for example <Code>apps/web</Code>) in the Git part. See <DocLink href="/docs/build#root-directory">Build types</DocLink>.</>],
           [
             "Deploy fails at the pushing stage",
             <>The local registry isn&apos;t provisioned yet, or <Code>REGISTRY_PUBLIC_HOST</Code> isn&apos;t localhost without TLS.</>,

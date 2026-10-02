@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -89,7 +90,7 @@ export default function Page() {
 
       <H2 id="database">Database backups</H2>
       <P>
-        Database page → <strong>Backup</strong> tab.
+        Database page<PathArrow /><strong>Backup</strong> tab.
       </P>
       <Table
         head={["Engine", "How it dumps", "Restore"]}
@@ -156,7 +157,7 @@ export default function Page() {
 
       <H3>Restore</H3>
       <Steps>
-        <Step title="Click restore on a backup row → confirm">
+        <Step title={<>Click restore on a backup row<PathArrow />confirm</>}>
           <P>
             If the local file is already gone (pruned by retention, a new
             disk) but an S3 copy still exists, the row is marked{" "}
@@ -176,7 +177,7 @@ export default function Page() {
 
       <H2 id="volume">Application volume backups</H2>
       <P>
-        Application page → <strong>Mount</strong> tab → the{" "}
+        Application page<PathArrow /><strong>Mount</strong> tab<PathArrow />the{" "}
         <strong>Volume backup</strong> section. Applies only to{" "}
         <strong>volume</strong>-type mounts (bind mounts aren&apos;t supported
         yet). If the application has more than one volume, pick it first.
@@ -185,7 +186,7 @@ export default function Page() {
         head={["Action", "What happens"]}
         rows={[
           ["Backup", <>A one-off busybox container, the volume mounted <Code>:ro</Code>, <Code>tar czf</Code> into <Code>{"<app>/<mount>/<stamp>.tar.gz"}</Code>. The application container keeps running.</>],
-          ["Restore", <><strong>Stop the container</strong> → clear the volume → extract → start. There&apos;s brief downtime.</>],
+          ["Restore", <><strong>Stop the container</strong> <PathArrow />clear the volume<PathArrow />extract<PathArrow />start. There&apos;s brief downtime.</>],
           ["Schedule", "The Volume backup schedule form: frequency, keep count, S3 destination — applies to all of an application's volumes; pruning is per volume."],
         ]}
       />
@@ -200,7 +201,7 @@ export default function Page() {
 
       <H2 id="instance">Instance backup (the panel itself)</H2>
       <P>
-        <strong>Settings → Instance backup</strong> (owner) saves aoox&apos;s own
+        <strong>Settings<PathArrow />Instance backup</strong> (owner) saves aoox&apos;s own
         internal database: users, projects, applications, databases,
         schedules, encrypted credentials — all as a single gzipped JSON file
         on the backup volume, without <Code>pg_dump</Code>.
@@ -245,7 +246,7 @@ export default function Page() {
 
       <H2 id="s3">S3 destinations</H2>
       <Steps>
-        <Step title="Settings → Backup destinations (S3) → New backup destination (owner/admin)">
+        <Step title={<>Settings<PathArrow />Backup destinations (S3)<PathArrow />New backup destination (owner/admin)</>}>
           <Table
             head={["Field", "Detail"]}
             rows={[

@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -35,7 +36,7 @@ const SUMMARY = [
 
 const IMAGE_FLOW = [
   { s: "build", d: "the image is built by the Docker daemon" },
-  { s: "push", d: "→ localhost:5000/<project>/<app>:<id>" },
+  { s: "push", d: <><PathArrow />{"localhost:5000/<project>/<app>:<id>"}</> },
   { s: "run", d: "a container is created from that image" },
   { s: "rollback", d: "the old image is pulled back from the registry" },
 ]
@@ -85,7 +86,7 @@ export default function Page() {
 
       <H2 id="lokal">Local registry</H2>
       <Steps>
-        <Step title="Registry menu → Local registry tab → Provision registry (owner)">
+        <Step title={<>Registry menu<PathArrow />Local registry tab<PathArrow />Provision registry (owner)</>}>
           <P>
             aoox runs <Code>registry:3</Code> as the <Code>aoox-registry</Code>{" "}
             container with htpasswd authentication, data on the{" "}
@@ -165,7 +166,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
       <H3>Browsing & cleaning up contents</H3>
       <Ul>
         <li>
-          The Local registry tab lists repository → tag along with{" "}
+          The Local registry tab lists repository<PathArrow />tag along with{" "}
           <strong>digest</strong> and <strong>size</strong>. Repository name
           = <Code>{"<project-slug>/<app-slug>"}</Code>.
         </li>
@@ -227,7 +228,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         ]}
       />
       <Steps>
-        <Step title="Settings → Docker disk">
+        <Step title={<>Settings<PathArrow />Docker disk</>}>
           <P>
             The card shows image, container, volume, and build cache usage,
             how much can be reclaimed, how many deployments can be pruned,
@@ -250,7 +251,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
 
       <H2 id="eksternal">External registry</H2>
       <P>
-        <strong>External registry</strong> tab → <strong>Add registry</strong>{" "}
+        <strong>External registry</strong> tab<PathArrow /><strong>Add registry</strong>{" "}
         (owner/admin): register credentials for Docker Hub, GHCR, GitLab,
         etc.
       </P>
@@ -260,7 +261,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
           ["Name", "Company GHCR"],
           ["URL", <Code key="1">ghcr.io</Code>],
           ["Username / Password / token", "A token with read access (and write if needed); stored encrypted"],
-          ["Image prefix", <>Optional, e.g. <Code>myorg</Code> → the image is referenced as <Code>{"<url>/<prefix>/<app>"}</Code></>],
+          ["Image prefix", <>Optional, e.g. <Code>myorg</Code> <PathArrow />the image is referenced as <Code>{"<url>/<prefix>/<app>"}</Code></>],
         ]}
       />
       <Callout kind="warn" title="Not used by the pipeline yet">
@@ -276,7 +277,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         rows={[
           ["Deploy fails: No self-hosted registry", "Provision the local registry first."],
           ["Manual push: http: server gave HTTP response to HTTPS client", <><Code>REGISTRY_PUBLIC_HOST</Code> isn&apos;t localhost, without TLS. Add it to <Code>insecure-registries</Code>, or set up a TLS reverse proxy.</>],
-          ["Disk still full after deleting tags", "Run Garbage collect, or Clean up now in Settings → Docker disk."],
+          ["Disk still full after deleting tags", <>Run Garbage collect, or Clean up now in Settings<PathArrow />Docker disk.</>],
           ["A “0 tags” repository won’t disappear even after Garbage collect", "Garbage collect never deletes the repository itself, only unused blobs. Use the Delete image button on that repository's header row."],
           ["Rollback fails: image not found", "The tag was already pruned by retention or deleted manually. Redeploy that commit."],
           ["Registry card: Docker unreachable", <><Code>DOCKER_GID</Code> is wrong or the socket isn&apos;t mounted — see <DocLink href="/en/docs/troubleshooting">Troubleshooting</DocLink>.</>],

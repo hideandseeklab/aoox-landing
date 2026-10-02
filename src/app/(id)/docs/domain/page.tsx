@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -35,15 +36,15 @@ const SUMMARY = [
 
 const REQUEST_FLOW = [
   { s: "browser", d: "https://app.example.com" },
-  { s: "DNS", d: "A record → IP server" },
+  { s: "DNS", d: <>A record<PathArrow />IP server</> },
   { s: "Traefik :443", d: "router <app>-secure, sertifikat ACME" },
-  { s: "container", d: "network aoox → :<port container>" },
+  { s: "container", d: <>network aoox<PathArrow />{":<port container>"}</> },
 ]
 
 const ROUTERS = [
   { name: "<app>", entry: "web (:80)", when: "Selalu", does: "Melayani http untuk host tanpa HTTPS" },
   { name: "<app>-secure", entry: "websecure (:443)", when: "HTTPS aktif", does: "TLS via certresolver le" },
-  { name: "<app>-redirect", entry: "web (:80)", when: "HTTPS aktif + ACME terpasang", does: "301 http → https" },
+  { name: "<app>-redirect", entry: "web (:80)", when: "HTTPS aktif + ACME terpasang", does: <>301 http<PathArrow />https</> },
 ]
 
 const NEXT = [
@@ -109,10 +110,10 @@ PROXY_ACME_STAGING=false     # true saat uji coba, agar tidak kena rate limit`}<
           <P>
             Tanpa email, Traefik berjalan tanpa resolver ACME: domain hanya
             dilayani lewat http dan toggle HTTPS di UI nonaktif. Mengubah nilai
-            ini setelah aktif → hapus proxy lalu aktifkan lagi.
+            ini setelah aktif<PathArrow />hapus proxy lalu aktifkan lagi.
           </P>
         </Step>
-        <Step title="Settings → Reverse proxy (Traefik) → aktifkan (owner)">
+        <Step title={<>Settings<PathArrow />Reverse proxy (Traefik)<PathArrow />aktifkan (owner)</>}>
           <P>
             Container <Code>aoox-proxy</Code> dibuat di network{" "}
             <Code>aoox</Code> dengan volume <Code>aoox_proxy_acme</Code>{" "}
@@ -133,7 +134,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
             sertifikat baru bisa terbit setelah DNS benar.
           </P>
         </Step>
-        <Step title="Halaman aplikasi → tab Domain → tambah">
+        <Step title={<>Halaman aplikasi<PathArrow />tab Domain<PathArrow />tambah</>}>
           <P>
             Isi <strong>Hostname</strong> (<Code>app.example.com</Code>, tanpa
             skema/path) dan nyalakan <strong>HTTPS</strong> bila proxy punya
@@ -196,7 +197,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
           dari internet. Perpanjangan otomatis oleh Traefik.
         </li>
         <li>
-          Redirect http → https hanya dibuat bila ACME aktif, supaya tanpa{" "}
+          Redirect http<PathArrow />https hanya dibuat bila ACME aktif, supaya tanpa{" "}
           <Code>PROXY_ACME_EMAIL</Code> (dev) host tetap bisa diakses http,
           bukan diarahkan ke sertifikat self-signed Traefik.
         </li>
@@ -228,7 +229,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
           ["Hapus domain", "Container dibuat ulang tanpa label host itu; sertifikat tetap di volume ACME."],
           ["Toggle HTTPS", "Container dibuat ulang; router -secure/-redirect ditambah/dihapus."],
           ["Hapus proxy (owner)", "Semua domain berhenti dilayani; container aplikasi tidak disentuh. Volume ACME ditanyakan."],
-          ["Ganti PROXY_ACME_EMAIL / port", "Ubah .env.dist → hapus proxy → aktifkan lagi."],
+          ["Ganti PROXY_ACME_EMAIL / port", <>Ubah .env.dist<PathArrow />hapus proxy<PathArrow />aktifkan lagi.</>],
         ]}
       />
 

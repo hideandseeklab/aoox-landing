@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -28,7 +29,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const SUMMARY = [
-  { k: "Transport", v: "SSH → docker system dial-stdio" },
+  { k: "Transport", v: <>SSH<PathArrow />docker system dial-stdio</> },
   { k: "Butuh di server", v: "sshd + Docker CLI, tanpa agen" },
   { k: "Siapa", v: "Owner/admin mendaftarkan; semua bisa memilih" },
 ]
@@ -116,7 +117,7 @@ docker system dial-stdio --help     # harus ada (Docker 20.10+)`}</Pre>
 
       <H2 id="langkah">Menambahkan server</H2>
       <Steps>
-        <Step title="Settings → Server remote → Server remote baru (owner/admin)">
+        <Step title={<>Settings<PathArrow />Server remote<PathArrow />Server remote baru (owner/admin)</>}>
           <Table
             head={["Field", "Keterangan"]}
             rows={[
@@ -160,7 +161,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
 
       <H2 id="deploy">Deploy ke server remote</H2>
       <P>
-        Di form aplikasi pilih <strong>Server</strong> → server tujuan (select
+        Di form aplikasi pilih <strong>Server</strong> <PathArrow />server tujuan (select
         hanya tampil bila ada server terdaftar; member melihat daftar kosong
         karena endpoint server dibatasi owner/admin). Aplikasi menampilkan
         badge nama server.
@@ -171,7 +172,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
           ["Build", "Di daemon server tujuan — Dockerfile, Nixpacks, situs statis (helper image dibangun di sana)."],
           ["Registry", <><strong>Tanpa push</strong>. Image tersimpan di server dengan ref <Code>{"aoox/<project>/<app>:<tag>"}</Code>; rollback memakai yang masih ada di sana.</>],
           ["Domain / Traefik", <><strong>Ya</strong> — aktifkan proxy di server itu (kartu <em>Proxy (Traefik) di server ini</em>), lalu tambahkan domain seperti biasa. Alternatifnya tetap bisa pakai <strong>Port host</strong>.</>],
-          ["Blue/green", "Ya bila server punya proxy dan aplikasi tanpa port host; tanpa proxy → replace biasa."],
+          ["Blue/green", <>Ya bila server punya proxy dan aplikasi tanpa port host; tanpa proxy<PathArrow />replace biasa.</>],
           ["Log container", "Ada (realtime, lewat tunnel)."],
           ["Metrik CPU/RAM", <><strong>Tidak</strong> — sampler hanya membaca daemon host aoox.</>],
           ["Env & referensi database", <>Env berlaku; referensi <Code>{"${{database…}}"}</Code> menghasilkan host internal yang <strong>tidak terjangkau</strong> dari server lain — pakai koneksi eksternal.</>],
@@ -188,7 +189,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
 DATABASE_URL=postgresql://app:PASSWORD@203.0.113.5:15432/app_db`}</Pre>
       <Ul>
         <li>Isi <strong>Port host</strong> pada database (mis. 15432) dan batasi akses port itu di firewall host ke IP server remote.</li>
-        <li>Salin password dari tab Ringkasan database (mask → salin).</li>
+        <li>Salin password dari tab Ringkasan database (mask<PathArrow />salin).</li>
       </Ul>
 
       <H2 id="proxy">Proxy & domain di server remote</H2>
@@ -226,11 +227,55 @@ DATABASE_URL=postgresql://app:PASSWORD@203.0.113.5:15432/app_db`}</Pre>
         dari browser. Lihat <DocLink href="/docs/terminal">Web terminal</DocLink>.
       </P>
 
+      <H2 id="pemantauan">Metrik, notifikasi, dan status server</H2>
+      <P>
+        Aplikasi di server remote ikut dipantau lewat terowongan SSH yang
+        sama dengan deploy:
+      </P>
+      <Ul>
+        <li>
+          <strong>Metrik</strong>: CPU, memori, dan jaringan aplikasi muncul di
+          tab Deploy (live 1 jam, plus riwayat 24 jam/7 hari/30 hari) dan di
+          kartu resource usage project, seperti aplikasi lokal. Server remote
+          dicuplik tiap 30 detik (lokal tiap 15 detik) karena tiap cuplikan
+          berarti dua panggilan <Code>stats</Code> lewat SSH.
+        </li>
+        <li>
+          <strong>Container mati</strong>: event <Code>die</Code> dari server
+          dialirkan lewat terowongan, dengan aturan yang sama seperti di host
+          (jeda 5 detik, abaikan bila diganti deploy/di-stop/exit 0, maksimal
+          1 pesan per container per 10 menit). Pesannya menyebut nama server.
+        </li>
+        <li>
+          <strong>Status server</strong>: tiap menit API menanyakan daftar
+          container ke server. Daftar server menampilkan badge{" "}
+          <em>terjangkau</em>/<em>tidak terjangkau</em>/<em>belum dicek</em>,
+          kapan dicek, sejak kapan down, dan jumlah container yang dipantau —
+          dibaca dari hasil terakhir, halaman tidak memanggil server saat
+          dibuka.
+        </li>
+        <li>
+          <strong>Server tidak terjangkau</strong>: notifikasi dikirim setelah{" "}
+          <em>dua</em> cek gagal berturut-turut (±2 menit, agar koneksi yang
+          berkedip tidak membangunkan siapa pun), diingatkan paling sering
+          sekali per jam selama masih down, dan satu pesan &quot;terjangkau
+          lagi&quot; (dengan lama down) saat pulih. Toggle:{" "}
+          <strong>server remote tidak terjangkau</strong> di{" "}
+          <DocLink href="/docs/notifikasi">Notifikasi</DocLink>.
+        </li>
+      </Ul>
+      <Callout kind="warn" title="Batasan">
+        Peringatan disk, pembersihan/retensi disk, pemantauan sertifikat, dan
+        cek DNS tetap hanya untuk host lokal. Server yang baru ditambahkan mulai
+        dipantau dalam ±30 detik; selama server tidak terjangkau metriknya
+        kosong (angka basi tidak ditampilkan).
+      </Callout>
+
       <H2 id="hapus">Menghapus server</H2>
       <Callout kind="warn">
         Server yang masih memiliki aplikasi tidak bisa dihapus (409). Hapus
         atau pindahkan aplikasinya dulu (ubah <strong>Server</strong> di
-        Pengaturan → deploy ulang membangun di target baru; container di
+        Pengaturan<PathArrow />deploy ulang membangun di target baru; container di
         server lama tidak dihapus otomatis).
       </Callout>
 

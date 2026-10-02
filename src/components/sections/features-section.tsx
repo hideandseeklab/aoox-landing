@@ -240,9 +240,10 @@ function FeaturesSection({ lang = "id" }: { lang?: Lang }) {
                   href={item.href}
                   className="group inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  <span className="text-primary-foreground dark:text-primary">
-                    →
-                  </span>
+                  <ArrowRight
+                    aria-hidden="true"
+                    className="size-3 shrink-0 text-primary-foreground transition-transform group-hover:translate-x-0.5 dark:text-primary"
+                  />
                   {item.label}
                 </Link>
               </li>

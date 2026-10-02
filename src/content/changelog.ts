@@ -30,6 +30,84 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.0-alpha.5",
+    date: "2026-10-02",
+    channel: "alpha",
+    groups: [
+      {
+        kind: "added",
+        items: [
+          {
+            id: "**Root directory untuk monorepo**: aplikasi bisa membangun satu subfolder repo (mis. `apps/web`) untuk Dockerfile, Nixpacks, Railpack, dan situs statis, termasuk preview pull request. Path Dockerfile dan folder output dihitung dari folder itu, dan folder yang salah menggagalkan deployment dengan pesan jelas tanpa menyentuh container yang berjalan.",
+            en: "**Root directory for monorepos**: an application can build one subfolder of its repo (e.g. `apps/web`) for Dockerfile, Nixpacks, Railpack and static sites, pull request previews included. The Dockerfile path and output folder are relative to that folder, and a wrong folder fails the deployment with a clear message without touching the running container.",
+          },
+          {
+            id: "Opsi webhook **deploy hanya bila folder berubah**: push yang hanya menyentuh folder lain dijawab `ignored`. Bila aoox tidak bisa memastikan (tanpa daftar file, merge commit, 20 commit atau lebih, force push), deploy tetap berjalan.",
+            en: "A webhook option to **deploy only when the folder changed**: a push that only touches other folders is answered `ignored`. When aoox cannot tell (no file lists, merge commits, 20 or more commits, force pushes), it deploys anyway.",
+          },
+          {
+            id: "**Monitor HTTP per aplikasi** (tab Monitor): pemeriksaan path dengan interval dan batas kegagalan, uptime 24 jam/7 hari, latensi rata-rata dan p95, grafik 24 jam, riwayat insiden, dan notifikasi saat down dan pulih. Host selalu diturunkan dari aplikasi, bukan dari input pengguna.",
+            en: "**Per-application HTTP monitor** (Monitor tab): a path check with an interval and failure threshold, 24 h/7 d uptime, average and p95 latency, a 24 h chart, incident history, and notifications when it goes down and recovers. The host is always derived from the application, never from user input.",
+          },
+          {
+            id: "**Pemantauan server remote**: metrik CPU, memori, dan jaringan aplikasi di server remote (live dan riwayat), notifikasi saat container mati, status terjangkau/tidak terjangkau di daftar server, dan notifikasi saat server tidak terjangkau serta saat pulih.",
+            en: "**Remote server monitoring**: CPU, memory and network metrics for applications on remote servers (live and history), a notification when a container dies, a reachable/unreachable status in the server list, and notifications when a server becomes unreachable and when it recovers.",
+          },
+          {
+            id: "**Template satu-klik bertambah dari 6 menjadi 14**: Vaultwarden, Umami, Grafana, Metabase, Directus, Mattermost, Nextcloud, dan Odoo Community (edisi Community, LGPLv3). Semua memakai tag image yang dikunci, health check, dan password yang dibuat otomatis.",
+            en: "**One-click templates grow from 6 to 14**: Vaultwarden, Umami, Grafana, Metabase, Directus, Mattermost, Nextcloud, and Odoo Community (Community edition, LGPLv3). All use pinned image tags, health checks and generated passwords.",
+          },
+          {
+            id: "Kartu aplikasi, stack, dan database di halaman project menampilkan **alamat untuk membukanya** (domain atau `host:port`), dan aplikasi menampilkan root directory-nya di header.",
+            en: "Application, stack and database cards on the project page show **where to open them** (domain or `host:port`), and applications show their root directory in the header.",
+          },
+          {
+            id: "**Sumber secret eksternal (Infisical)** untuk env aplikasi: daftarkan koneksi sekali di Pengaturan, Integrasi, lalu pilih project, environment, dan path di aplikasi. Secret disuntikkan saat container dibuat, semuanya (sync) atau lewat referensi `${{secret.KEY}}`. Tidak disimpan di aoox, nilainya disensor dari log, dan preview pull request tidak ikut memakainya.",
+            en: "**External secret source (Infisical)** for application env: register a connection once in Settings, Integrasi, then pick the project, environment and path on the application. Secrets are injected when the container is created, either all of them (sync) or through `${{secret.KEY}}` references. Nothing is stored in aoox, values are masked in logs, and pull request previews do not use it.",
+          },
+          {
+            id: "Halaman aplikasi punya **tab Environment** tersendiri, berisi editor env dan sumber secret.",
+            en: "The application page has its own **Environment tab** with the env editor and the secret source.",
+          },
+        ],
+      },
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Radius sedang** di seluruh panel dan situs, ikon menggantikan panah `→` di teks, kartu katalog template satu tinggi, dan dialog Buat tabel kini rata dengan kolomnya. Field dan tombol dalam satu baris memiliki tinggi yang sama.",
+            en: "**Medium border radius** across the panel and the site, icons replace the `→` arrows in text, template catalog cards share one height, and the Create table dialog now lines up with its columns. Fields and buttons on one row have the same height.",
+          },
+          {
+            id: "Header halaman aplikasi, database, compose, dan project tidak lagi meluap di layar ponsel, dan deretan tab bisa digeser bila lebih lebar dari layar.",
+            en: "The headers of the application, database, compose and project pages no longer overflow on a phone, and tab strips scroll when wider than the screen.",
+          },
+          {
+            id: "Metadata proyek dan tautan antar situs (aoox.dev, GitHub, npm, Docker Hub) dirapikan agar mudah ditemukan; tidak ada perubahan perilaku.",
+            en: "Project metadata and links between the site, GitHub, npm and Docker Hub were tidied up for discoverability; no behavior change.",
+          },
+          {
+            id: "Form **Aplikasi baru** dan Pengaturan kini berbentuk kartu per topik (Sumber, Build, Jaringan, dan seterusnya), jadi lebih mudah dipindai.",
+            en: "The **New application** form and Pengaturan are now split into cards per topic (Source, Build, Network and so on), so they are easier to scan.",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "`docker-compose.dist.yml` kini meneruskan `API_IMAGE`, `WEB_IMAGE`, `WEBHOOK_VERIFY_GITHUB_IP`, dan `PREVIEW_DOMAIN` ke container api. Instalasi lama menerimanya lewat `aoox reinstall`, bukan `aoox update`.",
+            en: "`docker-compose.dist.yml` now forwards `API_IMAGE`, `WEB_IMAGE`, `WEBHOOK_VERIFY_GITHUB_IP` and `PREVIEW_DOMAIN` to the api container. Existing installs get them through `aoox reinstall`, not `aoox update`.",
+          },
+          {
+            id: "`/favicon.ico` tidak lagi 404 di panel dan situs, dan favicon kini memenuhi seluruh kanvas agar tampil benar saat dipotong bulat oleh mesin pencari.",
+            en: "`/favicon.ico` no longer returns 404 on the panel and the site, and the favicon fills the whole canvas so it looks right when search engines crop it to a circle.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.0-alpha.4",
     date: "2026-09-29",
     channel: "alpha",

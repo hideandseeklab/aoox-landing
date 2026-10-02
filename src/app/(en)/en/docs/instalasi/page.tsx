@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -271,8 +272,8 @@ curl -s http://localhost:3001/auth/setup-status
       <H2 id="update">Upgrading</H2>
       <P>
         The fastest way (needs <Code>INSTALL_DIR</Code> set, same as{" "}
-        <DocLink href="/en/docs/domain-panel">Domain panel</DocLink>): Settings →{" "}
-        <strong>Update aoox</strong> → Check for updates → Apply. Or from the CLI:
+        <DocLink href="/en/docs/domain-panel">Domain panel</DocLink>): Settings<PathArrow />
+        <strong>Update aoox</strong> <PathArrow />Check for updates<PathArrow />Apply. Or from the CLI:
       </P>
       <P>
         Clicking <strong>Apply update</strong> shows a confirmation dialog
@@ -306,7 +307,12 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         version, set <Code>API_IMAGE</Code> and <Code>WEB_IMAGE</Code> in{" "}
         <Code>.env.dist</Code>, e.g. <Code>hideandseeklab/aoox-api:0.1.0-alpha.0</Code>{" "}
         (see the available tags on Docker Hub) — both paths above read the
-        same variables.
+        same variables. An install pinned to a tag never sees the &ldquo;Update
+        tersedia&rdquo; button in the sidebar; the Update aoox page still lists the newest
+        version for information. The panel recognizes the installed tag from the{" "}
+        <Code>API_IMAGE</Code> variable, which the compose file now forwards to the API
+        container (older installs: run <Code>aoox reinstall</Code> so the compose file
+        is refreshed too).
       </P>
       <P>
         <strong>Important limitation</strong>: both <Code>aoox update</Code> and

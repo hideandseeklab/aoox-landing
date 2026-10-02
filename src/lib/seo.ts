@@ -139,6 +139,13 @@ export function pageMetadata({
 }
 
 const GITHUB_URL = "https://github.com/hideandseeklab/aoox-api"
+// Profiles that are really ours (each URL checked to exist) — used as JSON-LD `sameAs`.
+const SAME_AS = [
+  "https://github.com/hideandseeklab",
+  GITHUB_URL,
+  "https://www.npmjs.com/package/@hideandseeklab/aoox",
+  "https://hub.docker.com/u/hideandseeklab",
+]
 
 /**
  * JSON-LD for the homepage (ID + EN): `SoftwareApplication` (what aoox is),
@@ -167,13 +174,13 @@ export function homeJsonLd(lang: Lang) {
           price: "0",
           priceCurrency: "USD",
         },
-        sameAs: [GITHUB_URL],
+        sameAs: SAME_AS,
       },
       {
         "@type": "Organization",
         name: SITE_NAME,
         url: SITE_URL,
-        sameAs: [GITHUB_URL],
+        sameAs: SAME_AS,
       },
       {
         "@type": "WebSite",

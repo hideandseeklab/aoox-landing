@@ -8,29 +8,37 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.5] - 2026-10-02
+
+### Added
+
+- Docs for the new monitoring: remote servers (metrics, container-down and reachability notifications, the status in the server list, and what stays local-only) on the Server remote page; the optional HTTP monitor (settings, how the target is derived and why the host is never typed, redirects, when it stays quiet, notifications, uptime and history) on the Monitoring page; and the two new events on the Notifications page (12 toggles). Indonesian and English.
+
+- **Root directory (monorepo) documentation**: new section in the build types page (what is relative to the folder per build type, an example with three applications, and the limits such as
+  files outside the folder not being available), a "deploy only when the folder changed" section in the webhook page (what it reads and when it deploys anyway), and a pitfall entry in
+  the application page. Indonesian and English.
+
+- **Template documentation updated for 13 templates**: catalog table with the seven new ones (Vaultwarden, Umami, Grafana, Metabase, Directus, Mattermost, Nextcloud), a new "notes per
+  template" section (what each stack contains, PostgreSQL/Redis inside the stack, HTTPS and first-login notes, which ones are heavy), the catalog count on the page, and the template
+  teaser on the home page. Indonesian and English.
+
+- **Odoo Community in the template documentation**: catalog table row, the count updated to 14, and a section entry explaining what the stack contains, where to find the generated master
+  password, creating the first database, securing the database manager afterwards, the single-process mode and its limit, and that it is the LGPLv3 Community Edition without Enterprise
+  modules. Indonesian and English.
+
+- Docs for the application's Environment tab and for the secret source (Infisical): connections in Settings → Integrasi, the "Sumber secret" section (project, environment, path, sync, key preview), `${{secret.KEY}}` references, precedence and what happens when the secret manager is down. Indonesian and English.
+
 ### Changed
 
-- **Full-bleed favicon.** Google Search crops favicons to a circle on a white background, and the old icon (a dark
-  rounded tile with a transparent margin around it) showed up as a small dark square inside a white circle, with white
-  gaps at the edges. `public/favicon.ico` (16/32/48 px), `public/icon.svg` and `public/apple-touch-icon.png` are now
-  regenerated with the whole square canvas filled with the same dark color (`#0c1013`), no rounded corners and no
-  transparent margin, and the `$` glyph (same outline, only scaled and re-centered) at about 59% of the canvas so it stays
-  inside the inscribed circle; it still reads at 16 px. Checked by rendering the icons cropped to a circle on white, dark and
-  light-grey backgrounds. `icon.svg` is only used as the favicon here (the header logo is text and the JSON-LD has no
-  logo), so it was changed in place; the panel keeps its own rounded logo. Browsers and Google cache favicons, so the new
-  one can take a while to show up.
-- **Medium border radius across the whole site.** `--radius` goes from `0` (every corner square) to `0.5rem`,
-  using the existing scale (`sm` 0.6×, `md` 0.8×, `lg` 1×, `xl` 1.4×), the same values as aoox-web. Most of the site
-  is hand-built markup that never used the radius variable, so the change is applied to it explicitly, by role:
-  panels, cards, tables, code blocks, the terminal mockups and the grid-of-cells sections (`gap-px` lines) are
-  `rounded-lg` (with `overflow-hidden` where children have their own background or border, so nothing pokes out of a
-  corner); boxes nested inside a card, version/badge pills, icon boxes, the docs search field, header links,
-  copy/theme/language buttons and the numbered step markers are `rounded-md`; tiny tags, inline code, `kbd` and the
-  changelog badges are `rounded-sm`; the small status dots are circles. Left square on purpose: full-width bars
-  (header, footer, section dividers, docs sidebar rules), rules/accents that are a single side border (docs table of
-  contents, timeline, changelog group headings), the callout's left edge (its accent bar; only the right corners are
-  rounded), the terminal cursor block, the FAQ list (dividers only), the logo, icons and images. Colors, spacing and
-  layout are unchanged.
+- Project metadata for discoverability (no behavior change): `package.json` gets `description`, `keywords`, `homepage`, `repository` and `bugs`; the README links to
+  the docs/changelog and the other repos. Footer "Kode" group now also links `aoox-cli`, npm and Docker Hub, external
+  links use `rel="noopener"` (own links, no `nofollow`/`noreferrer`), the header/docs "GitLab" labels now say GitHub (the
+  URLs already pointed there), and the JSON-LD `sameAs` lists the GitHub org, the api repo, the npm package and the
+  Docker Hub profile (all URLs checked to exist). `BACKLINKS.md` (repo file, not a page) lists the manual steps.
+
+- Docs (ID + EN): installation (pinned tags and the "Update tersedia" button, `API_IMAGE` now forwarded), webhook
+  (`WEBHOOK_VERIFY_GITHUB_IP`) and preview (`PREVIEW_DOMAIN` in `.env.dist`) — with the note that older installs only
+  get the new compose variables through `aoox reinstall`, not `aoox update`.
 
 ### Fixed
 
@@ -43,6 +51,33 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   `/favicon.ico` (16/32/48 px, generated from the same `$` mark by a one-off script, no new dependency) with
   `sizes="48x48"` first, then `/icon.svg`, then the existing `apple-touch-icon.png`. `icon.svg` moved from
   `src/app/` to `public/` (same file). Checked across every built page (60, including `404.html`).
+
+### UI UX Improvement
+
+- **`→` in running text became icons.** Arrows between the steps of a path or flow in a sentence (docs tables, lists, steps: "Pengaturan → Akses") are a small chevron, `PathArrow`, and the prev/next links in docs (`←`/`→`) and the hero version pill / "Baca docs" links use `ArrowLeft`/`ArrowRight` that nudge on hover; both live in `components/arrows.tsx`. `PathArrow` carries a visually hidden "→" (and its own spaces), so screen readers and copy-paste still get "Settings → Audit log" ("→" rather than ">", which reads as "greater than"). The hidden text sits in a `relative` wrapper: `sr-only` is absolutely positioned and otherwise escaped the `overflow-x-auto` of wide table cells, which made `/docs/notifikasi` and `/docs/troubleshooting` scroll sideways at 375 px. Kept as `→` on purpose: code blocks (`Pre`), inline code, terminal-style mockups (hero, self-host, build options, blue → green), code comments and SEO metadata (`<title>`, description, OG — unchanged, checked for all pages).
+
+- **Full-bleed favicon.** Google Search crops favicons to a circle on a white background, and the old icon (a dark
+  rounded tile with a transparent margin around it) showed up as a small dark square inside a white circle, with white
+  gaps at the edges. `public/favicon.ico` (16/32/48 px), `public/icon.svg` and `public/apple-touch-icon.png` are now
+  regenerated with the whole square canvas filled with the same dark color (`#0c1013`), no rounded corners and no
+  transparent margin, and the `$` glyph (same outline, only scaled and re-centered) at about 59% of the canvas so it stays
+  inside the inscribed circle; it still reads at 16 px. Checked by rendering the icons cropped to a circle on white, dark and
+  light-grey backgrounds. `icon.svg` is only used as the favicon here (the header logo is text and the JSON-LD has no
+  logo), so it was changed in place; the panel keeps its own rounded logo. Browsers and Google cache favicons, so the new
+  one can take a while to show up.
+
+- **Medium border radius across the whole site.** `--radius` goes from `0` (every corner square) to `0.5rem`,
+  using the existing scale (`sm` 0.6×, `md` 0.8×, `lg` 1×, `xl` 1.4×), the same values as aoox-web. Most of the site
+  is hand-built markup that never used the radius variable, so the change is applied to it explicitly, by role:
+  panels, cards, tables, code blocks, the terminal mockups and the grid-of-cells sections (`gap-px` lines) are
+  `rounded-lg` (with `overflow-hidden` where children have their own background or border, so nothing pokes out of a
+  corner); boxes nested inside a card, version/badge pills, icon boxes, the docs search field, header links,
+  copy/theme/language buttons and the numbered step markers are `rounded-md`; tiny tags, inline code, `kbd` and the
+  changelog badges are `rounded-sm`; the small status dots are circles. Left square on purpose: full-width bars
+  (header, footer, section dividers, docs sidebar rules), rules/accents that are a single side border (docs table of
+  contents, timeline, changelog group headings), the callout's left edge (its accent bar; only the right corners are
+  rounded), the terminal cursor block, the FAQ list (dividers only), the logo, icons and images. Colors, spacing and
+  layout are unchanged.
 
 ## [0.1.0-alpha.4] - 2026-09-29
 
@@ -285,7 +320,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.4...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.5...HEAD
+[0.1.0-alpha.5]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.4...v0.1.0-alpha.5
 [0.1.0-alpha.4]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.3...v0.1.0-alpha.4
 [0.1.0-alpha.3]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.2...v0.1.0-alpha.3
 [0.1.0-alpha.2]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.1...v0.1.0-alpha.2

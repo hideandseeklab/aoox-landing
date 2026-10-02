@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -96,13 +97,13 @@ export default function Page() {
           <Table
             head={["Provider", "Token type", "Minimum scope"]}
             rows={[
-              ["GitHub", "Fine-grained or classic PAT", <>Classic: <Code>repo</Code>. Fine-grained: Contents → Read.</>],
+              ["GitHub", "Fine-grained or classic PAT", <>Classic: <Code>repo</Code>. Fine-grained: Contents<PathArrow />Read.</>],
               ["GitLab", "Project/personal access token", <><Code>read_repository</Code></>],
               ["Generic", "Username + HTTP basic password/token", "Read access"],
             ]}
           />
         </Step>
-        <Step title="Settings → Git credentials → New Git credential (owner/admin)">
+        <Step title={<>Settings<PathArrow />Git credentials<PathArrow />New Git credential (owner/admin)</>}>
           <P>
             Choose a <strong>Provider</strong>, fill in a <strong>Username</strong>{" "}
             and <strong>Password / token</strong>. The token is stored encrypted
@@ -210,7 +211,7 @@ export default function Page() {
       </Callout>
       <H3>GitHub</H3>
       <Steps>
-        <Step title="Repo → Settings → Webhooks">
+        <Step title={<>Repo<PathArrow />Settings<PathArrow />Webhooks</>}>
           <P>Click the webhook aoox uses (Edit).</P>
         </Step>
         <Step title="Recent Deliveries tab">
@@ -229,13 +230,13 @@ export default function Page() {
       </Steps>
       <H3>GitLab</H3>
       <Steps>
-        <Step title="Settings → Webhooks → Edit">
+        <Step title={<>Settings<PathArrow />Webhooks<PathArrow />Edit</>}>
           <P>Open the <strong>Recent events</strong> section below the form.</P>
         </Step>
         <Step title="Resend request">
           <P>
             On the failed event&apos;s row. To trigger a fresh delivery with no
-            old event at all: the <strong>Test</strong> button → pick{" "}
+            old event at all: the <strong>Test</strong> button<PathArrow />pick{" "}
             <strong>Push events</strong>, no real push needed.
           </P>
         </Step>
@@ -254,11 +255,11 @@ export default function Page() {
         <Step title="Paste it into the provider">
           <Ul>
             <li>
-              GitHub: the <strong>Secret</strong> field → header{" "}
+              GitHub: the <strong>Secret</strong> field<PathArrow />header{" "}
               <Code>X-Hub-Signature-256</Code> = <Code>sha256=HMAC-SHA256(secret, raw body)</Code>.
             </li>
             <li>
-              GitLab: the <strong>Secret token</strong> field → header{" "}
+              GitLab: the <strong>Secret token</strong> field<PathArrow />header{" "}
               <Code>X-Gitlab-Token</Code> = the secret as-is.
             </li>
           </Ul>
@@ -282,6 +283,45 @@ export default function Page() {
         <li>
           The comparison uses <Code>timingSafeEqual</Code>; the HMAC is
           computed over the exact request body bytes, not the parsed JSON.
+        </li>
+        <li>
+          Optional extra layer for GitHub: put{" "}
+          <Code>WEBHOOK_VERIFY_GITHUB_IP=true</Code> in <Code>.env.dist</Code> so a
+          GitHub delivery for an app with a secret must also come from GitHub&apos;s
+          published IP ranges (empty = off; don&apos;t enable it for GitHub Enterprise
+          Server or GitLab). An install created before this variable was forwarded
+          only gets it after <Code>aoox reinstall</Code>.
+        </li>
+      </Ul>
+
+      <H2 id="monorepo">Monorepo: deploy only when the folder changed</H2>
+      <P>
+        An application with a <strong>Root directory</strong> (see{" "}
+        <DocLink href="/docs/build#root-directory">Build types</DocLink>) has
+        the switch <strong>Webhook: deploy only when files in this folder change</strong>.
+        When it is on, a push that only touches other folders is answered{" "}
+        <Code>ignored</Code> and no deployment starts. It is off by default, so
+        the old behaviour (every push to the branch deploys) is unchanged.
+      </P>
+      <Ul>
+        <li>
+          aoox reads the per-commit file lists in GitHub and GitLab push
+          payloads (<Code>added</Code>, <Code>modified</Code>, <Code>removed</Code>).
+        </li>
+        <li>
+          <strong>When it cannot tell, aoox deploys anyway.</strong> That covers
+          a payload without file lists, a commit without file lists (merge
+          commits on GitHub), pushes of 20 or more commits (the payload cap of
+          both providers), force pushes, and new branches.
+        </li>
+        <li>
+          Changes outside the folder the build uses (for example{" "}
+          <Code>packages/shared</Code>) do not trigger a deploy. Turn the switch
+          off for applications that depend on files outside their folder.
+        </li>
+        <li>
+          It applies to pushes to the application branch; pull request events
+          for previews are not filtered.
         </li>
       </Ul>
 

@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -60,7 +61,7 @@ const INSTALASI: Row[] = [
   [
     <>Registry/Proxy card: <em>Docker unreachable</em> / permission denied on the socket</>,
     <><Code>DOCKER_GID</Code> is wrong or the socket isn&apos;t mounted.</>,
-    <><Code>stat -c %g /var/run/docker.sock</Code> → set <Code>DOCKER_GID</Code> → recreate the API.</>,
+    <><Code>stat -c %g /var/run/docker.sock</Code> <PathArrow />set <Code>DOCKER_GID</Code> <PathArrow />recreate the API.</>,
   ],
   [
     <>Everyone gets logged out suddenly</>,
@@ -141,12 +142,12 @@ const DOMAIN: Row[] = [
   [
     <>Domain tab: <em>Proxy isn&apos;t running</em></>,
     "Traefik hasn't been provisioned.",
-    <>Settings → Reverse proxy → provision (owner).</>,
+    <>Settings<PathArrow />Reverse proxy<PathArrow />provision (owner).</>,
   ],
   [
     <>Panel domain saved, DNS & <Code>ufw</Code> are fine, browser still says <em>unable to connect</em></>,
     <>The proxy wasn&apos;t running at the time (now started automatically when the domain is saved), or ports 80/443 are blocked by your <strong>VPS provider&apos;s firewall/security group</strong> — <Code>ufw inactive</Code> ≠ ports open to the public.</>,
-    <><Code>docker ps --filter name=aoox-proxy</Code> should show <Code>Up</Code>; open 80/443 in your VPS provider&apos;s panel. See <DocLink href="/en/docs/domain-panel#jebakan">Domain for the panel → Common pitfalls</DocLink>.</>,
+    <><Code>docker ps --filter name=aoox-proxy</Code> should show <Code>Up</Code>; open 80/443 in your VPS provider&apos;s panel. See <DocLink href="/en/docs/domain-panel#jebakan">Domain for the panel<PathArrow />Common pitfalls</DocLink>.</>,
   ],
   [
     <>404 page not found from Traefik</>,
@@ -216,7 +217,7 @@ const SERVER: Row[] = [
   [
     <>Terminal: <Code>TERMINAL_SSH_USER is not set</Code> (older versions)</>,
     <>Older installs have no such line in <Code>.env.dist</Code>, and updates never touch that file. Recent versions fall back to <Code>root</Code> when it&apos;s empty.</>,
-    <>Run <DocLink href="/en/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (adds the missing line without touching data). Without the CLI: add <Code>TERMINAL_SSH_USER=root</Code> to <Code>.env.dist</Code> or use the Environment page. If the login must be another user, set it from Settings → Infrastructure → <strong>Environment</strong> (owner, no SSH needed), or manually in <Code>.env.dist</Code> then restart the stack.</>,
+    <>Run <DocLink href="/en/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (adds the missing line without touching data). Without the CLI: add <Code>TERMINAL_SSH_USER=root</Code> to <Code>.env.dist</Code> or use the Environment page. If the login must be another user, set it from Settings<PathArrow />Infrastructure<PathArrow /><strong>Environment</strong> (owner, no SSH needed), or manually in <Code>.env.dist</Code> then restart the stack.</>,
   ],
   [
     <>Terminal: <Code>ECONNREFUSED</Code> to host.docker.internal</>,
@@ -274,7 +275,7 @@ const LAINNYA: Row[] = [
   [
     <>Disk full (or a low-disk notification)</>,
     "Old deployment images, dangling images, build cache, local backups.",
-    <>Settings → Docker disk → <strong>Clean up now</strong>; lower deployment history & backup retention counts; run registry GC.</>,
+    <>Settings<PathArrow />Docker disk<PathArrow /><strong>Clean up now</strong>; lower deployment history & backup retention counts; run registry GC.</>,
   ],
   [
     <>Compose stack: a service can&apos;t see the env</>,

@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -218,7 +219,7 @@ Buat akun owner pertama di /setup.`}</Pre>
       <Steps>
         <Step title="Buat API token di panel">
           <P>
-            <strong>Settings → API token</strong>: beri nama (mis.{" "}
+            <strong>Settings<PathArrow />API token</strong>: beri nama (mis.{" "}
             <Code>laptop-saya</Code>), pilih kedaluwarsa, lalu salin token{" "}
             <Code>aoox_…</Code> yang hanya tampil sekali. Token bertindak{" "}
             <strong>sebagai pemiliknya</strong> dengan peran yang sama — lihat{" "}
@@ -301,7 +302,7 @@ Deployed: localhost:5000/toko/shop:a1b2c3d`}</Pre>
 
       <H2 id="domain">Ganti domain panel</H2>
       <P>
-        Alternatif dari Settings → Domain panel di dashboard — cocok untuk
+        Alternatif dari Settings<PathArrow />Domain panel di dashboard — cocok untuk
         skrip provisioning. Lihat{" "}
         <DocLink href="/docs/domain-panel">Domain untuk panel</DocLink> untuk
         detail apa yang terjadi di baliknya.
@@ -439,7 +440,7 @@ $ sudo aoox reinstall`}</Pre>
       />
       <Ul>
         <li>
-          Urutan: flag → environment → isi <Code>config.json</Code>. Bila tidak
+          Urutan: flag<PathArrow />environment<PathArrow />isi <Code>config.json</Code>. Bila tidak
           ada yang lengkap, CLI menyuruh menjalankan <Code>aoox login</Code>.
         </li>
         <li>
@@ -471,7 +472,7 @@ $ sudo aoox reinstall`}</Pre>
         rows={[
           [
             <>Token ditolak panel (401)</>,
-            <>Token kedaluwarsa, dicabut, atau salah salin. Buat token baru di Settings → API token.</>,
+            <>Token kedaluwarsa, dicabut, atau salah salin. Buat token baru di Settings<PathArrow />API token.</>,
           ],
           [
             <>Tidak ada terminal interaktif</>,

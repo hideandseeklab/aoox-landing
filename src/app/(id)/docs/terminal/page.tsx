@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -30,7 +31,7 @@ export const metadata: Metadata = pageMetadata({
 const SUMMARY = [
   { k: "Siapa", v: "Owner & admin saja" },
   { k: "Ke mana", v: "Host aoox (SSH) atau server remote" },
-  { k: "Klien", v: "xterm.js di browser → Socket.IO → SSH" },
+  { k: "Klien", v: <>xterm.js di browser<PathArrow />Socket.IO<PathArrow />SSH</> },
 ]
 
 const FLOW = [
@@ -113,14 +114,14 @@ TERMINAL_SSH_USER=deploy        # user host yang dipakai terminal`}</Pre>
             <Code>TERMINAL_SSH_USER</Code> kosong, terminal masuk sebagai{" "}
             <Code>root</Code> (default installer) — kartu Terminal menandainya
             sebagai user default. Kalau koneksi gagal, terminal menampilkan
-            tautan ke <strong>Infrastruktur → Environment</strong> untuk
+            tautan ke <strong>Infrastruktur<PathArrow />Environment</strong> untuk
             memperbaiki pengaturannya.
           </P>
         </Step>
         <Step title="Otorisasi key platform">
           <P>
             API membuat keypair ed25519 di <Code>./secrets</Code> saat pertama
-            dibutuhkan. <strong>Settings → Terminal</strong> menampilkan public
+            dibutuhkan. <strong>Settings<PathArrow />Terminal</strong> menampilkan public
             key dan perintah untuk dijalankan <strong>sekali</strong> di host
             sebagai <Code>TERMINAL_SSH_USER</Code>:
           </P>
@@ -147,7 +148,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
           [<Code key="3">TERMINAL_SSH_PASSWORD</Code>, "Password SSH", "Kurang aman — hanya untuk uji cepat."],
         ]}
       />
-      <P>Prioritas: key eksplisit → password → key platform (default).</P>
+      <P>Prioritas: key eksplisit<PathArrow />password<PathArrow />key platform (default).</P>
 
       <H2 id="pakai">Tips pemakaian</H2>
       <Ul>

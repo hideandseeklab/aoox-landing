@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight, Boxes, Globe, Rocket, type LucideIcon } from "lucide-react"
@@ -98,7 +99,7 @@ export default function Page() {
       <div className="flex flex-col gap-px border border-border bg-border text-xs rounded-lg overflow-hidden">
         <div className="flex items-center justify-between bg-muted/40 px-4 py-2 text-muted-foreground">
           <span>browser</span>
-          <span>→ WEB_ORIGIN (:3000) · PUBLIC_API_URL (:3001)</span>
+          <span><PathArrow />WEB_ORIGIN (:3000) · PUBLIC_API_URL (:3001)</span>
         </div>
         <div className="grid gap-px bg-border sm:grid-cols-3">
           {ARCH.map((svc) => (
@@ -112,7 +113,7 @@ export default function Page() {
           ))}
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 bg-background px-4 py-3">
-          <span className="text-muted-foreground">Docker Engine on the host →</span>
+          <span className="text-muted-foreground">Docker Engine on the host<PathArrow /></span>
           {MANAGED.map((c) => (
             <span key={c} className="border border-border px-1.5 py-px text-muted-foreground rounded-sm">
               aoox-{c}
@@ -145,7 +146,7 @@ export default function Page() {
           ],
           [
             <strong key="d">Deployment</strong>,
-            "One build → push → start run for an application. Has its own log and status; can be rolled back.",
+            <>One build<PathArrow />push<PathArrow />start run for an application. Has its own log and status; can be rolled back.</>,
           ],
           [
             <strong key="c">Compose stack</strong>,
@@ -173,12 +174,12 @@ export default function Page() {
             <Link href="/en/docs/instalasi" className="text-foreground underline underline-offset-4">
               Installation
             </Link>{" "}
-            → open <Code>/setup</Code>.
+            <PathArrow />open <Code>/setup</Code>.
           </P>
         </Step>
         <Step title="Provision the local registry (and the proxy if you'll use a domain)">
           <P>
-            The <strong>Registry</strong> and <strong>Settings → Reverse
+            The <strong>Registry</strong> and <strong>Settings<PathArrow />Reverse
             proxy</strong> menus. The registry is required before the first
             deploy —{" "}
             <Link href="/en/docs/registry" className="text-foreground underline underline-offset-4">
@@ -189,7 +190,7 @@ export default function Page() {
         </Step>
         <Step title="Create a project, then an application from a Git repo">
           <P>
-            <strong>Projects → New project → New application</strong>, click{" "}
+            <strong>Projects<PathArrow />New project<PathArrow />New application</strong>, click{" "}
             <strong>Deploy</strong> —{" "}
             <Link href="/en/docs/aplikasi" className="text-foreground underline underline-offset-4">
               Creating an application

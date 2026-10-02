@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -60,7 +61,7 @@ const INSTALASI: Row[] = [
   [
     <>Kartu Registry/Proxy: <em>Docker tidak terjangkau</em> / permission denied di socket</>,
     <><Code>DOCKER_GID</Code> salah atau socket tidak di-mount.</>,
-    <><Code>stat -c %g /var/run/docker.sock</Code> → set <Code>DOCKER_GID</Code> → recreate API.</>,
+    <><Code>stat -c %g /var/run/docker.sock</Code> <PathArrow />set <Code>DOCKER_GID</Code> <PathArrow />recreate API.</>,
   ],
   [
     <>Semua pengguna logout mendadak</>,
@@ -141,12 +142,12 @@ const DOMAIN: Row[] = [
   [
     <>Tab Domain: <em>Proxy belum berjalan</em></>,
     "Traefik belum diaktifkan.",
-    <>Settings → Reverse proxy → aktifkan (owner).</>,
+    <>Settings<PathArrow />Reverse proxy<PathArrow />aktifkan (owner).</>,
   ],
   [
     <>Domain panel disimpan, DNS & <Code>ufw</Code> sudah OK, browser tetap <em>unable to connect</em></>,
     <>Proxy belum jalan saat itu (kini otomatis dinyalakan saat simpan domain), atau port 80/443 diblokir <strong>firewall/security group provider VPS</strong> — <Code>ufw inactive</Code> ≠ port terbuka ke publik.</>,
-    <><Code>docker ps --filter name=aoox-proxy</Code> harus <Code>Up</Code>; buka 80/443 di panel provider VPS. Lihat <DocLink href="/docs/domain-panel#jebakan">Domain untuk panel → Jebakan umum</DocLink>.</>,
+    <><Code>docker ps --filter name=aoox-proxy</Code> harus <Code>Up</Code>; buka 80/443 di panel provider VPS. Lihat <DocLink href="/docs/domain-panel#jebakan">Domain untuk panel<PathArrow />Jebakan umum</DocLink>.</>,
   ],
   [
     <>404 page not found dari Traefik</>,
@@ -217,7 +218,7 @@ const SERVER: Row[] = [
   [
     <>Terminal: <Code>TERMINAL_SSH_USER is not set</Code> (versi lama)</>,
     <>Instalasi lama tidak punya baris ini di <Code>.env.dist</Code>, dan update tidak menyentuh file itu. Versi terbaru otomatis memakai <Code>root</Code> bila kosong.</>,
-    <>Jalankan <DocLink href="/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (menambah baris yang hilang tanpa menyentuh data). Tanpa CLI: tambah <Code>TERMINAL_SSH_USER=root</Code> di <Code>.env.dist</Code> atau pakai halaman Environment. Kalau login harus user lain, isi lewat Settings → Infrastruktur → <strong>Environment</strong> (owner, tanpa SSH), atau manual di <Code>.env.dist</Code> lalu restart stack.</>,
+    <>Jalankan <DocLink href="/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (menambah baris yang hilang tanpa menyentuh data). Tanpa CLI: tambah <Code>TERMINAL_SSH_USER=root</Code> di <Code>.env.dist</Code> atau pakai halaman Environment. Kalau login harus user lain, isi lewat Settings<PathArrow />Infrastruktur<PathArrow /><strong>Environment</strong> (owner, tanpa SSH), atau manual di <Code>.env.dist</Code> lalu restart stack.</>,
   ],
   [
     <>Terminal: <Code>ECONNREFUSED</Code> ke host.docker.internal</>,
@@ -275,7 +276,7 @@ const LAINNYA: Row[] = [
   [
     <>Disk penuh (atau notifikasi disk hampir penuh)</>,
     "Image deployment lama, dangling image, build cache, backup lokal.",
-    <>Settings → Disk Docker → <strong>Bersihkan sekarang</strong>; turunkan Riwayat deployment & jumlah simpan backup; GC registry.</>,
+    <>Settings<PathArrow />Disk Docker<PathArrow /><strong>Bersihkan sekarang</strong>; turunkan Riwayat deployment & jumlah simpan backup; GC registry.</>,
   ],
   [
     <>Stack compose: service tidak melihat env</>,

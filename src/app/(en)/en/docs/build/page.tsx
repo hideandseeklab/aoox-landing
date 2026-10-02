@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -43,8 +44,8 @@ const DECISION = [
 const NIXPACKS_FLOW = [
   { s: "helper", d: "the aoox-nixpacks image is built once (debian + git + the nixpacks CLI)" },
   { s: "clone", d: "a one-shot container runs git clone --depth 1 (credentials never leave the helper)" },
-  { s: "plan", d: "nixpacks build → writes .nixpacks/Dockerfile" },
-  { s: "build", d: "the source is tarred → POST /build with the generated Dockerfile" },
+  { s: "plan", d: <>nixpacks build<PathArrow />writes .nixpacks/Dockerfile</> },
+  { s: "build", d: <>the source is tarred<PathArrow />POST /build with the generated Dockerfile</> },
 ]
 
 const RAILPACK_FLOW = [
@@ -97,15 +98,15 @@ export default function Page() {
           >
             <span className="text-foreground">{row.q}</span>
             <span className="text-muted-foreground">
-              yes → <span className="text-primary-foreground dark:text-primary">{row.yes}</span>
+              yes<PathArrow /><span className="text-primary-foreground dark:text-primary">{row.yes}</span>
             </span>
             <span className="text-muted-foreground">
               {row.no ? (
                 <>
-                  no → <span className="text-foreground">{row.no}</span>
+                  no<PathArrow /><span className="text-foreground">{row.no}</span>
                 </>
               ) : (
-                "no → keep going"
+                <>no<PathArrow />keep going</>
               )}
             </span>
           </div>
@@ -126,7 +127,7 @@ export default function Page() {
 
       <H2 id="dockerfile">Dockerfile</H2>
       <P>
-        Choose <strong>Build method → Dockerfile</strong> and set the{" "}
+        Choose <strong>Build method<PathArrow />Dockerfile</strong> and set the{" "}
         <strong>Dockerfile path in the repo</strong> (default <Code>Dockerfile</Code> at
         the root). The build runs directly on the Docker daemon from the Git URL
         (<Code>POST /build?remote=…</Code>) — the daemon does the cloning, the API
@@ -159,7 +160,7 @@ CMD ["node", "server.js"]`}</Pre>
 
       <H2 id="nixpacks">Nixpacks</H2>
       <P>
-        Choose <strong>Build method → Nixpacks</strong> for repos without a
+        Choose <strong>Build method<PathArrow />Nixpacks</strong> for repos without a
         Dockerfile. There&apos;s no nixpacks binary on the host or in the API image —
         everything runs in a container:
       </P>
@@ -205,7 +206,7 @@ NIXPACKS_START_CMD=node server.js`}</Pre>
 
       <H2 id="railpack">Railpack</H2>
       <P>
-        Choose <strong>Build method → Railpack</strong> for repos without a
+        Choose <strong>Build method<PathArrow />Railpack</strong> for repos without a
         Dockerfile that get deployed repeatedly and where you want dependency
         caching to stick around. Unlike Nixpacks, Railpack executes its build
         plan through a long-lived <Code>moby/buildkit</Code> container with its
@@ -246,7 +247,7 @@ NIXPACKS_START_CMD=node server.js`}</Pre>
 
       <H2 id="static">Static site (nginx)</H2>
       <P>
-        Choose <strong>Build method → Static site (nginx)</strong> for repos
+        Choose <strong>Build method<PathArrow />Static site (nginx)</strong> for repos
         whose final output is just static files. aoox builds a two-stage
         Dockerfile: an (optional) build stage on <Code>node:22-alpine</Code>, then{" "}
         <Code>nginx:1.27-alpine</Code> serving the output folder on port 80 — the create form fills in
@@ -266,7 +267,7 @@ NIXPACKS_START_CMD=node server.js`}</Pre>
           [
             "Output folder",
             <>
-              Relative to the repo root: <Code>dist</Code> (default), <Code>build</Code>,{" "}
+              Relative to the Root directory (repo root when empty): <Code>dist</Code> (default), <Code>build</Code>,{" "}
               <Code>out</Code>, or <Code>.</Code> for the whole repo.
             </>,
           ],
@@ -310,6 +311,62 @@ EXPOSE 80`}</Pre>
           The Node version is pinned to 22 by aoox; not yet changeable from the UI.
         </li>
       </Ul>
+
+      <H2 id="root-directory">Root directory (monorepo)</H2>
+      <P>
+        A monorepo keeps several applications in one repository (for example{" "}
+        <Code>apps/web</Code> and <Code>services/api</Code>). Set{" "}
+        <strong>Root directory</strong> in the Git part of the application form
+        to the folder you want built; empty means the repository root. It
+        applies to every build type, pull request previews included.
+      </P>
+      <Table
+        head={["Build type", "What is relative to the Root directory"]}
+        rows={[
+          [
+            "Dockerfile",
+            <>
+              The build context is that folder (<Code>POST /build?remote=URL#branch:folder</Code>),
+              and the <strong>Dockerfile</strong> path is relative to the same folder.
+            </>,
+          ],
+          ["Nixpacks", <>Stack detection and the build run in that folder; <Code>.nixpacks/Dockerfile</Code> is written there.</>],
+          ["Railpack", <><Code>railpack build</Code> runs in that folder.</>],
+          ["Static site", <>The build command runs in that folder and the <strong>Output folder</strong> is relative to it too.</>],
+        ]}
+      />
+      <Pre title="Example: one repo, three applications">{`apps/web        Root directory: apps/web       (Nixpacks)
+services/api    Root directory: services/api   (Dockerfile at services/api/Dockerfile)
+apps/site       Root directory: apps/site      (Static site, output: .)`}</Pre>
+      <Callout kind="warn" title="Limits">
+        <Ul>
+          <li>
+            <strong>Files outside the folder are not available during the build.</strong>{" "}
+            A Dockerfile in <Code>apps/web</Code> cannot{" "}
+            <Code>COPY ../../packages/shared</Code>. Bundle shared packages
+            first, or use a Dockerfile at the repository root with an empty
+            Root directory.
+          </li>
+          <li>
+            Format: a relative folder, only letters, digits, <Code>.</Code>,{" "}
+            <Code>_</Code>, <Code>-</Code> separated by <Code>/</Code>; no{" "}
+            <Code>..</Code> and no leading or trailing <Code>/</Code>.
+          </li>
+          <li>
+            A folder that does not exist on that branch fails the deployment
+            with <em>Root directory … was not found</em>; the old container
+            keeps running.
+          </li>
+          <li>
+            Symbolic links in the repository that point outside the clone are
+            rejected.
+          </li>
+        </Ul>
+      </Callout>
+      <P>
+        Want deploys only when that folder changed? See{" "}
+        <DocLink href="/docs/webhook#monorepo">Webhook for monorepos</DocLink>.
+      </P>
 
       <H2 id="build-args">Build args</H2>
       <P>

@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -27,7 +28,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const SUMMARY = [
-  { k: "Where", v: "Database page → Data tab" },
+  { k: "Where", v: <>Database page<PathArrow />Data tab</> },
   { k: "Can do", v: "View/edit/delete rows, table structure, queries, CSV, SQL export/import" },
   { k: "Limits", v: "500 rows, 15 seconds, 60 queries/min, 50-entry history" },
 ]
@@ -151,7 +152,7 @@ export default function Page() {
           [
             <strong key="m">member</strong>,
             <>Statements starting with <Code>SELECT</Code>, <Code>WITH</Code>, <Code>SHOW</Code>, <Code>EXPLAIN</Code>, <Code>DESCRIBE</Code>, <Code>VALUES</Code>, <Code>TABLE</Code>.</>,
-            <>Anything else → 403, <em>and</em> the engine session is put into read-only mode (<Code>default_transaction_read_only</Code> / <Code>SET SESSION TRANSACTION READ ONLY</Code>) — even <Code>WITH … DELETE</Code> fails at the engine.</>,
+            <>Anything else<PathArrow />403, <em>and</em> the engine session is put into read-only mode (<Code>default_transaction_read_only</Code> / <Code>SET SESSION TRANSACTION READ ONLY</Code>) — even <Code>WITH … DELETE</Code> fails at the engine.</>,
           ],
           [
             <strong key="oa">owner / admin</strong>,

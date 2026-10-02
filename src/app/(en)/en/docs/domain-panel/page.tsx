@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -125,7 +126,7 @@ api.panel.example.com.   A   203.0.113.10`}</Pre>
           <Pre title=".env.dist">{`INSTALL_DIR=/opt/aoox   # absolute path of the docker-compose.dist.yml folder on this host`}</Pre>
           <Pre>{`docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         </Step>
-        <Step title="Settings → Domain panel (owner)">
+        <Step title={<>Settings<PathArrow />Domain panel (owner)</>}>
           <P>
             Fill in the dashboard domain, the API domain, and an ACME email,
             then <strong>Save &amp; apply</strong>. The panel writes{" "}
@@ -205,8 +206,8 @@ PUBLIC_API_URL=https://api.panel.example.com`}</Pre>
 
         <Step title="Provision the reverse proxy (if not already)">
           <P>
-            Log in (still over IP:3000 if needed) →{" "}
-            <strong>Settings → Reverse proxy (Traefik)</strong> → provision
+            Log in (still over IP:3000 if needed)<PathArrow />
+            <strong>Settings<PathArrow />Reverse proxy (Traefik)</strong> <PathArrow />provision
             (owner). A proxy that&apos;s already provisioned <em>without</em>{" "}
             <Code>PROXY_ACME_EMAIL</Code> must be removed and provisioned
             again for the ACME resolver to activate.
@@ -274,7 +275,7 @@ curl -s https://api.panel.example.com/auth/setup-status   # {"needsSetup":false}
           ["Domain works, then disappears after an update", "up -d without -f docker-compose.domain.yml. Always include both files."],
           ["Login succeeds but is immediately logged out / 401", "WEB_ORIGIN is still http or a different host — the Secure cookie/origin don't match. Fix it, up -d, log in again."],
           ["Terminal: origin not allowed", "Same as above: WEB_ORIGIN ≠ the browser's URL."],
-          ["Traefik's default certificate", "PROXY_ACME_EMAIL was empty at provision time, DNS isn't correct yet, or port 80 is closed. Remove the proxy → provision again once fixed."],
+          ["Traefik's default certificate", <>{"PROXY_ACME_EMAIL was empty at provision time, DNS isn't correct yet, or port 80 is closed. Remove the proxy"}<PathArrow />provision again once fixed.</>],
           ["Logs/terminal don't stream, other pages are fine", "PUBLIC_API_URL isn't reachable from the browser (WebSockets blocked by a proxy in front)."],
           [
             "Domain saved, DNS & the OS firewall (ufw) are fine, but the browser says \"unable to connect\"",

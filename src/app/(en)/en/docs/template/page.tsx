@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -27,7 +28,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const SUMMARY = [
-  { k: "Catalog", v: "6 templates, bundled inside aoox" },
+  { k: "Catalog", v: "14 templates, bundled inside aoox" },
   { k: "Result", v: "A compose stack (source: template)" },
   { k: "Secrets", v: "Passwords/secrets generated automatically" },
 ]
@@ -39,6 +40,14 @@ const CATALOG = [
   { id: "uptime-kuma", ver: "1", untuk: "Uptime monitoring", isi: "—", service: "uptime-kuma :3001" },
   { id: "minio", ver: "latest", untuk: "S3 object storage — can serve as a backup destination", isi: "Root user has a default", service: "Console :9001 · S3 API :9000" },
   { id: "gitea", ver: "1.24", untuk: "Lightweight Git hosting", isi: "Public URL", service: "gitea :3000" },
+  { id: "vaultwarden", ver: "1.37", untuk: "Password manager (Bitwarden compatible)", isi: "Public URL (HTTPS)", service: "vaultwarden :80" },
+  { id: "umami", ver: "2.20", untuk: "Privacy-friendly web analytics + PostgreSQL", isi: "—", service: "umami :3000" },
+  { id: "grafana", ver: "13.0", untuk: "Metrics and log dashboards", isi: "Public URL", service: "grafana :3000" },
+  { id: "metabase", ver: "0.63", untuk: "Business intelligence + PostgreSQL", isi: "Public URL", service: "metabase :3000" },
+  { id: "directus", ver: "12.4", untuk: "Headless CMS / data API + PostgreSQL", isi: "Public URL, admin email", service: "directus :8055" },
+  { id: "mattermost", ver: "11.11", untuk: "Team chat + PostgreSQL", isi: "Public URL", service: "mattermost :8065" },
+  { id: "nextcloud", ver: "32", untuk: "Files and collaboration + PostgreSQL, Redis, cron", isi: "Domain", service: "nextcloud :80" },
+  { id: "odoo", ver: "19.0", untuk: "ERP / all-in-one business suite (Community) + PostgreSQL", isi: "— (master password is generated)", service: "odoo :8069" },
 ]
 
 const NEXT = [
@@ -97,9 +106,32 @@ export default function Page() {
         generated automatically (alphanumeric) when left blank.
       </P>
 
+      <H2 id="catatan">Notes per template</H2>
+      <P>
+        Templates that need a database ship <strong>their own PostgreSQL inside
+        the stack</strong> (not a managed database), with named volumes for the
+        data and health checks so the app only starts once the database is
+        ready. Image versions are pinned to a specific tag, not{" "}
+        <Code>latest</Code>. Licenses differ per project; check the project
+        website before using one commercially.
+      </P>
+      <Table
+        head={["Template", "Stack contents and what to know"]}
+        rows={[
+          ["vaultwarden", <>One container, data in SQLite. The web vault needs HTTPS (except on localhost), so enter the public URL as <Code>https://…</Code>. The <Code>/admin</Code> token is generated; turn sign-ups off (<Code>SIGNUPS_ALLOWED=false</Code>) once your account exists.</>],
+          ["umami", <>Umami + PostgreSQL. Umami&apos;s built-in first login is <Code>admin</Code> / <Code>umami</Code>; change it right away.</>],
+          ["grafana", <>One container (built-in SQLite). The admin username and password are in the stack env.</>],
+          ["metabase", <>Metabase + PostgreSQL for its own application data (not the data you analyse). It is a Java app, so the first start takes a few minutes and uses a fair amount of RAM. The credential encryption key is generated; do not change it once in use.</>],
+          ["directus", <>Directus + PostgreSQL. The first admin account is created from the email you enter and the password in the stack env; <Code>KEY</Code> and <Code>SECRET</Code> are generated.</>],
+          ["mattermost", <>Mattermost Team Edition + PostgreSQL. The first account is created on the web and becomes the system admin.</>],
+          ["nextcloud", <>Nextcloud (Apache) + PostgreSQL + Redis (cache and file locking) + a separate <Code>cron</Code> container for background jobs. Enter the domain without <Code>https://</Code>. The public protocol defaults to <Code>https</Code>; use <Code>http</Code> only for local tests. The first install takes longer, and it is the heaviest template.</>],
+          ["odoo", <>Odoo <strong>Community</strong> 19.0 (LGPLv3; no Enterprise modules, which are proprietary) + PostgreSQL 16. Open the site: the first page asks for the <em>Master Password</em>, a database name, an email and an admin password. The <strong>master password</strong> is generated; find it on the stack page, <strong>Pengaturan</strong> tab, environment section, <strong>Tampilkan nilai</strong> (the <Code>MASTER_PASSWORD</Code> variable). It runs as <strong>a single process without workers</strong> (<Code>workers = 0</Code>), fine for small use; multiple workers with a separate websocket route are not set up. <Code>proxy_mode</Code> is on so the https scheme and redirects are right behind Traefik. The database list stays open so the first database can be created from the web; the master password guards creating, duplicating, backing up and deleting databases. Once the database exists, secure <Code>/web/database/manager</Code>: edit the stack compose (Pengaturan tab), add <Code>list_db = False</Code> and <Code>dbfilter = ^db_name$</Code> to the Odoo configuration part, and redeploy. The image uses a dated tag (<Code>19.0-20260926</Code>) so it does not move every night; for security updates, change the tag and redeploy. Data lives in the <Code>odoo_data</Code> volume (filestore) and the database.</>],
+        ]}
+      />
+
       <H2 id="langkah">Deploying a template</H2>
       <Steps>
-        <Step title="Templates menu → pick a template">
+        <Step title={<>Templates menu<PathArrow />pick a template</>}>
           <P>
             Or, from a project page, click <strong>From template</strong> so
             the project is already selected. A search box is available for
@@ -136,7 +168,7 @@ export default function Page() {
             ]}
           />
           <Callout kind="warn" title="Public URL must match the domain">
-            Ghost, Gitea, and n8n use the public URL/host to build their own
+            Ghost, Gitea, n8n, Grafana, Metabase, Directus, Mattermost, Vaultwarden, and Nextcloud use the public URL/host to build their own
             links and webhooks. Fill it in exactly matching the hostname
             you&apos;ve set up, scheme included (<Code>https://blog.example.com</Code>)
             — if it differs, the admin pages/links will point to the wrong place.
@@ -201,7 +233,7 @@ Variables   : DB_PASSWORD (blank → generated)
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
-          ["400: required variable is empty", "The public URL/host hasn't been filled in (Ghost, Gitea, n8n)."],
+          ["400: required variable is empty", "The public URL/host/domain or the admin email (Directus) hasn't been filled in."],
           ["Admin links point to localhost / http", "The public URL doesn't match the domain, or n8n's protocol is still http. Fix the stack env, redeploy."],
           ["Deploy stays in deploying", "The first image pull. Wait, and check the Last action log for progress."],
           ["MinIO can't be used as a backup destination", <>Set up a domain/hostname for the <em>S3 API</em> service (port 9000), or use the internal endpoint <Code>http://&lt;container&gt;:9000</Code> — the stack must be on the <Code>aoox</Code> network.</>],

@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight, Boxes, Globe, Rocket, type LucideIcon } from "lucide-react"
@@ -97,7 +98,7 @@ export default function Page() {
       <div className="flex flex-col gap-px border border-border bg-border text-xs rounded-lg overflow-hidden">
         <div className="flex items-center justify-between bg-muted/40 px-4 py-2 text-muted-foreground">
           <span>browser</span>
-          <span>→ WEB_ORIGIN (:3000) · PUBLIC_API_URL (:3001)</span>
+          <span><PathArrow />WEB_ORIGIN (:3000) · PUBLIC_API_URL (:3001)</span>
         </div>
         <div className="grid gap-px bg-border sm:grid-cols-3">
           {ARCH.map((svc) => (
@@ -111,7 +112,7 @@ export default function Page() {
           ))}
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 bg-background px-4 py-3">
-          <span className="text-muted-foreground">Docker Engine di host →</span>
+          <span className="text-muted-foreground">Docker Engine di host<PathArrow /></span>
           {MANAGED.map((c) => (
             <span key={c} className="border border-border px-1.5 py-px text-muted-foreground rounded-sm">
               aoox-{c}
@@ -143,7 +144,7 @@ export default function Page() {
           ],
           [
             <strong key="d">Deployment</strong>,
-            "Satu kali proses build → push → start untuk sebuah aplikasi. Punya log dan status sendiri; bisa di-rollback.",
+            <>Satu kali proses build<PathArrow />push<PathArrow />start untuk sebuah aplikasi. Punya log dan status sendiri; bisa di-rollback.</>,
           ],
           [
             <strong key="c">Stack compose</strong>,
@@ -171,12 +172,12 @@ export default function Page() {
             <Link href="/docs/instalasi" className="text-foreground underline underline-offset-4">
               Instalasi
             </Link>{" "}
-            → buka <Code>/setup</Code>.
+            <PathArrow />buka <Code>/setup</Code>.
           </P>
         </Step>
         <Step title="Aktifkan registry lokal (dan proxy bila pakai domain)">
           <P>
-            Menu <strong>Registry</strong> dan <strong>Settings → Reverse proxy</strong>.
+            Menu <strong>Registry</strong> dan <strong>Settings<PathArrow />Reverse proxy</strong>.
             Registry wajib sebelum deploy pertama —{" "}
             <Link href="/docs/registry" className="text-foreground underline underline-offset-4">
               Registry
@@ -186,7 +187,7 @@ export default function Page() {
         </Step>
         <Step title="Buat project, lalu aplikasi dari repo Git">
           <P>
-            <strong>Projects → Project baru → Aplikasi baru</strong>, klik{" "}
+            <strong>Projects<PathArrow />Project baru<PathArrow />Aplikasi baru</strong>, klik{" "}
             <strong>Deploy</strong> —{" "}
             <Link href="/docs/aplikasi" className="text-foreground underline underline-offset-4">
               Membuat aplikasi

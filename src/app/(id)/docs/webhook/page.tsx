@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -95,13 +96,13 @@ export default function Page() {
           <Table
             head={["Provider", "Jenis token", "Scope minimum"]}
             rows={[
-              ["GitHub", "Fine-grained atau classic PAT", <>Classic: <Code>repo</Code>. Fine-grained: Contents → Read.</>],
+              ["GitHub", "Fine-grained atau classic PAT", <>Classic: <Code>repo</Code>. Fine-grained: Contents<PathArrow />Read.</>],
               ["GitLab", "Project/Personal access token", <><Code>read_repository</Code></>],
               ["Generik", "Username + password/token HTTP basic", "Akses baca"],
             ]}
           />
         </Step>
-        <Step title="Settings → Kredensial Git → Kredensial Git baru (owner/admin)">
+        <Step title={<>Settings<PathArrow />Kredensial Git<PathArrow />Kredensial Git baru (owner/admin)</>}>
           <P>
             Pilih <strong>Provider</strong>, isi <strong>Username</strong> dan{" "}
             <strong>Password / token</strong>. Token disimpan terenkripsi
@@ -207,7 +208,7 @@ export default function Page() {
       </Callout>
       <H3>GitHub</H3>
       <Steps>
-        <Step title="Repo → Settings → Webhooks">
+        <Step title={<>Repo<PathArrow />Settings<PathArrow />Webhooks</>}>
           <P>Klik webhook yang dipakai aoox (Edit).</P>
         </Step>
         <Step title="Tab Recent Deliveries">
@@ -226,13 +227,13 @@ export default function Page() {
       </Steps>
       <H3>GitLab</H3>
       <Steps>
-        <Step title="Settings → Webhooks → Edit">
+        <Step title={<>Settings<PathArrow />Webhooks<PathArrow />Edit</>}>
           <P>Buka bagian <strong>Recent events</strong> di bawah form.</P>
         </Step>
         <Step title="Resend request">
           <P>
             Pada baris event yang gagal. Alternatif tanpa event lama sama
-            sekali: tombol <strong>Test</strong> → pilih <strong>Push
+            sekali: tombol <strong>Test</strong> <PathArrow />pilih <strong>Push
             events</strong> untuk memicu pengiriman baru tanpa perlu push
             sungguhan.
           </P>
@@ -252,11 +253,11 @@ export default function Page() {
         <Step title="Tempel di provider">
           <Ul>
             <li>
-              GitHub: field <strong>Secret</strong> → header{" "}
+              GitHub: field <strong>Secret</strong> <PathArrow />header{" "}
               <Code>X-Hub-Signature-256</Code> = <Code>sha256=HMAC-SHA256(secret, raw body)</Code>.
             </li>
             <li>
-              GitLab: field <strong>Secret token</strong> → header{" "}
+              GitLab: field <strong>Secret token</strong> <PathArrow />header{" "}
               <Code>X-Gitlab-Token</Code> = secret apa adanya.
             </li>
           </Ul>
@@ -279,6 +280,45 @@ export default function Page() {
         <li>
           Perbandingan memakai <Code>timingSafeEqual</Code>; HMAC dihitung atas
           byte body persis, bukan JSON hasil parse.
+        </li>
+        <li>
+          Lapis tambahan opsional untuk GitHub: tulis{" "}
+          <Code>WEBHOOK_VERIFY_GITHUB_IP=true</Code> di <Code>.env.dist</Code> agar
+          delivery GitHub yang bersecret juga harus datang dari rentang IP resmi GitHub
+          (kosong = mati; jangan dinyalakan untuk GitHub Enterprise Server atau GitLab).
+          Instalasi lama baru menerima variabel ini setelah{" "}
+          <Code>aoox reinstall</Code>.
+        </li>
+      </Ul>
+
+      <H2 id="monorepo">Monorepo: deploy hanya bila folder berubah</H2>
+      <P>
+        Aplikasi dengan <strong>Root directory</strong> (lihat{" "}
+        <DocLink href="/docs/build#root-directory">Cara build</DocLink>) punya
+        switch <strong>Webhook: deploy hanya bila file di folder ini berubah</strong>.
+        Bila aktif, push yang hanya menyentuh folder lain dijawab{" "}
+        <Code>ignored</Code> tanpa deployment. Default mati, jadi perilaku lama
+        (setiap push ke branch men-deploy) tidak berubah.
+      </P>
+      <Ul>
+        <li>
+          aoox membaca daftar file per commit di payload push GitHub dan GitLab
+          (<Code>added</Code>, <Code>modified</Code>, <Code>removed</Code>).
+        </li>
+        <li>
+          <strong>Bila tidak yakin, aoox tetap deploy.</strong> Itu berlaku saat
+          payload tanpa daftar file, sebuah commit tanpa daftar file (merge
+          commit di GitHub), push 20 commit atau lebih (batas payload kedua
+          penyedia), force push, atau branch baru.
+        </li>
+        <li>
+          Perubahan di luar folder yang dipakai build (mis.{" "}
+          <Code>packages/shared</Code>) tidak memicu deploy. Matikan switch-nya
+          untuk aplikasi yang bergantung pada file di luar foldernya.
+        </li>
+        <li>
+          Berlaku untuk push ke branch aplikasi; event pull request untuk
+          preview tidak difilter.
         </li>
       </Ul>
 

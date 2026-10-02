@@ -1,3 +1,4 @@
+import { PathArrow } from "@/components/arrows"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -126,7 +127,7 @@ export default function Page() {
 
       <H2 id="aktifkan">Mengaktifkan swarm</H2>
       <Steps>
-        <Step title="Settings → Docker Swarm → Init swarm (owner)">
+        <Step title={<>Settings<PathArrow />Docker Swarm<PathArrow />Init swarm (owner)</>}>
           <P>
             Isi <strong>Advertise address</strong> bila host punya lebih dari
             satu IP — alamat inilah yang dipakai node lain untuk menghubungi
@@ -242,7 +243,7 @@ export default function Page() {
       <Callout kind="warn">
         Kembalikan dulu semua aplikasi ke <em>Mode deploy: container</em> —
         keluar dari swarm menghapus service yang berjalan. Setelah itu{" "}
-        <strong>Settings → Docker Swarm → keluar</strong> (owner). Node lain
+        <strong>Settings<PathArrow />Docker Swarm<PathArrow />keluar</strong> (owner). Node lain
         perlu menjalankan <Code>docker swarm leave</Code> sendiri.
       </Callout>
 
