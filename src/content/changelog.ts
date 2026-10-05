@@ -30,6 +30,72 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.0-alpha.6",
+    date: "2026-10-05",
+    channel: "alpha",
+    groups: [
+      {
+        kind: "added",
+        items: [
+          {
+            id: "**Sertifikat SSL kustom** untuk domain aplikasi: unggah sertifikat sendiri (CA perusahaan, wildcard beli, Cloudflare Origin CA) beserta kunci privatnya di Pengaturan, Integrasi, lalu pilih per domain di tab Domain sebagai ganti Let's Encrypt. Kunci disimpan terenkripsi dan tidak pernah ditampilkan lagi, pembaruan tidak perlu restart, dan sertifikat yang hampir atau sudah kedaluwarsa memicu notifikasi.",
+            en: "**Custom SSL certificates** for application domains: upload your own certificate (company CA, purchased wildcard, Cloudflare Origin CA) with its private key in Settings, Integrasi, then pick it per domain on the Domain tab instead of Let's Encrypt. The key is stored encrypted and never shown again, renewing needs no restart, and a certificate that is close to or past its expiry triggers a notification.",
+          },
+          {
+            id: "**Admin UI database** sekali klik: pasang Adminer, phpMyAdmin, pgAdmin, Mongo Express, Redis Commander, atau DbGate di samping database terkelola, dalam container sendiri dengan akses lewat domain dan/atau IP & port.",
+            en: "**Database Admin UI** in one click: install Adminer, phpMyAdmin, pgAdmin, Mongo Express, Redis Commander or DbGate next to a managed database, in its own container reachable through a domain and/or an IP and port.",
+          },
+          {
+            id: "Kartu **Aktivitas terakhir** di dashboard (owner/admin) menampilkan 10 entri audit log terbaru dengan teks aksi yang mudah dibaca, dan setiap rute yang dicatat API kini punya teks tersendiri.",
+            en: "A **Recent activity** card on the dashboard (owner/admin) shows the 10 latest audit-log entries with readable action texts, and every route the API records now has its own text.",
+          },
+          {
+            id: "**Template Excalidraw** (template satu-klik ke-15): papan tulis open source sebagai klien statis tanpa database, dengan image yang dikunci pada digest.",
+            en: "**Excalidraw template** (the 15th one-click template): the open source whiteboard as a static client without a database, with the image pinned by digest.",
+          },
+          {
+            id: "Dokumentasi baru untuk sertifikat SSL kustom dan Admin UI database, serta pembaruan halaman template, dashboard, dan mount, dalam bahasa Indonesia dan Inggris.",
+            en: "New documentation for custom SSL certificates and the database Admin UI, plus updates to the template, dashboard and mount pages, in Indonesian and English.",
+          },
+        ],
+      },
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Ukuran teks seragam** di seluruh panel: teks biasa 12 px, judul kartu 13 px, dan field tetap 16 px di layar sentuh agar iOS tidak memperbesar halaman. Logo sidebar kini memenuhi kotaknya.",
+            en: "**One text scale** across the panel: normal text is 12 px, card titles 13 px, and fields stay 16 px on touch screens so iOS does not zoom the page. The sidebar logo now fills its square.",
+          },
+          {
+            id: "Semua konfirmasi hapus memakai **satu dialog** yang sama (bukan lagi pop-up browser), dan melepas mount menawarkan dua pilihan jelas: lepas saja, atau lepas dan hapus volume.",
+            en: "Every delete confirmation uses **one shared dialog** (no more browser pop-ups), and detaching a mount offers two clear choices: detach only, or detach and delete the volume.",
+          },
+          {
+            id: "Tab Pengaturan, Domain, Webhook, dan Environment kini selebar konten; form Pengaturan menjadi dua kolom di layar lebar. Tambah dan hapus database tambahan pindah ke tab Ringkasan.",
+            en: "The Pengaturan, Domain, Webhook and Environment tabs are now full width, and the settings form uses two columns on wide screens. Adding and dropping extra databases moved to the Ringkasan tab.",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "Mengubah pengaturan aplikasi saat deployment berjalan tidak lagi dibatalkan diam-diam ketika deployment selesai, dan menghapus aplikasi kini ikut menghapus container preview pull request-nya.",
+            en: "Changing application settings while a deployment runs is no longer silently reverted when it finishes, and deleting an application now also removes its pull request preview containers.",
+          },
+          {
+            id: "Membuat database dengan port host yang sudah dipakai kini ditolak di awal dengan pesan jelas, bukan berakhir `error`.",
+            en: "Creating a database with a host port that is already in use is now rejected up front with a clear message instead of ending in `error`.",
+          },
+          {
+            id: "Mengganti sertifikat kustom tidak lagi memunculkan galat sementara \"private key does not match\" di proxy.",
+            en: "Replacing a custom certificate no longer causes a transient \"private key does not match\" error in the proxy.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.0-alpha.5",
     date: "2026-10-02",
     channel: "alpha",
