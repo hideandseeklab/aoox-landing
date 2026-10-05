@@ -1,6 +1,6 @@
 {
   "name": "aoox-landing",
-  "version": "0.1.0-alpha.5",
+  "version": "0.1.0-alpha.6",
   "description": "Marketing site and documentation for aoox, a self-hosted PaaS (Next.js static export)",
   "keywords": [
     "self-hosted",
