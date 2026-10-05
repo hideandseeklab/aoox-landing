@@ -341,7 +341,11 @@ export default function Page() {
         undangan. Filter per aksi, mis. <Code>deploy</Code>,{" "}
         <Code>/databases/</Code>, <Code>sign-in</Code>. Body request disimpan
         dengan rahasia disensor; entri lebih tua dari <strong>90 hari</strong>{" "}
-        dihapus otomatis.
+        dihapus otomatis. Daftar menampilkan aksi dalam bahasa yang mudah
+        dibaca (mis. &ldquo;Deploy aplikasi&rdquo;); rute aslinya tetap terlihat
+        di detail, dan aksi yang belum punya teks ditampilkan apa adanya.
+        Sepuluh entri terbaru juga muncul di kartu <strong>Aktivitas
+        terakhir</strong> pada Dashboard (owner/admin).
       </P>
 
       <H2 id="praktik">Praktik yang disarankan</H2>

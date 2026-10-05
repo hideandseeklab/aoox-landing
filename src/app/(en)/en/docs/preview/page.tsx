@@ -187,6 +187,10 @@ host      : https://shop-pr42.preview.example.com`}</Pre>
           A PR closed while its build is still running doesn&apos;t leave a
           container behind — it&apos;s re-checked after the build and after start.
         </li>
+        <li>
+          Deleting the application also deletes all of its PR preview
+          containers (on a remote server too).
+        </li>
       </Ul>
 
       <H2 id="jebakan">Common pitfalls</H2>

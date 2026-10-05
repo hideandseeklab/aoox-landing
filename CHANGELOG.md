@@ -8,6 +8,15 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Added
+
+- **Docs: custom SSL certificates** (new page in Indonesian and English): when to use your own certificate, uploading PEM (bundle, unencrypted key), attaching it to an HTTPS domain, wildcards, expiry and renewal, limits and security; the Proxy & domain page now points to it.
+
+- **Docs: database Admin UI** (new page in Indonesian and English): the tools per engine with their pinned image versions, how to install one from the Admin UI card (domain or IP & port), how to sign in, removal, and security notes.
+- **Docs updated** for adding/dropping extra databases on the Ringkasan tab, the dashboard's Recent activity card and readable audit-log actions, the shared confirmation dialog when detaching a mount (detach only, or detach and delete the volume), PR previews removed with their application, and settings changes made during a deploy no longer being overwritten.
+
+- **Excalidraw in the template documentation** (Indonesian and English): catalog row and a note (static client on port 80, no database, no live collaboration), and the template count updated from 14 to 15.
+
 ## [0.1.0-alpha.5] - 2026-10-02
 
 ### Added

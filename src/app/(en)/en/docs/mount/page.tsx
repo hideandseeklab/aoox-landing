@@ -217,9 +217,9 @@ export default function Page() {
       <Table
         head={["Kind", "What happens"]}
         rows={[
-          ["Volume", "You're asked whether to delete the volume too (purge). Without purge, the data stays in Docker and can be reattached under the same name."],
-          ["Bind", "Only detaches the mount; the folder on the host is untouched."],
-          ["File", "The mount is detached and its content is deleted from aoox."],
+          ["Volume", <>A confirmation dialog with two choices: <strong>Detach the mount only</strong> (the data stays in Docker and can be reattached under the same name) or <strong>Detach and delete the volume</strong> (the data is lost permanently and can&apos;t be undone; this is the purge).</>],
+          ["Bind", "A confirmation dialog, then the mount is detached; the folder on the host is untouched."],
+          ["File", "A confirmation dialog, then the mount is detached and its content is deleted from aoox."],
         ]}
       />
 

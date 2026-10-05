@@ -250,15 +250,20 @@ export default function Page() {
       <H2 id="database-tambahan">Extra databases on the same server</H2>
       <P>
         A single PostgreSQL/MySQL/MariaDB/MongoDB container can hold several
-        databases. Under the <strong>Data</strong> tab, an
-        owner/admin can create a new database named{" "}
-        <Code>[A-Za-z_][A-Za-z0-9_]*</Code>; the one created at provisioning
-        time is the <em>primary</em> one and can&apos;t be deleted.
+        databases. On the <strong>Overview</strong> tab, next to the{" "}
+        <strong>Connection for database</strong> selector, an owner/admin can
+        click <strong>Add database</strong> to create a new database named{" "}
+        <Code>[A-Za-z_][A-Za-z0-9_]*</Code>, and drop an extra database with
+        the trash icon beside the selector (a confirmation dialog appears;
+        everything in it is lost permanently). The one created at
+        provisioning time is the <em>primary</em> one and can&apos;t be deleted.
+        The <strong>Data</strong> tab keeps its own database selector for
+        browsing.
       </P>
       <Pre title="Referencing an extra database from env">{`REPORTS_DB_URL=\${{database.app-db.url:reports}}`}</Pre>
       <Ul>
         <li>The host, user, and password are the same — only the database name part differs.</li>
-        <li>The Overview tab shows a <strong>Connection for database</strong> per name when there&apos;s more than one.</li>
+        <li>The Overview tab shows a <strong>Connection for database</strong> per name when there&apos;s more than one. The add/drop buttons only show while the database is running.</li>
         <li>Backups have an option to include every database on the server (see Backup).</li>
         <li>Redis/Valkey don&apos;t have this feature (use the DB number in the URL if needed).</li>
         <li>MongoDB: a new database is immediately populated with a placeholder document, same as the primary one.</li>

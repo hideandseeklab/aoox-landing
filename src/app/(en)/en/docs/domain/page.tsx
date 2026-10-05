@@ -30,7 +30,7 @@ export const metadata: Metadata = pageMetadata({
 
 const SUMMARY = [
   { k: "Proxy", v: "Traefik v3, the aoox-proxy container" },
-  { k: "HTTPS", v: "Let's Encrypt HTTP-01, automatic per host" },
+  { k: "HTTPS", v: "Let's Encrypt HTTP-01 automatic per host, or your own certificate" },
   { k: "Scope", v: "The aoox host and each remote server" },
 ]
 
@@ -48,6 +48,7 @@ const ROUTERS = [
 ]
 
 const NEXT = [
+  { title: "Custom SSL certificates", description: "Use your own certificate instead of Let's Encrypt.", href: "/en/docs/sertifikat-ssl" },
   { title: "Domain for the panel", description: "The dashboard & API on your own domain.", href: "/en/docs/domain-panel" },
   { title: "Deploy & rollback", description: "Blue/green needs a domain without a host port.", href: "/en/docs/deploy#blue-green" },
   { title: "Pull request previews", description: "A wildcard subdomain per PR.", href: "/en/docs/preview" },
@@ -228,6 +229,15 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
           redirect loop with the <Code>-redirect</Code> router.
         </li>
       </Ul>
+
+      <P>
+        Don&apos;t want Let&apos;s Encrypt? Upload your own certificate
+        (corporate CA, wildcard, Cloudflare Origin CA) and pick it per domain
+        on the Domain tab — see{" "}
+        <DocLink href="/en/docs/sertifikat-ssl">Custom SSL certificates</DocLink>.
+        It applies to application domains; the panel&apos;s domains keep using
+        ACME.
+      </P>
 
       <H2 id="operasi">Operations</H2>
       <Table

@@ -76,9 +76,9 @@ export default function Page() {
       <P>
         Untuk server dengan{" "}
         <DocLink href="/docs/database#database-tambahan">lebih dari satu database</DocLink>,
-        select <strong>Database</strong> di toolbar memilih mana yang dilihat;
-        owner/admin bisa membuat database baru dari sana (tombol{" "}
-        <em>Buat database</em>).
+        select <strong>Database</strong> di toolbar memilih mana yang dilihat.
+        Membuat atau menghapus database tambahan dilakukan di tab{" "}
+        <strong>Ringkasan</strong> (owner/admin).
       </P>
 
       <H2 id="query">Menjalankan query</H2>

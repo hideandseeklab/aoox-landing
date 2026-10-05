@@ -78,8 +78,8 @@ export default function Page() {
         For servers with{" "}
         <DocLink href="/en/docs/database#database-tambahan">more than one database</DocLink>,
         the <strong>Database</strong> select in the toolbar picks which one is
-        shown; owners/admins can create a new database from there (the{" "}
-        <em>Create database</em> button).
+        shown. Creating or dropping extra databases is done on the{" "}
+        <strong>Overview</strong> tab (owner/admin).
       </P>
 
       <H2 id="query">Running queries</H2>

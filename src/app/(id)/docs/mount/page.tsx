@@ -214,9 +214,9 @@ export default function Page() {
       <Table
         head={["Jenis", "Yang terjadi"]}
         rows={[
-          ["Volume", "Ditanya apakah volume ikut dihapus (purge). Tanpa purge, data tetap ada di Docker dan bisa dipasang lagi dengan nama yang sama."],
-          ["Bind", "Hanya melepas mount; folder di host tidak disentuh."],
-          ["File", "Mount dilepas dan isinya dihapus dari aoox."],
+          ["Volume", <>Dialog konfirmasi dengan dua pilihan: <strong>Lepas mount saja</strong> (data tetap ada di Docker dan bisa dipasang lagi dengan nama yang sama) atau <strong>Lepas dan hapus volume</strong> (data hilang permanen, tidak bisa dibatalkan, memakai purge).</>],
+          ["Bind", "Dialog konfirmasi lalu melepas mount; folder di host tidak disentuh."],
+          ["File", "Dialog konfirmasi lalu mount dilepas dan isinya dihapus dari aoox."],
         ]}
       />
 

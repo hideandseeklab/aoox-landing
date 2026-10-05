@@ -30,7 +30,7 @@ export const metadata: Metadata = pageMetadata({
 
 const SUMMARY = [
   { k: "Proxy", v: "Traefik v3, container aoox-proxy" },
-  { k: "HTTPS", v: "Let's Encrypt HTTP-01, otomatis per host" },
+  { k: "HTTPS", v: "Let's Encrypt HTTP-01 otomatis per host, atau sertifikat sendiri" },
   { k: "Lingkup", v: "Host aoox dan tiap server remote" },
 ]
 
@@ -48,6 +48,7 @@ const ROUTERS = [
 ]
 
 const NEXT = [
+  { title: "Sertifikat SSL kustom", description: "Pakai sertifikat sendiri, bukan Let's Encrypt.", href: "/docs/sertifikat-ssl" },
   { title: "Domain untuk panel", description: "Dashboard & API di domain sendiri.", href: "/docs/domain-panel" },
   { title: "Deploy & rollback", description: "Blue/green membutuhkan domain tanpa port host.", href: "/docs/deploy#blue-green" },
   { title: "Preview pull request", description: "Subdomain wildcard per PR.", href: "/docs/preview" },
@@ -221,6 +222,14 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
           dengan router <Code>-redirect</Code>.
         </li>
       </Ul>
+
+      <P>
+        Tidak mau Let&apos;s Encrypt? Unggah sertifikat sendiri (CA perusahaan,
+        wildcard, Cloudflare Origin CA) dan pilih per domain di tab Domain —
+        lihat{" "}
+        <DocLink href="/docs/sertifikat-ssl">Sertifikat SSL kustom</DocLink>.
+        Berlaku untuk domain aplikasi; domain panel tetap memakai ACME.
+      </P>
 
       <H2 id="operasi">Operasi</H2>
       <Table

@@ -103,6 +103,15 @@ export default function Page() {
           <Code>busy</Code> back and is not queued.
         </li>
         <li>
+          Changing application settings (name, env, domains, resource limits,
+          health check, previews, and so on) while a deploy runs is{" "}
+          <strong>not lost</strong>: the change is saved and takes effect on the
+          next deploy, because the container being created uses the values from
+          when the deploy started. Only the <strong>host port</strong> and the{" "}
+          <strong>secret source</strong> are rejected (409) while a deploy is
+          active.
+        </li>
+        <li>
           Failing during <Code>building</Code> or <Code>pushing</Code>{" "}
           <strong>never touches</strong> the currently running container, and
           doesn&apos;t change the application&apos;s status.

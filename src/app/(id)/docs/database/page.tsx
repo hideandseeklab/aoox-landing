@@ -243,15 +243,19 @@ export default function Page() {
       <H2 id="database-tambahan">Database tambahan di server yang sama</H2>
       <P>
         Satu container PostgreSQL/MySQL/MariaDB/MongoDB bisa menampung
-        beberapa database. Di tab <strong>Data</strong>, owner/admin bisa
-        membuat database baru dengan nama <Code>[A-Za-z_][A-Za-z0-9_]*</Code>;
-        yang dibuat saat provisioning adalah <em>primary</em> dan tidak bisa
-        dihapus.
+        beberapa database. Di tab <strong>Ringkasan</strong>, dekat pemilih{" "}
+        <strong>Koneksi untuk database</strong>, owner/admin bisa menekan{" "}
+        <strong>Tambah database</strong> untuk membuat database baru dengan
+        nama <Code>[A-Za-z_][A-Za-z0-9_]*</Code>, dan menghapus database
+        tambahan lewat ikon tempat sampah di sebelah pemilih (ada dialog
+        konfirmasi; seluruh isinya hilang permanen). Yang dibuat saat
+        provisioning adalah <em>primary</em> dan tidak bisa dihapus. Tab{" "}
+        <strong>Data</strong> tetap punya pemilih database untuk menjelajah.
       </P>
       <Pre title="Merujuk database tambahan dari env">{`REPORTS_DB_URL=\${{database.app-db.url:reports}}`}</Pre>
       <Ul>
         <li>Host, user, dan password sama — hanya bagian nama database yang berbeda.</li>
-        <li>Tab Ringkasan menampilkan <strong>Koneksi untuk database</strong> per nama bila ada lebih dari satu.</li>
+        <li>Tab Ringkasan menampilkan <strong>Koneksi untuk database</strong> per nama bila ada lebih dari satu. Tombol tambah/hapus hanya tampil saat database berjalan.</li>
         <li>Backup punya opsi menyertakan semua database di server (lihat Backup).</li>
         <li>Redis/Valkey tidak punya fitur ini (pakai nomor DB di URL bila perlu).</li>
         <li>MongoDB: database baru dibuat langsung terisi dokumen placeholder, sama seperti database utama.</li>

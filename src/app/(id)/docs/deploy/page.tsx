@@ -101,6 +101,15 @@ export default function Page() {
           dan tidak diantre.
         </li>
         <li>
+          Mengubah pengaturan aplikasi (nama, env, domain, batas sumber daya,
+          health check, preview, dan lainnya) saat deploy berjalan{" "}
+          <strong>tidak hilang</strong>: perubahan tersimpan, dan berlaku di
+          deploy berikutnya karena container yang sedang dibuat memakai nilai
+          saat deploy dimulai. Hanya <strong>port host</strong> dan{" "}
+          <strong>sumber secret</strong> yang ditolak (409) selama ada deploy
+          aktif.
+        </li>
+        <li>
           Gagal di <Code>building</Code> atau <Code>pushing</Code>{" "}
           <strong>tidak menyentuh</strong> container yang sedang berjalan dan
           tidak mengubah status aplikasi.

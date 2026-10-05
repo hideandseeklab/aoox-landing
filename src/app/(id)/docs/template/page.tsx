@@ -28,7 +28,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const SUMMARY = [
-  { k: "Katalog", v: "14 template, dibundel di dalam aoox" },
+  { k: "Katalog", v: "15 template, dibundel di dalam aoox" },
   { k: "Hasil", v: "Stack compose (source: template)" },
   { k: "Rahasia", v: "Password/secret di-generate otomatis" },
 ]
@@ -48,6 +48,7 @@ const CATALOG = [
   { id: "mattermost", ver: "11.11", untuk: "Chat tim + PostgreSQL", isi: "URL publik", service: "mattermost :8065" },
   { id: "nextcloud", ver: "32", untuk: "File & kolaborasi + PostgreSQL, Redis, cron", isi: "Domain", service: "nextcloud :80" },
   { id: "odoo", ver: "19.0", untuk: "ERP / bisnis all-in-one (Community) + PostgreSQL", isi: "— (master password di-generate)", service: "odoo :8069" },
+  { id: "excalidraw", ver: "latest (dikunci digest)", untuk: "Whiteboard / diagram sketsa tangan kolaboratif (open source, MIT)", isi: "—", service: "excalidraw :80" },
 ]
 
 const NEXT = [
@@ -124,7 +125,8 @@ export default function Page() {
           ["directus", <>Directus + PostgreSQL. Akun admin pertama dibuat dari email yang kamu isi dan password di env stack; <Code>KEY</Code> dan <Code>SECRET</Code> di-generate.</>],
           ["mattermost", <>Mattermost Team Edition + PostgreSQL. Akun pertama dibuat lewat web dan otomatis jadi admin sistem.</>],
           ["nextcloud", <>Nextcloud (Apache) + PostgreSQL + Redis (cache dan file locking) + container <Code>cron</Code> untuk tugas latar. Isi domain tanpa <Code>https://</Code>. Protokol publik default <Code>https</Code>; <Code>http</Code> hanya untuk uji lokal. Install pertama lebih lama dan paling berat di antara template.</>],
-          ["odoo", <>Odoo <strong>Community</strong> 19.0 (LGPLv3; tanpa modul Enterprise, yang proprietary) + PostgreSQL 16. Buka situsnya: halaman awal meminta <em>Master Password</em>, nama database, email, dan password admin. <strong>Master password</strong> dibuat otomatis; lihat di halaman stack, tab <strong>Pengaturan</strong>, bagian environment, <strong>Tampilkan nilai</strong> (variabel <Code>MASTER_PASSWORD</Code>). Berjalan <strong>satu proses tanpa worker</strong> (<Code>workers = 0</Code>), cukup untuk pemakaian kecil; banyak worker dengan jalur websocket terpisah belum disiapkan. <Code>proxy_mode</Code> menyala agar skema https dan pengalihan benar di belakang Traefik. Daftar database tetap terbuka supaya database pertama bisa dibuat lewat web; master password melindungi pembuatan, penyalinan, backup, dan penghapusan database. Setelah database dibuat, amankan <Code>/web/database/manager</Code>: edit compose stack (tab Pengaturan), tambahkan <Code>list_db = False</Code> dan <Code>dbfilter = ^nama_db$</Code> pada bagian konfigurasi Odoo, lalu deploy ulang. Image memakai tag bertanggal (<Code>19.0-20260926</Code>) agar tidak bergeser tiap malam; untuk pembaruan keamanan, ganti tag-nya dan deploy ulang. Data ada di volume <Code>odoo_data</Code> (filestore) dan database.</>],
+          ["odoo", <>Odoo <strong>Community</strong> 19.0 (LGPLv3; tanpa modul Enterprise, yang proprietary) + PostgreSQL 16. Buka situsnya: halaman awal meminta <em>Master Password</em>, nama database, email, dan password admin. <strong>Master password</strong> dibuat otomatis; lihat di halaman stack, tab <strong>Pengaturan</strong>, bagian environment, <strong>Tampilkan nilai</strong> (variabel <Code>MASTER_PASSWORD</Code>). Berjalan <strong>satu proses tanpa worker</strong> (<Code>workers = 0</Code>), cukup untuk pemakaian kecil; banyak worker dengan jalur websocket terpisah belum disiapkan. <Code>proxy_mode</Code> menyala agar skema https dan pengalihan benar di belakang Traefik. Daftar database tetap terbuka supaya database pertama bisa dibuat lewat web; master password melindungi pembuatan, penyalinan, backup, dan penghapusan database. Setelah database dibuat, amankan <Code>/web/database/manager</Code>: edit compose stack (tab Pengaturan), tambahkan <Code>list_db = False</Code> dan <Code>dbfilter = ^nama_db$</Code> pada bagian konfigurasi Odoo, lalu deploy ulang. Image memakai tag bertanggal (<Code>19.0-20260926</Code>) agar tidak bergeser tiap malam; untuk pembaruan keamanan, ganti tag-nya dan deploy ulang. Data ada di volume <Code>odoo_data</Code> (filestore) dan database.</>],          ["excalidraw", <>Excalidraw (MIT), whiteboard untuk sketsa dan diagram bergaya tulisan tangan. Satu container klien statis di port 80, tanpa database dan tanpa isian. Gambar tersimpan di browser (local storage) dan bisa diekspor ke PNG, SVG, atau berkas. <strong>Kolaborasi live tidak termasuk</strong>: butuh server kolaborasi terpisah yang tidak disiapkan template ini. Image resminya tidak punya tag versi (hanya <Code>latest</Code> yang bergulir), jadi dikunci pada digest image; untuk memperbarui, ganti digest di file compose stack secara manual.</>],
+
         ]}
       />
 

@@ -28,7 +28,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const SUMMARY = [
-  { k: "Catalog", v: "14 templates, bundled inside aoox" },
+  { k: "Catalog", v: "15 templates, bundled inside aoox" },
   { k: "Result", v: "A compose stack (source: template)" },
   { k: "Secrets", v: "Passwords/secrets generated automatically" },
 ]
@@ -48,6 +48,7 @@ const CATALOG = [
   { id: "mattermost", ver: "11.11", untuk: "Team chat + PostgreSQL", isi: "Public URL", service: "mattermost :8065" },
   { id: "nextcloud", ver: "32", untuk: "Files and collaboration + PostgreSQL, Redis, cron", isi: "Domain", service: "nextcloud :80" },
   { id: "odoo", ver: "19.0", untuk: "ERP / all-in-one business suite (Community) + PostgreSQL", isi: "— (master password is generated)", service: "odoo :8069" },
+  { id: "excalidraw", ver: "latest (pinned by digest)", untuk: "Collaborative hand-drawn whiteboard / diagrams (open source, MIT)", isi: "—", service: "excalidraw :80" },
 ]
 
 const NEXT = [
@@ -126,6 +127,7 @@ export default function Page() {
           ["mattermost", <>Mattermost Team Edition + PostgreSQL. The first account is created on the web and becomes the system admin.</>],
           ["nextcloud", <>Nextcloud (Apache) + PostgreSQL + Redis (cache and file locking) + a separate <Code>cron</Code> container for background jobs. Enter the domain without <Code>https://</Code>. The public protocol defaults to <Code>https</Code>; use <Code>http</Code> only for local tests. The first install takes longer, and it is the heaviest template.</>],
           ["odoo", <>Odoo <strong>Community</strong> 19.0 (LGPLv3; no Enterprise modules, which are proprietary) + PostgreSQL 16. Open the site: the first page asks for the <em>Master Password</em>, a database name, an email and an admin password. The <strong>master password</strong> is generated; find it on the stack page, <strong>Pengaturan</strong> tab, environment section, <strong>Tampilkan nilai</strong> (the <Code>MASTER_PASSWORD</Code> variable). It runs as <strong>a single process without workers</strong> (<Code>workers = 0</Code>), fine for small use; multiple workers with a separate websocket route are not set up. <Code>proxy_mode</Code> is on so the https scheme and redirects are right behind Traefik. The database list stays open so the first database can be created from the web; the master password guards creating, duplicating, backing up and deleting databases. Once the database exists, secure <Code>/web/database/manager</Code>: edit the stack compose (Pengaturan tab), add <Code>list_db = False</Code> and <Code>dbfilter = ^db_name$</Code> to the Odoo configuration part, and redeploy. The image uses a dated tag (<Code>19.0-20260926</Code>) so it does not move every night; for security updates, change the tag and redeploy. Data lives in the <Code>odoo_data</Code> volume (filestore) and the database.</>],
+          ["excalidraw", <>Excalidraw (MIT), a whiteboard for hand-drawn style sketches and diagrams. One static client container on port 80, no database and nothing to fill in. Drawings stay in the browser (local storage) and can be exported to PNG, SVG, or a file. <strong>Live collaboration is not included</strong>: it needs a separate collaboration server, which this template does not set up. The official image has no version tags (only a rolling <Code>latest</Code>), so it is pinned to an image digest; to update, replace the digest in the stack&apos;s compose file by hand.</>],
         ]}
       />
 

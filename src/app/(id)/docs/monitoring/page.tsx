@@ -87,6 +87,16 @@ export default function Page() {
         ]}
       />
       <P>
+        Di bawah grafik ada kartu <strong>Aktivitas terakhir</strong> (hanya
+        owner/admin): 10 entri{" "}
+        <DocLink href="/docs/pengguna-peran">audit log</DocLink> terbaru dengan
+        waktu, pelaku, aksi dalam bahasa yang mudah dibaca (mis. &ldquo;Deploy
+        aplikasi&rdquo;, &ldquo;Hapus database&rdquo;), status, dan lewat apa
+        (sesi, API token, webhook). Disegarkan tiap 30 detik selama tab
+        terlihat; tautan <strong>Lihat semua</strong> membuka halaman Audit
+        log. Isi request tidak ditampilkan di kartu ini.
+      </P>
+      <P>
         Di container Docker, <Code>/proc/stat</Code> dan <Code>/proc/meminfo</Code>{" "}
         adalah milik host, jadi angkanya = host tanpa panggilan Docker per tick.
         Riwayat 150 titik di memori API (hilang saat restart).

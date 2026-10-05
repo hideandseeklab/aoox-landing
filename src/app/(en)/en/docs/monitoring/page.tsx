@@ -89,6 +89,15 @@ export default function Page() {
         ]}
       />
       <P>
+        Below the charts is a <strong>Recent activity</strong> card (owner/admin
+        only): the 10 latest <DocLink href="/en/docs/pengguna-peran">audit log</DocLink>{" "}
+        entries with the time, who did it, a readable action (e.g. &ldquo;Deploy
+        application&rdquo;, &ldquo;Delete database&rdquo;), the status, and how
+        it was done (session, API token, webhook). It refreshes every 30
+        seconds while the tab is visible; <strong>View all</strong> opens the
+        Audit log page. Request contents are not shown on this card.
+      </P>
+      <P>
         Inside a Docker container, <Code>/proc/stat</Code> and{" "}
         <Code>/proc/meminfo</Code> belong to the host, so the numbers reflect
         the host with no extra Docker call per tick. History is 150 points

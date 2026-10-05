@@ -111,6 +111,11 @@ export const DOCS_NAV: DocGroup[] = [
         description: "Melihat tabel dan menjalankan query dari dashboard.",
       },
       {
+        href: "/docs/admin-database",
+        title: "Admin UI database",
+        description: "Adminer, phpMyAdmin, pgAdmin, dan lainnya, dipasang sekali klik.",
+      },
+      {
         href: "/docs/backup",
         title: "Backup & restore",
         description: "Backup database dan volume, jadwal, retensi, tujuan S3.",
@@ -139,6 +144,11 @@ export const DOCS_NAV: DocGroup[] = [
         href: "/docs/domain",
         title: "Proxy & domain",
         description: "Traefik, domain aplikasi, HTTPS otomatis, cek DNS.",
+      },
+      {
+        href: "/docs/sertifikat-ssl",
+        title: "Sertifikat SSL kustom",
+        description: "Sertifikat sendiri (CA perusahaan, wildcard) sebagai ganti Let's Encrypt.",
       },
       {
         href: "/docs/server-remote",
@@ -275,6 +285,11 @@ export const DOCS_NAV_EN: DocGroup[] = [
         description: "Browse tables and run queries from the dashboard.",
       },
       {
+        href: "/en/docs/admin-database",
+        title: "Database admin UI",
+        description: "Adminer, phpMyAdmin, pgAdmin, and more, installed in one click.",
+      },
+      {
         href: "/en/docs/backup",
         title: "Backup & restore",
         description: "Back up databases and volumes, schedules, retention, S3 destinations.",
@@ -303,6 +318,11 @@ export const DOCS_NAV_EN: DocGroup[] = [
         href: "/en/docs/domain",
         title: "Proxy & domain",
         description: "Traefik, application domains, automatic HTTPS, DNS checks.",
+      },
+      {
+        href: "/en/docs/sertifikat-ssl",
+        title: "Custom SSL certificates",
+        description: "Your own certificate (corporate CA, wildcard) instead of Let's Encrypt.",
       },
       {
         href: "/en/docs/server-remote",

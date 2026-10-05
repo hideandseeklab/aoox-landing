@@ -183,6 +183,10 @@ host      : https://shop-pr42.preview.example.com`}</Pre>
           PR yang ditutup saat build masih berjalan: container tidak
           ditinggalkan — dicek lagi setelah build dan setelah start.
         </li>
+        <li>
+          Menghapus aplikasi ikut menghapus semua container preview PR-nya
+          (juga di server remote).
+        </li>
       </Ul>
 
       <H2 id="jebakan">Jebakan umum</H2>

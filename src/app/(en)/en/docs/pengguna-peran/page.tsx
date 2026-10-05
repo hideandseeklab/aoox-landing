@@ -344,7 +344,11 @@ export default function Page() {
         invitations. Filter by action, e.g. <Code>deploy</Code>,{" "}
         <Code>/databases/</Code>, <Code>sign-in</Code>. Request bodies are
         stored with secrets redacted; entries older than{" "}
-        <strong>90 days</strong> are deleted automatically.
+        <strong>90 days</strong> are deleted automatically. The list shows
+        actions in readable words (e.g. &ldquo;Deploy application&rdquo;); the
+        original route is still visible in the details, and an action without
+        a label is shown as it is. The ten latest entries also appear on the{" "}
+        <strong>Recent activity</strong> card on the Dashboard (owner/admin).
       </P>
 
       <H2 id="praktik">Recommended practices</H2>
