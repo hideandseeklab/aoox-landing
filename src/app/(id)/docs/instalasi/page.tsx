@@ -94,6 +94,25 @@ export default function Page() {
         lupa, gagal dengan pesan <Code>must be run as root</Code>.
       </Callout>
       <Callout>
+        <strong>User SSH terminal.</strong> Instalasi baru, baik skrip
+        satu-perintah ini maupun <Code>sudo aoox install</Code>, mengisi{" "}
+        <Code>TERMINAL_SSH_USER</Code> otomatis dengan nama user yang
+        menjalankan <Code>sudo</Code> (kalau dijalankan langsung sebagai{" "}
+        <Code>root</Code> atau nama itu bukan login polos, hasilnya{" "}
+        <Code>root</Code>). Instalasi baru juga <strong>mengotorisasi key terminal</strong> otomatis
+        (membuat key di <Code>secrets/</Code> dan menambahkannya ke{" "}
+        <Code>~/.ssh/authorized_keys</Code> user itu); lewati dengan{" "}
+        <Code>AOOX_NO_TERMINAL_AUTHORIZE=1</Code> di depan <Code>sh</Code> (atau{" "}
+        <Code>--no-terminal-authorize</Code> pada CLI). Langkah ini menolak
+        <Code>~/.ssh</Code> atau <Code>authorized_keys</Code> yang berupa symlink; gagal
+        di sini hanya memberi peringatan, instalasi tetap lanjut. Isi eksplisit menang: tambahkan{" "}
+        <Code>TERMINAL_SSH_USER=ubuntu</Code> di depan <Code>sh</Code> pada
+        skrip, atau <Code>--terminal-ssh-user</Code> pada CLI. Instalasi lama tidak berubah — ubah lewat
+        Infrastruktur<PathArrow />Environment. Di VPS cloud login root biasanya
+        dimatikan, jadi user ini yang harus dipakai; detailnya di{" "}
+        <DocLink href="/docs/terminal#user-ssh">Web terminal</DocLink>.
+      </Callout>
+      <Callout>
         Skrip ini di-serve dari domain aoox sendiri (bukan pihak ketiga) dan
         mengambil file compose langsung dari repo <Code>aoox-cli</Code> —
         source-nya bisa dibaca dulu di{" "}

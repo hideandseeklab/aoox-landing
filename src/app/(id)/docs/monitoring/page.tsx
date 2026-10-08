@@ -118,6 +118,30 @@ export default function Page() {
           <em>running</em> (aplikasi, database, atau stack).
         </li>
       </Ul>
+      <H3>Halaman Docker</H3>
+      <P>
+        <strong>Infrastruktur<PathArrow />Docker</strong> (owner/admin) menampilkan
+        container, image, volume, dan network di host atau di server remote
+        (pilih server di atas tab; item Docker ada di grup Platform pada sidebar). Container, image, volume, dan network
+        milik aoox diberi lencana (kolom Managed by aoox) dan hanya ditampilkan; container aoox
+        (panel, proxy, registry, aplikasi, database, stack) tidak bisa
+        dihentikan atau dihapus dari sini — gunakan halaman resource-nya.
+      </P>
+      <Ul>
+        <li>
+          <strong>Container</strong>: semua, termasuk yang berhenti. Untuk yang
+          bukan milik aoox: log (satu kali ambil, maks 500 baris), start, stop,
+          restart, dan hapus (khusus owner, dengan konfirmasi).
+        </li>
+        <li>
+          <strong>Image</strong>: hapus image yang tidak dipakai container
+          mana pun, atau bersihkan yang dangling. Image yang dipakai ditolak.
+        </li>
+        <li>
+          <strong>Volume</strong> dan <strong>Network</strong>: daftar saja,
+          lengkap dengan ukuran, pemakai, dan penanda volume yatim milik aoox.
+        </li>
+      </Ul>
 
       <H2 id="container">Metrik per container</H2>
       <P>

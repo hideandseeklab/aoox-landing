@@ -230,6 +230,12 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
         <DocLink href="/docs/sertifikat-ssl">Sertifikat SSL kustom</DocLink>.
         Berlaku untuk domain aplikasi; domain panel tetap memakai ACME.
       </P>
+      <P>
+        Perlu basic auth, header keamanan, rate limit, allowlist IP, atau
+        redirect www untuk sebuah domain? Tulis middleware Traefik sendiri (atau
+        pakai preset) dan pasang per domain di tab Domain — lihat{" "}
+        <DocLink href="/docs/konfigurasi-proxy">Konfigurasi proxy</DocLink>.
+      </P>
 
       <H2 id="operasi">Operasi</H2>
       <Table

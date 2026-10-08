@@ -151,6 +151,11 @@ export const DOCS_NAV: DocGroup[] = [
         description: "Sertifikat sendiri (CA perusahaan, wildcard) sebagai ganti Let's Encrypt.",
       },
       {
+        href: "/docs/konfigurasi-proxy",
+        title: "Konfigurasi proxy",
+        description: "Middleware Traefik sendiri (basic auth, header, rate limit) dan pasang per domain.",
+      },
+      {
         href: "/docs/server-remote",
         title: "Server remote",
         description: "Deploy ke server lain lewat SSH.",
@@ -323,6 +328,11 @@ export const DOCS_NAV_EN: DocGroup[] = [
         href: "/en/docs/sertifikat-ssl",
         title: "Custom SSL certificates",
         description: "Your own certificate (corporate CA, wildcard) instead of Let's Encrypt.",
+      },
+      {
+        href: "/en/docs/konfigurasi-proxy",
+        title: "Proxy configuration",
+        description: "Your own Traefik middlewares (basic auth, headers, rate limit) attached per domain.",
       },
       {
         href: "/en/docs/server-remote",

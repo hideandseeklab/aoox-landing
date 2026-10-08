@@ -8,6 +8,18 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Added
+
+- **Docs: the Docker page** (Indonesian and English, on the Monitoring page): Infrastructure > Docker lists containers, images, volumes and networks of the host or a remote server; what aoox-owned items show and why they cannot be stopped or removed there; logs, start/stop/restart and remove for other containers, removing unused images.
+
+- **Docs: proxy configuration** (new page in Indonesian and English, "Konfigurasi proxy", in the Infrastructure group, linked from Proxy & domain): the Traefik dynamic-configuration editor (files stored in aoox and written to the proxy as `user-<name>.yml`, only the `http` section, unique names per proxy, Traefik errors roll the change back), the five presets (basic auth with a bcrypt hash only, security headers, rate limit, IP allowlist, www redirect), attaching middlewares per domain on the Domain tab (order, what a domain on HTTP/HTTPS gets, 409 while a domain uses a middleware), the one-time proxy recreation on a proxy from an older aoox, "Apply again" after a restore, and the limits (dynamic only, Traefik does not report every wrong value, remote servers untested).
+
+### Changed
+
+- **Docs: proxy configuration and terminal limits** (Indonesian and English): the Proxy configuration page now says that files are per proxy, are not part of project export/import (imported domains have no middlewares), and that moving an application to another server drops the middlewares its domains use that the destination proxy does not define; the Web terminal page lists the custom Docker bridge/gateway case among the limits of automatic authorization (the button does not appear; use the manual command).
+
+- **Docs: terminal SSH user on cloud VPS** (Indonesian and English): a new "SSH user on a cloud VPS" section on the Web terminal page (the user in Environment, authorizing the key as that same user, root login usually refused by sshd), the new default (both `sudo aoox install` and the one-line `install.sh` use the user who ran `sudo`; existing installs unchanged) on the Web terminal and Installation pages, and "SSH authentication failed" rows in the terminal troubleshooting tables. The one-line installer (`public/install.sh`) now follows the same rule as `aoox install`: `TERMINAL_SSH_USER` defaults to `SUDO_USER` when it is a plain login name other than root, otherwise root, and an explicit `TERMINAL_SSH_USER` still wins. The installer also authorizes the terminal's SSH key itself: it creates the key in `secrets/` and adds its public half to that user's `~/.ssh/authorized_keys` (idempotent, same rules as `aoox install`: refuses a symlinked `~/.ssh` or `authorized_keys`, tightens loose modes, only warns on failure; skip with `AOOX_NO_TERMINAL_AUTHORIZE=1`). The Web terminal page documents the "Otorisasi otomatis" button for existing installs, its limits (remote servers, non-standard `AuthorizedKeysFile`, SELinux), and the installation and troubleshooting pages mention the automatic step.
+
 ## [0.1.0-alpha.6] - 2026-10-05
 
 ### Added

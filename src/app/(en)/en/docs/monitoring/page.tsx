@@ -120,6 +120,31 @@ export default function Page() {
           <em>running</em> (an application, database, or stack).
         </li>
       </Ul>
+      <H3>The Docker page</H3>
+      <P>
+        <strong>Infrastructure<PathArrow />Docker</strong> (owner/admin) lists
+        containers, images, volumes and networks on the host or on a remote
+        server (pick the server above the tabs; the Docker item is in the Platform group of the sidebar). Anything aoox owns is badged
+        and shown read-only: aoox containers (panel, proxy, registry,
+        applications, databases, stacks) cannot be stopped or removed from
+        here — use their own pages.
+      </P>
+      <Ul>
+        <li>
+          <strong>Containers</strong>: all of them, stopped ones included. For
+          containers aoox does not own: logs (a one-time tail, up to 500
+          lines), start, stop, restart, and remove (owner only, with a
+          confirmation).
+        </li>
+        <li>
+          <strong>Images</strong>: remove an image no container uses, or clean
+          up dangling ones. Images in use are refused.
+        </li>
+        <li>
+          <strong>Volumes</strong> and <strong>Networks</strong>: lists only,
+          with size, users and a marker for aoox&apos;s orphaned volumes.
+        </li>
+      </Ul>
 
       <H2 id="container">Per-container metrics</H2>
       <P>

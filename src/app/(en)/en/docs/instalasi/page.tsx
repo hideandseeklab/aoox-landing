@@ -95,6 +95,25 @@ export default function Page() {
         Forgetting it fails with <Code>must be run as root</Code>.
       </Callout>
       <Callout>
+        <strong>Terminal SSH user.</strong> A new install, through this
+        one-line script or <Code>sudo aoox install</Code>, fills{" "}
+        <Code>TERMINAL_SSH_USER</Code> with the name of the user who ran{" "}
+        <Code>sudo</Code> (run directly as <Code>root</Code>, or when that name
+        is not a plain login, it stays <Code>root</Code>). A new install also{" "}
+        <strong>authorizes the terminal key</strong> automatically (creates the
+        key in <Code>secrets/</Code> and adds it to that user&apos;s{" "}
+        <Code>~/.ssh/authorized_keys</Code>); skip it with{" "}
+        <Code>AOOX_NO_TERMINAL_AUTHORIZE=1</Code> before <Code>sh</Code> (or{" "}
+        <Code>--no-terminal-authorize</Code> on the CLI). This step refuses a
+        symlinked <Code>~/.ssh</Code> or <Code>authorized_keys</Code>; a problem here
+        only prints a warning and the install continues. An explicit value
+        wins: put <Code>TERMINAL_SSH_USER=ubuntu</Code> before <Code>sh</Code>{" "}
+        on the script, or <Code>--terminal-ssh-user</Code> on the CLI. Existing installs don&apos;t
+        change — change it in Infrastructure<PathArrow />Environment. On a cloud
+        VPS root login is usually off, so this user is the one to use; details in{" "}
+        <DocLink href="/en/docs/terminal#user-ssh">Web terminal</DocLink>.
+      </Callout>
+      <Callout>
         This script is served from aoox&apos;s own domain (not a third party) and
         pulls the compose files straight from the <Code>aoox-cli</Code> repo —
         read the source first at{" "}

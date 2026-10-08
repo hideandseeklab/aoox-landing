@@ -211,8 +211,13 @@ const DATABASE: Row[] = [
 const SERVER: Row[] = [
   [
     <>Terminal: <em>auth failed</em> + an authorization command</>,
-    "The platform key isn't in that user's authorized_keys yet.",
+    <>The platform key isn&apos;t in that user&apos;s <Code>authorized_keys</Code> yet (automatic authorization refuses a symlinked <Code>~/.ssh</Code> or <Code>authorized_keys</Code>).</>,
     "Run the command shown, on the host, as that same user.",
+  ],
+  [
+    <>Terminal: <Code>SSH authentication failed for root@host.docker.internal</Code></>,
+    <>The terminal logs in as <Code>root</Code> (the default), while on a cloud VPS (Ubuntu and the like) root login is usually refused by sshd and your login is another user.</>,
+    <>Set <strong>User</strong> in Infrastructure<PathArrow />Environment to the VPS login user (e.g. <Code>ubuntu</Code>), run the authorization command on the VPS as that user, and check that user&apos;s <Code>~/.ssh/authorized_keys</Code> and <Code>PermitRootLogin</Code> in <Code>/etc/ssh/sshd_config</Code>. Details in <DocLink href="/en/docs/terminal#user-ssh">Web terminal</DocLink>.</>,
   ],
   [
     <>Terminal: <Code>TERMINAL_SSH_USER is not set</Code> (older versions)</>,

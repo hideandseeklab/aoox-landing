@@ -24,9 +24,16 @@
 #   ADMIN_EMAIL     Create the first owner account non-interactively
 #   ADMIN_PASSWORD  Required with ADMIN_EMAIL (min. 8 characters)
 #   ADMIN_NAME      Optional, defaults to "Admin"
-#   TERMINAL_SSH_USER  SSH user the web terminal uses to reach this host (default: root,
-#                      since this script itself requires root). Still needs the one-time
-#                      authorize command shown in Settings -> Terminal to actually connect.
+#   AOOX_NO_TERMINAL_AUTHORIZE  Set to 1 to skip authorizing the web terminal's SSH key for
+#                      TERMINAL_SSH_USER (see below); by default the key is created in
+#                      $AOOX_DIR/secrets and added to that user's ~/.ssh/authorized_keys.
+#   TERMINAL_SSH_USER  SSH user the web terminal uses to reach this host. Default: the
+#                      user who ran `sudo` (SUDO_USER) when it is a plain login name other
+#                      than root, otherwise root. Cloud images usually refuse SSH as root,
+#                      so the sudo user is the one that can actually log in. This script
+#                      authorizes the platform key for that user itself; if that step prints a
+#                      warning, run the command shown in Infrastructure -> Terminal on this host
+#                      as that same user.
 #
 # Without ADMIN_EMAIL, create the owner account yourself at /setup afterwards.
 # Everything this script does is also available as `aoox install` from
@@ -58,6 +65,140 @@ if [ -e "$DIR/docker-compose.dist.yml" ] && [ -z "${FORCE:-}" ]; then
 fi
 
 command_exists() { command -v "$1" >/dev/null 2>&1; }
+
+# Default TERMINAL_SSH_USER for this (new) install: the person who ran `sudo sh`
+# (SUDO_USER). Same rule as `aoox install` (defaultTerminalSshUser in aoox-cli):
+# root when there is no sudo user, SUDO_USER is root, or the value is not a plain
+# login name (it is written into .env.dist, so no spaces/newlines/odd characters;
+# unlike the CLI, surrounding whitespace is not trimmed, it just falls back to root).
+default_terminal_ssh_user() {
+  u="${SUDO_USER:-}"
+  case "$u" in
+    '' | root) echo root; return 0 ;;
+    [A-Za-z_]*) ;;
+    *) echo root; return 0 ;;
+  esac
+  case "$u" in
+    *[!A-Za-z0-9_-]*) echo root; return 0 ;;
+  esac
+  if [ "${#u}" -gt 32 ]; then echo root; return 0; fi
+  echo "$u"
+}
+# An explicit TERMINAL_SSH_USER always wins.
+TERMINAL_USER="${TERMINAL_SSH_USER:-$(default_terminal_ssh_user)}"
+
+# A plain login name: letters, digits, "_" and "-", not starting with a digit or "-", at most 32
+# characters (same rule as `aoox install`: /^[a-z_][\w-]{0,31}$/i).
+is_login_name() {
+  case "$1" in
+    [A-Za-z_]*) ;;
+    *) return 1 ;;
+  esac
+  case "$1" in
+    *[!A-Za-z0-9_-]*) return 1 ;;
+  esac
+  [ "${#1}" -le 32 ]
+}
+
+# Never fatal: any problem is this one warning and the install goes on (Settings > Terminal has the
+# authorize button and the manual command).
+terminal_warn() {
+  printf 'warning: terminal key not authorized automatically; use Settings > Terminal > authorize (%s)\n' "$1" >&2
+}
+
+# The passwd line of a user: getent first (LDAP/sssd users), then /etc/passwd.
+passwd_entry() {
+  entry=""
+  if command_exists getent; then entry="$(getent passwd "$1" 2>/dev/null || true)"; fi
+  if [ -z "$entry" ]; then
+    entry="$(awk -F: -v u="$1" '$1 == u { print; exit }' /etc/passwd 2>/dev/null || true)"
+  fi
+  printf '%s\n' "$entry"
+}
+
+# Lets the web terminal log in to this host without the manual step. Same behavior, names, modes
+# and messages as `aoox install` (aoox-cli/src/lib/terminal-key.ts, "Terminal key" in its
+# AGENTS.md) — change both together:
+#  1. $DIR/secrets: chown 1000:1000 (the api container's `node` user), chmod 700;
+#  2. no terminal_ssh_key yet: ssh-keygen ed25519, comment aoox-terminal; private 600, .pub 644,
+#     both 1000:1000. An existing key is never replaced;
+#  3. key line = first non-empty line of the .pub, one `ssh-<type> <base64> [comment]` line;
+#  4. uid/gid/home of the user from passwd; home absolute, not "/", no ".." (plus: it must exist,
+#     this script never creates a home directory);
+#  5. ~/.ssh (700) and ~/.ssh/authorized_keys (600) created if needed, loose modes tightened,
+#     both chown uid:gid (not recursive); refused when either is a symlink (this runs as root, so
+#     never follow a link the account owner controls);
+#  6. the line is added only when no identical line exists (own line, newline added if missing).
+authorize_terminal_key() {
+  user="$1"
+  keydir="$DIR/secrets"
+  key="$keydir/terminal_ssh_key"
+  mkdir -p "$keydir" 2>/dev/null || { terminal_warn "cannot create $keydir"; return 0; }
+  chown 1000:1000 "$keydir" 2>/dev/null || true
+  chmod 700 "$keydir" 2>/dev/null || true
+  if [ ! -f "$key" ]; then
+    if ! command_exists ssh-keygen; then terminal_warn "ssh-keygen not found"; return 0; fi
+    if ! ssh-keygen -q -t ed25519 -N "" -C aoox-terminal -f "$key" >/dev/null 2>&1; then
+      terminal_warn "ssh-keygen failed"
+      return 0
+    fi
+    chmod 600 "$key" 2>/dev/null || true
+    chmod 644 "$key.pub" 2>/dev/null || true
+    chown 1000:1000 "$key" "$key.pub" 2>/dev/null || true
+  fi
+  pub="$(sed -n 's/^[[:space:]]*//;s/[[:space:]]*$//;/./{p;q;}' "$key.pub" 2>/dev/null || true)"
+  if ! printf '%s\n' "$pub" | grep -Eq '^ssh-[a-z0-9-]+ [A-Za-z0-9+/=]+( [!-~]+)?$'; then
+    terminal_warn "unreadable public key"
+    return 0
+  fi
+  entry="$(passwd_entry "$user")"
+  uid="$(printf '%s' "$entry" | cut -d: -f3)"
+  gid="$(printf '%s' "$entry" | cut -d: -f4)"
+  home="$(printf '%s' "$entry" | cut -d: -f6)"
+  case "$uid:$gid" in
+    '' | *[!0-9:]* | :* | *:) terminal_warn "no usable home for $user"; return 0 ;;
+  esac
+  case "$home" in
+    /) terminal_warn "no usable home for $user"; return 0 ;;
+    /*) ;;
+    *) terminal_warn "no usable home for $user"; return 0 ;;
+  esac
+  case "$home/" in
+    */../*) terminal_warn "no usable home for $user"; return 0 ;;
+  esac
+  if [ ! -d "$home" ]; then terminal_warn "no usable home for $user"; return 0; fi
+  sshdir="$home/.ssh"
+  auth="$sshdir/authorized_keys"
+  for path in "$sshdir" "$auth"; do
+    if [ -L "$path" ]; then terminal_warn "$path is a symlink"; return 0; fi
+  done
+  mkdir -p "$sshdir" 2>/dev/null || { terminal_warn "cannot create $sshdir"; return 0; }
+  chmod 700 "$sshdir" 2>/dev/null || { terminal_warn "cannot set permissions on $sshdir"; return 0; }
+  if [ ! -e "$auth" ]; then
+    : > "$auth" 2>/dev/null || { terminal_warn "cannot create $auth"; return 0; }
+  fi
+  chmod 600 "$auth" 2>/dev/null || { terminal_warn "cannot set permissions on $auth"; return 0; }
+  if grep -qxF "$pub" "$auth" 2>/dev/null; then
+    added=0
+  else
+    # A file that does not end in a newline would swallow the key onto its last line.
+    if [ -s "$auth" ] && [ "$(tail -c 1 "$auth" | wc -l)" -eq 0 ]; then
+      printf '\n' >> "$auth" 2>/dev/null || { terminal_warn "cannot write $auth"; return 0; }
+    fi
+    printf '%s\n' "$pub" >> "$auth" 2>/dev/null || { terminal_warn "cannot write $auth"; return 0; }
+    added=1
+  fi
+  if ! chown "$uid:$gid" "$sshdir" "$auth" 2>/dev/null; then
+    terminal_warn "cannot change the owner of $sshdir"
+    return 0
+  fi
+  if [ "$added" = "1" ]; then
+    log "terminal key authorized for $user"
+  else
+    log "terminal key already authorized for $user"
+  fi
+  return 0
+}
 
 if ! command_exists docker || ! docker info >/dev/null 2>&1; then
   log "Docker not found/running — installing via https://get.docker.com"
@@ -132,7 +273,7 @@ ADMIN_NAME=${ADMIN_NAME:-}
 
 TERMINAL_SSH_HOST=host.docker.internal
 TERMINAL_SSH_PORT=22
-TERMINAL_SSH_USER=${TERMINAL_SSH_USER:-root}
+TERMINAL_SSH_USER=$TERMINAL_USER
 TERMINAL_SSH_PRIVATE_KEY_FILE=
 TERMINAL_SSH_PASSPHRASE=
 TERMINAL_SSH_PASSWORD=
@@ -154,6 +295,13 @@ BUILDKIT_VERSION=v0.27.0
 BUILDKIT_CACHE_KEEP_GB=10
 EOF
 chmod 600 "$DIR/.env.dist"
+
+# Authorize the web terminal's key for TERMINAL_USER, unless asked not to, the user is not a plain
+# login name, or a terminal key file/password is configured. Failures only warn.
+if [ "${AOOX_NO_TERMINAL_AUTHORIZE:-}" != "1" ] && is_login_name "$TERMINAL_USER" \
+  && [ -z "${TERMINAL_SSH_PRIVATE_KEY_FILE:-}${TERMINAL_SSH_PASSWORD:-}" ]; then
+  authorize_terminal_key "$TERMINAL_USER" || true
+fi
 
 log "Running docker compose up -d"
 cd "$DIR"

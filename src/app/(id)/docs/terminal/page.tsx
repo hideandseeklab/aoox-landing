@@ -112,13 +112,36 @@ TERMINAL_SSH_USER=deploy        # user host yang dipakai terminal`}</Pre>
           <P>
             Jalankan <Code>up -d</Code> lagi setelah mengubah env. Bila{" "}
             <Code>TERMINAL_SSH_USER</Code> kosong, terminal masuk sebagai{" "}
-            <Code>root</Code> (default installer) — kartu Terminal menandainya
-            sebagai user default. Kalau koneksi gagal, terminal menampilkan
+            <Code>root</Code> (default instalasi lama) — kartu Terminal
+            menandainya sebagai user default. Instalasi baru lewat{" "}
+            <Code>sudo aoox install</Code> atau skrip satu-perintah (
+            <Code>curl … | sudo sh</Code>) mengisinya otomatis dengan nama user
+            yang menjalankan <Code>sudo</Code> (bila berupa nama login polos
+            dan bukan <Code>root</Code>; selain itu <Code>root</Code>; flag{" "}
+            <Code>--terminal-ssh-user</Code> atau env{" "}
+            <Code>TERMINAL_SSH_USER</Code> yang eksplisit selalu menang);
+            instalasi lama tidak berubah
+            (ubah lewat Environment, lihat{" "}
+            <DocLink href="#user-ssh">User SSH di VPS cloud</DocLink>). Kalau
+            koneksi gagal, terminal menampilkan
             tautan ke <strong>Infrastruktur<PathArrow />Environment</strong> untuk
             memperbaiki pengaturannya.
           </P>
         </Step>
         <Step title="Otorisasi key platform">
+          <P>
+            <strong>Instalasi baru</strong> melakukannya sendiri:{" "}
+            <Code>sudo aoox install</Code> dan skrip satu-perintah membuat key
+            di <Code>secrets/</Code> lalu menambahkannya ke{" "}
+            <Code>~/.ssh/authorized_keys</Code> user terminal. Untuk{" "}
+            <strong>instalasi yang sudah ada</strong>, owner cukup klik{" "}
+            <strong>Otorisasi otomatis</strong> di Infrastruktur
+            <PathArrow />Terminal (atau di notifikasi galat halaman Terminal);
+            aoox menambahkan public key ke <Code>authorized_keys</Code> user itu,
+            menguji login, dan menyambung ulang. Tidak ada password atau private
+            key yang ditulis. Perintah manual di bawah tetap tampil sebagai
+            cadangan.
+          </P>
           <P>
             API membuat keypair ed25519 di <Code>./secrets</Code> saat pertama
             dibutuhkan. <strong>Settings<PathArrow />Terminal</strong> menampilkan public
@@ -138,6 +161,49 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
           </P>
         </Step>
       </Steps>
+
+      <H2 id="user-ssh">User SSH di VPS cloud</H2>
+      <P>
+        Terminal masuk ke host sebagai user di kolom <strong>User</strong>{" "}
+        (<Code>TERMINAL_SSH_USER</Code>), dan perintah otorisasi key harus
+        dijalankan di host <strong>sebagai user yang sama</strong>. Di VPS cloud
+        (Ubuntu, Tencent, dan sejenisnya) login <Code>root</Code> biasanya
+        dimatikan di sshd (<Code>PermitRootLogin no</Code> atau hanya lewat key
+        provider), jadi default <Code>root</Code> sering ditolak.
+      </P>
+      <Steps>
+        <Step title="Isi User dengan user login VPS">
+          <P>
+            Buka <strong>Infrastruktur<PathArrow />Environment</strong> (owner),
+            isi <strong>User</strong> dengan user yang kamu pakai untuk SSH ke
+            VPS — di Ubuntu biasanya <Code>ubuntu</Code> — lalu simpan. Panel
+            memulai ulang kontainer API beberapa detik.
+          </P>
+        </Step>
+        <Step title="Otorisasi key sebagai user itu">
+          <P>
+            Di VPS, login sebagai user yang sama dan jalankan perintah otorisasi
+            dari <strong>Infrastruktur<PathArrow />Terminal</strong> (tiga baris
+            di atas). Perintah itu menulis ke <Code>~/.ssh/authorized_keys</Code>{" "}
+            milik user yang sedang menjalankannya, jadi jangan dijalankan
+            dengan <Code>sudo</Code>.
+          </P>
+        </Step>
+        <Step title="Sambung ulang">
+          <P>Klik <strong>Sambung ulang</strong> di menu Terminal.</P>
+        </Step>
+      </Steps>
+
+      <H3>Batas otorisasi otomatis</H3>
+      <Ul>
+        <li>Hanya untuk <strong>host aoox</strong> dengan key platform. <strong>Server remote</strong> tetap manual (perintah otorisasi di halaman Server remote), begitu juga bila memakai key atau password sendiri.</li>
+        <li>Hanya owner yang melihat tombolnya (admin tetap bisa memakai perintah manual).</li>
+        <li>Key ditulis ke <Code>~/.ssh/authorized_keys</Code> user terminal. Kalau sshd memakai <Code>AuthorizedKeysFile</Code> di lokasi lain, key tidak akan dibaca: aoox melaporkan bahwa uji koneksi gagal, dan kamu perlu memasang key di lokasi itu.</li>
+        <li>SELinux (mis. RHEL/Rocky) bisa menolak sshd membaca berkas yang baru ditulis; perbaiki konteksnya dengan <Code>restorecon -R ~/.ssh</Code> di host.</li>
+        <li>Bila <Code>~/.ssh</Code> atau <Code>authorized_keys</Code> berupa symlink, aoox menolak mengikutinya dan meminta otorisasi manual.</li>
+        <li>Bila Docker memakai bridge/gateway kustom (bukan alamat default seperti <Code>host.docker.internal</Code> atau <Code>172.17.0.1</Code>), tombol tidak muncul; gunakan perintah manual.</li>
+        <li>Instalasi baru bisa melewatkan langkah otomatis dengan <Code>--no-terminal-authorize</Code> (CLI) atau <Code>AOOX_NO_TERMINAL_AUTHORIZE=1</Code> (skrip satu-perintah).</li>
+      </Ul>
 
       <H3>Kredensial alternatif</H3>
       <Table
@@ -176,6 +242,8 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
         head={["Pesan", "Penyebab & solusi"]}
         rows={[
           ["auth failed + perintah otorisasi", "Key belum ada di authorized_keys user itu. Jalankan perintah yang ditampilkan di terminal/Settings."],
+          [<>SSH authentication failed for root@host.docker.internal</>, <>Terminal mencoba masuk sebagai <Code>root</Code>, padahal login VPS-mu user lain dan sshd biasanya menolak root. Owner bisa mencoba tombol <strong>Otorisasi otomatis</strong> setelah User di Environment benar. Periksa: (1) kolom User di Infrastruktur<PathArrow />Environment sama dengan user login VPS (mis. <Code>ubuntu</Code>); (2) key platform ada di <Code>~/.ssh/authorized_keys</Code> <em>user itu</em> (bukan root); (3) kalau tetap ingin root, <Code>PermitRootLogin</Code> di <Code>/etc/ssh/sshd_config</Code> mengizinkan login key (<Code>prohibit-password</Code> atau <Code>yes</Code>), lalu <Code>sudo systemctl reload ssh</Code>.</>],
+          ["Otorisasi otomatis: \"…but the connection test failed\"", <>Key sudah ditulis, tetapi login uji masih ditolak: sshd memakai <Code>AuthorizedKeysFile</Code> di tempat lain, SELinux memblokir, atau login key dimatikan (<Code>PubkeyAuthentication no</Code>). Periksa <Code>/etc/ssh/sshd_config</Code>, lalu <Code>restorecon -R ~/.ssh</Code> bila SELinux aktif; perintah manual tetap tersedia.</>],
           ["origin not allowed", <><Code>WEB_ORIGIN</Code> tidak sama persis dengan URL di browser (skema/host/port). Samakan, <Code>up -d</Code> ulang.</>],
           ["connect ECONNREFUSED / timeout", "sshd tidak jalan, port salah, atau host.docker.internal tidak resolve (Linux tanpa extra_hosts — pakai IP gateway docker0, mis. 172.17.0.1)."],
           ["Direktori key tidak writable (uid 1000)", <>Perbaiki kepemilikan folder <Code>./secrets</Code>: <Code>sudo chown -R 1000:1000 ./secrets</Code>.</>],

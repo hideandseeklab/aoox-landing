@@ -238,6 +238,12 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
         It applies to application domains; the panel&apos;s domains keep using
         ACME.
       </P>
+      <P>
+        Need basic auth, security headers, rate limiting, an IP allowlist or a
+        www redirect for a domain? Write your own Traefik middleware (or use a
+        preset) and attach it per domain on the Domain tab — see{" "}
+        <DocLink href="/en/docs/konfigurasi-proxy">Proxy configuration</DocLink>.
+      </P>
 
       <H2 id="operasi">Operations</H2>
       <Table

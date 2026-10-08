@@ -212,8 +212,13 @@ const DATABASE: Row[] = [
 const SERVER: Row[] = [
   [
     <>Terminal: <em>auth failed</em> + perintah otorisasi</>,
-    "Key platform belum di authorized_keys user itu.",
+    <>Key platform belum di <Code>authorized_keys</Code> user itu (otorisasi otomatis menolak <Code>~/.ssh</Code> atau <Code>authorized_keys</Code> yang berupa symlink).</>,
     "Jalankan perintah yang ditampilkan di host sebagai user itu.",
+  ],
+  [
+    <>Terminal: <Code>SSH authentication failed for root@host.docker.internal</Code></>,
+    <>Terminal masuk sebagai <Code>root</Code> (default), sedangkan di VPS cloud (Ubuntu, dll.) login root biasanya ditolak sshd dan login-mu user lain.</>,
+    <>Isi <strong>User</strong> di Infrastruktur<PathArrow />Environment dengan user login VPS (mis. <Code>ubuntu</Code>), jalankan perintah otorisasi di VPS sebagai user itu, periksa <Code>~/.ssh/authorized_keys</Code> user itu dan <Code>PermitRootLogin</Code> di <Code>/etc/ssh/sshd_config</Code>. Rinciannya di <DocLink href="/docs/terminal#user-ssh">Web terminal</DocLink>.</>,
   ],
   [
     <>Terminal: <Code>TERMINAL_SSH_USER is not set</Code> (versi lama)</>,
