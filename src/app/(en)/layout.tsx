@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "aoox — self-hosted PaaS for deploying from Git",
+    default: "aoox — Self-hosted PaaS to deploy your apps",
     template: "%s · aoox",
   },
   description:

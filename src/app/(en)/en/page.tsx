@@ -7,7 +7,7 @@ import { homeJsonLd, pageMetadata } from "@/lib/seo"
 export const metadata: Metadata = pageMetadata({
   path: "/en",
   lang: "en",
-  title: "aoox — self-hosted PaaS for deploying from Git",
+  title: "aoox — Self-hosted PaaS to deploy your apps",
   description:
     "aoox is a self-hosted PaaS on top of Docker: deploy applications straight from Git, managed databases, automatic domains, and monitoring in one dashboard — a Heroku/Vercel alternative that runs on your own server.",
   titleIsFinal: true,
