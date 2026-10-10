@@ -37,7 +37,7 @@ function CopyButton({
   )
 }
 
-/** Clipboard API dulu; bila ditolak (http, izin), fallback ke execCommand. */
+/** Try the Clipboard API first; if it is refused (http, permissions), fall back to execCommand. */
 async function copyText(text: string) {
   try {
     await navigator.clipboard.writeText(text)

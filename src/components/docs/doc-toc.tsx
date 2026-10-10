@@ -13,8 +13,8 @@ const COPY: Record<Lang, string> = {
 }
 
 /**
- * Daftar isi per halaman: membaca h2[id] di dalam <article> setelah mount,
- * lalu menyorot heading yang sedang terlihat lewat IntersectionObserver.
+ * Table of contents per page: reads h2[id] inside <article> after mount,
+ * then highlights the heading currently in view via IntersectionObserver.
  */
 function DocToc({ lang = "id" }: { lang?: Lang }) {
   const [headings, setHeadings] = React.useState<Heading[]>([])

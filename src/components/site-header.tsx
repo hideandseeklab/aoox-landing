@@ -70,7 +70,7 @@ function SiteHeader() {
           <Button size="sm" className="hidden sm:inline-flex" asChild>
             <Link href={lang === "en" ? "/en/docs/instalasi" : "/docs/instalasi"}>{cta}</Link>
           </Button>
-          {/* key = pathname: menu otomatis tertutup saat pindah halaman */}
+          {/* key = pathname: the menu closes automatically when the page changes */}
           <MobileMenu key={pathname} pathname={pathname} lang={lang} nav={nav} cta={cta} />
         </div>
       </div>
@@ -138,7 +138,7 @@ function ThemeToggle({ lang }: { lang: Lang }) {
       title={lang === "en" ? "Toggle theme (d)" : "Ganti tema (d)"}
       className="inline-flex size-7 items-center justify-center border border-transparent text-muted-foreground transition-colors hover:border-border hover:text-foreground rounded-md"
     >
-      {/* dua ikon, dipilih lewat CSS agar tidak ada hydration mismatch */}
+      {/* two icons, chosen via CSS so there is no hydration mismatch */}
       <Sun className="size-3.5 dark:hidden" />
       <Moon className="hidden size-3.5 dark:block" />
     </button>

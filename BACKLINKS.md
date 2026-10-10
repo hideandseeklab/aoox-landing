@@ -1,42 +1,41 @@
-# Backlink & visibilitas — tindakan manual
+# Backlink & visibility — manual actions
 
-Berkas ini untuk **pemilik proyek**, bukan halaman situs (tidak di-deploy). Isinya hal-hal yang tidak bisa
-dipasang lewat kode dan harus dilakukan sendiri dari akun GitHub, Docker Hub, npm, dan komunitas. Teks di
-bawah siap tempel. Semua fakta tentang syarat direktori diambil dari sumbernya pada 2026-09-30 — periksa
-ulang sebelum mengirim, aturan komunitas berubah.
+This file is for the **project owner**, not a site page (it is not deployed). It contains things that cannot be set up
+through code and must be done yourself from the GitHub, Docker Hub, and npm accounts and from the community. The text
+below is ready to paste. All facts about directory requirements were taken from their sources on 2026-09-30 — re-check
+them before submitting, because community rules change.
 
-## Catatan jujur dulu
+## Honest notes first
 
-- Tautan dari repo/profil kita sendiri (GitHub, npm, Docker Hub) sebagian besar berstatus `nofollow` atau
-  tidak membawa bobot peringkat. Gunanya: **membantu mesin pencari menemukan** `aoox.dev` dan membuat
-  profil resmi saling menguatkan (sinyal entitas). Ini bukan pengganti tautan alami dari situs lain.
-- Bobot terbesar datang dari tautan yang **diberikan orang lain secara sukarela** karena produknya berguna:
-  artikel, diskusi, daftar kurasi. Itu tumbuh dari kualitas docs, changelog yang rutin, dan proyek yang
-  benar-benar dipakai. Jangan membeli tautan, menukar tautan massal, atau meminta teman meng-upvote —
-  selain melanggar aturan komunitas, itu berisiko dihukum Google.
-- Yang sudah dipasang lewat kode (rilis berikutnya): `homepage`/`repository`/`bugs`/`keywords` di keempat
-  `package.json`, tautan `https://aoox.dev` di README keempat repo, label OCI di image Docker api/web,
-  tautan GitHub/npm/Docker Hub di footer situs, dan JSON-LD `sameAs`.
+- Links from our own repos/profiles (GitHub, npm, Docker Hub) are mostly `nofollow` or carry no ranking weight. Their
+  purpose is **to help search engines find** `aoox.dev` and to make the official profiles reinforce each other (entity
+  signals). They are not a substitute for natural links from other sites.
+- The largest weight comes from links that **other people give voluntarily** because the product is useful: articles,
+  discussions, curated lists. That grows from the quality of the docs, a regular changelog, and a project that is
+  actually used. Do not buy links, trade links in bulk, or ask friends to upvote — besides violating community rules,
+  it risks a Google penalty.
+- Already set up through code (next release): `homepage`/`repository`/`bugs`/`keywords` in all four `package.json`
+  files, `https://aoox.dev` links in the README of all four repos, OCI labels on the api/web Docker images, GitHub/npm/
+  Docker Hub links in the site footer, and JSON-LD `sameAs`.
 
-## Urutan yang disarankan
+## Suggested order
 
-1. **GitHub** — About/topics keempat repo + profil organisasi (10 menit, dampak langsung).
-2. **Rilis alpha.4** (`npm version`, push tag) → `homepage`, README, dan label OCI mulai tampil di npm dan
-   Docker Hub. Setelah itu putuskan soal tag `latest` npm (lihat bagian npm).
-3. **Docker Hub** — short description + overview `aoox-api` dan `aoox-web`.
-4. **Google Search Console + Bing Webmaster Tools** — verifikasi `aoox.dev` dan kirim
-   `https://aoox.dev/sitemap.xml`. Ini yang paling mempercepat indeks.
-5. Konten yang layak ditautkan: 1–2 tulisan teknis sungguhan (mis. cara kami men-deploy dengan Nixpacks/Railpack
-   di server sendiri, atau pelajaran dari membangun PaaS) di blog sendiri, lalu dibagikan ke dev.to dan
-   komunitas Indonesia.
-6. **Show HN**, **r/selfhosted**, AlternativeTo, Product Hunt — setelah ada beberapa pengguna nyata, changelog
-   yang berjalan, dan demo/instalasi yang mulus. Jangan semuanya di hari yang sama.
-7. Daftar kurasi (awesome-*): **tunda** — lihat bagian "Direktori" (aoox belum memenuhi syaratnya).
+1. **GitHub** — About/topics for all four repos + the organization profile (10 minutes, immediate impact).
+2. **Release alpha.4** (`npm version`, push tag) → `homepage`, README, and OCI labels start showing on npm and Docker
+   Hub. After that, decide on the npm `latest` tag (see the npm section).
+3. **Docker Hub** — short description + overview for `aoox-api` and `aoox-web`.
+4. **Google Search Console + Bing Webmaster Tools** — verify `aoox.dev` and submit
+   `https://aoox.dev/sitemap.xml`. This is what speeds up indexing the most.
+5. Content worth linking to: 1–2 genuine technical articles (e.g. how we deploy with Nixpacks/Railpack on our own server,
+   or lessons from building a PaaS) on our own blog, then shared on dev.to and Indonesian developer communities.
+6. **Show HN**, **r/selfhosted**, AlternativeTo, Product Hunt — after there are some real users, a running changelog,
+   and a smooth demo/installation. Do not do them all on the same day.
+7. Curated lists (awesome-*): **postpone** — see the "Directories" section (aoox does not meet the requirements yet).
 
 ## 1. GitHub
 
-Deskripsi maksimal 350 karakter; topics maksimal 20, huruf kecil dan tanda hubung. Jalankan sendiri
-(perintah ini **tidak** dijalankan oleh siapa pun selain Anda; butuh `gh auth login` dengan hak admin repo):
+Description max 350 characters; topics max 20, lowercase and hyphenated. Run these yourself (no one else runs these
+commands; they need `gh auth login` with repo admin rights):
 
 ```bash
 gh repo edit hideandseeklab/aoox-api \
@@ -64,13 +63,13 @@ gh repo edit hideandseeklab/aoox-landing \
   --add-topic self-hosted --add-topic paas --add-topic documentation --add-topic nextjs
 ```
 
-Lewat web (kalau tidak memakai `gh`): halaman repo → ikon roda gigi di kotak **About** → isi Description,
-Website (`https://aoox.dev`), Topics.
+Via the web (if you are not using `gh`): repo page → gear icon in the **About** box → fill in Description, Website
+(`https://aoox.dev`), and Topics.
 
-**Organisasi `hideandseeklab`** (Settings → Profile): Description singkat, mis.
-`Building aoox, a self-hosted PaaS — deploy from Git to your own server. https://aoox.dev`, isi URL
-`https://aoox.dev`, dan unggah logo. Bila ingin README profil organisasi, buat repo publik bernama
-`.github` dengan `profile/README.md`. Isi yang disarankan:
+**Organization `hideandseeklab`** (Settings → Profile): a short Description, e.g.
+`Building aoox, a self-hosted PaaS — deploy from Git to your own server. https://aoox.dev`, set the URL to
+`https://aoox.dev`, and upload the logo. If you want a README for the organization profile, create a public repo named
+`.github` with `profile/README.md`. Suggested contents:
 
 ```markdown
 # hideandseeklab
@@ -90,14 +89,14 @@ Website: https://aoox.dev · Docs: https://aoox.dev/docs · Changelog: https://a
 
 ## 2. Docker Hub (`hideandseeklab/aoox-api`, `hideandseeklab/aoox-web`)
 
-Repositori → **General** → edit **Short description** (maks. 100 karakter) dan **Overview** (Markdown).
-Label OCI di Dockerfile terbaca setelah image dirilis ulang, tetapi kolom di atas diisi manual.
+Repository → **General** → edit **Short description** (max. 100 characters) and **Overview** (Markdown). The OCI labels
+in the Dockerfile are read after the image is re-released, but the fields above are filled in manually.
 
 **Short description**
 
-- `aoox-api` (96 karakter):
+- `aoox-api` (96 characters):
   `API of aoox, a self-hosted PaaS: deploy from Git on your own server. Docs: https://aoox.dev/docs`
-- `aoox-web` (89 karakter):
+- `aoox-web` (89 characters):
   `Dashboard of aoox, a self-hosted PaaS: deploy, databases, domains, logs. https://aoox.dev`
 
 **Overview `aoox-api`**
@@ -153,104 +152,102 @@ Details: https://aoox.dev/docs/instalasi
 
 ## 3. npm (`@hideandseeklab/aoox`)
 
-- `homepage`, `repository`, `bugs`, `keywords`, dan README (dengan tautan `aoox.dev`) baru tampil di halaman
-  npm **setelah rilis berikutnya dipublikasikan** (`npm version` → push tag → workflow `npm-publish`).
-- **Temuan penting — tag `latest`:** per 2026-09-30 registry npm memberi `latest` = `0.1.0-alpha.0` dan
-  `alpha` = `0.1.0-alpha.4`. Halaman `https://www.npmjs.com/package/@hideandseeklab/aoox` menampilkan versi
-  yang ditunjuk `latest`, jadi yang tampil di sana (README, homepage) masih alpha.0, dan
-  `npm install -g @hideandseeklab/aoox` tanpa `@alpha` memasang alpha.0. Workflow publish sengaja tidak
-  menggeser `latest` untuk pra-rilis. Selama proyek masih alpha, pilihan yang masuk akal:
+- `homepage`, `repository`, `bugs`, `keywords`, and the README (with the `aoox.dev` link) only appear on the npm page
+  **after the next release is published** (`npm version` → push tag → `npm-publish` workflow).
+- **Important finding — `latest` tag:** as of 2026-09-30 the npm registry has `latest` = `0.1.0-alpha.0` and
+  `alpha` = `0.1.0-alpha.4`. The page `https://www.npmjs.com/package/@hideandseeklab/aoox` shows the version that
+  `latest` points to, so what appears there (README, homepage) is still alpha.0, and
+  `npm install -g @hideandseeklab/aoox` without `@alpha` installs alpha.0. The publish workflow intentionally does not
+  move `latest` for pre-releases. While the project is still alpha, a sensible option is:
   ```bash
-  npm dist-tag add @hideandseeklab/aoox@0.1.0-alpha.4 latest   # setelah alpha.4 terbit
+  npm dist-tag add @hideandseeklab/aoox@0.1.0-alpha.4 latest   # after alpha.4 is published
   ```
-  (butuh login npm dengan hak publish/2FA; keputusan ini di tangan Anda, dampaknya: instalasi tanpa tag ikut
-  ke pra-rilis terbaru). Alternatifnya, biarkan dan pastikan semua docs memakai `@alpha` (sudah begitu di
-  halaman CLI).
-- Setelah rilis, buka halaman npm dan pastikan tautan Homepage menunjuk `https://aoox.dev`.
+  (requires npm login with publish rights/2FA; this decision is yours. Impact: installs without a tag will follow the
+  latest pre-release.) The alternative is to leave it as is and make sure all docs use `@alpha` (already the case on the
+  CLI page).
+- After the release, open the npm page and make sure the Homepage link points to `https://aoox.dev`.
 
-## 4. Mesin pencari
+## 4. Search engines
 
-- Google Search Console: tambah properti `https://aoox.dev` (verifikasi DNS TXT paling stabil), kirim
-  `https://aoox.dev/sitemap.xml`, lalu "Request indexing" untuk beranda, `/docs`, `/docs/instalasi`,
-  `/changelog` (ID dan EN). Cek laporan Pages dan pastikan `hreflang` id/en tidak dilaporkan error.
-- Bing Webmaster Tools: impor dari Search Console (sekali klik).
-- Bing + Yandex dan beberapa mesin lain memakai IndexNow; opsional, tidak wajib.
+- Google Search Console: add the property `https://aoox.dev` (DNS TXT verification is the most stable), submit
+  `https://aoox.dev/sitemap.xml`, then "Request indexing" for the home page, `/docs`, `/docs/instalasi`, and
+  `/changelog` (ID and EN). Check the Pages report and make sure `hreflang` id/en is not reported as an error.
+- Bing Webmaster Tools: import from Search Console (one click).
+- Bing, Yandex, and several other engines use IndexNow; optional, not required.
 
-## 5. Direktori dan komunitas
+## 5. Directories and communities
 
-Draf teks singkat; **tidak dikirim** oleh siapa pun selain Anda. Tulis sendiri dengan kata-kata Anda bila
-komunitasnya melarang teks yang digenerasi mesin (lihat catatan tiap baris).
+Short draft texts; **nobody else submits them** — only you. Write them yourself in your own words if a community
+prohibits machine-generated text (see the note on each entry).
 
-### awesome-selfhosted — **tidak memenuhi syarat** (jangan kirim)
+### awesome-selfhosted — **does not meet the requirements** (do not submit)
 
-Sumber: `CONTRIBUTING.md` di `awesome-selfhosted/awesome-selfhosted-data`. Syarat objektif: rilis pertama
-lebih dari 4 bulan lalu (aoox: alpha.0 pada 2026-09-25 → paling cepat 2027-01-25), dipelihara aktif,
-instruksi instalasi yang berfungsi, lisensi bebas (Apache-2.0 memenuhi). **Tetapi** bagian "What does not
-qualify" menolak eksplisit "Software acts as a platform to build and deploy arbitrary applications (PaaS,
-'serverless'...)". README mereka juga mengarahkan PaaS ke awesome-sysadmin. Selain itu kontribusi yang
-digenerasi mesin/LLM "will result in a ban". Kesimpulan: tidak ada gunanya; jangan diajukan.
+Source: `CONTRIBUTING.md` in `awesome-selfhosted/awesome-selfhosted-data`. Objective requirements: first release more
+than 4 months ago (aoox: alpha.0 on 2026-09-25 → earliest 2027-01-25), actively maintained, working installation
+instructions, free license (Apache-2.0 satisfies this). **But** the "What does not qualify" section explicitly rejects
+"Software acts as a platform to build and deploy arbitrary applications (PaaS, 'serverless'...)". Their README also
+directs PaaS projects to awesome-sysadmin. In addition, machine- or LLM-generated contributions "will result in a
+ban". Conclusion: it is pointless; do not submit it.
 
-### awesome-sysadmin (kategori PaaS) — **belum**, kandidat jangka panjang
+### awesome-sysadmin (PaaS category) — **not yet**, long-term candidate
 
-Sumber: `PULL_REQUEST_TEMPLATE.md` di `awesome-foss/awesome-sysadmin-data`. Daftar ini punya kategori PaaS
-(berisi CapRover, Coolify, Dokku). Syarat di templatnya: perangkat lunak bebas (Apache-2.0 ✓), belum terdaftar
-di awesome-selfhosted, dipelihara aktif, ada instruksi instalasi yang berfungsi — dan
-**"first released more than 12 months ago"** (aoox: paling cepat 2027-09-25) serta "not your own, unless you
-have a healthy ecosystem with a few contributors (which aren't your sock puppet accounts)". Jadi: belum
-memenuhi syarat sekarang; jangan diajukan sebelum lewat 12 bulan **dan** ada kontributor/pengguna nyata di
-luar tim. Bila saatnya, satu item per PR, isi "Why is it awesome?" dengan jujur (kelebihan nyata, tanpa
-klaim berlebihan).
+Source: `PULL_REQUEST_TEMPLATE.md` in `awesome-foss/awesome-sysadmin-data`. This list has a PaaS category (containing
+CapRover, Coolify, and Dokku). The requirements in the template: free software (Apache-2.0 ✓), not already listed on
+awesome-selfhosted, actively maintained, working installation instructions — and **"first released more than 12 months
+ago"** (aoox: earliest 2027-09-25) plus "not your own, unless you have a healthy ecosystem with a few contributors (which
+aren't your sock puppet accounts)". So: it does not meet the requirements now; do not submit until 12 months have passed
+**and** there are contributors/users outside the team. When the time comes, submit one item per PR and fill in "Why is it
+awesome?" honestly (real strengths, without exaggerated claims).
 
-### AlternativeTo — layak, risiko rendah
+### AlternativeTo — worthwhile, low risk
 
-Situs direktori alternatif perangkat lunak; formulir "Suggest new app" gratis dan melewati moderasi.
-Belum saya verifikasi otomatis (situsnya memblokir pemeriksaan otomatis) — baca panduan mereka sebelum
-mengirim. Bila mengarang perbandingan ("alternatif X"), pastikan benar dan tidak menyesatkan. Draf:
+An alternative software directory site; the "Suggest new app" form is free and skips moderation. I have not verified it
+automatically yet (the site blocks automated checks), so read their guidelines before submitting. If you write
+comparisons ("alternative to X"), make sure they are accurate and not misleading. Draft:
 
-- Nama: `aoox`
+- Name: `aoox`
 - Tagline: `Self-hosted PaaS: deploy from Git to your own server`
-- Deskripsi: `aoox is an open-source (Apache-2.0) self-hosted PaaS. Connect a Git repo or pick an image and aoox builds (Dockerfile, Nixpacks, Railpack, or static sites), deploys with health checks and rollback, and serves it behind Traefik with automatic HTTPS. It also runs managed databases (PostgreSQL, MySQL, MariaDB, Redis/Valkey, MongoDB) with backups, one-click templates, scheduled jobs, monitoring, notifications and a CLI. One dashboard, your own server, no vendor lock-in. Alpha.`
-- Tautan: https://aoox.dev · Sumber: https://github.com/hideandseeklab/aoox-api
+- Description: `aoox is an open-source (Apache-2.0) self-hosted PaaS. Connect a Git repo or pick an image and aoox builds (Dockerfile, Nixpacks, Railpack, or static sites), deploys with health checks and rollback, and serves it behind Traefik with automatic HTTPS. It also runs managed databases (PostgreSQL, MySQL, MariaDB, Redis/Valkey, MongoDB) with backups, one-click templates, scheduled jobs, monitoring, notifications and a CLI. One dashboard, your own server, no vendor lock-in. Alpha.`
+- Links: https://aoox.dev · Source: https://github.com/hideandseeklab/aoox-api
 
-### Product Hunt — opsional, tunda
+### Product Hunt — optional, postpone
 
-Butuh akun maker, aset visual (galeri, ikon), dan hari peluncuran yang direncanakan. Efeknya lonjakan
-sesaat; untuk proyek alpha, lebih baik menunggu rilis yang stabil dan demo yang rapi. Jangan minta teman
-meng-upvote. Belum diverifikasi otomatis.
+Requires a maker account, visual assets (gallery, icon), and a planned launch day. The effect is a momentary spike; for an
+alpha project it is better to wait for a stable release and a polished demo. Do not ask friends to upvote. Not verified
+automatically.
 
 ### Hacker News — "Show HN"
 
-Aturan resmi (`news.ycombinator.com/showhn.html`, dibaca 2026-09-30): Show HN untuk karya yang bisa **dicoba**
-orang, bukan landing page; proyek harus non-trivial dan Anda ada untuk berdiskusi; mudahkan orang
-mencobanya tanpa sign-up; "New features and upgrades (Foo 1.3.1 is out)" tidak layak; jangan meminta teman
-meng-upvote/komentar. Format: judul `Show HN: aoox – self-hosted PaaS (deploy from Git to your own server)`,
-tautan ke `https://aoox.dev` atau repo, lalu **komentar pertama Anda sendiri** berisi cerita: kenapa dibuat,
-apa yang berbeda (mis. build Nixpacks/Railpack + Traefik + blue/green dalam satu panel), apa yang belum ada
-(alpha, satu node utama, dll.), dan cara mencobanya (satu perintah instalasi). Waktu: hari kerja pagi waktu
-AS (Selasa–Kamis), saat Anda bisa membalas komentar berjam-jam. Risiko: kritik keras terhadap kualitas alpha
-dan kompetisi Coolify/Dokku/CapRover — siapkan jawaban jujur. Kirim **sekali**; jangan diulang.
+Official rules (`news.ycombinator.com/showhn.html`, read 2026-09-30): Show HN is for work people can **try**, not landing
+pages; the project must be non-trivial and you must be there to discuss it; make it easy for people to try without
+sign-up; "New features and upgrades (Foo 1.3.1 is out)" is not eligible; do not ask friends to upvote or comment. Format:
+the title `Show HN: aoox – self-hosted PaaS (deploy from Git to your own server)`, a link to `https://aoox.dev` or the
+repo, then **your own first comment** telling the story: why it was built, what is different (e.g. Nixpacks/Railpack
+builds + Traefik + blue/green in one panel), what is not there yet (alpha, one main node, etc.), and how to try it (one
+install command). Timing: a weekday morning US time (Tuesday–Thursday), when you can reply to comments for hours. Risks:
+harsh criticism of alpha quality and competition from Coolify/Dokku/CapRover — prepare honest answers. Submit **once**;
+do not repeat it.
 
-### r/selfhosted — periksa aturannya dulu
+### r/selfhosted — check the rules first
 
-Saya **tidak bisa memverifikasi** aturan subreddit ini (Reddit memblokir akses otomatis dan kotak aturan
-tidak terbaca). Sebelum posting, baca sendiri **Rules** dan **wiki** subreddit — subreddit besar seperti
-ini biasanya membatasi promosi diri (mis. rasio kontribusi vs promosi, format/hari khusus untuk proyek
-baru, atau keharusan menyebut proyek dibuat sendiri). Kalau ada thread/hari khusus proyek baru, pakai itu.
-Draf umum: judul jujur ("Built a self-hosted PaaS (alpha) — feedback welcome"), sebutkan bahwa Anda
-pembuatnya, apa yang dilakukan, apa yang belum, tautan repo dan docs, dan tanyakan pertanyaan spesifik.
-Jangan posting ulang setiap rilis. Risiko: dihapus moderator dan terkesan spam.
+I **cannot verify** this subreddit's rules (Reddit blocks automated access and the rules box is not readable). Before
+posting, read the **Rules** and the wiki yourself — large subreddits like this usually limit self-promotion (e.g. a ratio
+of contributions to promotion, a specific format or day for new projects, or a requirement to state that you built the
+project yourself). If there is a thread or day for new projects, use that. General draft: an honest title ("Built a
+self-hosted PaaS (alpha) — feedback welcome"), state that you are the creator, what it does, what is not there yet, links
+to the repo and docs, and ask specific questions. Do not repost on every release. Risk: removal by moderators and being
+seen as spam.
 
-### dev.to / Medium / komunitas developer Indonesia
+### dev.to / Medium / Indonesian developer communities
 
-Paling bernilai bila berupa **artikel** yang berguna (bukan iklan): mis. "Deploy Next.js dari Git ke VPS
-sendiri tanpa vendor lock-in" atau "Menjalankan PaaS di satu VPS: Traefik, blue/green, dan health check".
-Sertakan tautan `aoox.dev` secara wajar di tengah isi, bukan hanya di akhir. Untuk komunitas Indonesia
-(grup Telegram/Discord developer, forum), baca aturan promosi masing-masing dan posting di kanal yang
-memang untuk "showcase". Tulis dalam bahasa yang sesuai audiensnya.
+Most valuable as a **useful article** (not an ad), e.g. "Deploy Next.js from Git to your own VPS without vendor lock-in"
+or "Running a PaaS on one VPS: Traefik, blue/green, and health checks". Include the `aoox.dev` link naturally in the
+middle of the content, not only at the end. For Indonesian communities (developer Telegram groups, Discord, forums), read
+each one's promotion rules and post in the channel meant for "showcase". Write in the language that suits the audience.
 
-## 6. Pemeliharaan (rutin, bukan sekali)
+## 6. Maintenance (routine, not one-time)
 
-- Setiap rilis: isi entri di `src/content/changelog.ts` lalu `npm run check-release` (lihat `RELEASING.md`).
-  Changelog yang hidup adalah alasan orang kembali dan menautkan.
-- Jangan membuat tautan mati: bila memindahkan repo/URL, perbarui `package.json`, README, `sameAs` di
-  `src/lib/seo.ts`, dan teks di berkas ini.
+- Every release: fill in the entry in `src/content/changelog.ts`, then run `npm run check-release` (see `RELEASING.md`).
+  A living changelog is what brings people back and gets them to link to it.
+- Do not create dead links: if you move a repo or URL, update `package.json`, the README, `sameAs` in
+  `src/lib/seo.ts`, and the text in this file.
