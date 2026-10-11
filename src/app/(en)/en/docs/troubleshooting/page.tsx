@@ -32,21 +32,21 @@ const SUMMARY = [
 ]
 
 const AREAS = [
-  { id: "instalasi", title: "Installation & access" },
+  { id: "installation", title: "Installation & access" },
   { id: "deploy", title: "Build & deploy" },
   { id: "domain", title: "Domain & HTTPS" },
   { id: "database", title: "Database & backup" },
   { id: "server", title: "Terminal & remote servers" },
-  { id: "lainnya", title: "Notifications, jobs, disk" },
+  { id: "other", title: "Notifications, jobs, disk" },
 ]
 
 type Row = [symptom: React.ReactNode, cause: React.ReactNode, fix: React.ReactNode]
 
-const INSTALASI: Row[] = [
+const INSTALLATION: Row[] = [
   [
     <>Fixes/new features don&apos;t show up after a panel update (e.g. the webhook <Code>PUBLIC_API_URL</Code> is still <Code>localhost</Code>)</>,
     <><Code>aoox update</Code> and the &ldquo;Apply update&rdquo; button only run <Code>pull</Code> + <Code>up -d</Code>: the compose file and new variables in <Code>.env.dist</Code> are not updated.</>,
-    <>Run <DocLink href="/en/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (<Code>--dry-run</Code> first to see what changes). Without the CLI: edit <Code>.env.dist</Code> / use the Environment page, or adjust the compose file manually per the release notes — see <DocLink href="/en/docs/instalasi#update">Upgrading</DocLink>. Don&apos;t use <Code>aoox install --force</Code> (new secrets cut off the old data).</>,
+    <>Run <DocLink href="/en/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (<Code>--dry-run</Code> first to see what changes). Without the CLI: edit <Code>.env.dist</Code> / use the Environment page, or adjust the compose file manually per the release notes — see <DocLink href="/en/docs/installation#update">Upgrading</DocLink>. Don&apos;t use <Code>aoox install --force</Code> (new secrets cut off the old data).</>,
   ],
   [
     <>The web app loads, but sign-in / the API fails (network error)</>,
@@ -56,7 +56,7 @@ const INSTALASI: Row[] = [
   [
     <>Terminal: <Code>origin not allowed</Code></>,
     <><Code>WEB_ORIGIN</Code> ≠ the browser&apos;s URL (scheme/host/port).</>,
-    <>Match them exactly, then <Code>up -d</Code> again. See <DocLink href="/en/docs/domain-panel">Domain for the panel</DocLink>.</>,
+    <>Match them exactly, then <Code>up -d</Code> again. See <DocLink href="/en/docs/panel-domain">Domain for the panel</DocLink>.</>,
   ],
   [
     <>Registry/Proxy card: <em>Docker unreachable</em> / permission denied on the socket</>,
@@ -114,7 +114,7 @@ const DEPLOY: Row[] = [
   [
     <>A webhook push doesn&apos;t trigger a deploy</>,
     <>A different branch, a non-push event, a deployment already running (<Code>busy</Code>), or a 401 secret mismatch.</>,
-    <>Check <em>Recent Deliveries</em> on the provider — see the <DocLink href="/en/docs/webhook#respons">response table</DocLink>.</>,
+    <>Check <em>Recent Deliveries</em> on the provider — see the <DocLink href="/en/docs/webhook#response">response table</DocLink>.</>,
   ],
   [
     <>Rollback fails: <em>image not found</em></>,
@@ -132,7 +132,7 @@ const DEPLOY: Row[] = [
     <>
       Add either one from the Settings or Domain tab. For new applications,
       pick IP+port or Domain in the{" "}
-      <DocLink href="/en/docs/aplikasi#langkah">Access step</DocLink> when
+      <DocLink href="/en/docs/applications#steps">Access step</DocLink> when
       creating it, so it doesn&apos;t need fixing afterward.
     </>,
   ],
@@ -147,7 +147,7 @@ const DOMAIN: Row[] = [
   [
     <>Panel domain saved, DNS & <Code>ufw</Code> are fine, browser still says <em>unable to connect</em></>,
     <>The proxy wasn&apos;t running at the time (now started automatically when the domain is saved), or ports 80/443 are blocked by your <strong>VPS provider&apos;s firewall/security group</strong> — <Code>ufw inactive</Code> ≠ ports open to the public.</>,
-    <><Code>docker ps --filter name=aoox-proxy</Code> should show <Code>Up</Code>; open 80/443 in your VPS provider&apos;s panel. See <DocLink href="/en/docs/domain-panel#jebakan">Domain for the panel<PathArrow />Common pitfalls</DocLink>.</>,
+    <><Code>docker ps --filter name=aoox-proxy</Code> should show <Code>Up</Code>; open 80/443 in your VPS provider&apos;s panel. See <DocLink href="/en/docs/panel-domain#pitfalls">Domain for the panel<PathArrow />Common pitfalls</DocLink>.</>,
   ],
   [
     <>404 page not found from Traefik</>,
@@ -217,7 +217,7 @@ const SERVER: Row[] = [
   [
     <>Terminal: <Code>SSH authentication failed for root@host.docker.internal</Code></>,
     <>The terminal logs in as <Code>root</Code> (the default), while on a cloud VPS (Ubuntu and the like) root login is usually refused by sshd and your login is another user.</>,
-    <>Set <strong>User</strong> in Infrastructure<PathArrow />Environment to the VPS login user (e.g. <Code>ubuntu</Code>), run the authorization command on the VPS as that user, and check that user&apos;s <Code>~/.ssh/authorized_keys</Code> and <Code>PermitRootLogin</Code> in <Code>/etc/ssh/sshd_config</Code>. Details in <DocLink href="/en/docs/terminal#user-ssh">Web terminal</DocLink>.</>,
+    <>Set <strong>User</strong> in Infrastructure<PathArrow />Environment to the VPS login user (e.g. <Code>ubuntu</Code>), run the authorization command on the VPS as that user, and check that user&apos;s <Code>~/.ssh/authorized_keys</Code> and <Code>PermitRootLogin</Code> in <Code>/etc/ssh/sshd_config</Code>. Details in <DocLink href="/en/docs/terminal#ssh-user">Web terminal</DocLink>.</>,
   ],
   [
     <>Terminal: <Code>TERMINAL_SSH_USER is not set</Code> (older versions)</>,
@@ -246,7 +246,7 @@ const SERVER: Row[] = [
   ],
 ]
 
-const LAINNYA: Row[] = [
+const OTHER: Row[] = [
   [
     <>The notification test succeeds, but the real event never arrives</>,
     "The event's toggle isn't enabled, or the event genuinely didn't happen (e.g. a dead container on a remote server isn't detected).",
@@ -255,7 +255,7 @@ const LAINNYA: Row[] = [
   [
     <>A teammate can&apos;t see a project</>,
     "They haven't been added as a project member yet; instance members only see projects they're assigned to.",
-    <>Add them on the project&apos;s Members tab — see <DocLink href="/en/docs/project#anggota">Project</DocLink>.</>,
+    <>Add them on the project&apos;s Members tab — see <DocLink href="/en/docs/project#members">Project</DocLink>.</>,
   ],
   [
     <>Viewer: the button is there but the action fails with 403</>,
@@ -265,7 +265,7 @@ const LAINNYA: Row[] = [
   [
     <>Swarm: task pending / image pull failed on another node</>,
     <>The constraint doesn&apos;t match, or <Code>REGISTRY_PUBLIC_HOST</Code> is still localhost so other nodes can&apos;t pull the image.</>,
-    <>See <DocLink href="/en/docs/swarm#jebakan">Docker Swarm</DocLink>.</>,
+    <>See <DocLink href="/en/docs/swarm#pitfalls">Docker Swarm</DocLink>.</>,
   ],
   [
     <>A job runs at the wrong time</>,
@@ -290,10 +290,10 @@ const LAINNYA: Row[] = [
 ]
 
 const NEXT = [
-  { title: "Installation", description: "Required env vars and initial verification.", href: "/en/docs/instalasi" },
+  { title: "Installation", description: "Required env vars and initial verification.", href: "/en/docs/installation" },
   { title: "Deploy & rollback", description: "Reading deployment logs.", href: "/en/docs/deploy#log" },
   { title: "Proxy & domain", description: "Traefik routers and ACME.", href: "/en/docs/domain#https" },
-  { title: "Users & roles", description: "The audit log, to trace who changed what.", href: "/en/docs/pengguna-peran#akun" },
+  { title: "Users & roles", description: "The audit log, to trace who changed what.", href: "/en/docs/users-roles#account" },
 ]
 
 function Area({ id, title, rows }: { id: string; title: string; rows: Row[] }) {
@@ -370,7 +370,7 @@ curl -s http://localhost:3001/auth/setup-status`}</Pre>
         </li>
         <li>
           Who changed what: the{" "}
-          <DocLink href="/en/docs/pengguna-peran#akun">audit log</DocLink>{" "}
+          <DocLink href="/en/docs/users-roles#account">audit log</DocLink>{" "}
           (owner/admin).
         </li>
       </Ul>
@@ -387,12 +387,12 @@ curl -s http://localhost:3001/auth/setup-status`}</Pre>
         ))}
       </div>
 
-      <Area id="instalasi" title="Installation & access" rows={INSTALASI} />
+      <Area id="installation" title="Installation & access" rows={INSTALLATION} />
       <Area id="deploy" title="Build & deploy" rows={DEPLOY} />
       <Area id="domain" title="Domain & HTTPS" rows={DOMAIN} />
       <Area id="database" title="Database & backup" rows={DATABASE} />
       <Area id="server" title="Terminal & remote servers" rows={SERVER} />
-      <Area id="lainnya" title="Notifications, jobs, disk" rows={LAINNYA} />
+      <Area id="other" title="Notifications, jobs, disk" rows={OTHER} />
 
       <H2 id="reset">Starting from scratch (testing)</H2>
       <P>This wipes all of aoox&apos;s own data — <strong>not</strong> the application/database containers already created from the dashboard:</P>
@@ -418,7 +418,7 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         ]}
       />
 
-      <H2 id="melapor">Reporting an issue</H2>
+      <H2 id="reporting">Reporting an issue</H2>
       <P>
         If it&apos;s still not fixed, open an issue on{" "}
         <a
@@ -438,7 +438,7 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         <li>For deploys: the deployment log from the Deploy tab and which build type was used.</li>
       </Ul>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

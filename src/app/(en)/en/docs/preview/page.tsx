@@ -64,7 +64,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="prasyarat">Prerequisites</H2>
+      <H2 id="prerequisites">Prerequisites</H2>
       <Ul>
         <li>
           The application&apos;s <DocLink href="/en/docs/webhook">webhook</DocLink> is
@@ -84,7 +84,7 @@ export default function Page() {
         <li>The application runs on the aoox host (not a remote server).</li>
       </Ul>
 
-      <H2 id="siklus">Lifecycle</H2>
+      <H2 id="lifecycle">Lifecycle</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {LIFECYCLE.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
@@ -98,7 +98,7 @@ export default function Page() {
 router    : shop-pr42
 host      : https://shop-pr42.preview.example.com`}</Pre>
 
-      <H2 id="langkah">Enabling it</H2>
+      <H2 id="steps">Enabling it</H2>
       <Steps>
         <Step title={<>Application settings<PathArrow />Pull request previews</>}>
           <P>
@@ -145,7 +145,7 @@ host      : https://shop-pr42.preview.example.com`}</Pre>
         <em>preview limit</em>).
       </P>
 
-      <H2 id="yang-diwarisi">What&apos;s inherited from the application</H2>
+      <H2 id="inherited">What&apos;s inherited from the application</H2>
       <Table
         head={["Aspect", "Preview"]}
         rows={[
@@ -168,7 +168,7 @@ host      : https://shop-pr42.preview.example.com`}</Pre>
         don&apos;t enable previews on applications that modify data.
       </Callout>
 
-      <H2 id="aturan">Security rules</H2>
+      <H2 id="rules">Security rules</H2>
       <Ul>
         <li>
           <strong>Opt-in per application</strong> (off by default) — a PR
@@ -193,7 +193,7 @@ host      : https://shop-pr42.preview.example.com`}</Pre>
         </li>
       </Ul>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -210,7 +210,7 @@ host      : https://shop-pr42.preview.example.com`}</Pre>
         with the preview link; preview-specific env.
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

@@ -1,9 +1,15 @@
 "use client"
 
 import * as React from "react"
+import { usePathname } from "next/navigation"
 import { Check, Copy } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+
+const LABELS = {
+  id: { copy: "Salin perintah", copied: "Tersalin" },
+  en: { copy: "Copy command", copied: "Copied" },
+}
 
 function CopyButton({
   text,
@@ -13,6 +19,9 @@ function CopyButton({
   className?: string
 }) {
   const [copied, setCopied] = React.useState(false)
+  // Same rule as the header: `/en` and `/en/...` are English, everything else Indonesian.
+  const pathname = usePathname()
+  const labels = LABELS[pathname === "/en" || pathname.startsWith("/en/") ? "en" : "id"]
 
   async function onCopy() {
     if (await copyText(text)) {
@@ -25,7 +34,7 @@ function CopyButton({
     <button
       type="button"
       onClick={onCopy}
-      aria-label={copied ? "Tersalin" : "Salin perintah"}
+      aria-label={copied ? labels.copied : labels.copy}
       className={cn(
         "inline-flex size-7 shrink-0 items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground rounded-md",
         copied && "border-primary text-primary-foreground dark:text-primary",

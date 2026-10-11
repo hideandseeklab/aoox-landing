@@ -88,8 +88,8 @@ const COMMANDS = [
 ]
 
 const NEXT = [
-  { title: "Users & roles", description: "Creating an API token and its scope.", href: "/en/docs/pengguna-peran#akun" },
-  { title: "Installation", description: "The manual steps aoox install automates.", href: "/en/docs/instalasi" },
+  { title: "Users & roles", description: "Creating an API token and its scope.", href: "/en/docs/users-roles#account" },
+  { title: "Installation", description: "The manual steps aoox install automates.", href: "/en/docs/installation" },
   { title: "Registry", description: "Where images from aoox deploy are stored.", href: "/en/docs/registry" },
   { title: "Deploy & rollback", description: "What happens behind the scenes during a deploy.", href: "/en/docs/deploy" },
 ]
@@ -121,7 +121,7 @@ export default function Page() {
         directly with the same token.
       </Callout>
 
-      <H2 id="instalasi-cli">Installing the CLI</H2>
+      <H2 id="cli-installation">Installing the CLI</H2>
       <P>
         On Linux or macOS, the install script sets up <Code>aoox</Code> with
         no Node.js required at all — the tarball bundles its own Node.js
@@ -163,16 +163,16 @@ aoox --version`}</Pre>
         doesn&apos;t connect to an existing panel — it{" "}
         <strong>installs its own panel</strong> (postgres + api + web) on a
         fresh Linux VPS, as an alternative to the manual steps in{" "}
-        <DocLink href="/en/docs/instalasi">Installation</DocLink>. Run it as
+        <DocLink href="/en/docs/installation">Installation</DocLink>. Run it as
         root, directly on the target server.
       </P>
       <Pre title="Simplest form (no domain, accessed by IP)">{`$ sudo aoox install
-==> Detecting the server's public IP
-Install aoox into /opt/aoox and run docker compose up -d? (Y/n)
+==> Detecting the server public IP
+Install aoox in /opt/aoox and run docker compose up -d? (Y/n)
 ==> Running docker compose up -d
 ==> Waiting for the API to be ready
 
-aoox installed into /opt/aoox.
+aoox is installed in /opt/aoox.
 Open: http://203.0.113.10:3000
 Create the first owner account at /setup.`}</Pre>
       <Pre title="With a domain + automatic HTTPS, and creating the owner right away">{`sudo aoox install \\
@@ -212,7 +212,7 @@ Create the first owner account at /setup.`}</Pre>
       </Ul>
       <Callout>
         This command replays the steps in{" "}
-        <DocLink href="/en/docs/instalasi">Installation</DocLink>{" "}
+        <DocLink href="/en/docs/installation">Installation</DocLink>{" "}
         automatically: cloning the distribution compose files, filling in
         the env, <Code>docker compose up -d</Code>, then waiting for{" "}
         <Code>/auth/setup-status</Code> to respond. It&apos;s not a replacement for{" "}
@@ -228,7 +228,7 @@ Create the first owner account at /setup.`}</Pre>
             <Code>my-laptop</Code>), pick an expiry, then copy the{" "}
             <Code>aoox_…</Code> token — it&apos;s only shown once. A token acts{" "}
             <strong>as its owner</strong>, with the same role — see{" "}
-            <DocLink href="/en/docs/pengguna-peran#akun">Account security</DocLink>.
+            <DocLink href="/en/docs/users-roles#account">Account security</DocLink>.
           </P>
         </Step>
         <Step title="Run aoox login">
@@ -236,7 +236,7 @@ Create the first owner account at /setup.`}</Pre>
 Panel URL  https://panel.example.com
 API token (aoox_…) ********
 Verifying token... ok
-Signed in as you@example.com (owner) at https://panel.example.com
+Logged in as you@example.com (owner) at https://panel.example.com
 Token saved to /home/you/.config/aoox/config.json`}</Pre>
           <P>
             The token is asked for via a hidden prompt, not an argument, so
@@ -270,7 +270,7 @@ $ aoox link
 ? Select a project › shop
 ? Select an application › shop (shop)
 Linked: shop / shop (shop)
-Written to .aoox.json — safe to commit, holds no secrets.`}</Pre>
+Written to .aoox.json — safe to commit, contains no secrets.`}</Pre>
           <P>
             <Code>--project</Code>/<Code>--app</Code> skip the interactive
             picker — used in CI. The generated <Code>.aoox.json</Code> file
@@ -301,7 +301,7 @@ Deployed: localhost:5000/shop/shop:a1b2c3d`}</Pre>
         The application is automatically switched to{" "}
         <Code>sourceType: image</Code>, using the registry and tag just
         pushed — not rebuilt on the server the way a Git build is.{" "}
-        <DocLink href="/en/docs/aplikasi#sumber">The two application sources</DocLink>.
+        <DocLink href="/en/docs/applications#source">The two application sources</DocLink>.
         A deployment already in progress for the same application is rejected
         (409) — wait for it to finish first.
       </Callout>
@@ -310,7 +310,7 @@ Deployed: localhost:5000/shop/shop:a1b2c3d`}</Pre>
       <P>
         An alternative to Settings<PathArrow />Domain panel in the dashboard — good for
         provisioning scripts. See{" "}
-        <DocLink href="/en/docs/domain-panel">Domain for the panel</DocLink> for
+        <DocLink href="/en/docs/panel-domain">Domain for the panel</DocLink> for
         the details of what happens behind it.
       </P>
       <Pre>{`$ aoox domain set --web panel.example.com --api api.panel.example.com \\
@@ -338,10 +338,10 @@ Running version: 0.1.0-alpha.1
 Update available. Run with --apply to apply it.
 
 $ aoox update --apply
-Update applied — the panel will restart in a few seconds to apply it.`}</Pre>
+Update applied — the panel will restart for a few seconds to apply it.`}</Pre>
       <P>
         Same as <Code>aoox domain set</Code>, needs <Code>INSTALL_DIR</Code>{" "}
-        set. See <DocLink href="/en/docs/instalasi#update">Upgrading</DocLink>{" "}
+        set. See <DocLink href="/en/docs/installation#update">Upgrading</DocLink>{" "}
         for the manual, over-SSH alternative.
       </P>
 
@@ -400,7 +400,7 @@ $ sudo aoox reinstall`}</Pre>
         Settings, then <Code>docker compose … up -d</Code>.
       </P>
 
-      <H2 id="perintah">Command reference</H2>
+      <H2 id="commands">Command reference</H2>
       <div className="overflow-x-auto border border-border rounded-lg">
         <table className="w-full text-xs">
           <thead className="bg-muted text-muted-foreground">
@@ -422,7 +422,7 @@ $ sudo aoox reinstall`}</Pre>
         </table>
       </div>
 
-      <H2 id="konfigurasi">Configuration & environment variables</H2>
+      <H2 id="configuration">Configuration & environment variables</H2>
       <Table
         head={["Source", "Contents", "Notes"]}
         rows={[
@@ -476,12 +476,12 @@ $ sudo aoox reinstall`}</Pre>
         the others.
       </Callout>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Message", "Cause & fix"]}
         rows={[
           [
-            <>Token rejected by the panel (401)</>,
+            <>The panel rejected the token (401)</>,
             <>The token expired, was revoked, or was copied wrong. Create a new one in Settings<PathArrow />API token.</>,
           ],
           [
@@ -489,31 +489,31 @@ $ sudo aoox reinstall`}</Pre>
             <>Running in CI/a script. Pass <Code>--url</Code> and <Code>--token</Code>, or set <Code>AOOX_URL</Code> and <Code>AOOX_TOKEN</Code>.</>,
           ],
           [
-            <>Can&apos;t reach the panel</>,
+            <>Cannot reach the panel</>,
             <>Wrong URL, or the API isn&apos;t reachable from this machine. Use the panel&apos;s <Code>PUBLIC_API_URL</Code> (not the dashboard URL) and test with <Code>curl &lt;url&gt;/auth/setup-status</Code>.</>,
           ],
           [
-            <>Config is corrupted (not valid JSON)</>,
+            <>Config is corrupt (not valid JSON)</>,
             <>The config file was edited by hand. Delete it, then run <Code>aoox login</Code> again.</>,
           ],
           [
             <>403 on a specific command</>,
-            <>The token owner&apos;s role isn&apos;t high enough — a token never grants more than its owner has. If the token has a scope, see <DocLink href="/en/docs/pengguna-peran#akun">read-only/project-limited tokens</DocLink>.</>,
+            <>The token owner&apos;s role isn&apos;t high enough — a token never grants more than its owner has. If the token has a scope, see <DocLink href="/en/docs/users-roles#account">read-only/project-limited tokens</DocLink>.</>,
           ],
           [
-            <>This repo isn&apos;t linked yet</>,
+            <>This repo is not linked yet</>,
             <><Code>aoox deploy</Code> was run before <Code>aoox link</Code>. Run <Code>aoox link</Code> first in the repo folder.</>,
           ],
           [
-            <>A deployment is already running (409)</>,
+            <>A deployment is already running for this application (409)</>,
             <>The same application is already being deployed — from the dashboard, a webhook, or another <Code>aoox deploy</Code>. Wait for it to finish, check the Deploy tab.</>,
           ],
           [
-            <>aoox install: root required</>,
+            <>aoox install: Root is required</>,
             <>Run it with <Code>sudo</Code> — installation writes to system paths and manages Docker.</>,
           ],
           [
-            <>aoox install: an install already exists at …</>,
+            <>aoox install: An installation already exists in …</>,
             <>The <Code>--dir</Code> folder (default <Code>/opt/aoox</Code>) is already populated. To repair that install, use <Code>aoox reinstall</Code>. <Code>--force</Code> is only for a from-scratch reinstall (it generates new secrets — the old data becomes unreadable), or use a different <Code>--dir</Code>.</>,
           ],
         ]}
@@ -525,7 +525,7 @@ $ sudo aoox reinstall`}</Pre>
         for every command (currently just <Code>whoami</Code>).
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

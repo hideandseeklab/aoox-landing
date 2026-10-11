@@ -51,7 +51,7 @@ function CtaSection({ lang = "id" }: { lang?: Lang }) {
   const t = COPY[lang]
   return (
     <section className="relative overflow-hidden border-b border-border">
-      {/* latar: grid + glow lime */}
+      {/* background: grid + lime glow */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-50 [background-image:linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_75%)]"
@@ -86,7 +86,7 @@ function CtaSection({ lang = "id" }: { lang?: Lang }) {
 
         <div className="flex flex-wrap justify-center gap-3">
           <Button size="lg" asChild>
-            <Link href={lang === "en" ? "/en/docs/instalasi" : "/docs/instalasi"}>
+            <Link href={lang === "en" ? "/en/docs/installation" : "/docs/instalasi"}>
               {t.ctaPrimary}
               <ArrowRight data-icon="inline-end" />
             </Link>

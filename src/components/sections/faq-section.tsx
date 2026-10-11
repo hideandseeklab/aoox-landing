@@ -120,7 +120,7 @@ const FAQ_EN: Faq[] = [
       <>
         No. A single host with the Docker Engine is enough. For several
         machines there are two paths without Kubernetes: connect a server over
-        SSH as a separate deploy target (<A href="/en/docs/server-remote">Remote
+        SSH as a separate deploy target (<A href="/en/docs/remote-servers">Remote
         server</A>), or turn on <strong>Docker Swarm</strong> and run apps as
         a service with replicas, rolling updates, and per-node placement.
       </>

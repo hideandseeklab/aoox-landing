@@ -35,7 +35,7 @@ const SUMMARY = [
 ]
 
 const DECISION = [
-  { q: "One repo, one process, one port?", a: "Application", href: "/en/docs/aplikasi" },
+  { q: "One repo, one process, one port?", a: "Application", href: "/en/docs/applications" },
   { q: "Several services talking to each other (web + worker + queue) with a docker-compose.yml?", a: "Compose stack", href: null },
   { q: "Want a ready-made app (WordPress, n8n, …) without a repo?", a: "Template", href: "/en/docs/template" },
 ]
@@ -71,7 +71,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="kapan">Application, compose stack, or template?</H2>
+      <H2 id="when">Application, compose stack, or template?</H2>
       <div className="border border-border text-xs rounded-lg overflow-hidden">
         {DECISION.map((row, i) => (
           <div
@@ -99,7 +99,7 @@ export default function Page() {
         volumes defined inside it.
       </P>
 
-      <H2 id="langkah">Creating a stack</H2>
+      <H2 id="steps">Creating a stack</H2>
       <Steps>
         <Step title={<>Project page<PathArrow />New compose stack</>}>
           <Table
@@ -190,7 +190,7 @@ networks:
   aoox:
     external: true`}</Pre>
 
-      <H2 id="akses">Access: domain or IP & port</H2>
+      <H2 id="access">Access: domain or IP & port</H2>
       <P>
         The <strong>Access</strong> card on the stack page has two kinds of
         rows for each service you want reachable from outside:
@@ -262,7 +262,7 @@ networks:
         </li>
       </Ul>
 
-      <H2 id="operasi">Operations</H2>
+      <H2 id="operations">Operations</H2>
       <Table
         head={["Action", "What runs", "Notes"]}
         rows={[
@@ -273,7 +273,7 @@ networks:
         ]}
       />
 
-      <H2 id="riwayat">History, webhooks & metrics</H2>
+      <H2 id="history">History, webhooks & metrics</H2>
       <P>
         Every time the compose runner runs — Deploy, Stop, Start, Delete, or
         via a webhook — it&apos;s recorded as one history row (action, trigger,
@@ -303,7 +303,7 @@ networks:
         </li>
       </Ul>
 
-      <H2 id="perilaku">Behavior & limitations</H2>
+      <H2 id="behavior">Behavior & limitations</H2>
       <Ul>
         <li>
           <Code>build:</Code> is fully supported — the compose CLI uses
@@ -322,7 +322,7 @@ networks:
           <strong>Jobs</strong> are available under the stack&apos;s Jobs tab: pick
           a <strong>Service</strong>, then exec inside that service&apos;s
           container or a separate container from its image — see{" "}
-          <DocLink href="/en/docs/jobs#pemilik">Scheduled jobs</DocLink>.
+          <DocLink href="/en/docs/jobs#owner">Scheduled jobs</DocLink>.
         </li>
         <li>
           Databases inside a stack don&apos;t get aoox&apos;s backup features — for
@@ -336,7 +336,7 @@ networks:
         <li>A failed deploy sends a deployment-failure notification.</li>
       </Ul>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -358,7 +358,7 @@ networks:
         <DocLink href="/en/docs/template">One-click templates</DocLink>.
       </P>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

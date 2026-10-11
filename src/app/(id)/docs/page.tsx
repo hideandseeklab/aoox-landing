@@ -62,7 +62,7 @@ export default function Page() {
       title="Dokumentasi aoox"
       description="Panduan lengkap memasang dan memakai aoox: dari instalasi di server sendiri sampai deploy, database, backup, dan notifikasi."
     >
-      {/* mulai dari sini */}
+      {/* start here */}
       <div className="grid gap-px border border-border bg-border sm:grid-cols-3 rounded-lg overflow-hidden">
         {START.map((item) => (
           <Link

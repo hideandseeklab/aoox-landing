@@ -99,7 +99,7 @@ EMPTY=`}</Pre>
       <Ul>
         <li>
           <strong>Connection</strong>: owner/admin add it under Settings
-          <PathArrow />Integrasi
+          <PathArrow />Integrations
           <PathArrow />Secret manager (name, optional URL for a self-hosted
           instance, the machine identity&apos;s Client ID and Client secret). The
           client secret is stored encrypted and can&apos;t be seen again; the test
@@ -108,7 +108,7 @@ EMPTY=`}</Pre>
         <li>
           <strong>Secret source</strong> on the Environment tab: pick the
           connection, then project ID, environment and path (default{" "}
-          <Code>/</Code>). <strong>Lihat key</strong> lists key names only,
+          <Code>/</Code>). <strong>View keys</strong> lists key names only,
           never their values.
         </li>
         <li>
@@ -128,7 +128,7 @@ EMPTY=`}</Pre>
         </li>
       </Ul>
 
-      <H2 id="alur">How env gets merged</H2>
+      <H2 id="flow">How env gets merged</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {RESOLVE.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
@@ -154,7 +154,7 @@ EMPTY=`}</Pre>
         </li>
       </Ul>
 
-      <H2 id="referensi">References</H2>
+      <H2 id="references">References</H2>
       <Table
         head={["Syntax", "Resolves to"]}
         rows={[
@@ -201,7 +201,7 @@ PORT=3000`}</Pre>
         </li>
       </Ul>
 
-      <H2 id="rahasia">Secrets & logs</H2>
+      <H2 id="secrets">Secrets & logs</H2>
       <Ul>
         <li>
           Resolved database passwords and Git tokens are automatically redacted
@@ -228,7 +228,7 @@ PORT=3000`}</Pre>
         <DocLink href="/en/docs/compose#env">Compose stacks</DocLink>.
       </Callout>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -239,7 +239,7 @@ PORT=3000`}</Pre>
         ]}
       />
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

@@ -34,21 +34,21 @@ const SUMMARY = [
 ]
 
 const CATALOG = [
-  { id: "wordpress", ver: "6.8", untuk: "CMS/blog + MySQL", isi: "—", service: "wordpress :80" },
-  { id: "ghost", ver: "5", untuk: "Publishing platform", isi: "Public URL", service: "ghost :2368" },
-  { id: "n8n", ver: "1.x", untuk: "Workflow automation", isi: "Public host; protocol & timezone have defaults", service: "n8n :5678" },
-  { id: "uptime-kuma", ver: "1", untuk: "Uptime monitoring", isi: "—", service: "uptime-kuma :3001" },
-  { id: "minio", ver: "latest", untuk: "S3 object storage — can serve as a backup destination", isi: "Root user has a default", service: "Console :9001 · S3 API :9000" },
-  { id: "gitea", ver: "1.24", untuk: "Lightweight Git hosting", isi: "Public URL", service: "gitea :3000" },
-  { id: "vaultwarden", ver: "1.37", untuk: "Password manager (Bitwarden compatible)", isi: "Public URL (HTTPS)", service: "vaultwarden :80" },
-  { id: "umami", ver: "2.20", untuk: "Privacy-friendly web analytics + PostgreSQL", isi: "—", service: "umami :3000" },
-  { id: "grafana", ver: "13.0", untuk: "Metrics and log dashboards", isi: "Public URL", service: "grafana :3000" },
-  { id: "metabase", ver: "0.63", untuk: "Business intelligence + PostgreSQL", isi: "Public URL", service: "metabase :3000" },
-  { id: "directus", ver: "12.4", untuk: "Headless CMS / data API + PostgreSQL", isi: "Public URL, admin email", service: "directus :8055" },
-  { id: "mattermost", ver: "11.11", untuk: "Team chat + PostgreSQL", isi: "Public URL", service: "mattermost :8065" },
-  { id: "nextcloud", ver: "32", untuk: "Files and collaboration + PostgreSQL, Redis, cron", isi: "Domain", service: "nextcloud :80" },
-  { id: "odoo", ver: "19.0", untuk: "ERP / all-in-one business suite (Community) + PostgreSQL", isi: "— (master password is generated)", service: "odoo :8069" },
-  { id: "excalidraw", ver: "latest (pinned by digest)", untuk: "Collaborative hand-drawn whiteboard / diagrams (open source, MIT)", isi: "—", service: "excalidraw :80" },
+  { id: "wordpress", ver: "6.8", purpose: "CMS/blog + MySQL", fills: "—", service: "wordpress :80" },
+  { id: "ghost", ver: "5", purpose: "Publishing platform", fills: "Public URL", service: "ghost :2368" },
+  { id: "n8n", ver: "1.x", purpose: "Workflow automation", fills: "Public host; protocol & timezone have defaults", service: "n8n :5678" },
+  { id: "uptime-kuma", ver: "1", purpose: "Uptime monitoring", fills: "—", service: "uptime-kuma :3001" },
+  { id: "minio", ver: "latest", purpose: "S3 object storage — can serve as a backup destination", fills: "Root user has a default", service: "Console :9001 · S3 API :9000" },
+  { id: "gitea", ver: "1.24", purpose: "Lightweight Git hosting", fills: "Public URL", service: "gitea :3000" },
+  { id: "vaultwarden", ver: "1.37", purpose: "Password manager (Bitwarden compatible)", fills: "Public URL (HTTPS)", service: "vaultwarden :80" },
+  { id: "umami", ver: "2.20", purpose: "Privacy-friendly web analytics + PostgreSQL", fills: "—", service: "umami :3000" },
+  { id: "grafana", ver: "13.0", purpose: "Metrics and log dashboards", fills: "Public URL", service: "grafana :3000" },
+  { id: "metabase", ver: "0.63", purpose: "Business intelligence + PostgreSQL", fills: "Public URL", service: "metabase :3000" },
+  { id: "directus", ver: "12.4", purpose: "Headless CMS / data API + PostgreSQL", fills: "Public URL, admin email", service: "directus :8055" },
+  { id: "mattermost", ver: "11.11", purpose: "Team chat + PostgreSQL", fills: "Public URL", service: "mattermost :8065" },
+  { id: "nextcloud", ver: "32", purpose: "Files and collaboration + PostgreSQL, Redis, cron", fills: "Domain", service: "nextcloud :80" },
+  { id: "odoo", ver: "19.0", purpose: "ERP / all-in-one business suite (Community) + PostgreSQL", fills: "— (master password is generated)", service: "odoo :8069" },
+  { id: "excalidraw", ver: "latest (pinned by digest)", purpose: "Collaborative hand-drawn whiteboard / diagrams (open source, MIT)", fills: "—", service: "excalidraw :80" },
 ]
 
 const NEXT = [
@@ -75,7 +75,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="katalog">Catalog</H2>
+      <H2 id="catalog">Catalog</H2>
       <div className="overflow-x-auto border border-border rounded-lg">
         <table className="w-full text-xs">
           <thead className="bg-muted text-muted-foreground">
@@ -92,8 +92,8 @@ export default function Page() {
               <tr key={t.id} className="border-t border-border align-top">
                 <td className="px-3 py-2"><Code>{t.id}</Code></td>
                 <td className="px-3 py-2 text-muted-foreground">{t.ver}</td>
-                <td className="px-3 py-2 text-muted-foreground">{t.untuk}</td>
-                <td className="px-3 py-2 text-muted-foreground">{t.isi}</td>
+                <td className="px-3 py-2 text-muted-foreground">{t.purpose}</td>
+                <td className="px-3 py-2 text-muted-foreground">{t.fills}</td>
                 <td className="px-3 py-2 text-muted-foreground">{t.service}</td>
               </tr>
             ))}
@@ -107,7 +107,7 @@ export default function Page() {
         generated automatically (alphanumeric) when left blank.
       </P>
 
-      <H2 id="catatan">Notes per template</H2>
+      <H2 id="notes">Notes per template</H2>
       <P>
         Templates that need a database ship <strong>their own PostgreSQL inside
         the stack</strong> (not a managed database), with named volumes for the
@@ -126,12 +126,12 @@ export default function Page() {
           ["directus", <>Directus + PostgreSQL. The first admin account is created from the email you enter and the password in the stack env; <Code>KEY</Code> and <Code>SECRET</Code> are generated.</>],
           ["mattermost", <>Mattermost Team Edition + PostgreSQL. The first account is created on the web and becomes the system admin.</>],
           ["nextcloud", <>Nextcloud (Apache) + PostgreSQL + Redis (cache and file locking) + a separate <Code>cron</Code> container for background jobs. Enter the domain without <Code>https://</Code>. The public protocol defaults to <Code>https</Code>; use <Code>http</Code> only for local tests. The first install takes longer, and it is the heaviest template.</>],
-          ["odoo", <>Odoo <strong>Community</strong> 19.0 (LGPLv3; no Enterprise modules, which are proprietary) + PostgreSQL 16. Open the site: the first page asks for the <em>Master Password</em>, a database name, an email and an admin password. The <strong>master password</strong> is generated; find it on the stack page, <strong>Pengaturan</strong> tab, environment section, <strong>Tampilkan nilai</strong> (the <Code>MASTER_PASSWORD</Code> variable). It runs as <strong>a single process without workers</strong> (<Code>workers = 0</Code>), fine for small use; multiple workers with a separate websocket route are not set up. <Code>proxy_mode</Code> is on so the https scheme and redirects are right behind Traefik. The database list stays open so the first database can be created from the web; the master password guards creating, duplicating, backing up and deleting databases. Once the database exists, secure <Code>/web/database/manager</Code>: edit the stack compose (Pengaturan tab), add <Code>list_db = False</Code> and <Code>dbfilter = ^db_name$</Code> to the Odoo configuration part, and redeploy. The image uses a dated tag (<Code>19.0-20260926</Code>) so it does not move every night; for security updates, change the tag and redeploy. Data lives in the <Code>odoo_data</Code> volume (filestore) and the database.</>],
+          ["odoo", <>Odoo <strong>Community</strong> 19.0 (LGPLv3; no Enterprise modules, which are proprietary) + PostgreSQL 16. Open the site: the first page asks for the <em>Master Password</em>, a database name, an email and an admin password. The <strong>master password</strong> is generated; find it on the stack page, <strong>Settings</strong> tab, environment section, <strong>Show values</strong> (the <Code>MASTER_PASSWORD</Code> variable). It runs as <strong>a single process without workers</strong> (<Code>workers = 0</Code>), fine for small use; multiple workers with a separate websocket route are not set up. <Code>proxy_mode</Code> is on so the https scheme and redirects are right behind Traefik. The database list stays open so the first database can be created from the web; the master password guards creating, duplicating, backing up and deleting databases. Once the database exists, secure <Code>/web/database/manager</Code>: edit the stack compose (Settings tab), add <Code>list_db = False</Code> and <Code>dbfilter = ^db_name$</Code> to the Odoo configuration part, and redeploy. The image uses a dated tag (<Code>19.0-20260926</Code>) so it does not move every night; for security updates, change the tag and redeploy. Data lives in the <Code>odoo_data</Code> volume (filestore) and the database.</>],
           ["excalidraw", <>Excalidraw (MIT), a whiteboard for hand-drawn style sketches and diagrams. One static client container on port 80, no database and nothing to fill in. Drawings stay in the browser (local storage) and can be exported to PNG, SVG, or a file. <strong>Live collaboration is not included</strong>: it needs a separate collaboration server, which this template does not set up. The official image has no version tags (only a rolling <Code>latest</Code>), so it is pinned to an image digest; to update, replace the digest in the stack&apos;s compose file by hand.</>],
         ]}
       />
 
-      <H2 id="langkah">Deploying a template</H2>
+      <H2 id="steps">Deploying a template</H2>
       <Steps>
         <Step title={<>Templates menu<PathArrow />pick a template</>}>
           <P>
@@ -155,7 +155,7 @@ export default function Page() {
                   An alternative to a domain: the stack can then be opened at{" "}
                   <Code>{"<server-ip>:<port>"}</Code>. Port clashes are
                   rejected when saving — see{" "}
-                  <DocLink href="/en/docs/compose#akses">Stack access</DocLink>.
+                  <DocLink href="/en/docs/compose#access">Stack access</DocLink>.
                 </>,
               ],
               [
@@ -194,7 +194,7 @@ export default function Page() {
         </Step>
       </Steps>
 
-      <H2 id="contoh">Example: WordPress with a domain</H2>
+      <H2 id="examples">Example: WordPress with a domain</H2>
       <Pre title="Deploy dialog">{`Project     : shop
 Name        : blog
 Service     : wordpress → blog.example.com  [HTTPS ✓]
@@ -209,7 +209,7 @@ Variables   : DB_PASSWORD (blank → generated)
         editing the compose file.
       </P>
 
-      <H2 id="setelah">After deploying</H2>
+      <H2 id="after-deploy">After deploying</H2>
       <Ul>
         <li>
           The <strong>compose file</strong> is stored in aoox and can be
@@ -231,7 +231,7 @@ Variables   : DB_PASSWORD (blank → generated)
         </li>
       </Ul>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -246,10 +246,10 @@ Variables   : DB_PASSWORD (blank → generated)
         Templates from a custom repo/URL; upgrading the version of an already
         deployed template; offline template icons. The other compose stack
         limitations still apply — see{" "}
-        <DocLink href="/en/docs/compose#perilaku">Compose stacks</DocLink>.
+        <DocLink href="/en/docs/compose#behavior">Compose stacks</DocLink>.
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

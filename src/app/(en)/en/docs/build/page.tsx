@@ -83,10 +83,10 @@ export default function Page() {
         This page is about applications <strong>built from a Git repo</strong>.
         Applications whose source is a ready-made image skip the build stage
         entirely — see{" "}
-        <DocLink href="/en/docs/aplikasi#sumber">Two application sources</DocLink>.
+        <DocLink href="/en/docs/applications#source">Two application sources</DocLink>.
       </Callout>
 
-      <H2 id="memilih">Which one should I pick?</H2>
+      <H2 id="choosing">Which one should I pick?</H2>
       <div className="border border-border text-xs rounded-lg overflow-hidden">
         {DECISION.map((row, i) => (
           <div
@@ -401,7 +401,7 @@ RUN npm run build`}</Pre>
         </li>
       </Ul>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -414,7 +414,7 @@ RUN npm run build`}</Pre>
         ]}
       />
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

@@ -39,7 +39,7 @@ export function PathArrow() {
 }
 
 /**
- * The trailing arrow of a link or button ("Berikutnya →"): decorative (the label
+ * The trailing arrow of a link or button ("Next →"): decorative (the label
  * already says where it goes). It nudges right when the surrounding
  * `group/arrow` (put the class on the link) is hovered.
  */

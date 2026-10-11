@@ -48,8 +48,8 @@ const ROUTERS = [
 ]
 
 const NEXT = [
-  { title: "Custom SSL certificates", description: "Use your own certificate instead of Let's Encrypt.", href: "/en/docs/sertifikat-ssl" },
-  { title: "Domain for the panel", description: "The dashboard & API on your own domain.", href: "/en/docs/domain-panel" },
+  { title: "Custom SSL certificates", description: "Use your own certificate instead of Let's Encrypt.", href: "/en/docs/ssl-certificates" },
+  { title: "Domain for the panel", description: "The dashboard & API on your own domain.", href: "/en/docs/panel-domain" },
   { title: "Deploy & rollback", description: "Blue/green needs a domain without a host port.", href: "/en/docs/deploy#blue-green" },
   { title: "Pull request previews", description: "A wildcard subdomain per PR.", href: "/en/docs/preview" },
   { title: "Compose stacks", description: "A domain per service.", href: "/en/docs/compose#domain" },
@@ -72,7 +72,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="alur">One request&apos;s flow</H2>
+      <H2 id="flow">One request&apos;s flow</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {REQUEST_FLOW.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
@@ -93,7 +93,7 @@ export default function Page() {
       <P>
         Traefik runs per <em>daemon</em>: one on the aoox host, and
         optionally one on each{" "}
-        <DocLink href="/en/docs/server-remote#proxy">remote server</DocLink>{" "}
+        <DocLink href="/en/docs/remote-servers#proxy">remote server</DocLink>{" "}
         with its own port and ACME email. The steps below are for the host.
       </P>
       <Steps>
@@ -234,7 +234,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
         Don&apos;t want Let&apos;s Encrypt? Upload your own certificate
         (corporate CA, wildcard, Cloudflare Origin CA) and pick it per domain
         on the Domain tab — see{" "}
-        <DocLink href="/en/docs/sertifikat-ssl">Custom SSL certificates</DocLink>.
+        <DocLink href="/en/docs/ssl-certificates">Custom SSL certificates</DocLink>.
         It applies to application domains; the panel&apos;s domains keep using
         ACME.
       </P>
@@ -242,10 +242,10 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
         Need basic auth, security headers, rate limiting, an IP allowlist or a
         www redirect for a domain? Write your own Traefik middleware (or use a
         preset) and attach it per domain on the Domain tab — see{" "}
-        <DocLink href="/en/docs/konfigurasi-proxy">Proxy configuration</DocLink>.
+        <DocLink href="/en/docs/proxy-configuration">Proxy configuration</DocLink>.
       </P>
 
-      <H2 id="operasi">Operations</H2>
+      <H2 id="operations">Operations</H2>
       <Table
         head={["Action", "Effect"]}
         rows={[
@@ -256,13 +256,13 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
         ]}
       />
 
-      <H2 id="catatan">Notes</H2>
+      <H2 id="notes">Notes</H2>
       <Ul>
         <li>
           Applications on a <strong>remote server</strong> use that server&apos;s
           own proxy: provision it from the server card (port + ACME email),
           then point DNS at that server&apos;s IP — see{" "}
-          <DocLink href="/en/docs/server-remote#proxy">Remote servers</DocLink>.
+          <DocLink href="/en/docs/remote-servers#proxy">Remote servers</DocLink>.
           Without a proxy there, use a host port instead.
         </li>
         <li>
@@ -274,7 +274,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
         <li>
           The domain for the aoox panel itself is set via env, not the
           Domain tab — see{" "}
-          <DocLink href="/en/docs/domain-panel">Domain for the panel</DocLink>.
+          <DocLink href="/en/docs/panel-domain">Domain for the panel</DocLink>.
         </li>
         <li>
           Local dev uses ports 8088/8443 (80 is often taken); production uses
@@ -282,7 +282,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
         </li>
       </Ul>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -299,10 +299,10 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
         Periodic/automatic DNS checks; wildcard certificates (DNS-01);
         www ↔ apex redirects; path/prefix routing; basic auth per domain. A
         certificate that fails to issue is now reported via{" "}
-        <DocLink href="/en/docs/notifikasi">notifications</DocLink>.
+        <DocLink href="/en/docs/notifications">notifications</DocLink>.
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

@@ -13,13 +13,22 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 - **Round favicon and new page titles.** The favicon (`icon.svg` and the 16/32/48 px `favicon.ico`) is now a dark circle with a transparent background, so it no longer shows as a dark square inside the round icon in search results; the Apple touch icon stays square. The home page titles are now "aoox — Self-hosted PaaS untuk deploy aplikasi Anda" (Indonesian) and "aoox — Self-hosted PaaS to deploy your apps" (English).
 - **Docs: the Docker page** (Indonesian and English, on the Monitoring page): Infrastructure > Docker lists containers, images, volumes and networks of the host or a remote server; what aoox-owned items show and why they cannot be stopped or removed there; logs, start/stop/restart and remove for other containers, removing unused images.
 
-- **Docs: proxy configuration** (new page in Indonesian and English, "Konfigurasi proxy", in the Infrastructure group, linked from Proxy & domain): the Traefik dynamic-configuration editor (files stored in aoox and written to the proxy as `user-<name>.yml`, only the `http` section, unique names per proxy, Traefik errors roll the change back), the five presets (basic auth with a bcrypt hash only, security headers, rate limit, IP allowlist, www redirect), attaching middlewares per domain on the Domain tab (order, what a domain on HTTP/HTTPS gets, 409 while a domain uses a middleware), the one-time proxy recreation on a proxy from an older aoox, "Apply again" after a restore, and the limits (dynamic only, Traefik does not report every wrong value, remote servers untested).
+- **Docs: proxy configuration** (new page in Indonesian and English, "Proxy configuration", in the Infrastructure group, linked from Proxy & domain): the Traefik dynamic-configuration editor (files stored in aoox and written to the proxy as `user-<name>.yml`, only the `http` section, unique names per proxy, Traefik errors roll the change back), the five presets (basic auth with a bcrypt hash only, security headers, rate limit, IP allowlist, www redirect), attaching middlewares per domain on the Domain tab (order, what a domain on HTTP/HTTPS gets, 409 while a domain uses a middleware), the one-time proxy recreation on a proxy from an older aoox, "Apply again" after a restore, and the limits (dynamic only, Traefik does not report every wrong value, remote servers untested).
 
 ### Changed
 
+- **English docs use English URLs and anchors.** The English documentation pages moved to English slugs (for example `/en/docs/installation`, `/en/docs/users-roles`, `/en/docs/applications`, `/en/docs/proxy-configuration`) and their section anchors are English too (`#what-is-it`, `#account`, `#pitfalls`); the Indonesian pages keep their Indonesian URLs. The language switch, hreflang alternates, sitemap and prev/next links now go through one explicit slug table (`src/lib/doc-slugs.ts`) instead of assuming the same path under `/en`. Every old English URL keeps working as a static redirect page (meta refresh plus a script that keeps the `#anchor`, mapped to the new anchor), marked `noindex` and left out of the sitemap. On the landing page the English section anchors are `#features`, `#how-it-works` and `#team`. The English docs also quote the dashboard's English labels now (for example "Update available", "Reconnect", "Authorize automatically").
+- **Copy button label follows the page language.** The copy button on code blocks and the install command says "Copy command"/"Copied" on English pages and "Salin perintah"/"Tersalin" on Indonesian pages.
+
+- **Docs: CLI messages** (Indonesian and English): the CLI pages now quote the CLI's English messages and prompts exactly as `aoox` prints them (for example `Logged in as`, `Verifying token...`, `Select a project`, `The panel rejected the token (401)`).
+
 - **Docs: proxy configuration and terminal limits** (Indonesian and English): the Proxy configuration page now says that files are per proxy, are not part of project export/import (imported domains have no middlewares), and that moving an application to another server drops the middlewares its domains use that the destination proxy does not define; the Web terminal page lists the custom Docker bridge/gateway case among the limits of automatic authorization (the button does not appear; use the manual command).
 
-- **Docs: terminal SSH user on cloud VPS** (Indonesian and English): a new "SSH user on a cloud VPS" section on the Web terminal page (the user in Environment, authorizing the key as that same user, root login usually refused by sshd), the new default (both `sudo aoox install` and the one-line `install.sh` use the user who ran `sudo`; existing installs unchanged) on the Web terminal and Installation pages, and "SSH authentication failed" rows in the terminal troubleshooting tables. The one-line installer (`public/install.sh`) now follows the same rule as `aoox install`: `TERMINAL_SSH_USER` defaults to `SUDO_USER` when it is a plain login name other than root, otherwise root, and an explicit `TERMINAL_SSH_USER` still wins. The installer also authorizes the terminal's SSH key itself: it creates the key in `secrets/` and adds its public half to that user's `~/.ssh/authorized_keys` (idempotent, same rules as `aoox install`: refuses a symlinked `~/.ssh` or `authorized_keys`, tightens loose modes, only warns on failure; skip with `AOOX_NO_TERMINAL_AUTHORIZE=1`). The Web terminal page documents the "Otorisasi otomatis" button for existing installs, its limits (remote servers, non-standard `AuthorizedKeysFile`, SELinux), and the installation and troubleshooting pages mention the automatic step.
+- **Docs: terminal SSH user on cloud VPS** (Indonesian and English): a new "SSH user on a cloud VPS" section on the Web terminal page (the user in Environment, authorizing the key as that same user, root login usually refused by sshd), the new default (both `sudo aoox install` and the one-line `install.sh` use the user who ran `sudo`; existing installs unchanged) on the Web terminal and Installation pages, and "SSH authentication failed" rows in the terminal troubleshooting tables. The one-line installer (`public/install.sh`) now follows the same rule as `aoox install`: `TERMINAL_SSH_USER` defaults to `SUDO_USER` when it is a plain login name other than root, otherwise root, and an explicit `TERMINAL_SSH_USER` still wins. The installer also authorizes the terminal's SSH key itself: it creates the key in `secrets/` and adds its public half to that user's `~/.ssh/authorized_keys` (idempotent, same rules as `aoox install`: refuses a symlinked `~/.ssh` or `authorized_keys`, tightens loose modes, only warns on failure; skip with `AOOX_NO_TERMINAL_AUTHORIZE=1`). The Web terminal page documents the "Authorize automatically" button for existing installs, its limits (remote servers, non-standard `AuthorizedKeysFile`, SELinux), and the installation and troubleshooting pages mention the automatic step.
+
+### Fixed
+
+- **404 page in English for /en URLs.** The global 404 page now shows English text and English links (Home, Documentation) for `/en` and `/en/...` URLs; it was Indonesian only. Other URLs keep the Indonesian text.
 
 ## [0.1.0-alpha.6] - 2026-10-05
 
@@ -28,7 +37,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 - **Docs: custom SSL certificates** (new page in Indonesian and English): when to use your own certificate, uploading PEM (bundle, unencrypted key), attaching it to an HTTPS domain, wildcards, expiry and renewal, limits and security; the Proxy & domain page now points to it.
 
 - **Docs: database Admin UI** (new page in Indonesian and English): the tools per engine with their pinned image versions, how to install one from the Admin UI card (domain or IP & port), how to sign in, removal, and security notes.
-- **Docs updated** for adding/dropping extra databases on the Ringkasan tab, the dashboard's Recent activity card and readable audit-log actions, the shared confirmation dialog when detaching a mount (detach only, or detach and delete the volume), PR previews removed with their application, and settings changes made during a deploy no longer being overwritten.
+- **Docs updated** for adding/dropping extra databases on the Overview tab, the dashboard's Recent activity card and readable audit-log actions, the shared confirmation dialog when detaching a mount (detach only, or detach and delete the volume), PR previews removed with their application, and settings changes made during a deploy no longer being overwritten.
 
 - **Excalidraw in the template documentation** (Indonesian and English): catalog row and a note (static client on port 80, no database, no live collaboration), and the template count updated from 14 to 15.
 
@@ -50,7 +59,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   password, creating the first database, securing the database manager afterwards, the single-process mode and its limit, and that it is the LGPLv3 Community Edition without Enterprise
   modules. Indonesian and English.
 
-- Docs for the application's Environment tab and for the secret source (Infisical): connections in Settings → Integrasi, the "Sumber secret" section (project, environment, path, sync, key preview), `${{secret.KEY}}` references, precedence and what happens when the secret manager is down. Indonesian and English.
+- Docs for the application's Environment tab and for the secret source (Infisical): connections in Settings → Integrations, the "Secret source" section (project, environment, path, sync, key preview), `${{secret.KEY}}` references, precedence and what happens when the secret manager is down. Indonesian and English.
 
 ### Changed
 
@@ -60,7 +69,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   URLs already pointed there), and the JSON-LD `sameAs` lists the GitHub org, the api repo, the npm package and the
   Docker Hub profile (all URLs checked to exist). `BACKLINKS.md` (repo file, not a page) lists the manual steps.
 
-- Docs (ID + EN): installation (pinned tags and the "Update tersedia" button, `API_IMAGE` now forwarded), webhook
+- Docs (ID + EN): installation (pinned tags and the "Update available" button, `API_IMAGE` now forwarded), webhook
   (`WEBHOOK_VERIFY_GITHUB_IP`) and preview (`PREVIEW_DOMAIN` in `.env.dist`) — with the note that older installs only
   get the new compose variables through `aoox reinstall`, not `aoox update`.
 
@@ -78,7 +87,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ### UI UX Improvement
 
-- **`→` in running text became icons.** Arrows between the steps of a path or flow in a sentence (docs tables, lists, steps: "Pengaturan → Akses") are a small chevron, `PathArrow`, and the prev/next links in docs (`←`/`→`) and the hero version pill / "Baca docs" links use `ArrowLeft`/`ArrowRight` that nudge on hover; both live in `components/arrows.tsx`. `PathArrow` carries a visually hidden "→" (and its own spaces), so screen readers and copy-paste still get "Settings → Audit log" ("→" rather than ">", which reads as "greater than"). The hidden text sits in a `relative` wrapper: `sr-only` is absolutely positioned and otherwise escaped the `overflow-x-auto` of wide table cells, which made `/docs/notifikasi` and `/docs/troubleshooting` scroll sideways at 375 px. Kept as `→` on purpose: code blocks (`Pre`), inline code, terminal-style mockups (hero, self-host, build options, blue → green), code comments and SEO metadata (`<title>`, description, OG — unchanged, checked for all pages).
+- **`→` in running text became icons.** Arrows between the steps of a path or flow in a sentence (docs tables, lists, steps: "Settings → Access") are a small chevron, `PathArrow`, and the prev/next links in docs (`←`/`→`) and the hero version pill / "Baca docs" links use `ArrowLeft`/`ArrowRight` that nudge on hover; both live in `components/arrows.tsx`. `PathArrow` carries a visually hidden "→" (and its own spaces), so screen readers and copy-paste still get "Settings → Audit log" ("→" rather than ">", which reads as "greater than"). The hidden text sits in a `relative` wrapper: `sr-only` is absolutely positioned and otherwise escaped the `overflow-x-auto` of wide table cells, which made `/docs/notifikasi` and `/docs/troubleshooting` scroll sideways at 375 px. Kept as `→` on purpose: code blocks (`Pre`), inline code, terminal-style mockups (hero, self-host, build options, blue → green), code comments and SEO metadata (`<title>`, description, OG — unchanged, checked for all pages).
 
 - **Full-bleed favicon.** Google Search crops favicons to a circle on a white background, and the old icon (a dark
   rounded tile with a transparent margin around it) showed up as a small dark square inside a white circle, with white
@@ -182,12 +191,12 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ### Changed
 
-- Installation doc (ID + EN), "Memperbarui versi": the "Update tersedia" button in the sidebar — owner
+- Installation doc (ID + EN), "Upgrading": the "Update available" button in the sidebar — owner
   only, checked by the server from Docker Hub (after boot, then every few hours), silent without
   internet, only for installs following `:latest`.
-- Installation doc (ID + EN) "Upgrading"/"Memperbarui versi" section gets a new paragraph describing
-  what actually happens after clicking "Terapkan update"/"Apply update" on the dashboard: the confirm
-  dialog, the "Sedang memperbarui"/"Applying" mode with disabled buttons, automatic polling and page
+- Installation doc (ID + EN) "Upgrading"/"Upgrading" section gets a new paragraph describing
+  what actually happens after clicking "Apply update" on the dashboard: the confirm
+  dialog, the "Applying" mode with disabled buttons, automatic polling and page
   reload once the panel is back on the new version, a connection drop during the restart being
   expected rather than an error, and the 5-minute manual-recovery fallback.
 - Installation doc (ID + EN): the callout next to `aoox install` now also notes that `aoox install`
@@ -264,7 +273,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 - Creating an application doc (ID + EN) now covers the new Akses/Access step in the New Application
   dialog (IP+port / Domain / set up later), and troubleshooting gets a matching entry for "deploy
   succeeded but the app isn't reachable" pointing at the missing host port/domain.
-- Installation doc (ID + EN) now documents that `aoox update` / the "Terapkan update"/"Apply update"
+- Installation doc (ID + EN) now documents that `aoox update` / the "Apply update"
   button only `pull`s and restarts the existing `docker-compose.dist.yml` on the server — it never
   rewrites that file, so a release that adds a new compose variable needs a manual edit to
   `docker-compose.dist.yml` in `INSTALL_DIR` before the update actually takes effect.

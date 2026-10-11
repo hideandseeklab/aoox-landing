@@ -27,6 +27,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return paths.map((path) => {
     const lang = path === "/en" || path.startsWith("/en/") ? "en" : "id"
     const sibling = otherLangPath(path, lang)
+    // Fail the build if a nav entry has no counterpart in `doc-slugs.ts`.
+    if (!sibling) throw new Error(`No paired page for ${path} — add it to src/lib/doc-slugs.ts`)
+    if (!paths.includes(sibling)) throw new Error(`${path} pairs with ${sibling}, which is not in the docs nav`)
     const idPath = lang === "id" ? path : sibling
     const enPath = lang === "en" ? path : sibling
 

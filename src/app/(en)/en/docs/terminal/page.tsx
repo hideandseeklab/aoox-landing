@@ -42,9 +42,9 @@ const FLOW = [
 ]
 
 const NEXT = [
-  { title: "Remote servers", description: "Terminal targets besides the host.", href: "/en/docs/server-remote" },
-  { title: "Users & roles", description: "Why members don't get a terminal.", href: "/en/docs/pengguna-peran" },
-  { title: "Domain for the panel", description: "The right WEB_ORIGIN for the terminal.", href: "/en/docs/domain-panel" },
+  { title: "Remote servers", description: "Terminal targets besides the host.", href: "/en/docs/remote-servers" },
+  { title: "Users & roles", description: "Why members don't get a terminal.", href: "/en/docs/users-roles" },
+  { title: "Domain for the panel", description: "The right WEB_ORIGIN for the terminal.", href: "/en/docs/panel-domain" },
   { title: "Troubleshooting", description: "origin not allowed and friends.", href: "/en/docs/troubleshooting" },
 ]
 
@@ -65,7 +65,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="cara-kerja">How it works</H2>
+      <H2 id="how-it-works">How it works</H2>
       <P>
         A container can&apos;t open a shell on its own host, so the API connects
         to the host over <strong>SSH</strong>. The browser never holds SSH
@@ -122,7 +122,7 @@ TERMINAL_SSH_USER=deploy        # the host user the terminal will use`}</Pre>
             <Code>--terminal-ssh-user</Code> flag or <Code>TERMINAL_SSH_USER</Code>{" "}
             env always wins); existing installs don&apos;t change
             (change it in Environment, see{" "}
-            <DocLink href="#user-ssh">SSH user on a cloud VPS</DocLink>). If the
+            <DocLink href="#ssh-user">SSH user on a cloud VPS</DocLink>). If the
             connection fails, the terminal shows
             a link to <strong>Infrastructure<PathArrow />Environment</strong> to fix the
             settings.
@@ -134,8 +134,8 @@ TERMINAL_SSH_USER=deploy        # the host user the terminal will use`}</Pre>
             <Code>sudo aoox install</Code> and the one-line script create the
             key in <Code>secrets/</Code> and add it to the terminal user&apos;s{" "}
             <Code>~/.ssh/authorized_keys</Code>. On an <strong>existing install</strong>,
-            the owner just clicks <strong>Otorisasi otomatis</strong> (automatic
-            authorization) in Infrastructure<PathArrow />Terminal (or in the
+            the owner just clicks <strong>Authorize automatically</strong>
+            in Infrastructure<PathArrow />Terminal (or in the
             error notice on the Terminal page); aoox adds the public key to that
             user&apos;s <Code>authorized_keys</Code>, tests the login and
             reconnects. No password or private key is written. The manual
@@ -161,7 +161,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
         </Step>
       </Steps>
 
-      <H2 id="user-ssh">SSH user on a cloud VPS</H2>
+      <H2 id="ssh-user">SSH user on a cloud VPS</H2>
       <P>
         The terminal logs in to the host as the user in the <strong>User</strong>{" "}
         field (<Code>TERMINAL_SSH_USER</Code>), and the key authorization command
@@ -189,7 +189,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
           </P>
         </Step>
         <Step title="Reconnect">
-          <P>Click <strong>Sambung ulang</strong> (reconnect) in the Terminal menu.</P>
+          <P>Click <strong>Reconnect</strong> in the Terminal menu.</P>
         </Step>
       </Steps>
 
@@ -215,7 +215,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
       />
       <P>Priority: an explicit key<PathArrow />password<PathArrow />the platform key (default).</P>
 
-      <H2 id="pakai">Usage tips</H2>
+      <H2 id="usage">Usage tips</H2>
       <Ul>
         <li>
           Every aoox container is visible from the host:{" "}
@@ -236,12 +236,12 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
         </li>
       </Ul>
 
-      <H2 id="masalah">If it fails</H2>
+      <H2 id="problems">If it fails</H2>
       <Table
         head={["Message", "Cause & fix"]}
         rows={[
           ["auth failed + an authorization command", "The key isn't in that user's authorized_keys yet. Run the command shown in the terminal/Settings."],
-          [<>SSH authentication failed for root@host.docker.internal</>, <>The terminal tried to log in as <Code>root</Code> while your VPS login is another user and sshd usually refuses root. The owner can try the <strong>Otorisasi otomatis</strong> button once User in Environment is right. Check: (1) the User field in Infrastructure<PathArrow />Environment equals the VPS login user (e.g. <Code>ubuntu</Code>); (2) the platform key is in <Code>~/.ssh/authorized_keys</Code> of <em>that user</em> (not root); (3) if you really want root, <Code>PermitRootLogin</Code> in <Code>/etc/ssh/sshd_config</Code> allows key login (<Code>prohibit-password</Code> or <Code>yes</Code>), then <Code>sudo systemctl reload ssh</Code>.</>],
+          [<>SSH authentication failed for root@host.docker.internal</>, <>The terminal tried to log in as <Code>root</Code> while your VPS login is another user and sshd usually refuses root. The owner can try the <strong>Authorize automatically</strong> button once User in Environment is right. Check: (1) the User field in Infrastructure<PathArrow />Environment equals the VPS login user (e.g. <Code>ubuntu</Code>); (2) the platform key is in <Code>~/.ssh/authorized_keys</Code> of <em>that user</em> (not root); (3) if you really want root, <Code>PermitRootLogin</Code> in <Code>/etc/ssh/sshd_config</Code> allows key login (<Code>prohibit-password</Code> or <Code>yes</Code>), then <Code>sudo systemctl reload ssh</Code>.</>],
           ["Automatic authorization: \"…but the connection test failed\"", <>The key was written, but the test login is still refused: sshd uses an <Code>AuthorizedKeysFile</Code> elsewhere, SELinux blocks it, or key login is off (<Code>PubkeyAuthentication no</Code>). Check <Code>/etc/ssh/sshd_config</Code>, then <Code>restorecon -R ~/.ssh</Code> if SELinux is on; the manual command is still available.</>],
           ["origin not allowed", <><Code>WEB_ORIGIN</Code> doesn&apos;t exactly match the browser&apos;s URL (scheme/host/port). Fix it, then <Code>up -d</Code> again.</>],
           ["connect ECONNREFUSED / timeout", "sshd isn't running, the port is wrong, or host.docker.internal doesn't resolve (Linux without extra_hosts — use the docker0 gateway IP, e.g. 172.17.0.1)."],
@@ -260,7 +260,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
         the audit log; the commands typed are not.
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

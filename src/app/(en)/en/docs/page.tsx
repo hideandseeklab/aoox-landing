@@ -31,13 +31,13 @@ const START: { icon: LucideIcon; title: string; description: string; href: strin
     icon: Rocket,
     title: "Install aoox",
     description: "Docker Compose on a VPS, then create an owner account at /setup.",
-    href: "/en/docs/instalasi",
+    href: "/en/docs/installation",
   },
   {
     icon: Boxes,
     title: "Deploy your first application",
     description: "Connect a repo, pick a build method, hit Deploy.",
-    href: "/en/docs/aplikasi",
+    href: "/en/docs/applications",
   },
   {
     icon: Globe,
@@ -86,7 +86,7 @@ export default function Page() {
         ))}
       </div>
 
-      <H2 id="apa-itu">What is aoox?</H2>
+      <H2 id="what-is-it">What is aoox?</H2>
       <P>
         aoox is a <strong>self-hosted PaaS</strong> built on Docker. You run
         it on your own server, then from the web dashboard you can deploy
@@ -95,7 +95,7 @@ export default function Page() {
         <Code>docker</Code> by hand.
       </P>
 
-      <H2 id="arsitektur">Architecture</H2>
+      <H2 id="architecture">Architecture</H2>
       <div className="flex flex-col gap-px border border-border bg-border text-xs rounded-lg overflow-hidden">
         <div className="flex items-center justify-between bg-muted/40 px-4 py-2 text-muted-foreground">
           <span>browser</span>
@@ -127,12 +127,12 @@ export default function Page() {
         compose stacks — is just a regular Docker container on the same host,
         on the <Code>aoox</Code> network. There are two ways to add more
         machines: a{" "}
-        <DocLink href="/en/docs/server-remote">remote server</DocLink> over
+        <DocLink href="/en/docs/remote-servers">remote server</DocLink> over
         SSH, or <DocLink href="/en/docs/swarm">Docker Swarm</DocLink> to
         spread replicas of one application.
       </P>
 
-      <H2 id="konsep">Core concepts</H2>
+      <H2 id="concepts">Core concepts</H2>
       <Table
         head={["Term", "Meaning"]}
         rows={[
@@ -167,11 +167,11 @@ export default function Page() {
         ]}
       />
 
-      <H2 id="alur-cepat">Quick path</H2>
+      <H2 id="quick-flow">Quick path</H2>
       <Steps>
         <Step title="Install & create the owner account">
           <P>
-            <Link href="/en/docs/instalasi" className="text-foreground underline underline-offset-4">
+            <Link href="/en/docs/installation" className="text-foreground underline underline-offset-4">
               Installation
             </Link>{" "}
             <PathArrow />open <Code>/setup</Code>.
@@ -192,7 +192,7 @@ export default function Page() {
           <P>
             <strong>Projects<PathArrow />New project<PathArrow />New application</strong>, click{" "}
             <strong>Deploy</strong> —{" "}
-            <Link href="/en/docs/aplikasi" className="text-foreground underline underline-offset-4">
+            <Link href="/en/docs/applications" className="text-foreground underline underline-offset-4">
               Creating an application
             </Link>
             .
@@ -206,7 +206,7 @@ export default function Page() {
         </Step>
       </Steps>
 
-      <H2 id="peta">Documentation map</H2>
+      <H2 id="map">Documentation map</H2>
       <div className="grid gap-4 sm:grid-cols-2">
         {DOCS_NAV_EN.map((group) => (
           <div key={group.title} className="flex flex-col overflow-hidden border border-border rounded-lg">
@@ -241,7 +241,7 @@ export default function Page() {
         aoox is designed for a server you trust (a private VPS, a small
         team). Instance roles restrict access to infrastructure (terminal,
         servers, registry, proxy), while{" "}
-        <DocLink href="/en/docs/pengguna-peran#project">per-project membership</DocLink>{" "}
+        <DocLink href="/en/docs/users-roles#project">per-project membership</DocLink>{" "}
         decides who can see and change which project.
       </Callout>
     </DocPage>

@@ -44,8 +44,8 @@ const FLOW = [
 const NEXT = [
   { title: "Pull request previews", description: "Temporary containers per PR through the same webhook.", href: "/en/docs/preview" },
   { title: "Deploy & rollback", description: "What happens once a deploy is queued.", href: "/en/docs/deploy" },
-  { title: "Notifications", description: "Alerts for successful/failed deploys.", href: "/en/docs/notifikasi" },
-  { title: "Domain for the panel", description: "So PUBLIC_API_URL is reachable by a provider.", href: "/en/docs/domain-panel" },
+  { title: "Notifications", description: "Alerts for successful/failed deploys.", href: "/en/docs/notifications" },
+  { title: "Domain for the panel", description: "So PUBLIC_API_URL is reachable by a provider.", href: "/en/docs/panel-domain" },
 ]
 
 export default function Page() {
@@ -65,17 +65,17 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="prasyarat">Prerequisites</H2>
+      <H2 id="prerequisites">Prerequisites</H2>
       <Ul>
         <li>
           <Code>PUBLIC_API_URL</Code> is reachable <strong>from the internet</strong>{" "}
           — GitHub/GitLab call it from outside. A public IP + port 3001, or a
-          domain via <DocLink href="/en/docs/domain-panel">Domain for the panel</DocLink>.
+          domain via <DocLink href="/en/docs/panel-domain">Domain for the panel</DocLink>.
         </li>
         <li>The application has already been deployed manually at least once (registry, build, etc. already set up).</li>
       </Ul>
 
-      <H2 id="alur">Flow</H2>
+      <H2 id="flow">Flow</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {FLOW.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
@@ -86,7 +86,7 @@ export default function Page() {
         ))}
       </ol>
 
-      <H2 id="kredensial">Git credentials (private repos)</H2>
+      <H2 id="credentials">Git credentials (private repos)</H2>
       <P>
         Needed so the Docker daemon (and the Nixpacks helper) can clone a
         private repo. It&apos;s unrelated to incoming webhooks, but the two are
@@ -180,7 +180,7 @@ export default function Page() {
         </Step>
       </Steps>
 
-      <H2 id="respons">Reading the webhook response</H2>
+      <H2 id="response">Reading the webhook response</H2>
       <Table
         head={["Situation", "Status", "Body"]}
         rows={[
@@ -325,7 +325,7 @@ export default function Page() {
         </li>
       </Ul>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -388,7 +388,7 @@ export default function Page() {
         webhooks for compose stacks.
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

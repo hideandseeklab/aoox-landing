@@ -176,7 +176,7 @@ const MORE_ID = [
 ]
 
 const MORE_EN = [
-  { label: "Your own domain for the panel (not just apps)", href: "/en/docs/domain-panel" },
+  { label: "Your own domain for the panel (not just apps)", href: "/en/docs/panel-domain" },
   { label: "Pull request previews", href: "/en/docs/preview" },
   { label: "Scheduled jobs", href: "/en/docs/jobs" },
   { label: "Compose stacks: history, webhook, metrics", href: "/en/docs/compose" },
@@ -184,7 +184,7 @@ const MORE_EN = [
   { label: "Project export & import", href: "/en/docs/project" },
   { label: "Volumes & mounts", href: "/en/docs/mount" },
   { label: "Data browser: row edit & CSV", href: "/en/docs/data-browser" },
-  { label: "2FA, scoped API tokens, audit log", href: "/en/docs/pengguna-peran#akun" },
+  { label: "2FA, scoped API tokens, audit log", href: "/en/docs/users-roles#account" },
   { label: "Local registry & disk cleanup", href: "/en/docs/registry" },
   { label: "aoox CLI: install, link, deploy", href: "/en/docs/cli" },
 ]
@@ -219,7 +219,7 @@ const COPY: Record<Lang, Copy> = {
 function FeaturesSection({ lang = "id" }: { lang?: Lang }) {
   const t = COPY[lang]
   return (
-    <Section id="fitur">
+    <Section id={lang === "en" ? "features" : "fitur"}>
       <SectionHeading label={t.label} title={t.title} description={t.description} />
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3 rounded-lg overflow-hidden">
         {t.features.map((feature) => (

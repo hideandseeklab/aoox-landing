@@ -57,7 +57,7 @@ const LIFECYCLE = [
 ]
 
 const NEXT = [
-  { title: "Environment variables", description: "Every form of the ${{database.…}} reference.", href: "/en/docs/environment#referensi" },
+  { title: "Environment variables", description: "Every form of the ${{database.…}} reference.", href: "/en/docs/environment#references" },
   { title: "Data browser", description: "Browse tables and run queries from the dashboard.", href: "/en/docs/data-browser" },
   { title: "Backup & restore", description: "Manual and scheduled backups, S3 copies.", href: "/en/docs/backup#database" },
   { title: "Monitoring", description: "Database metrics and resource limits.", href: "/en/docs/monitoring#limit" },
@@ -125,7 +125,7 @@ export default function Page() {
         application&apos;s first write.
       </Callout>
 
-      <H2 id="varian-postgres">PostgreSQL variants</H2>
+      <H2 id="postgres-variants">PostgreSQL variants</H2>
       <P>
         When creating a database with Engine <strong>PostgreSQL</strong>,
         pick a <strong>Variant</strong> for an image with an extension
@@ -173,7 +173,7 @@ export default function Page() {
         </li>
       </Ul>
 
-      <H2 id="langkah">Creating a database</H2>
+      <H2 id="steps">Creating a database</H2>
       <Steps>
         <Step title={<>Project page<PathArrow />New database</>}>
           <Table
@@ -216,7 +216,7 @@ export default function Page() {
             Deploy (or roll back) so the new application container picks up
             the value. Other forms (<Code>host</Code>, <Code>port</Code>,{" "}
             <Code>username</Code>, …) are covered in{" "}
-            <DocLink href="/en/docs/environment#referensi">Environment variables</DocLink>.
+            <DocLink href="/en/docs/environment#references">Environment variables</DocLink>.
           </P>
         </Step>
       </Steps>
@@ -226,7 +226,7 @@ export default function Page() {
         <strong>same project</strong>.
       </Callout>
 
-      <H2 id="koneksi">Connections</H2>
+      <H2 id="connection">Connections</H2>
       <Table
         head={["Type", "Host", "Who can use it"]}
         rows={[
@@ -247,7 +247,7 @@ export default function Page() {
         (masked, copyable) and a ready-to-paste <Code>DATABASE_URL</Code>.
       </P>
 
-      <H2 id="database-tambahan">Extra databases on the same server</H2>
+      <H2 id="extra-databases">Extra databases on the same server</H2>
       <P>
         A single PostgreSQL/MySQL/MariaDB/MongoDB container can hold several
         databases. On the <strong>Overview</strong> tab, next to the{" "}
@@ -269,7 +269,7 @@ export default function Page() {
         <li>MongoDB: a new database is immediately populated with a placeholder document, same as the primary one.</li>
       </Ul>
 
-      <H2 id="operasi">Operations</H2>
+      <H2 id="operations">Operations</H2>
       <Table
         head={["Action", "Where", "Notes"]}
         rows={[
@@ -295,7 +295,7 @@ export default function Page() {
           <strong>Jobs</strong> <PathArrow />scheduled commands in the database container
           or a separate container from the engine image with{" "}
           <Code>DB_*</Code> env — {" "}
-          <DocLink href="/en/docs/jobs#pemilik">Scheduled jobs</DocLink>.
+          <DocLink href="/en/docs/jobs#owner">Scheduled jobs</DocLink>.
         </li>
         <li>
           <strong>Mount</strong> <PathArrow />engine config files (<Code>my.cnf</Code>,{" "}
@@ -307,7 +307,7 @@ export default function Page() {
         </li>
       </Ul>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -330,7 +330,7 @@ export default function Page() {
         interpreted in filters yet.
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

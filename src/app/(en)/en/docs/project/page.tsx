@@ -42,7 +42,7 @@ const TREE = `shop/                      ← project (shared env: APP_ENV, SENTR
 └── monitoring  stack        docker-compose (grafana + loki)`
 
 const NEXT = [
-  { title: "Creating an application", description: "The next step once a project exists.", href: "/en/docs/aplikasi" },
+  { title: "Creating an application", description: "The next step once a project exists.", href: "/en/docs/applications" },
   { title: "Environment variables", description: "Project vs. application env, database references.", href: "/en/docs/environment" },
   { title: "Managed databases", description: "A database per project.", href: "/en/docs/database" },
   { title: "One-click templates", description: "Ready-made stacks into a project.", href: "/en/docs/template" },
@@ -65,7 +65,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="konsep">What a project groups together</H2>
+      <H2 id="concepts">What a project groups together</H2>
       <Pre title="Example: a shop project">{TREE}</Pre>
       <Table
         head={["Shared within one project", "Not shared"]}
@@ -102,7 +102,7 @@ export default function Page() {
         </li>
       </Ul>
 
-      <H2 id="membuat">Creating a project</H2>
+      <H2 id="create">Creating a project</H2>
       <Steps>
         <Step title={<>Projects menu<PathArrow />New project</>}>
           <Table
@@ -135,7 +135,7 @@ export default function Page() {
         </Step>
       </Steps>
 
-      <H2 id="env-bersama">Shared environment</H2>
+      <H2 id="shared-env">Shared environment</H2>
       <P>
         Edited in the project&apos;s Settings tab, one <Code>KEY=VALUE</Code> per
         line (<Code>#</Code> comments are ignored). Values are{" "}
@@ -165,11 +165,11 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
         </li>
         <li>
           Syntax details and merge order in{" "}
-          <DocLink href="/en/docs/environment#alur">Environment variables</DocLink>.
+          <DocLink href="/en/docs/environment#flow">Environment variables</DocLink>.
         </li>
       </Ul>
 
-      <H2 id="anggota">Project members</H2>
+      <H2 id="members">Project members</H2>
       <P>
         The <strong>Members</strong> tab on the project page decides who can
         see and change this project. Add someone by the email of an existing
@@ -191,7 +191,7 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
         <li>
           Other instance members only see projects they&apos;ve been added to —
           other projects return 404. Details in{" "}
-          <DocLink href="/en/docs/pengguna-peran#project">Users &amp; roles</DocLink>.
+          <DocLink href="/en/docs/users-roles#project">Users &amp; roles</DocLink>.
         </li>
       </Ul>
 
@@ -245,12 +245,12 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
         recent projects with a <em>See all</em> link.
       </P>
 
-      <H2 id="kepemilikan">Ownership & access</H2>
+      <H2 id="ownership">Ownership & access</H2>
       <Ul>
         <li>
           A project records its creator, who is always its project admin. Who
           else can see it is decided by the member list above — see{" "}
-          <DocLink href="/en/docs/pengguna-peran#project">Users &amp; roles</DocLink>.
+          <DocLink href="/en/docs/users-roles#project">Users &amp; roles</DocLink>.
         </li>
         <li>
           A user who still owns a project can&apos;t be removed from the team —
@@ -260,7 +260,7 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
         <li>Every project change is recorded in the audit log.</li>
       </Ul>
 
-      <H2 id="hapus">Deleting a project</H2>
+      <H2 id="delete">Deleting a project</H2>
       <Callout kind="warn" title="Read before deleting">
         Deleting a project removes the <strong>records</strong> of its
         applications, compose stacks, databases, and backups in aoox
@@ -285,7 +285,7 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
 docker rm -f aoox-app-<slug> aoox-db-<slug>
 docker volume rm aoox_app_<slug>_<name> aoox_db_<slug>`}</Pre>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -304,7 +304,7 @@ docker volume rm aoox_app_<slug>_<name> aoox_db_<slug>`}</Pre>
         env; import that brings data along (not just configuration).
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

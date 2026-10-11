@@ -200,17 +200,17 @@ export const DOCS_NAV_EN: DocGroup[] = [
         description: "What aoox is and how these docs are organized.",
       },
       {
-        href: "/en/docs/instalasi",
+        href: "/en/docs/installation",
         title: "Installation",
         description: "Running aoox on your own server with Docker Compose.",
       },
       {
-        href: "/en/docs/domain-panel",
+        href: "/en/docs/panel-domain",
         title: "Domain for the panel",
         description: "Serve the dashboard and API on your own domain with HTTPS.",
       },
       {
-        href: "/en/docs/pengguna-peran",
+        href: "/en/docs/users-roles",
         title: "Users & roles",
         description: "First owner account, invitations, per-role limits, 2FA, API tokens, audit log.",
       },
@@ -225,7 +225,7 @@ export const DOCS_NAV_EN: DocGroup[] = [
         description: "The container for apps, databases, and shared environment.",
       },
       {
-        href: "/en/docs/aplikasi",
+        href: "/en/docs/applications",
         title: "Creating an application",
         description: "From a Git repo or a ready-made image, plus deploy modes.",
       },
@@ -290,7 +290,7 @@ export const DOCS_NAV_EN: DocGroup[] = [
         description: "Browse tables and run queries from the dashboard.",
       },
       {
-        href: "/en/docs/admin-database",
+        href: "/en/docs/database-admin",
         title: "Database admin UI",
         description: "Adminer, phpMyAdmin, pgAdmin, and more, installed in one click.",
       },
@@ -325,17 +325,17 @@ export const DOCS_NAV_EN: DocGroup[] = [
         description: "Traefik, application domains, automatic HTTPS, DNS checks.",
       },
       {
-        href: "/en/docs/sertifikat-ssl",
+        href: "/en/docs/ssl-certificates",
         title: "Custom SSL certificates",
         description: "Your own certificate (corporate CA, wildcard) instead of Let's Encrypt.",
       },
       {
-        href: "/en/docs/konfigurasi-proxy",
+        href: "/en/docs/proxy-configuration",
         title: "Proxy configuration",
         description: "Your own Traefik middlewares (basic auth, headers, rate limit) attached per domain.",
       },
       {
-        href: "/en/docs/server-remote",
+        href: "/en/docs/remote-servers",
         title: "Remote servers",
         description: "Deploy to another server over SSH.",
       },
@@ -355,7 +355,7 @@ export const DOCS_NAV_EN: DocGroup[] = [
         description: "Host and container metrics, resource limits.",
       },
       {
-        href: "/en/docs/notifikasi",
+        href: "/en/docs/notifications",
         title: "Notifications",
         description: "Send deploy and health alerts to Telegram, Slack, Discord, a webhook, or email.",
       },

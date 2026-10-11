@@ -79,11 +79,11 @@ const COPY: Record<Lang, Copy> = {
 function HowItWorksSection({ lang = "id" }: { lang?: Lang }) {
   const t = COPY[lang]
   return (
-    <Section id="cara-kerja">
+    <Section id={lang === "en" ? "how-it-works" : "cara-kerja"}>
       <SectionHeading label={t.label} title={t.title} description={t.description} />
 
       <ol className="relative grid gap-10 md:grid-cols-3 md:gap-6">
-        {/* garis penghubung */}
+        {/* connector line */}
         <span
           aria-hidden
           className="absolute top-3 bottom-3 left-3 w-px bg-border md:top-3 md:right-[16.6%] md:bottom-auto md:left-[16.6%] md:h-px md:w-auto"
@@ -118,7 +118,7 @@ function HowItWorksSection({ lang = "id" }: { lang?: Lang }) {
 
       <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
         <Link
-          href={lang === "en" ? "/en/docs/aplikasi" : "/docs/aplikasi"}
+          href={lang === "en" ? "/en/docs/applications" : "/docs/aplikasi"}
           className="inline-flex items-center gap-1 text-foreground underline underline-offset-4 hover:no-underline"
         >
           {t.guide}

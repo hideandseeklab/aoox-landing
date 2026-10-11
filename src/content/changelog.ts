@@ -39,7 +39,7 @@ export const RELEASES: Release[] = [
         items: [
           {
             id: "**Sertifikat SSL kustom** untuk domain aplikasi: unggah sertifikat sendiri (CA perusahaan, wildcard beli, Cloudflare Origin CA) beserta kunci privatnya di Pengaturan, Integrasi, lalu pilih per domain di tab Domain sebagai ganti Let's Encrypt. Kunci disimpan terenkripsi dan tidak pernah ditampilkan lagi, pembaruan tidak perlu restart, dan sertifikat yang hampir atau sudah kedaluwarsa memicu notifikasi.",
-            en: "**Custom SSL certificates** for application domains: upload your own certificate (company CA, purchased wildcard, Cloudflare Origin CA) with its private key in Settings, Integrasi, then pick it per domain on the Domain tab instead of Let's Encrypt. The key is stored encrypted and never shown again, renewing needs no restart, and a certificate that is close to or past its expiry triggers a notification.",
+            en: "**Custom SSL certificates** for application domains: upload your own certificate (company CA, purchased wildcard, Cloudflare Origin CA) with its private key in Settings, Integrations, then pick it per domain on the Domain tab instead of Let's Encrypt. The key is stored encrypted and never shown again, renewing needs no restart, and a certificate that is close to or past its expiry triggers a notification.",
           },
           {
             id: "**Admin UI database** sekali klik: pasang Adminer, phpMyAdmin, pgAdmin, Mongo Express, Redis Commander, atau DbGate di samping database terkelola, dalam container sendiri dengan akses lewat domain dan/atau IP & port.",
@@ -72,7 +72,7 @@ export const RELEASES: Release[] = [
           },
           {
             id: "Tab Pengaturan, Domain, Webhook, dan Environment kini selebar konten; form Pengaturan menjadi dua kolom di layar lebar. Tambah dan hapus database tambahan pindah ke tab Ringkasan.",
-            en: "The Pengaturan, Domain, Webhook and Environment tabs are now full width, and the settings form uses two columns on wide screens. Adding and dropping extra databases moved to the Ringkasan tab.",
+            en: "The Settings, Domain, Webhook and Environment tabs are now full width, and the settings form uses two columns on wide screens. Adding and dropping extra databases moved to the Overview tab.",
           },
         ],
       },
@@ -129,7 +129,7 @@ export const RELEASES: Release[] = [
           },
           {
             id: "**Sumber secret eksternal (Infisical)** untuk env aplikasi: daftarkan koneksi sekali di Pengaturan, Integrasi, lalu pilih project, environment, dan path di aplikasi. Secret disuntikkan saat container dibuat, semuanya (sync) atau lewat referensi `${{secret.KEY}}`. Tidak disimpan di aoox, nilainya disensor dari log, dan preview pull request tidak ikut memakainya.",
-            en: "**External secret source (Infisical)** for application env: register a connection once in Settings, Integrasi, then pick the project, environment and path on the application. Secrets are injected when the container is created, either all of them (sync) or through `${{secret.KEY}}` references. Nothing is stored in aoox, values are masked in logs, and pull request previews do not use it.",
+            en: "**External secret source (Infisical)** for application env: register a connection once in Settings, Integrations, then pick the project, environment and path on the application. Secrets are injected when the container is created, either all of them (sync) or through `${{secret.KEY}}` references. Nothing is stored in aoox, values are masked in logs, and pull request previews do not use it.",
           },
           {
             id: "Halaman aplikasi punya **tab Environment** tersendiri, berisi editor env dan sumber secret.",
@@ -154,7 +154,7 @@ export const RELEASES: Release[] = [
           },
           {
             id: "Form **Aplikasi baru** dan Pengaturan kini berbentuk kartu per topik (Sumber, Build, Jaringan, dan seterusnya), jadi lebih mudah dipindai.",
-            en: "The **New application** form and Pengaturan are now split into cards per topic (Source, Build, Network and so on), so they are easier to scan.",
+            en: "The **New application** form and Settings are now split into cards per topic (Source, Build, Network and so on), so they are easier to scan.",
           },
         ],
       },
@@ -183,7 +183,7 @@ export const RELEASES: Release[] = [
         items: [
           {
             id: "Tombol **Update tersedia** di bagian bawah sidebar (khusus owner): server memeriksa versi aoox terbaru di Docker Hub secara berkala dan tombolnya membuka halaman Update aoox. Tidak muncul untuk instalasi dengan tag yang dikunci, dan diam saja tanpa akses internet.",
-            en: "An **Update tersedia** (update available) button at the bottom of the sidebar (owner only): the server periodically checks Docker Hub for the newest aoox version and the button opens the Update aoox page. It stays hidden for installs pinned to a tag, and stays silent without internet access.",
+            en: "An **Update available** button at the bottom of the sidebar (owner only): the server periodically checks Docker Hub for the newest aoox version and the button opens the Update aoox page. It stays hidden for installs pinned to a tag, and stays silent without internet access.",
           },
           {
             id: "**`aoox reinstall`** untuk memperbaiki atau menyegarkan instalasi yang sudah ada tanpa kehilangan data, dan **installer CLI tanpa Node.js** (`curl -fsSL https://aoox.dev/install-cli.sh | sh`) untuk Linux dan macOS.",
@@ -225,7 +225,7 @@ export const RELEASES: Release[] = [
           },
           {
             id: "Tombol **Terapkan update** kini meminta konfirmasi, menampilkan progres selama panel restart, dan memuat ulang halaman sendiri — tanpa error merah yang menyesatkan.",
-            en: "The **Terapkan update** (apply update) button now asks for confirmation, shows progress while the panel restarts, and reloads the page by itself — without the misleading red error.",
+            en: "The **Apply update** button now asks for confirmation, shows progress while the panel restarts, and reloads the page by itself — without the misleading red error.",
           },
         ],
       },

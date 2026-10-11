@@ -99,12 +99,12 @@ function SelfHostSection({ lang = "id" }: { lang?: Lang }) {
 
           <div className="flex flex-wrap gap-3">
             <Button asChild>
-              <Link href={lang === "en" ? "/en/docs/instalasi" : "/docs/instalasi"}>
+              <Link href={lang === "en" ? "/en/docs/installation" : "/docs/instalasi"}>
                 {t.ctaPrimary}
               </Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link href={lang === "en" ? "/en/docs/domain-panel" : "/docs/domain-panel"}>
+              <Link href={lang === "en" ? "/en/docs/panel-domain" : "/docs/domain-panel"}>
                 {t.ctaSecondary}
                 <ArrowRight data-icon="inline-end" />
               </Link>

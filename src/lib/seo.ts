@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { otherLangDocPath } from "./doc-slugs"
 import type { Lang } from "./lang"
 
 export const SITE_URL = "https://aoox.dev"
@@ -44,10 +45,12 @@ const OG_IMAGE = {
  * switcher (`site-header.tsx`) and by hreflang generation here, so the two
  * can never drift apart.
  *
- * The mapping is purely structural (`/docs/<slug>` ⇄ `/en/docs/<slug>`,
- * `/` ⇄ `/en`, `/changelog` ⇄ `/en/changelog`) — slugs are never translated. If a page without a real
- * counterpart is ever added, this must return `null` for it rather than a
- * guessed path, so callers never emit an hreflang link to a 404.
+ * Docs pages are paired through the explicit slug table in `doc-slugs.ts`
+ * (Indonesian and English slugs differ for some pages); the landing pages and
+ * changelog mirror each other structurally (`/` ⇄ `/en`, `/changelog` ⇄
+ * `/en/changelog`). Anything without a real counterpart (an unknown docs slug,
+ * a redirect stub) returns `null`, so callers never emit a link or hreflang to
+ * a 404.
  */
 export function otherLangPath(pathname: string, lang: Lang): string | null {
   if (pathname === "/" || pathname === "/en") {
@@ -56,13 +59,7 @@ export function otherLangPath(pathname: string, lang: Lang): string | null {
   if (pathname === "/changelog" || pathname === "/en/changelog") {
     return lang === "en" ? "/changelog" : "/en/changelog"
   }
-  if (lang === "id" && (pathname === "/docs" || pathname.startsWith("/docs/"))) {
-    return `/en${pathname}`
-  }
-  if (lang === "en" && (pathname === "/en/docs" || pathname.startsWith("/en/docs/"))) {
-    return pathname.slice("/en".length)
-  }
-  return null
+  return otherLangDocPath(pathname, lang)
 }
 
 export interface PageSeoInput {

@@ -51,7 +51,7 @@ const PRESETS = [
 const NEXT = [
   { title: "Managed database", description: "The database being backed up.", href: "/en/docs/database" },
   { title: "Mounts", description: "Application volumes that can be backed up.", href: "/en/docs/mount" },
-  { title: "Notifications", description: "Get notified when a backup fails.", href: "/en/docs/notifikasi" },
+  { title: "Notifications", description: "Get notified when a backup fails.", href: "/en/docs/notifications" },
   { title: "Templates", description: "MinIO from the catalog as a local S3 destination.", href: "/en/docs/template" },
 ]
 
@@ -72,7 +72,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="alur">One backup&apos;s flow</H2>
+      <H2 id="flow">One backup&apos;s flow</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {FLOW.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
@@ -143,7 +143,7 @@ export default function Page() {
             <li>
               <strong>All databases on the server</strong> — for
               PostgreSQL/MySQL/MariaDB with{" "}
-              <DocLink href="/en/docs/database#database-tambahan">extra databases</DocLink>:
+              <DocLink href="/en/docs/database#extra-databases">extra databases</DocLink>:
               the dump covers all of them (PostgreSQL uses{" "}
               <Code>pg_dumpall</Code>, including roles). The backup row is
               marked <em>all databases</em>.
@@ -282,7 +282,7 @@ export default function Page() {
         aren&apos;t hidden.
       </Callout>
 
-      <H2 id="strategi">Suggested strategies</H2>
+      <H2 id="strategy">Suggested strategies</H2>
       <Table
         head={["Need", "Settings"]}
         rows={[
@@ -294,7 +294,7 @@ export default function Page() {
         ]}
       />
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -312,7 +312,7 @@ export default function Page() {
         instance restore.
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

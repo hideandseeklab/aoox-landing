@@ -21,8 +21,8 @@ const NAV_ID = [
 ]
 
 const NAV_EN = [
-  { href: "/en#fitur", label: "Features" },
-  { href: "/en#cara-kerja", label: "How it works" },
+  { href: "/en#features", label: "Features" },
+  { href: "/en#how-it-works", label: "How it works" },
   { href: "/en#self-host", label: "Self-host" },
   { href: "/en#faq", label: "FAQ" },
   { href: "/en/docs", label: "Docs" },
@@ -68,7 +68,7 @@ function SiteHeader() {
           <LangSwitch pathname={pathname} lang={lang} />
           <ThemeToggle lang={lang} />
           <Button size="sm" className="hidden sm:inline-flex" asChild>
-            <Link href={lang === "en" ? "/en/docs/instalasi" : "/docs/instalasi"}>{cta}</Link>
+            <Link href={lang === "en" ? "/en/docs/installation" : "/docs/instalasi"}>{cta}</Link>
           </Button>
           {/* key = pathname: the menu closes automatically when the page changes */}
           <MobileMenu key={pathname} pathname={pathname} lang={lang} nav={nav} cta={cta} />
@@ -184,7 +184,7 @@ function MobileMenu({
             ))}
             <div className="mt-3 flex items-center gap-3 border-t border-border pt-3">
               <Button size="sm" asChild>
-                <Link href={lang === "en" ? "/en/docs/instalasi" : "/docs/instalasi"}>{cta}</Link>
+                <Link href={lang === "en" ? "/en/docs/installation" : "/docs/instalasi"}>{cta}</Link>
               </Button>
               <a
                 href={REPO}

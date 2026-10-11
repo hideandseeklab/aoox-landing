@@ -53,7 +53,7 @@ const BLUE_GREEN = [
 const NEXT = [
   { title: "Webhook auto-deploy", description: "Deploy on every push without pressing a button.", href: "/en/docs/webhook" },
   { title: "Pull request previews", description: "A temporary container per PR.", href: "/en/docs/preview" },
-  { title: "Notifications", description: "Deploy success/failure alerts to Telegram, Slack, and more.", href: "/en/docs/notifikasi" },
+  { title: "Notifications", description: "Deploy success/failure alerts to Telegram, Slack, and more.", href: "/en/docs/notifications" },
   { title: "Monitoring", description: "Container CPU/RAM metrics after a deploy.", href: "/en/docs/monitoring" },
 ]
 
@@ -74,7 +74,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="alur">Life of a deployment</H2>
+      <H2 id="flow">Life of a deployment</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-5 rounded-lg overflow-hidden">
         {STATUSES.map((item, i) => (
           <li key={item.s} className="relative flex flex-col gap-1 bg-background px-3 py-3">
@@ -275,7 +275,7 @@ export default function Page() {
         notifications aren&apos;t sent for an intentional stop.
       </P>
 
-      <H2 id="perubahan">What change triggers what</H2>
+      <H2 id="changes">What change triggers what</H2>
       <Table
         head={["What changed", "Effect", "Needs"]}
         rows={[
@@ -289,7 +289,7 @@ export default function Page() {
         ]}
       />
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

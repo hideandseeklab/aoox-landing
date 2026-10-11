@@ -66,7 +66,7 @@ const COMPARE = [
 
 const NEXT = [
   { title: "Deploy & rollback", description: "Container vs. service mode, rolling updates.", href: "/en/docs/deploy#mode" },
-  { title: "Remote servers", description: "A multi-machine alternative without a cluster.", href: "/en/docs/server-remote" },
+  { title: "Remote servers", description: "A multi-machine alternative without a cluster.", href: "/en/docs/remote-servers" },
   { title: "Registry", description: "Other nodes must be able to pull the image.", href: "/en/docs/registry" },
   { title: "Monitoring", description: "Service and per-node task metrics.", href: "/en/docs/monitoring" },
 ]
@@ -88,7 +88,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="kapan">Swarm or remote servers?</H2>
+      <H2 id="when">Swarm or remote servers?</H2>
       <div className="overflow-x-auto border border-border rounded-lg">
         <table className="w-full text-xs">
           <thead className="bg-muted text-muted-foreground">
@@ -111,11 +111,11 @@ export default function Page() {
       </div>
       <P>
         You can use both at once: the aoox host becomes the swarm manager,
-        while a <DocLink href="/en/docs/server-remote">remote server</DocLink>{" "}
+        while a <DocLink href="/en/docs/remote-servers">remote server</DocLink>{" "}
         keeps serving other applications separately.
       </P>
 
-      <H2 id="alur">Flow</H2>
+      <H2 id="flow">Flow</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {FLOW.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
@@ -126,7 +126,7 @@ export default function Page() {
         ))}
       </ol>
 
-      <H2 id="aktifkan">Enabling swarm</H2>
+      <H2 id="enable">Enabling swarm</H2>
       <Steps>
         <Step title={<>Settings<PathArrow />Docker Swarm<PathArrow />Init swarm (owner)</>}>
           <P>
@@ -162,7 +162,7 @@ export default function Page() {
             <Code>localhost</Code> — other nodes won&apos;t be able to pull from
             it. Set it to a reachable hostname/IP (with TLS or{" "}
             <Code>insecure-registries</Code>) — see{" "}
-            <DocLink href="/en/docs/registry#lokal">Registry</DocLink>.
+            <DocLink href="/en/docs/registry#local">Registry</DocLink>.
           </P>
         </Step>
       </Steps>
@@ -242,7 +242,7 @@ export default function Page() {
         ]}
       />
 
-      <H2 id="keluar">Leaving swarm</H2>
+      <H2 id="leave">Leaving swarm</H2>
       <Callout kind="warn">
         First switch every application back to <em>Deploy mode: container</em>{" "}
         — leaving swarm removes any running services. Then{" "}
@@ -250,7 +250,7 @@ export default function Page() {
         need to run <Code>docker swarm leave</Code> themselves.
       </Callout>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -267,7 +267,7 @@ export default function Page() {
         metrics across nodes; automatic volume scheduling between nodes.
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

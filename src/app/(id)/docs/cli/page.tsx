@@ -164,14 +164,14 @@ aoox --version`}</Pre>
         root, langsung di server tujuan.
       </P>
       <Pre title="Paling sederhana (tanpa domain, akses lewat IP)">{`$ sudo aoox install
-==> Mendeteksi IP publik server
-Pasang aoox di /opt/aoox dan jalankan docker compose up -d? (Y/n)
-==> Menjalankan docker compose up -d
-==> Menunggu API siap
+==> Detecting the server public IP
+Install aoox in /opt/aoox and run docker compose up -d? (Y/n)
+==> Running docker compose up -d
+==> Waiting for the API to be ready
 
-aoox terpasang di /opt/aoox.
-Buka: http://203.0.113.10:3000
-Buat akun owner pertama di /setup.`}</Pre>
+aoox is installed in /opt/aoox.
+Open: http://203.0.113.10:3000
+Create the first owner account at /setup.`}</Pre>
       <Pre title="Dengan domain + HTTPS otomatis dan owner langsung dibuat">{`sudo aoox install \\
   --web-domain panel.example.com \\
   --api-domain api.panel.example.com \\
@@ -228,11 +228,11 @@ Buat akun owner pertama di /setup.`}</Pre>
         </Step>
         <Step title="Jalankan aoox login">
           <Pre>{`$ aoox login
-URL panel  https://panel.example.com
+Panel URL  https://panel.example.com
 API token (aoox_…) ********
-Memverifikasi token... ok
-Masuk sebagai kamu@example.com (owner) di https://panel.example.com
-Token disimpan di /home/kamu/.config/aoox/config.json`}</Pre>
+Verifying token... ok
+Logged in as kamu@example.com (owner) at https://panel.example.com
+Token saved to /home/kamu/.config/aoox/config.json`}</Pre>
           <P>
             Token diminta lewat prompt tersembunyi, bukan argumen, supaya tidak
             tertinggal di riwayat shell atau daftar proses. Sebelum disimpan,
@@ -262,10 +262,10 @@ Panel: https://panel.example.com`}</Pre>
         <Step title="Link folder ke aplikasi">
           <Pre>{`$ cd repo-aplikasiku
 $ aoox link
-? Pilih project › toko
-? Pilih aplikasi › shop (shop)
-Ter-link: toko / shop (shop)
-Ditulis ke .aoox.json — aman di-commit, tidak memuat rahasia.`}</Pre>
+? Select a project › toko
+? Select an application › shop (shop)
+Linked: toko / shop (shop)
+Written to .aoox.json — safe to commit, contains no secrets.`}</Pre>
           <P>
             <Code>--project</Code>/<Code>--app</Code> melewati pemilihan
             interaktif — dipakai di CI. File <Code>.aoox.json</Code>{" "}
@@ -277,7 +277,7 @@ Ditulis ke .aoox.json — aman di-commit, tidak memuat rahasia.`}</Pre>
 ==> Build localhost:5000/toko/shop:a1b2c3d
 ==> docker login localhost:5000
 ==> Push localhost:5000/toko/shop:a1b2c3d
-==> Memutakhirkan aplikasi & memicu deploy
+==> Updating the application & triggering a deploy
 [building] Building localhost:5000/toko/shop:a1b2c3d from https://…
 ...
 Deployed: localhost:5000/toko/shop:a1b2c3d`}</Pre>
@@ -309,8 +309,8 @@ Deployed: localhost:5000/toko/shop:a1b2c3d`}</Pre>
       </P>
       <Pre>{`$ aoox domain set --web panel.example.com --api api.panel.example.com \\
   --acme-email kamu@example.com
-Domain disimpan: panel.example.com (dashboard), api.panel.example.com (API).
-Panel akan restart beberapa detik untuk menerapkannya — koneksi ke API ini akan sempat terputus.`}</Pre>
+Domain saved: panel.example.com (dashboard), api.panel.example.com (API).
+The panel will restart for a few seconds to apply it — the connection to this API will drop briefly.`}</Pre>
       <Callout>
         Panel harus sudah punya <Code>INSTALL_DIR</Code> terisi di{" "}
         <Code>.env.dist</Code> (path absolut folder <Code>docker-compose.dist.yml</Code>{" "}
@@ -324,13 +324,13 @@ Panel akan restart beberapa detik untuk menerapkannya — koneksi ke API ini aka
         <Code>aoox-web</Code> di registry, bukan sekadar nomor versi.
       </P>
       <Pre>{`$ aoox update
-Versi berjalan: 0.1.0-alpha.1
-  api: hideandseeklab/aoox-api:latest (update tersedia)
-  web: hideandseeklab/aoox-web:latest (terbaru)
-Update tersedia. Jalankan dengan --apply untuk menerapkannya.
+Running version: 0.1.0-alpha.1
+  api: hideandseeklab/aoox-api:latest (update available)
+  web: hideandseeklab/aoox-web:latest (up to date)
+Update available. Run with --apply to apply it.
 
 $ aoox update --apply
-Update diterapkan — panel akan restart beberapa detik untuk menerapkannya.`}</Pre>
+Update applied — the panel will restart for a few seconds to apply it.`}</Pre>
       <P>
         Sama seperti <Code>aoox domain set</Code>, butuh <Code>INSTALL_DIR</Code>{" "}
         terisi. Lihat <DocLink href="/docs/instalasi#update">Memperbarui versi</DocLink>{" "}
@@ -471,19 +471,19 @@ $ sudo aoox reinstall`}</Pre>
         head={["Pesan", "Penyebab & solusi"]}
         rows={[
           [
-            <>Token ditolak panel (401)</>,
+            <>The panel rejected the token (401)</>,
             <>Token kedaluwarsa, dicabut, atau salah salin. Buat token baru di Settings<PathArrow />API token.</>,
           ],
           [
-            <>Tidak ada terminal interaktif</>,
+            <>No interactive terminal</>,
             <>Berjalan di CI/skrip. Beri <Code>--url</Code> dan <Code>--token</Code>, atau set <Code>AOOX_URL</Code> dan <Code>AOOX_TOKEN</Code>.</>,
           ],
           [
-            <>Tidak bisa menghubungi panel</>,
+            <>Cannot reach the panel</>,
             <>URL salah atau API tidak terjangkau dari mesin ini. Pakai <Code>PUBLIC_API_URL</Code> panel (bukan URL dashboard) dan uji dengan <Code>curl &lt;url&gt;/auth/setup-status</Code>.</>,
           ],
           [
-            <>Config rusak (bukan JSON yang sah)</>,
+            <>Config is corrupt (not valid JSON)</>,
             <>File konfigurasi teredit manual. Hapus file itu lalu <Code>aoox login</Code> lagi.</>,
           ],
           [
@@ -491,19 +491,19 @@ $ sudo aoox reinstall`}</Pre>
             <>Peran akun pemilik token tidak cukup — token tidak menambah hak apa pun di atas pemiliknya. Bila tokennya punya scope, lihat <DocLink href="/docs/pengguna-peran#akun">token read-only/project-limited</DocLink>.</>,
           ],
           [
-            <>Repo ini belum di-link</>,
+            <>This repo is not linked yet</>,
             <><Code>aoox deploy</Code> dijalankan sebelum <Code>aoox link</Code>. Jalankan <Code>aoox link</Code> dulu di folder repo.</>,
           ],
           [
-            <>Sudah ada deployment yang berjalan (409)</>,
+            <>A deployment is already running for this application (409)</>,
             <>Aplikasi yang sama sedang di-deploy — dari dashboard, webhook, atau <Code>aoox deploy</Code> lain. Tunggu selesai, cek tab Deploy.</>,
           ],
           [
-            <>aoox install: perlu root</>,
+            <>aoox install: Root is required</>,
             <>Jalankan dengan <Code>sudo</Code> — instalasi menulis ke path sistem dan mengelola Docker.</>,
           ],
           [
-            <>aoox install: sudah ada instalasi di …</>,
+            <>aoox install: An installation already exists in …</>,
             <>Folder <Code>--dir</Code> (default <Code>/opt/aoox</Code>) sudah terisi. Untuk memperbaiki instalasi itu, pakai <Code>aoox reinstall</Code>. <Code>--force</Code> hanya untuk instalasi ulang dari nol (membuat secret baru — data lama tidak terbaca), atau pakai <Code>--dir</Code> lain.</>,
           ],
         ]}

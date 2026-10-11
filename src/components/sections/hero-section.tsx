@@ -59,7 +59,7 @@ function HeroSection({ lang = "id" }: { lang?: Lang }) {
   const t = COPY[lang]
   return (
     <section className="relative overflow-hidden border-b border-border">
-      {/* grid latar */}
+      {/* background grid */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-60 [background-image:linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_at_top_left,black_10%,transparent_70%)]"
@@ -98,12 +98,12 @@ function HeroSection({ lang = "id" }: { lang?: Lang }) {
 
           <div className="flex flex-wrap gap-3">
             <Button size="lg" asChild>
-              <Link href={lang === "en" ? "/en/docs/instalasi" : "/docs/instalasi"}>
+              <Link href={lang === "en" ? "/en/docs/installation" : "/docs/instalasi"}>
                 {t.ctaPrimary}
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <a href="#fitur">{t.ctaSecondary}</a>
+              <a href={lang === "en" ? "#features" : "#fitur"}>{t.ctaSecondary}</a>
             </Button>
             <Button size="lg" variant="outline" asChild>
               <Link href={lang === "en" ? "/en/changelog" : "/changelog"}>

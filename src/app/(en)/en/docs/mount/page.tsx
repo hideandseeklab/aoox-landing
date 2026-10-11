@@ -41,16 +41,16 @@ const DECISION = [
 ]
 
 const EXAMPLES = [
-  { jenis: "Volume", path: "/app/uploads", sumber: "uploads", catatan: "Volume aoox_app_shop_uploads" },
-  { jenis: "Volume", path: "/data", sumber: "data", catatan: "SQLite / cache" },
-  { jenis: "Bind", path: "/srv/media", sumber: "/mnt/storage/media", catatan: "Host path, owner/admin" },
-  { jenis: "File", path: "/etc/nginx/conf.d/app.conf", sumber: "(content in the textarea)", catatan: "Read-only" },
+  { kind: "Volume", path: "/app/uploads", source: "uploads", note: "Volume aoox_app_shop_uploads" },
+  { kind: "Volume", path: "/data", source: "data", note: "SQLite / cache" },
+  { kind: "Bind", path: "/srv/media", source: "/mnt/storage/media", note: "Host path, owner/admin" },
+  { kind: "File", path: "/etc/nginx/conf.d/app.conf", source: "(content in the textarea)", note: "Read-only" },
 ]
 
 const NEXT = [
   { title: "Backup & restore", description: "Manual/scheduled volume backups, S3 copies.", href: "/en/docs/backup#volume" },
   { title: "Deploy & rollback", description: "Blue/green and shared volumes.", href: "/en/docs/deploy#blue-green" },
-  { title: "Users & roles", description: "Who's allowed to bind mount.", href: "/en/docs/pengguna-peran" },
+  { title: "Users & roles", description: "Who's allowed to bind mount.", href: "/en/docs/users-roles" },
   { title: "Managed database", description: "A volume alternative for relational data.", href: "/en/docs/database" },
 ]
 
@@ -71,7 +71,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="kapan">When do you need a mount?</H2>
+      <H2 id="when">When do you need a mount?</H2>
       <P>
         A container&apos;s filesystem <strong>disappears on every deploy</strong> —
         the old container is removed, a new one is created from the image.
@@ -92,7 +92,7 @@ export default function Page() {
         ))}
       </div>
 
-      <H2 id="jenis">Three kinds of mount</H2>
+      <H2 id="types">Three kinds of mount</H2>
       <Table
         head={["Kind", "Source", "Who", "Notes"]}
         rows={[
@@ -119,7 +119,7 @@ export default function Page() {
         ]}
       />
 
-      <H2 id="langkah">Adding a mount</H2>
+      <H2 id="steps">Adding a mount</H2>
       <Steps>
         <Step title={<>Open the Mount tab<PathArrow />Add mount</>}>
           <P>
@@ -141,10 +141,10 @@ export default function Page() {
               <tbody>
                 {EXAMPLES.map((row) => (
                   <tr key={row.path} className="border-t border-border">
-                    <td className="px-3 py-2 text-foreground">{row.jenis}</td>
+                    <td className="px-3 py-2 text-foreground">{row.kind}</td>
                     <td className="px-3 py-2"><Code>{row.path}</Code></td>
-                    <td className="px-3 py-2"><Code>{row.sumber}</Code></td>
-                    <td className="px-3 py-2 text-muted-foreground">{row.catatan}</td>
+                    <td className="px-3 py-2"><Code>{row.source}</Code></td>
+                    <td className="px-3 py-2 text-muted-foreground">{row.note}</td>
                   </tr>
                 ))}
               </tbody>
@@ -213,7 +213,7 @@ export default function Page() {
         </li>
       </Ul>
 
-      <H2 id="hapus">Deleting a mount</H2>
+      <H2 id="remove">Deleting a mount</H2>
       <Table
         head={["Kind", "What happens"]}
         rows={[
@@ -223,7 +223,7 @@ export default function Page() {
         ]}
       />
 
-      <H2 id="perilaku">Behavior & limitations</H2>
+      <H2 id="behavior">Behavior & limitations</H2>
       <Ul>
         <li>
           <strong>PR previews get no mounts</strong> — don&apos;t share a production
@@ -260,7 +260,7 @@ export default function Page() {
         applications on a remote server.
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

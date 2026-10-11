@@ -45,7 +45,7 @@ const NEXT = [
   { title: "Deploy & rollback", description: "Why old tags need to be kept.", href: "/en/docs/deploy#rollback" },
   { title: "How builds work", description: "How images get their name.", href: "/en/docs/build#image" },
   { title: "Monitoring", description: "Docker disk usage on the dashboard.", href: "/en/docs/monitoring#host" },
-  { title: "Installation", description: "REGISTRY_PORT & REGISTRY_PUBLIC_HOST in .env.dist.", href: "/en/docs/instalasi" },
+  { title: "Installation", description: "REGISTRY_PORT & REGISTRY_PUBLIC_HOST in .env.dist.", href: "/en/docs/installation" },
 ]
 
 export default function Page() {
@@ -65,7 +65,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="peran">The registry&apos;s role in a deploy</H2>
+      <H2 id="roles">The registry&apos;s role in a deploy</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {IMAGE_FLOW.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
@@ -80,11 +80,11 @@ export default function Page() {
         pulls it back from there. That&apos;s why the registry must be
         provisioned <strong>before the first deploy</strong> — without it,
         deploys fail with <em>No self-hosted registry</em>. Applications on a{" "}
-        <DocLink href="/en/docs/server-remote">remote server</DocLink> don&apos;t
+        <DocLink href="/en/docs/remote-servers">remote server</DocLink> don&apos;t
         use the registry (the image stays on that server&apos;s daemon).
       </P>
 
-      <H2 id="lokal">Local registry</H2>
+      <H2 id="local">Local registry</H2>
       <Steps>
         <Step title={<>Registry menu<PathArrow />Local registry tab<PathArrow />Provision registry (owner)</>}>
           <P>
@@ -203,7 +203,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         </li>
       </Ul>
 
-      <H2 id="pemeliharaan">Disk maintenance</H2>
+      <H2 id="maintenance">Disk maintenance</H2>
       <P>
         So old images don&apos;t fill up the disk, aoox has automatic cleanup
         that runs every night at <Code>04:30</Code> (UTC) and can also be
@@ -249,7 +249,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         happens on the next cleanup.
       </Callout>
 
-      <H2 id="eksternal">External registry</H2>
+      <H2 id="external">External registry</H2>
       <P>
         <strong>External registry</strong> tab<PathArrow /><strong>Add registry</strong>{" "}
         (owner/admin): register credentials for Docker Hub, GHCR, GitLab,
@@ -271,7 +271,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         is in progress.
       </Callout>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -284,7 +284,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         ]}
       />
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

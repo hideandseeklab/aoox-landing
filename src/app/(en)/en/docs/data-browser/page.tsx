@@ -41,10 +41,10 @@ const LAYOUT = [
 ]
 
 const NEXT = [
-  { title: "Managed database", description: "Extra databases on the same server.", href: "/en/docs/database#database-tambahan" },
+  { title: "Managed database", description: "Extra databases on the same server.", href: "/en/docs/database#extra-databases" },
   { title: "Backup & restore", description: "For routine copies, not manual exports.", href: "/en/docs/backup#database" },
-  { title: "Users & roles", description: "Who's allowed to write.", href: "/en/docs/pengguna-peran" },
-  { title: "Environment variables", description: "Referencing a database from an application.", href: "/en/docs/environment#referensi" },
+  { title: "Users & roles", description: "Who's allowed to write.", href: "/en/docs/users-roles" },
+  { title: "Environment variables", description: "Referencing a database from an application.", href: "/en/docs/environment#references" },
 ]
 
 export default function Page() {
@@ -64,7 +64,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="tata-letak">Layout</H2>
+      <H2 id="layout">Layout</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {LAYOUT.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
@@ -76,7 +76,7 @@ export default function Page() {
       </ol>
       <P>
         For servers with{" "}
-        <DocLink href="/en/docs/database#database-tambahan">more than one database</DocLink>,
+        <DocLink href="/en/docs/database#extra-databases">more than one database</DocLink>,
         the <strong>Database</strong> select in the toolbar picks which one is
         shown. Creating or dropping extra databases is done on the{" "}
         <strong>Overview</strong> tab (owner/admin).
@@ -115,7 +115,7 @@ export default function Page() {
         <li>Rate limit: 60 queries per minute per user.</li>
       </Ul>
 
-      <H2 id="edit-baris">Editing & deleting rows, table structure</H2>
+      <H2 id="edit-rows">Editing & deleting rows, table structure</H2>
       <P>
         The grid isn&apos;t just a viewer — cells can be edited directly, and
         every row has a <strong>Delete</strong> action (owner/admin). The{" "}
@@ -145,7 +145,7 @@ export default function Page() {
         <li>Owner/admin only — members stay read-only, same as queries.</li>
       </Ul>
 
-      <H2 id="hak-tulis">Write access per role</H2>
+      <H2 id="write-access">Write access per role</H2>
       <Table
         head={["Role", "Allowed", "Guardrail"]}
         rows={[
@@ -167,7 +167,7 @@ export default function Page() {
         <Code>SMEMBERS</Code>, <Code>ZRANGE</Code>, <Code>SCAN</Code>, …).
       </P>
 
-      <H2 id="ekspor-impor">CSV export, SQL export & import</H2>
+      <H2 id="export-import">CSV export, SQL export & import</H2>
       <Steps>
         <Step title="Export CSV per table (all roles)">
           <P>
@@ -199,16 +199,16 @@ export default function Page() {
         Redis has no CSV/SQL export — use backups instead.
       </Callout>
 
-      <H2 id="riwayat">Query history</H2>
+      <H2 id="history">Query history</H2>
       <P>
         The <strong>History</strong> tab keeps up to the last{" "}
         <strong>50 queries</strong> per user per database — both successful
         and failed, so &quot;what did I just run&quot; is always complete. This is a
         separate table, not part of the instance{" "}
-        <DocLink href="/en/docs/pengguna-peran#akun">audit log</DocLink>.
+        <DocLink href="/en/docs/users-roles#account">audit log</DocLink>.
       </P>
 
-      <H2 id="cara-kerja">How it works</H2>
+      <H2 id="how-it-works">How it works</H2>
       <P>
         Every query runs in a one-off container from the same engine image
         (the same pattern backups use), with credentials passed via env and
@@ -217,7 +217,7 @@ export default function Page() {
       </P>
       <Pre>{`psql --csv  ·  mysql --batch  ·  redis-cli --json`}</Pre>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -230,7 +230,7 @@ export default function Page() {
         ]}
       />
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

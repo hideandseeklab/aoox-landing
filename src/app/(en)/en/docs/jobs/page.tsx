@@ -46,7 +46,7 @@ const RECIPES = [
 ]
 
 const NEXT = [
-  { title: "Notifications", description: "Job failure/timeout alerts to a channel of your choice.", href: "/en/docs/notifikasi" },
+  { title: "Notifications", description: "Job failure/timeout alerts to a channel of your choice.", href: "/en/docs/notifications" },
   { title: "Environment variables", description: "The env a job inherits.", href: "/en/docs/environment" },
   { title: "Mounts", description: "Volumes a job can access.", href: "/en/docs/mount" },
   { title: "Backup & restore", description: "Use the built-in backup features instead of a job.", href: "/en/docs/backup" },
@@ -69,7 +69,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="pemilik">Three kinds of job owner</H2>
+      <H2 id="owner">Three kinds of job owner</H2>
       <Table
         head={["Owner", "Where", "In the container", "Separate container"]}
         rows={[
@@ -122,7 +122,7 @@ export default function Page() {
         ))}
       </div>
 
-      <H2 id="langkah">Creating a job</H2>
+      <H2 id="steps">Creating a job</H2>
       <Steps>
         <Step title={<>Open the Jobs tab<PathArrow />New job</>}>
           <Table
@@ -164,7 +164,7 @@ export default function Page() {
         </Step>
       </Steps>
 
-      <H2 id="contoh">Example jobs</H2>
+      <H2 id="examples">Example jobs</H2>
       <div className="overflow-x-auto border border-border rounded-lg">
         <table className="w-full text-xs">
           <thead className="bg-muted text-muted-foreground">
@@ -198,7 +198,7 @@ export default function Page() {
 0 3 * * *      every day at 03:00
 0 0 * * 0      every Sunday at 00:00`}</Pre>
 
-      <H2 id="perilaku">Behavior</H2>
+      <H2 id="behavior">Behavior</H2>
       <Ul>
         <li>
           A cron tick is <strong>skipped</strong> (not queued) while the
@@ -241,7 +241,7 @@ export default function Page() {
         busybox in the image if a job might run long.
       </Callout>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -256,7 +256,7 @@ export default function Page() {
         Streaming output while a run is in progress; history beyond 20 in the UI.
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

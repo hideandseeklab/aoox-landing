@@ -40,10 +40,10 @@ const SOURCES = [
 ]
 
 const NEXT = [
-  { title: "Notifications", description: "Container down, deploy, backup, job.", href: "/en/docs/notifikasi" },
-  { title: "Registry", description: "Disk maintenance & deployment retention.", href: "/en/docs/registry#pemeliharaan" },
+  { title: "Notifications", description: "Container down, deploy, backup, job.", href: "/en/docs/notifications" },
+  { title: "Registry", description: "Disk maintenance & deployment retention.", href: "/en/docs/registry#maintenance" },
   { title: "Deploy & rollback", description: "The health check that drops unhealthy containers.", href: "/en/docs/deploy#health-check" },
-  { title: "Installation", description: "STORAGE_PATH and other monitoring env vars.", href: "/en/docs/instalasi" },
+  { title: "Installation", description: "STORAGE_PATH and other monitoring env vars.", href: "/en/docs/installation" },
 ]
 
 export default function Page() {
@@ -63,7 +63,7 @@ export default function Page() {
         ))}
       </dl>
 
-      <H2 id="di-mana">Where to find it</H2>
+      <H2 id="where">Where to find it</H2>
       <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
         {SOURCES.map((item, i) => (
           <li key={i} className="flex flex-col gap-1 bg-background px-3 py-3">
@@ -90,7 +90,7 @@ export default function Page() {
       />
       <P>
         Below the charts is a <strong>Recent activity</strong> card (owner/admin
-        only): the 10 latest <DocLink href="/en/docs/pengguna-peran">audit log</DocLink>{" "}
+        only): the 10 latest <DocLink href="/en/docs/users-roles">audit log</DocLink>{" "}
         entries with the time, who did it, a readable action (e.g. &ldquo;Deploy
         application&rdquo;, &ldquo;Delete database&rdquo;), the status, and how
         it was done (session, API token, webhook). It refreshes every 30
@@ -236,7 +236,7 @@ Memory 512 → hard limit of 512 MiB, no swap (MemorySwap = Memory)`}</Pre>
         </li>
       </Ul>
 
-      <H2 id="container-mati">Detecting a dead container</H2>
+      <H2 id="container-down">Detecting a dead container</H2>
       <P>
         The API keeps a <Code>docker events</Code> stream (<Code>die</Code>)
         for aoox-labeled containers, plus a second stream for compose stack
@@ -253,10 +253,10 @@ Memory 512 → hard limit of 512 MiB, no swap (MemorySwap = Memory)`}</Pre>
         ]}
       />
       <P>
-        Enable it in <DocLink href="/en/docs/notifikasi">Notifications</DocLink>{" "}
+        Enable it in <DocLink href="/en/docs/notifications">Notifications</DocLink>{" "}
         <PathArrow />the <strong>Container down</strong> toggle. Applies to the
         local host and to applications on a{" "}
-        <DocLink href="/en/docs/server-remote#pemantauan">remote server</DocLink>{" "}
+        <DocLink href="/en/docs/remote-servers#monitoring">remote server</DocLink>{" "}
         (the message names the server).
       </P>
 
@@ -326,7 +326,7 @@ Memory 512 → hard limit of 512 MiB, no swap (MemorySwap = Memory)`}</Pre>
         <strong>HTTP monitor failing</strong> notification is sent (reminders at
         most every 6 hours while it stays down) and one recovery message with the
         downtime when it is healthy again — see{" "}
-        <DocLink href="/en/docs/notifikasi">Notifications</DocLink>. The Monitor
+        <DocLink href="/en/docs/notifications">Notifications</DocLink>. The Monitor
         tab shows the status, 24-hour and 7-day uptime, average and p95 latency, a
         24-hour latency chart, and the latest down incidents. Results are kept for
         7 days; the response body is never stored. The monitor&apos;s settings
@@ -345,10 +345,10 @@ Memory 512 → hard limit of 512 MiB, no swap (MemorySwap = Memory)`}</Pre>
       <P>
         The usual follow-up is <strong>Clean up now</strong> on the Docker
         disk card, lowering deployment retention, or pruning old backups —
-        see <DocLink href="/en/docs/registry#pemeliharaan">Registry</DocLink>.
+        see <DocLink href="/en/docs/registry#maintenance">Registry</DocLink>.
       </P>
 
-      <H2 id="jebakan">Common pitfalls</H2>
+      <H2 id="pitfalls">Common pitfalls</H2>
       <Table
         head={["Symptom", "Cause & fix"]}
         rows={[
@@ -365,7 +365,7 @@ Memory 512 → hard limit of 512 MiB, no swap (MemorySwap = Memory)`}</Pre>
         thresholds; export to Prometheus; per-container disk I/O.
       </Callout>
 
-      <H2 id="berikutnya">Next steps</H2>
+      <H2 id="next-steps">Next steps</H2>
       <div className="grid gap-px border border-border bg-border sm:grid-cols-2 rounded-lg overflow-hidden">
         {NEXT.map((item) => (
           <Link

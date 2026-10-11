@@ -43,8 +43,8 @@ function DocPage({
   const nav = docsNavFor(lang)
   const group = nav.find((g) => g.items.some((i) => i.href === href))
   const docsRoot = lang === "en" ? "/en/docs" : "/docs"
-  // The URL already mirrors the file path 1:1 (src/app/docs/* or src/app/en/docs/*).
-  const editHref = `${EDIT_BASE}${href}/page.tsx`
+  // The URL mirrors the file path inside its route group: src/app/(id)/docs/* or src/app/(en)/en/docs/*.
+  const editHref = `${EDIT_BASE}/(${lang})${href}/page.tsx`
 
   return (
     <div className="grid min-w-0 gap-10 xl:grid-cols-[1fr_11rem]">

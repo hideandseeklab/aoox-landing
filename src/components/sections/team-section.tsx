@@ -138,11 +138,11 @@ const COPY: Record<Lang, Copy> = {
 function TeamSection({ lang = "id" }: { lang?: Lang }) {
   const t = COPY[lang]
   return (
-    <Section id="tim">
+    <Section id={lang === "en" ? "team" : "tim"}>
       <SectionHeading label={t.label} title={t.title} description={t.description} />
 
       <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:gap-12">
-        {/* matriks hak akses instance */}
+        {/* instance-level permissions matrix */}
         <div className="flex min-w-0 flex-col gap-3">
           <span className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">
             {t.instanceRoles}
@@ -192,7 +192,7 @@ function TeamSection({ lang = "id" }: { lang?: Lang }) {
           </div>
         </div>
 
-        {/* peran per project + undangan */}
+        {/* per-project roles + invitations */}
         <div className="flex min-w-0 flex-col gap-8">
           <div className="flex flex-col gap-3">
             <span className="text-[0.65rem] tracking-wider text-muted-foreground uppercase">
@@ -234,7 +234,7 @@ function TeamSection({ lang = "id" }: { lang?: Lang }) {
           </div>
 
           <Link
-            href={lang === "en" ? "/en/docs/pengguna-peran" : "/docs/pengguna-peran"}
+            href={lang === "en" ? "/en/docs/users-roles" : "/docs/pengguna-peran"}
             className="inline-flex items-center gap-1 text-xs text-foreground underline underline-offset-4 hover:no-underline"
           >
             {t.more}

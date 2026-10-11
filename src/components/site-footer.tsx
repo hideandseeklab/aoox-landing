@@ -47,8 +47,8 @@ const GROUPS_EN: Group[] = [
   {
     title: "Product",
     links: [
-      { label: "Features", href: "/en#fitur" },
-      { label: "How it works", href: "/en#cara-kerja" },
+      { label: "Features", href: "/en#features" },
+      { label: "How it works", href: "/en#how-it-works" },
       { label: "Build methods", href: "/en#build" },
       { label: "Self-host", href: "/en#self-host" },
       { label: "FAQ", href: "/en#faq" },
@@ -59,8 +59,8 @@ const GROUPS_EN: Group[] = [
     title: "Docs",
     links: [
       { label: "Overview", href: "/en/docs" },
-      { label: "Installation", href: "/en/docs/instalasi" },
-      { label: "Creating an app", href: "/en/docs/aplikasi" },
+      { label: "Installation", href: "/en/docs/installation" },
+      { label: "Creating an app", href: "/en/docs/applications" },
       { label: "Managed database", href: "/en/docs/database" },
       { label: "Troubleshooting", href: "/en/docs/troubleshooting" },
     ],
