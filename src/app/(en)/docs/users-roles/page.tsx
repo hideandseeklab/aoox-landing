@@ -251,6 +251,7 @@ export default function Page() {
         head={["Action", "Where", "Notes"]}
         rows={[
           ["Change role", "Role select on the member's row", "Takes effect on the next request."],
+          ["Edit name or email", <>The <em>Edit name and email</em> (pencil) icon on the member&apos;s row</>, "Changes how they appear and which email they sign in with; no password is needed. Not for owners, and not for your own row (use Settings → Account). Rejected if the email is already used by an account or reserved by a pending invitation."],
           ["Reset password", <>The <em>Set new password (reset)</em> icon on the member&apos;s row</>, "For a member who forgot their password; deliver the temporary password through a secure channel and ask them to change it."],
           ["Disable a member's 2FA", "Member's row (non-owner)", "For someone who lost their authenticator and backup codes. An owner must use a backup code themselves."],
           ["Delete a user", "Member's row", "Rejected if they're the last owner or still own a project (move/delete the project first). Their invitations and API tokens go with them."],
@@ -260,6 +261,17 @@ export default function Page() {
 
       <H2 id="account">Account security</H2>
       <P>The <strong>Account</strong> card in Settings, for every role:</P>
+      <H3>Change name or email</H3>
+      <P>
+        <strong>Edit profile</strong> opens a form with your <strong>Name</strong>{" "}
+        and <strong>Email</strong>. A new name needs no password. Changing the
+        email also asks for your <strong>Current password</strong>, and the email
+        must not belong to another account or to a pending invitation. From then
+        on you sign in with the new email; your current session keeps working,
+        and API tokens are not affected. Signed in with an API token you cannot
+        change these. An owner changes other members&apos; name and email in
+        Settings → Team.
+      </P>
       <H3>Change password</H3>
       <P>
         Fill in <strong>Current password</strong> + <strong>New password (min. 8)</strong>.

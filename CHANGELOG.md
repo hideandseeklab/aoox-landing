@@ -8,6 +8,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Added
+
+- **Docs: changing name and email** (Users & roles, English and Indonesian): the Edit profile dialog in Settings > Account (current password only for an email change, uniqueness and pending-invitation rules, API tokens cannot do it) and the owner's edit action in Settings > Team.
+
 ### Changed
 
 - **Docs follow the new Integrations sidebar group (English and Indonesian).** Git credentials, Notifications, Backup destinations, Secret manager, DNS providers and SSL certificates are no longer a tab under Settings; the docs now say Integrations > Git credentials, Notifications, Backup destinations, Secret manager, DNS providers or SSL certificates (Webhook, Notifications, Backup, Environment, Cloudflare DNS, Custom SSL certificates and Troubleshooting pages).

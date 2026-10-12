@@ -248,6 +248,7 @@ export default function Page() {
         head={["Aksi", "Di mana", "Catatan"]}
         rows={[
           ["Ubah peran", "Select peran di baris anggota", "Berlaku pada request berikutnya."],
+          ["Ubah nama atau email", <>Ikon <em>Ubah nama dan email</em> (pensil) di baris anggota</>, "Mengubah nama yang tampil dan email untuk masuk; password tidak diperlukan. Tidak untuk owner, dan tidak untuk barismu sendiri (pakai Settings → Akun). Ditolak bila email sudah dipakai akun lain atau dipesan undangan yang masih menunggu."],
           ["Reset password", <>Ikon <em>Set password baru (reset)</em> di baris anggota</>, "Untuk anggota yang lupa password; sampaikan password sementara lewat jalur aman, minta ganti."],
           ["Nonaktifkan 2FA anggota", "Baris anggota (non-owner)", "Untuk yang kehilangan authenticator dan kode cadangan. Owner sendiri harus memakai kode cadangan."],
           ["Hapus pengguna", "Baris anggota", "Ditolak bila ia owner terakhir atau masih memiliki project (pindahkan/hapus project dulu). Undangan dan token API miliknya ikut hilang."],
@@ -257,6 +258,16 @@ export default function Page() {
 
       <H2 id="akun">Keamanan akun</H2>
       <P>Kartu <strong>Akun</strong> di Settings, untuk semua peran:</P>
+      <H3>Ubah nama atau email</H3>
+      <P>
+        <strong>Ubah profil</strong> membuka form berisi <strong>Nama</strong>{" "}
+        dan <strong>Email</strong>. Mengganti nama tidak perlu password. Mengganti
+        email juga meminta <strong>Password sekarang</strong>, dan email itu tidak
+        boleh dipakai akun lain atau undangan yang masih menunggu. Setelahnya kamu
+        masuk dengan email baru; sesimu saat ini tetap berjalan, dan token API
+        tidak terpengaruh. Dengan token API, perubahan ini tidak bisa dilakukan.
+        Owner mengubah nama dan email anggota lain di Settings → Tim.
+      </P>
       <H3>Ganti password</H3>
       <P>
         Isi <strong>Password sekarang</strong> + <strong>Password baru (min. 8)</strong>.
