@@ -82,8 +82,8 @@ const COMMANDS = [
   },
   {
     cmd: "aoox registry build",
-    what: "Build ./Dockerfile menjadi image lokal bernama registry; menolak versi yang sudah ada di sana.",
-    flags: "--registry, --dockerfile/-f, --context, --force",
+    what: "Build ./Dockerfile menjadi image lokal bernama registry; menolak versi yang sudah ada di sana. Dengan --push, image langsung dikirim juga.",
+    flags: "--push, --registry, --dockerfile/-f, --context, --force",
   },
   {
     cmd: "aoox registry push",
@@ -370,7 +370,7 @@ Deployed: localhost:5000/toko/shop:a1b2c3d`}</Pre>
 ==> Build registry.example.com/myapp:1.0.0
 ...
 Built registry.example.com/myapp:1.0.0
-Next: aoox registry push myapp:1.0.0
+Next: aoox registry push myapp:1.0.0 (or build with --push next time)
 
 $ aoox registry push myapp:1.0.0
 ==> docker login registry.example.com
@@ -382,21 +382,23 @@ Use it in the dashboard: New application → Ready-made image`}</Pre>
         <Code>-f/--dockerfile</Code>, <Code>--context</Code>) dan menamai image{" "}
         <Code>&lt;host registry&gt;/&lt;nama&gt;:&lt;versi&gt;</Code>.{" "}
         <Code>push</Code> hanya mendorong image yang sudah ada secara lokal dan
-        menerima nama pendek maupun lengkap. Versi wajib diisi, huruf kecil.
+        menerima nama pendek maupun lengkap. Untuk build dan push sekaligus,
+        pakai <Code>aoox registry build myapp:1.0.0 --push</Code>. Versi wajib
+        diisi, huruf kecil.
       </P>
       <Table
         head={["Yang muncul", "Artinya"]}
         rows={[
           [
-            <Code key="1">✖ myapp:1.0.0 already exists in registry.example.com.</Code>,
+            <Code key="1">❌ myapp:1.0.0 already exists in registry.example.com.</Code>,
             <>Versi itu sudah ada di registry (dicek sebelum build dan sebelum push). Pilih versi baru — petunjuknya menyarankan yang berikutnya — atau tambahkan <Code>--force</Code> untuk menimpa. <Code>latest</Code> selalu boleh ditimpa.</>,
           ],
           [
-            <Code key="2">✖ No local image myapp:1.0.0.</Code>,
+            <Code key="2">❌ No local image myapp:1.0.0.</Code>,
             <><Code>push</Code> tidak pernah build. Jalankan <Code>aoox registry build myapp:1.0.0</Code> dulu.</>,
           ],
           [
-            <Code key="3">✖ A version is required: &quot;myapp&quot; has none.</Code>,
+            <Code key="3">❌ A version is required: &quot;myapp&quot; has none.</Code>,
             <>Tulis <Code>nama:versi</Code>, mis. <Code>aoox registry build myapp:1.0.0</Code>.</>,
           ],
           [

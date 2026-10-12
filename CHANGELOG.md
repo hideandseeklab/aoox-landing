@@ -8,6 +8,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Changed
+
+- **CLI docs (English and Indonesian):** `aoox registry build --push` (build and push in one step). The example error lines of `aoox registry build|push` start with ❌, as the CLI now prints.
+
 ## [0.1.0-alpha.8] - 2026-10-12
 
 ### Added

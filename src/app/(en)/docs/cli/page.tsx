@@ -82,8 +82,8 @@ const COMMANDS = [
   },
   {
     cmd: "aoox registry build",
-    what: "Builds ./Dockerfile into a local image named for the registry; refuses a version that already exists there.",
-    flags: "--registry, --dockerfile/-f, --context, --force",
+    what: "Builds ./Dockerfile into a local image named for the registry; refuses a version that already exists there. With --push it also pushes it.",
+    flags: "--push, --registry, --dockerfile/-f, --context, --force",
   },
   {
     cmd: "aoox registry push",
@@ -377,7 +377,7 @@ Deployed: localhost:5000/shop/shop:a1b2c3d`}</Pre>
 ==> Build registry.example.com/myapp:1.0.0
 ...
 Built registry.example.com/myapp:1.0.0
-Next: aoox registry push myapp:1.0.0
+Next: aoox registry push myapp:1.0.0 (or build with --push next time)
 
 $ aoox registry push myapp:1.0.0
 ==> docker login registry.example.com
@@ -389,22 +389,23 @@ Use it in the dashboard: New application → Ready-made image`}</Pre>
         <Code>-f/--dockerfile</Code>, <Code>--context</Code>) and names the
         image <Code>&lt;registry host&gt;/&lt;name&gt;:&lt;version&gt;</Code>.{" "}
         <Code>push</Code> only pushes an image that already exists locally and
-        accepts the short name or the full one. A version is required, in
-        lowercase.
+        accepts the short name or the full one. To do both in one step, use{" "}
+        <Code>aoox registry build myapp:1.0.0 --push</Code>. A version is
+        required, in lowercase.
       </P>
       <Table
         head={["You see", "Meaning"]}
         rows={[
           [
-            <Code key="1">✖ myapp:1.0.0 already exists in registry.example.com.</Code>,
+            <Code key="1">❌ myapp:1.0.0 already exists in registry.example.com.</Code>,
             <>That version is already in the registry (checked before building, and before pushing). Pick a new version — the hint suggests the next one — or add <Code>--force</Code> to overwrite it. <Code>latest</Code> can always be overwritten.</>,
           ],
           [
-            <Code key="2">✖ No local image myapp:1.0.0.</Code>,
+            <Code key="2">❌ No local image myapp:1.0.0.</Code>,
             <><Code>push</Code> never builds. Run <Code>aoox registry build myapp:1.0.0</Code> first.</>,
           ],
           [
-            <Code key="3">✖ A version is required: &quot;myapp&quot; has none.</Code>,
+            <Code key="3">❌ A version is required: &quot;myapp&quot; has none.</Code>,
             <>Write <Code>name:version</Code>, e.g. <Code>aoox registry build myapp:1.0.0</Code>.</>,
           ],
           [
