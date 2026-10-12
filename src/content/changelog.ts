@@ -30,6 +30,68 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.0-alpha.8",
+    date: "2026-10-12",
+    channel: "alpha",
+    groups: [
+      {
+        kind: "added",
+        items: [
+          {
+            id: "**Ganti nama dan email akun**: di Pengaturan, Akun, tombol Edit profil mengubah nama dan email Anda; password saat ini hanya diminta saat email berubah. Owner juga bisa mengubah nama dan email anggota lain dari tab Tim.",
+            en: "**Change your name and email**: in Settings, Account, Edit profile changes your name and email; your current password is only asked for when the email changes. Owners can also edit other members' names and emails from the Team tab.",
+          },
+          {
+            id: "**`aoox registry build` dan `aoox registry push`**: bangun image dari `./Dockerfile` dengan nama dan versi, lalu kirim ke registry lokal aoox dengan satu perintah. Versi yang sudah ada di registry ditolak dengan pesan yang jelas.",
+            en: "**`aoox registry build` and `aoox registry push`**: build an image from `./Dockerfile` with a name and version, then send it to aoox's local registry with one command. A version that already exists in the registry is refused with a clear message.",
+          },
+          {
+            id: "**`aoox` tanpa argumen menunjukkan koneksi**: alamat dashboard, API, dan registry yang sedang dipakai CLI, plus peringatan satu baris saat versi CLI lebih lama dari panel.",
+            en: "**Plain `aoox` shows the connection**: the dashboard, API and registry the CLI is using, plus a one-line warning when the CLI is older than the panel.",
+          },
+        ],
+      },
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Perubahan besar di CLI: `aoox update` kini memperbarui CLI itu sendiri.** Pembaruan panel (aoox-api dan aoox-web) pindah ke `aoox update panel`.",
+            en: "**Breaking CLI change: `aoox update` now updates the CLI itself.** The panel update (aoox-api and aoox-web) moved to `aoox update panel`.",
+          },
+          {
+            id: "**`aoox login` cukup dengan alamat dashboard**: CLI menemukan alamat API sendiri, dan pesan error koneksi kini menjelaskan apa yang salah. Dialog token API baru menampilkan perintah login yang siap disalin.",
+            en: "**`aoox login` only needs the dashboard address**: the CLI finds the API address itself, and connection errors now say what is wrong. The new API token dialog shows a copy-ready login command.",
+          },
+          {
+            id: "**Halaman aplikasi, database, compose, dan proyek ditata ulang**: kartu header dengan status dan tombol utama, judul bagian di tiap tab, daftar berupa tabel dengan tombol \"+ Tambah\" yang membuka dialog, dan tombol hapus pindah ke kartu Zona berbahaya.",
+            en: "**Redesigned application, database, compose and project pages**: a header card with the status and main actions, section headings on each tab, lists shown as tables with a \"+ Add\" button that opens a dialog, and delete moved to a Danger zone card.",
+          },
+          {
+            id: "**Integrasi punya grup sendiri di sidebar**: kredensial Git, Notifikasi, Tujuan backup, Secret manager, Penyedia DNS, dan Sertifikat SSL kini satu halaman masing-masing.",
+            en: "**Integrations have their own sidebar group**: Git credentials, Notifications, Backup destinations, Secret manager, DNS providers and SSL certificates now have a page each.",
+          },
+          {
+            id: "**Tampilan lebih seragam**: semua tab memakai ikon dan garis bawah, menu pilihan terbuka di bawah kolomnya, teks terminal lebih proporsional, dan menu SSH terminal di Infrastruktur kini bernama Akses terminal.",
+            en: "**A more consistent look**: every tab strip uses icons and an underline, select menus open below their field, terminal text is in proportion, and the terminal SSH menu under Infrastructure is now called Terminal access.",
+          },
+          {
+            id: "**Membuka alamat API langsung** kini menampilkan JSON berisi nama dan versi API yang berjalan, bukan teks \"Hello World!\".",
+            en: "**Opening the API address directly** now shows JSON with the API name and running version instead of \"Hello World!\".",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "Logo template berwarna tidak lagi terbalik warnanya di mode gelap; hanya logo hitam yang dibalik.",
+            en: "Coloured template logos are no longer inverted in dark mode; only black logos are.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.0-alpha.7",
     date: "2026-10-12",
     channel: "alpha",

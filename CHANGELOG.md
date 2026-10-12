@@ -8,12 +8,15 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.8] - 2026-10-12
+
 ### Added
 
 - **Docs: changing name and email** (Users & roles, English and Indonesian): the Edit profile dialog in Settings > Account (current password only for an email change, uniqueness and pending-invitation rules, API tokens cannot do it) and the owner's edit action in Settings > Team.
 
 ### Changed
 
+- **Terminal docs (English and Indonesian)** name the renamed Infrastructure menu: Infrastructure > Terminal access (Akses terminal).
 - **Docs follow the new Integrations sidebar group (English and Indonesian).** Git credentials, Notifications, Backup destinations, Secret manager, DNS providers and SSL certificates are no longer a tab under Settings; the docs now say Integrations > Git credentials, Notifications, Backup destinations, Secret manager, DNS providers or SSL certificates (Webhook, Notifications, Backup, Environment, Cloudflare DNS, Custom SSL certificates and Troubleshooting pages).
 - **CLI docs (English and Indonesian): `aoox update` and `aoox registry build|push`.** `aoox update` now updates the CLI and `aoox update panel` the panel (all other pages that mentioned the panel update say `aoox update panel`); new sections for building and pushing images with the existence check and its errors, and for the connection block that plain `aoox` prints. npm installs no longer need the `@alpha` tag (`install-cli.sh` too).
 - **CLI docs follow the new `aoox login`.** The English and Indonesian CLI pages now describe signing in with the dashboard address (the CLI finds the API address itself), the optional scheme and the `IP:3000` fallback, where to get the token and the copy-ready command in Settings → Account → API token, the new `config.json` shape, and the new error messages and version warning.
@@ -369,7 +372,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.7...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.8...HEAD
+[0.1.0-alpha.8]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.7...v0.1.0-alpha.8
 [0.1.0-alpha.7]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.6...v0.1.0-alpha.7
 [0.1.0-alpha.6]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.5...v0.1.0-alpha.6
 [0.1.0-alpha.5]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.4...v0.1.0-alpha.5
