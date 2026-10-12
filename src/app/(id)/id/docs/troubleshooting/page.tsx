@@ -155,6 +155,11 @@ const DOMAIN: Row[] = [
     "Tunggu healthy; cek log deploy; pastikan health check lolos.",
   ],
   [
+    <><em>Bad Gateway</em> (502) dari domain, padahal container berjalan</>,
+    <>Traefik tidak bisa menjangkau aplikasi: <Code>Container port</Code> bukan port yang didengarkan aplikasi (mis. image nginx mendengarkan 80, port diatur 3000).</>,
+    <>Bila image mendeklarasikan port <Code>EXPOSE</Code> yang tidak mencakup Container port, tab Settings dan Domain menampilkan peringatan (dan log deploy mencatatnya) dengan tombol <Code>Pakai port 80</Code>. Jika tidak, atur Container port di Settings ke port yang benar-benar didengarkan aplikasi.</>,
+  ],
+  [
     <>Sertifikat self-signed / <em>TRAEFIK DEFAULT CERT</em></>,
     "ACME gagal: DNS belum benar, port 80 tertutup, rate limit, atau email kosong saat diaktifkan.",
     <><Code>docker logs -f aoox-proxy</Code>; uji dengan <Code>PROXY_ACME_STAGING=true</Code>.</>,

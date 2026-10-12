@@ -8,6 +8,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Added
+
+- **Troubleshooting (English and Indonesian):** a row for "Bad Gateway from a domain while the container runs" (Container port is not the port the app listens on) and the new EXPOSE warning with its one-click fix.
+
 ### Changed
 
 - **CLI docs (English and Indonesian):** `aoox registry build --push` (build and push in one step). The example error lines of `aoox registry build|push` start with ❌, as the CLI now prints.

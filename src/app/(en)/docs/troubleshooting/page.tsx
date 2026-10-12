@@ -155,6 +155,11 @@ const DOMAIN: Row[] = [
     "Wait for it to become healthy; check the deploy log; make sure the health check passes.",
   ],
   [
+    <><em>Bad Gateway</em> (502) from a domain, although the container is running</>,
+    <>Traefik can&apos;t reach the app: <Code>Container port</Code> is not the port the app listens on (e.g. an nginx image listens on 80, the port is 3000).</>,
+    <>When the image declares <Code>EXPOSE</Code> ports that exclude the Container port, the Settings and Domain tabs show a warning (and the deploy log a note) with a one-click <Code>Use port 80</Code> button. Otherwise set Container port to the port the app really listens on in Settings.</>,
+  ],
+  [
     <>Self-signed certificate / <em>TRAEFIK DEFAULT CERT</em></>,
     "ACME failed: DNS isn't correct yet, port 80 is closed, a rate limit, or the email was empty at provision time.",
     <><Code>docker logs -f aoox-proxy</Code>; test with <Code>PROXY_ACME_STAGING=true</Code>.</>,
