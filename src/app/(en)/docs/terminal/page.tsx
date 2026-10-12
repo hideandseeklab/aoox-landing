@@ -135,7 +135,7 @@ TERMINAL_SSH_USER=deploy        # the host user the terminal will use`}</Pre>
             key in <Code>secrets/</Code> and add it to the terminal user&apos;s{" "}
             <Code>~/.ssh/authorized_keys</Code>. On an <strong>existing install</strong>,
             the owner just clicks <strong>Authorize automatically</strong>
-            in Infrastructure<PathArrow />Terminal (or in the
+            in Infrastructure<PathArrow />Terminal access (or in the
             error notice on the Terminal page); aoox adds the public key to that
             user&apos;s <Code>authorized_keys</Code>, tests the login and
             reconnects. No password or private key is written. The manual
@@ -182,7 +182,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
         <Step title="Authorize the key as that user">
           <P>
             On the VPS, log in as the same user and run the authorization
-            command from <strong>Infrastructure<PathArrow />Terminal</strong>{" "}
+            command from <strong>Infrastructure<PathArrow />Terminal access</strong>{" "}
             (the three lines above). It writes to the{" "}
             <Code>~/.ssh/authorized_keys</Code> of the user running it, so
             don&apos;t run it with <Code>sudo</Code>.

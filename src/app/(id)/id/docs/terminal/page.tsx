@@ -183,7 +183,7 @@ echo 'ssh-ed25519 AAAA… aoox' >> ~/.ssh/authorized_keys`}</Pre>
         <Step title="Otorisasi key sebagai user itu">
           <P>
             Di VPS, login sebagai user yang sama dan jalankan perintah otorisasi
-            dari <strong>Infrastruktur<PathArrow />Terminal</strong> (tiga baris
+            dari <strong>Infrastruktur<PathArrow />Akses terminal</strong> (tiga baris
             di atas). Perintah itu menulis ke <Code>~/.ssh/authorized_keys</Code>{" "}
             milik user yang sedang menjalankannya, jadi jangan dijalankan
             dengan <Code>sudo</Code>.
