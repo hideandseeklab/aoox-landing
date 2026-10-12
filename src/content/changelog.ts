@@ -30,6 +30,84 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.0-alpha.7",
+    date: "2026-10-12",
+    channel: "alpha",
+    groups: [
+      {
+        kind: "added",
+        items: [
+          {
+            id: "**Dashboard dua bahasa**: seluruh panel kini berbahasa Inggris dengan terjemahan Bahasa Indonesia. Ganti bahasa dari menu pengguna di sidebar; pilihan diingat di browser, dan notifikasi di kotak masuk ikut bahasa yang aktif. Dokumentasi dan situs ini juga English-first, dengan terjemahan Indonesia di `/id`.",
+            en: "**A two-language dashboard**: the whole panel is now in English with an Indonesian translation. Switch language from the user menu in the sidebar; the choice is remembered in the browser, and inbox notifications follow the active language. This site and the documentation are English-first too, with the Indonesian translation under `/id`.",
+          },
+          {
+            id: "**Integrasi Cloudflare DNS**: hubungkan token API Cloudflare di Pengaturan, Integrasi, lalu aoox membuatkan record A/AAAA untuk domain aplikasi, dengan opsi proxied (awan oranye). Proxy juga bisa memakai ACME DNS-01 untuk **sertifikat wildcard**, termasuk satu wildcard untuk preview pull request. Token disimpan terenkripsi dan tidak pernah ditampilkan lagi.",
+            en: "**Cloudflare DNS integration**: connect a Cloudflare API token in Settings, Integrations, and aoox creates the A/AAAA record for an application domain, with a proxied (orange cloud) option. The proxy can also use ACME DNS-01 for **wildcard certificates**, including one wildcard for pull request previews. The token is stored encrypted and never shown again.",
+          },
+          {
+            id: "**Peringatan ambang sumber daya**: aturan CPU dan memori opsional per aplikasi dan per database, dengan ambang dan durasi sendiri. Notifikasi dikirim saat terlampaui, diingatkan berkala, dan dikirim lagi saat kembali normal.",
+            en: "**Resource threshold alerts**: optional CPU and memory rules per application and per database, each with its own threshold and duration. A notification is sent when it is exceeded, repeated as a reminder, and sent again when it is back to normal.",
+          },
+          {
+            id: "**Mode perawatan per aplikasi**: satu saklar menampilkan halaman \"sedang dalam perawatan\" (HTTP 503) di semua domain aplikasi, dengan pesan yang bisa Anda tulis, sementara container tetap berjalan.",
+            en: "**Per-application maintenance mode**: one switch shows an \"under maintenance\" page (HTTP 503) on every domain of the application, with a message you can write, while the container keeps running.",
+          },
+          {
+            id: "**Halaman Docker** di sidebar: lihat container, image, volume, dan jaringan di host atau server remote, lihat log, serta start/stop/restart/hapus container yang bukan milik aoox. Resource milik aoox dilindungi dari tindakan di sini.",
+            en: "**A Docker page** in the sidebar: browse containers, images, volumes and networks of the host or a remote server, read logs, and start/stop/restart/remove containers aoox does not own. aoox's own resources are protected from actions here.",
+          },
+          {
+            id: "**Editor konfigurasi Traefik dinamis** (Infrastruktur, Reverse proxy) dengan preset (basic auth, header keamanan, rate limit, IP allowlist, redirect www) dan **middleware per domain**. Berkas yang ditolak Traefik dikembalikan otomatis ke versi sebelumnya.",
+            en: "**A dynamic Traefik configuration editor** (Infrastructure, Reverse proxy) with presets (basic auth, security headers, rate limit, IP allowlist, www redirect) and **per-domain middlewares**. A file Traefik rejects is automatically restored to the previous version.",
+          },
+          {
+            id: "**Terminal lebih mudah disiapkan**: tombol \"Authorize automatically\" memasang kunci SSH terminal di host dalam satu klik, dan `aoox install` kini menyiapkan kunci itu sendiri serta memakai pengguna `sudo` sebagai user SSH default.",
+            en: "**An easier terminal setup**: an \"Authorize automatically\" button installs the terminal's SSH key on the host in one click, and `aoox install` now prepares that key itself and defaults the SSH user to the `sudo` user.",
+          },
+          {
+            id: "**Progres deploy, kotak masuk notifikasi, dan daftar langkah awal**: stepper deploy dengan durasi tiap langkah, lonceng notifikasi dengan penanda belum dibaca, dan checklist untuk owner baru. **Command palette** (Ctrl+K) melompat ke halaman, project, dan resource.",
+            en: "**Deploy progress, a notification inbox and a getting-started checklist**: a deploy stepper with per-step durations, a notification bell with an unread badge, and a checklist for a new owner. A **command palette** (Ctrl+K) jumps to pages, projects and resources.",
+          },
+          {
+            id: "Dokumentasi baru untuk Cloudflare DNS, konfigurasi proxy, halaman Docker, peringatan sumber daya, dan mode perawatan, dalam bahasa Inggris dan Indonesia.",
+            en: "New documentation for Cloudflare DNS, proxy configuration, the Docker page, resource alerts and maintenance mode, in English and Indonesian.",
+          },
+        ],
+      },
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Viewer project hanya melihat**: halaman project (domain, deploy, mount, backup volume, job, webhook, stack) tidak lagi menampilkan tombol yang pasti ditolak API dengan 403.",
+            en: "**Project viewers get read-only pages**: project pages (domains, deploy, mounts, volume backups, jobs, webhooks, stacks) no longer show controls that the API would refuse with 403.",
+          },
+          {
+            id: "**Tampilan lebih rapi**: viewer log bersama dengan warna ANSI dan pencarian, grafik metrik halus dengan tooltip, status berupa titik berwarna, status dan tombol di bawah tab pada halaman aplikasi dan database, serta menu pengguna di dasar sidebar.",
+            en: "**A tidier look**: a shared log viewer with ANSI colours and search, smooth metric charts with tooltips, status shown as a coloured dot, a status line under the tabs on application and database pages, and the user menu at the foot of the sidebar.",
+          },
+          {
+            id: "Memindahkan aplikasi ke server lain kini ikut membawa sertifikat SSL kustomnya dan membersihkan middleware yang tidak ada di proxy tujuan. Pesan error autentikasi SSH terminal menyebut akun yang harus dipakai.",
+            en: "Moving an application to another server now carries its custom SSL certificates along and drops middlewares that do not exist on the destination proxy. The terminal's SSH authentication error now names the account to use.",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "Menyimpan pengaturan di Infrastruktur, Environment tidak lagi menampilkan \"Cannot reach the server\" padahal perubahan berhasil diterapkan.",
+            en: "Saving settings in Infrastructure, Environment no longer shows \"Cannot reach the server\" when the change was applied.",
+          },
+          {
+            id: "Petunjuk environment stack compose kembali menampilkan daftar referensi database, dan error koneksi log menampilkan kalimat, bukan kunci mentah.",
+            en: "The compose stack environment hint shows its database reference list again, and the log connection error shows a sentence instead of a raw key.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.0-alpha.6",
     date: "2026-10-05",
     channel: "alpha",

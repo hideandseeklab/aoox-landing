@@ -8,6 +8,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.7] - 2026-10-12
+
 ### Added
 
 - **Round favicon and new page titles.** The favicon (`icon.svg` and the 16/32/48 px `favicon.ico`) is now a dark circle with a transparent background, so it no longer shows as a dark square inside the round icon in search results; the Apple touch icon stays square. The home page titles are now "aoox — Self-hosted PaaS untuk deploy aplikasi Anda" (Indonesian) and "aoox — Self-hosted PaaS to deploy your apps" (English).
@@ -357,7 +359,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.6...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.7...HEAD
+[0.1.0-alpha.7]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.6...v0.1.0-alpha.7
 [0.1.0-alpha.6]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.5...v0.1.0-alpha.6
 [0.1.0-alpha.5]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.4...v0.1.0-alpha.5
 [0.1.0-alpha.4]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.3...v0.1.0-alpha.4
