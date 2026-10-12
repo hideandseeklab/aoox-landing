@@ -333,6 +333,36 @@ Memory 512 → hard limit of 512 MiB, no swap (MemorySwap = Memory)`}</Pre>
         travel with project export/import (without history).
       </P>
 
+      <H2 id="alerts">Resource alerts (optional)</H2>
+      <P>
+        Get a notification when an application or database keeps using too much
+        CPU or memory. Each has a <strong>Resource alerts</strong> card: on an
+        application it sits under the HTTP monitor on the{" "}
+        <strong>Monitor</strong> tab, on a database on the{" "}
+        <strong>Overview</strong> tab. CPU and memory are separate rules.
+      </P>
+      <Table
+        head={["Setting", "Notes"]}
+        rows={[
+          ["Active", "Off by default. The switch saves at once."],
+          ["Above", "The threshold in percent. Default 90%. Memory is capped at 100%."],
+          ["For", "How long the value must stay above the threshold. Default 5 minutes. The two selects need Save."],
+        ]}
+      />
+      <Ul>
+        <li><strong>CPU</strong> is the percent of <em>one</em> core, the same number the charts show, so it can go above 100 on several cores (it is not divided by the CPU limit).</li>
+        <li><strong>Memory</strong> is the percent of the container&apos;s memory limit, or of the host&apos;s RAM when no limit is set (see <a href="#limit">Resource limits</a>).</li>
+        <li>The check runs once a minute on the stored per-minute metrics, so it also covers applications on a <DocLink href="/docs/remote-servers">remote server</DocLink>. The alert arrives about a minute after the value has been above the threshold for the whole duration; one missing minute of data is tolerated, a gap is never treated as high.</li>
+        <li>A rule alerts once, reminds every <strong>6 hours</strong> while the value stays high, and sends one <em>back to normal</em> message when it drops. Each rule shows a badge (normal / checking / alerting) and the last reading.</li>
+        <li>Nothing is sent while the application or database is <strong>stopped</strong> or while the application is <strong>deploying</strong>, and readings from before the last finished deployment do not count. Changing a rule resets its state without a message.</li>
+        <li>The state is stored, so restarting the API neither repeats an alert nor forgets a breach.</li>
+        <li>Messages go to every channel with the <strong>CPU or memory alert</strong> toggle on (on by default) and to the notification bell — see <DocLink href="/docs/notifications#event">Notifications</DocLink>. Developers and up edit the rules; viewers see them read-only. The rules travel with project export/import.</li>
+      </Ul>
+      <Callout title="Not covered">
+        Compose stacks have no resource alerts, and there is no alert for the
+        disk usage of volumes.
+      </Callout>
+
       <H2 id="disk">Low disk warning</H2>
       <P>
         Once a day (at <Code>07:00</Code> API time) aoox measures usage on

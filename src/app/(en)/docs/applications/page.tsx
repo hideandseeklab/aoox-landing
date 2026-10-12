@@ -277,7 +277,7 @@ success   old container replaced · application status Running`}</Pre>
         head={["Tab", "Contains"]}
         rows={[
           ["Deploy", "Deploy/Stop/Start buttons, deployment list, deployment & streaming container logs, metrics, Rollback."],
-          ["Settings", <>The same form as creation, plus build args (environment has its own tab). <strong>Host port, domains, and resource limits apply immediately</strong> to a running application — the container is recreated from the same image without a build (with a host port there is a brief downtime, since two containers cannot bind the same port). A stopped application picks up its new port when started again, and a host port change is rejected (409) while a deployment is active. Other settings take effect on the next deploy.</>],
+          ["Settings", <>The same form as creation, plus build args (environment has its own tab). <strong>Host port, domains, and resource limits apply immediately</strong> to a running application — the container is recreated from the same image without a build (with a host port there is a brief downtime, since two containers cannot bind the same port). A stopped application picks up its new port when started again, and a host port change is rejected (409) while a deployment is active. Other settings take effect on the next deploy. Also holds the <a href="#maintenance">Maintenance mode</a> card.</>],
           ["Domain", "Hostname for the application + HTTPS toggle + DNS check."],
           ["Mount", "Volumes, binds, files — and volume backups."],
           ["Environment", "The application's env variables, saved on their own, plus the secret source (Infisical). Applies on the next deploy."],
@@ -342,6 +342,30 @@ success   old container replaced · application status Running`}</Pre>
         <strong>Ignore error logs</strong> on the Settings tab — that
         application is skipped from the scan entirely, not just muted.
       </P>
+
+      <H2 id="maintenance">Maintenance mode</H2>
+      <P>
+        Show visitors a maintenance page instead of the application, without
+        stopping it. It is the first card on the <strong>Settings</strong> tab,
+        called <strong>Maintenance mode</strong>.
+      </P>
+      <Ul>
+        <li>The <strong>Enabled</strong> switch applies <strong>immediately</strong> and does not restart or recreate the container: only Traefik&apos;s routing changes. While it is on, the status strip shows a <em>Maintenance</em> badge.</li>
+        <li>Every request to <strong>every domain</strong> of the application gets the page with HTTP <Code>503</Code> and <Code>Retry-After: 300</Code> (5 minutes), so search engines and monitors see a temporary outage. This includes HTTPS domains with a <DocLink href="/docs/ssl-certificates">custom certificate</DocLink>, and your own <DocLink href="/docs/proxy-configuration">middlewares</DocLink> still run in front of it.</li>
+        <li><strong>Page message</strong>: plain text, up to <strong>280 characters</strong>, with its own <strong>Save message</strong> button; leave it empty for the default text. It is always shown as text, never as HTML. The page itself is in English.</li>
+        <li>A deploy while it is on keeps the page up. A domain you add or remove while it is on is covered or released automatically. Switching it off brings the application back at once.</li>
+        <li>Developers and up can switch it; viewers see the card read-only.</li>
+      </Ul>
+      <Callout title="What it does not cover">
+        <DocLink href="/docs/preview">Preview deployments</DocLink> keep serving,
+        and so does direct access through the <strong>Host port</strong>{" "}
+        (<Code>IP:port</Code>): only the domains are put in maintenance.
+      </Callout>
+      <Ul>
+        <li>Applications on a <DocLink href="/docs/remote-servers">remote server</DocLink> are not supported yet: the card says so and the API refuses it (400).</li>
+        <li>You cannot move an application to another server while it is in maintenance (409); switch it off first.</li>
+        <li>Project export/import does not carry the flag, so an imported application never starts in maintenance.</li>
+      </Ul>
 
       <H2 id="pitfalls">Common pitfalls</H2>
       <Table

@@ -255,7 +255,7 @@ Memori 512 → limit keras 512 MiB, tanpa swap (MemorySwap = Memory)`}</Pre>
       <P>
         Container yang hidup belum tentu sehat: aplikasi bisa mengembalikan
         5xx atau macet tanpa pernah mati. Nyalakan pemeriksaan HTTP per aplikasi
-        di tab <strong>Monitor</strong> (developer ke atas mengubah, viewer
+        di tab <strong>Pemantauan</strong> (developer ke atas mengubah, viewer
         hanya melihat).
       </P>
       <Table
@@ -321,6 +321,36 @@ Memori 512 → limit keras 512 MiB, tanpa swap (MemorySwap = Memory)`}</Pre>
         terakhir. Hasil disimpan 7 hari; isi respons tidak pernah disimpan.
         Konfigurasi monitor ikut ekspor/impor project (tanpa riwayat).
       </P>
+
+      <H2 id="peringatan">Peringatan sumber daya (opsional)</H2>
+      <P>
+        Dapatkan notifikasi saat aplikasi atau database terus-menerus memakai
+        CPU atau memori terlalu banyak. Masing-masing punya kartu{" "}
+        <strong>Peringatan sumber daya</strong>: pada aplikasi ada di bawah monitor
+        HTTP di tab <strong>Pemantauan</strong>, pada database di tab{" "}
+        <strong>Ringkasan</strong>. CPU dan memori adalah aturan terpisah.
+      </P>
+      <Table
+        head={["Pengaturan", "Catatan"]}
+        rows={[
+          ["Aktif", "Mati secara default. Sakelarnya langsung menyimpan."],
+          ["Di atas", "Ambang dalam persen. Default 90%. Memori maksimal 100%."],
+          ["Selama", "Berapa lama nilai harus bertahan di atas ambang. Default 5 menit. Kedua pilihan ini perlu disimpan."],
+        ]}
+      />
+      <Ul>
+        <li><strong>CPU</strong> adalah persen dari <em>satu</em> core, angka yang sama dengan grafik, jadi bisa lebih dari 100 pada beberapa core (tidak dibagi limit CPU).</li>
+        <li><strong>Memori</strong> adalah persen dari batas memori container, atau dari RAM host bila batas belum diatur (lihat <a href="#limit">Batas sumber daya</a>).</li>
+        <li>Pengecekan berjalan tiap menit dari metrik per menit yang tersimpan, jadi aplikasi di <DocLink href="/id/docs/server-remote">server remote</DocLink> ikut tercakup. Peringatan datang sekitar semenit setelah nilai berada di atas ambang selama seluruh durasi; satu menit data yang hilang ditoleransi, dan data yang kosong tidak pernah dianggap tinggi.</li>
+        <li>Sebuah aturan memperingatkan sekali, mengingatkan tiap <strong>6 jam</strong> selama nilai tetap tinggi, dan mengirim satu pesan <em>kembali normal</em> saat turun. Tiap aturan menampilkan lencana (normal / memeriksa / memperingatkan) dan pembacaan terakhir.</li>
+        <li>Tidak ada yang dikirim saat aplikasi atau database <strong>berhenti</strong> atau saat aplikasi sedang <strong>deploy</strong>, dan pembacaan sebelum deployment terakhir selesai tidak dihitung. Mengubah aturan mengatur ulang statusnya tanpa pesan.</li>
+        <li>Status disimpan, jadi restart API tidak mengulang peringatan dan tidak melupakan pelanggaran yang sedang berlangsung.</li>
+        <li>Pesan dikirim ke setiap kanal yang sakelar <strong>peringatan CPU atau memori</strong>-nya aktif (aktif secara default) dan ke lonceng notifikasi — lihat <DocLink href="/id/docs/notifikasi#event">Notifikasi</DocLink>. Developer ke atas mengubah aturan; viewer hanya melihat. Aturan ikut ekspor/impor project.</li>
+      </Ul>
+      <Callout title="Belum tercakup">
+        Stack compose belum punya peringatan sumber daya, dan belum ada peringatan
+        untuk pemakaian disk volume.
+      </Callout>
 
       <H2 id="disk">Peringatan disk menipis</H2>
       <P>

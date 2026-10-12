@@ -152,6 +152,11 @@ export const DOCS_NAV: DocGroup[] = [
         description: "Sertifikat sendiri (CA perusahaan, wildcard) sebagai ganti Let's Encrypt.",
       },
       {
+        href: "/id/docs/dns-cloudflare",
+        title: "DNS Cloudflare",
+        description: "Record DNS otomatis untuk domain aplikasi dan sertifikat wildcard lewat DNS-01.",
+      },
+      {
         href: "/id/docs/konfigurasi-proxy",
         title: "Konfigurasi proxy",
         description: "Middleware Traefik sendiri (basic auth, header, rate limit) dan pasang per domain.",
@@ -329,6 +334,11 @@ export const DOCS_NAV_EN: DocGroup[] = [
         href: "/docs/ssl-certificates",
         title: "Custom SSL certificates",
         description: "Your own certificate (corporate CA, wildcard) instead of Let's Encrypt.",
+      },
+      {
+        href: "/docs/cloudflare-dns",
+        title: "Cloudflare DNS",
+        description: "Automatic DNS records for application domains and wildcard certificates via DNS-01.",
       },
       {
         href: "/docs/proxy-configuration",

@@ -17,6 +17,7 @@ export const DOC_SLUGS: readonly { id: string; en: string }[] = [
   { id: "data-browser", en: "data-browser" },
   { id: "database", en: "database" },
   { id: "deploy", en: "deploy" },
+  { id: "dns-cloudflare", en: "cloudflare-dns" },
   { id: "domain", en: "domain" },
   { id: "domain-panel", en: "panel-domain" },
   { id: "environment", en: "environment" },

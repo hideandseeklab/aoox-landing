@@ -80,6 +80,12 @@ export default function Page() {
         </li>
       </Ul>
       <Pre title="DNS">{`*.preview.example.com.   A   203.0.113.10`}</Pre>
+      <P>
+        With a Cloudflare connection and DNS-01 on the proxy you can also use a
+        single wildcard certificate for all previews — see{" "}
+        <DocLink href="/docs/cloudflare-dns#previews">Cloudflare DNS</DocLink>.
+        You still create this wildcard DNS record yourself.
+      </P>
       <Ul>
         <li>The application runs on the aoox host (not a remote server).</li>
       </Ul>

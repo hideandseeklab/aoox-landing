@@ -249,6 +249,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
       <Table
         head={["Action", "Effect"]}
         rows={[
+          ["Maintenance mode", <>Show a 503 page on all of an application&apos;s domains without stopping it — see <DocLink href="/docs/applications#maintenance">Applications</DocLink>.</>],
           ["Remove a domain", "The container is recreated without that host's label; the certificate stays on the ACME volume."],
           ["Toggle HTTPS", "The container is recreated; the -secure/-redirect routers are added/removed."],
           ["Remove the proxy (owner)", "All domains stop being served; application containers aren't touched. You'll be asked about the ACME volume."],
@@ -296,10 +297,12 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
       />
 
       <Callout kind="warn" title="Not available yet">
-        Periodic/automatic DNS checks; wildcard certificates (DNS-01);
         www ↔ apex redirects; path/prefix routing; basic auth per domain. A
         certificate that fails to issue is now reported via{" "}
-        <DocLink href="/docs/notifications">notifications</DocLink>.
+        <DocLink href="/docs/notifications">notifications</DocLink>. Wildcard
+        certificates (DNS-01) and automatic DNS records are available with a
+        Cloudflare connection — see{" "}
+        <DocLink href="/docs/cloudflare-dns">Cloudflare DNS</DocLink>.
       </Callout>
 
       <H2 id="next-steps">Next steps</H2>

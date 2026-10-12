@@ -79,6 +79,12 @@ export default function Page() {
         </li>
       </Ul>
       <Pre title="DNS">{`*.preview.example.com.   A   203.0.113.10`}</Pre>
+      <P>
+        Dengan koneksi Cloudflare dan DNS-01 pada proxy, Anda juga bisa memakai
+        satu sertifikat wildcard untuk semua preview — lihat{" "}
+        <DocLink href="/id/docs/dns-cloudflare#previews">DNS Cloudflare</DocLink>.
+        Record DNS wildcard ini tetap Anda buat sendiri.
+      </P>
       <Ul>
         <li>Aplikasi berjalan di host aoox (bukan server remote).</li>
       </Ul>

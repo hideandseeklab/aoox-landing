@@ -115,6 +115,11 @@ export default function Page() {
 
       <H2 id="wildcard">Wildcards</H2>
       <P>
+        No certificate of your own? With a Cloudflare connection aoox can issue
+        a wildcard certificate itself through ACME DNS-01, see{" "}
+        <DocLink href="/docs/cloudflare-dns#modes">Cloudflare DNS</DocLink>.
+      </P>
+      <P>
         A <Code>*.example.com</Code> certificate covers <strong>one level</strong>:{" "}
         <Code>app.example.com</Code> yes, but <Code>a.b.example.com</Code> and{" "}
         <Code>example.com</Code> itself no. This is the same rule browsers use;

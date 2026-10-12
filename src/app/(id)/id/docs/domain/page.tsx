@@ -241,6 +241,7 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
       <Table
         head={["Aksi", "Efek"]}
         rows={[
+          ["Mode perawatan", <>Tampilkan halaman 503 di semua domain aplikasi tanpa menghentikannya — lihat <DocLink href="/id/docs/aplikasi#maintenance">Aplikasi</DocLink>.</>],
           ["Hapus domain", "Container dibuat ulang tanpa label host itu; sertifikat tetap di volume ACME."],
           ["Toggle HTTPS", "Container dibuat ulang; router -secure/-redirect ditambah/dihapus."],
           ["Hapus proxy (owner)", "Semua domain berhenti dilayani; container aplikasi tidak disentuh. Volume ACME ditanyakan."],
@@ -287,10 +288,12 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
       />
 
       <Callout kind="warn" title="Belum tersedia">
-        Cek DNS berkala/otomatis; sertifikat wildcard (DNS-01); redirect
-        www ↔ apex; path/prefix routing; basic auth per domain. Sertifikat
+        Redirect www ↔ apex; path/prefix routing; basic auth per domain. Sertifikat
         yang gagal terbit kini dilaporkan lewat{" "}
-        <DocLink href="/id/docs/notifikasi">notifikasi</DocLink>.
+        <DocLink href="/id/docs/notifikasi">notifikasi</DocLink>. Sertifikat
+        wildcard (DNS-01) dan record DNS otomatis tersedia dengan koneksi
+        Cloudflare — lihat{" "}
+        <DocLink href="/id/docs/dns-cloudflare">DNS Cloudflare</DocLink>.
       </Callout>
 
       <H2 id="berikutnya">Langkah berikutnya</H2>

@@ -273,7 +273,7 @@ success   container lama diganti · status aplikasi Running`}</Pre>
         head={["Tab", "Isi"]}
         rows={[
           ["Deploy", "Tombol Deploy/Stop/Start, daftar deployment, log deployment & log container streaming, metrik, Rollback."],
-          ["Pengaturan", <>Form yang sama dengan saat membuat, plus Build args (Environment punya tab sendiri). <strong>Port host, domain, dan limit resource berlaku langsung</strong> pada aplikasi yang berjalan — container dibuat ulang dari image yang sama tanpa build (dengan Port host ada downtime singkat, karena dua container tidak bisa memakai port yang sama). Aplikasi yang sedang berhenti memakai port barunya saat dijalankan lagi, dan perubahan Port host ditolak (409) selama ada deployment aktif. Pengaturan lain berlaku pada deploy berikutnya.</>],
+          ["Pengaturan", <>Form yang sama dengan saat membuat, plus Build args (Environment punya tab sendiri). <strong>Port host, domain, dan limit resource berlaku langsung</strong> pada aplikasi yang berjalan — container dibuat ulang dari image yang sama tanpa build (dengan Port host ada downtime singkat, karena dua container tidak bisa memakai port yang sama). Aplikasi yang sedang berhenti memakai port barunya saat dijalankan lagi, dan perubahan Port host ditolak (409) selama ada deployment aktif. Pengaturan lain berlaku pada deploy berikutnya. Juga memuat kartu <a href="#maintenance">Mode perawatan</a>.</>],
           ["Domain", "Hostname untuk aplikasi + toggle HTTPS + cek DNS."],
           ["Mount", "Volume, bind, file — dan backup volume."],
           ["Environment", "Variabel env aplikasi, disimpan sendiri, plus sumber secret (Infisical). Berlaku pada deploy berikutnya."],
@@ -339,6 +339,30 @@ success   container lama diganti · status aplikasi Running`}</Pre>
         <strong>Abaikan error di log</strong> di tab Pengaturan — aplikasi itu
         dilewati sepenuhnya dari pemindaian, tidak cuma dibisukan.
       </P>
+
+      <H2 id="maintenance">Mode perawatan</H2>
+      <P>
+        Tampilkan halaman perawatan kepada pengunjung sebagai ganti aplikasi,
+        tanpa menghentikannya. Ini kartu pertama di tab <strong>Pengaturan</strong>,
+        bernama <strong>Mode perawatan</strong>.
+      </P>
+      <Ul>
+        <li>Sakelar <strong>Aktif</strong> berlaku <strong>langsung</strong> dan tidak me-restart atau membuat ulang container: yang berubah hanya routing Traefik. Selama aktif, strip status menampilkan lencana <em>Maintenance</em>.</li>
+        <li>Setiap permintaan ke <strong>semua domain</strong> aplikasi mendapat halaman itu dengan HTTP <Code>503</Code> dan <Code>Retry-After: 300</Code> (5 menit), sehingga mesin pencari dan monitor melihatnya sebagai gangguan sementara. Termasuk domain HTTPS dengan <DocLink href="/id/docs/sertifikat-ssl">sertifikat kustom</DocLink>, dan <DocLink href="/id/docs/konfigurasi-proxy">middleware</DocLink> Anda tetap berjalan di depannya.</li>
+        <li><strong>Pesan halaman</strong>: teks biasa, maksimal <strong>280 karakter</strong>, dengan tombol <strong>Simpan pesan</strong> sendiri; kosongkan untuk teks standar. Selalu ditampilkan sebagai teks, bukan HTML. Halamannya sendiri berbahasa Inggris.</li>
+        <li>Deploy saat mode ini aktif tidak menghilangkan halamannya. Domain yang ditambah atau dihapus saat aktif otomatis ikut tercakup atau dilepas. Mematikannya langsung mengembalikan aplikasi.</li>
+        <li>Developer ke atas bisa menyalakannya; viewer melihat kartu ini tanpa bisa mengubah.</li>
+      </Ul>
+      <Callout title="Yang tidak tercakup">
+        <DocLink href="/id/docs/preview">Preview deployment</DocLink> tetap
+        melayani, begitu juga akses langsung lewat <strong>Port host</strong>{" "}
+        (<Code>IP:port</Code>): hanya domain yang dimasukkan ke mode perawatan.
+      </Callout>
+      <Ul>
+        <li>Aplikasi di <DocLink href="/id/docs/server-remote">server remote</DocLink> belum didukung: kartu memberi tahu hal ini dan API menolaknya (400).</li>
+        <li>Aplikasi tidak bisa dipindah ke server lain saat dalam mode perawatan (409); matikan dulu.</li>
+        <li>Ekspor/impor project tidak membawa flag ini, jadi aplikasi hasil impor tidak pernah mulai dalam mode perawatan.</li>
+      </Ul>
 
       <H2 id="jebakan">Jebakan umum</H2>
       <Table

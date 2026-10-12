@@ -115,6 +115,11 @@ export default function Page() {
 
       <H2 id="wildcard">Wildcard</H2>
       <P>
+        Tidak punya sertifikat sendiri? Dengan koneksi Cloudflare, aoox bisa
+        menerbitkan sertifikat wildcard sendiri lewat ACME DNS-01, lihat{" "}
+        <DocLink href="/id/docs/dns-cloudflare#mode">DNS Cloudflare</DocLink>.
+      </P>
+      <P>
         Sertifikat <Code>*.example.com</Code> mencakup <strong>satu level</strong>:{" "}
         <Code>app.example.com</Code> ya, tetapi <Code>a.b.example.com</Code>{" "}
         dan <Code>example.com</Code> sendiri tidak. Aturannya sama dengan yang
