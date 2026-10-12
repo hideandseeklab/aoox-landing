@@ -136,7 +136,7 @@ export default function Page() {
         rows={[
           [
             <strong key="p">Project</strong>,
-            "Wadah untuk aplikasi, stack compose, dan database yang saling terkait. Punya environment bersama.",
+            "Wadah untuk aplikasi, stack compose, dan database yang saling terkait. Punya environment (development, staging, production).",
           ],
           [
             <strong key="a">Aplikasi</strong>,

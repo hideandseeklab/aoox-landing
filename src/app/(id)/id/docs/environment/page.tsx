@@ -23,25 +23,26 @@ export const metadata: Metadata = pageMetadata({
   lang: "id",
   title: "Environment variables",
   description:
-    "Env project vs aplikasi dan referensi ke database.",
+    "Environment project, env aplikasi, dan referensi ke database.",
 })
 
 const SUMMARY = [
-  { k: "Dua lapis", v: "Env project (bersama) + env aplikasi" },
+  { k: "Lapisan", v: "Environment project + sumber secret + env aplikasi" },
   { k: "Diterapkan", v: "Saat container dibuat, bukan saat build" },
   { k: "Referensi", v: "${{project.KEY}} · ${{database.<slug>.url}}" },
 ]
 
 const RESOLVE = [
-  { s: "env project", d: "KEY=VALUE bersama satu project" },
-  { s: "env aplikasi", d: "menimpa key yang sama" },
+  { s: "environment", d: "environment project yang ditautkan ke aplikasi (terendah)" },
+  { s: "sumber secret", d: "Infisical, bila sync menyala, menimpanya" },
+  { s: "env aplikasi", d: "menimpa key yang sama (tertinggi)" },
   { s: "resolve ${{…}}", d: "project & database di project yang sama" },
   { s: "container", d: "hasil akhir masuk ke container" },
 ]
 
 const NEXT = [
   { title: "Managed database", description: "Slug database yang bisa direferensikan.", href: "/id/docs/database" },
-  { title: "Project", description: "Mengisi environment bersama.", href: "/id/docs/project" },
+  { title: "Project", description: "Environment, perlindungan, dan penautan.", href: "/id/docs/project" },
   { title: "Cara build", description: "Build args untuk nilai saat build.", href: "/id/docs/build#build-args" },
   { title: "Stack compose", description: "Env sebagai sumber interpolasi compose.", href: "/id/docs/compose#env" },
 ]
@@ -51,7 +52,7 @@ export default function Page() {
     <DocPage
       href="/id/docs/environment"
       title="Environment variables"
-      description="Env aplikasi, env bersama project, dan referensi ke kredensial managed database — semuanya diselesaikan saat container dibuat."
+      description="Env aplikasi, environment project, dan referensi ke kredensial managed database — semuanya diselesaikan saat container dibuat."
     >
       <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
@@ -127,7 +128,7 @@ EMPTY=`}</Pre>
       </Ul>
 
       <H2 id="alur">Bagaimana env digabung</H2>
-      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-4 rounded-lg overflow-hidden">
+      <ol className="grid gap-px border border-border bg-border text-xs sm:grid-cols-5 rounded-lg overflow-hidden">
         {RESOLVE.map((item, i) => (
           <li key={item.s} className="flex flex-col gap-1 bg-background px-3 py-3">
             <span className="text-[0.6rem] text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
@@ -138,12 +139,17 @@ EMPTY=`}</Pre>
       </ol>
       <Ul>
         <li>
-          Bila key yang sama ada di env project dan env aplikasi,{" "}
-          <strong>nilai aplikasi menang</strong>.
+          Prioritas, dari terendah ke tertinggi: <strong>environment
+          project</strong> yang ditautkan &lt; <strong>sumber secret
+          eksternal</strong> (Infisical, bila sync menyala) &lt;{" "}
+          <strong>env aplikasi itu sendiri</strong>. Bila key yang sama ada di
+          beberapa lapisan, yang lebih tinggi menang.
         </li>
         <li>
           Penggabungan dan resolusi terjadi <strong>setiap kali container dibuat</strong>:
-          deploy, rollback, atau recreate karena domain/mount berubah.
+          deploy, rollback, atau recreate karena domain/mount berubah. Mengubah
+          environment tidak mengubah container yang berjalan — berlaku pada{" "}
+          <strong>deploy berikutnya</strong> aplikasi.
         </li>
         <li>
           Env <strong>tidak tersedia saat build</strong>. Untuk itu pakai{" "}
@@ -155,7 +161,7 @@ EMPTY=`}</Pre>
       <Table
         head={["Sintaks", "Menghasilkan"]}
         rows={[
-          [<Code key="1">{"${{project.KEY}}"}</Code>, "Nilai KEY dari environment bersama project."],
+          [<Code key="1">{"${{project.KEY}}"}</Code>, "Nilai KEY dari environment yang ditautkan ke aplikasi (default production)."],
           [<Code key="2">{"${{database.<slug>.url}}"}</Code>, "URL koneksi internal managed database (host = nama container)."],
           [<Code key="3">{"${{database.<slug>.host}}"}</Code>, "Nama container database, mis. aoox-db-app-db."],
           [<Code key="4">{"${{database.<slug>.port}}"}</Code>, "Port engine di dalam network (5432, 3306, 6379)."],
@@ -169,7 +175,7 @@ EMPTY=`}</Pre>
         ]}
       />
       <H3>Contoh lengkap</H3>
-      <Pre title="Env project (bersama)">{`APP_ENV=production
+      <Pre title="Environment production (tertaut ke aplikasi)">{`APP_ENV=production
 SENTRY_DSN=https://abc@sentry.example.com/1`}</Pre>
       <Pre title="Env aplikasi web">{`NODE_ENV=\${{project.APP_ENV}}
 SENTRY_DSN=\${{project.SENTRY_DSN}}
@@ -186,6 +192,11 @@ PORT=3000`}</Pre>
           Database hanya dicari di <strong>project yang sama</strong> — aplikasi
           tidak bisa membaca kredensial project lain. Slug adalah nama yang
           tampil di halaman database.
+        </li>
+        <li>
+          Memindahkan aplikasi ke environment yang tidak punya{" "}
+          <Code>{"${{project.KEY}}"}</Code> yang dirujuknya ditolak dengan
+          pesan yang menyebut key-nya.
         </li>
         <li>
           Referensi tak dikenal<PathArrow /><strong>400</strong> saat menyimpan
@@ -209,9 +220,199 @@ PORT=3000`}</Pre>
           stdout dari aplikasi.
         </li>
         <li>
-          Env disimpan sebagai teks di database aoox; akses ke halaman
-          Pengaturan = akses ke nilainya. Semua anggota bisa membuka semua
-          project.
+          Env aplikasi disimpan sebagai teks di database aoox; akses ke halaman
+          Pengaturan = akses ke nilainya. Variabel environment project
+          terenkripsi saat disimpan dan dilindungi — lihat di bawah.
+        </li>
+      </Ul>
+
+      <H2 id="environments">Environment project</H2>
+      <P>
+        Project punya environment (<Code>development</Code>,{" "}
+        <Code>staging</Code>, <Code>production</Code>, plus yang Anda tambah).
+        Masing-masing menyimpan variabel <Code>KEY=VALUE</Code> sendiri,
+        terenkripsi saat disimpan, diedit di tab <strong>Environment</strong>{" "}
+        project. Setiap aplikasi dan stack compose ditautkan ke{" "}
+        <strong>satu</strong> environment lewat pilihan <strong>Environment</strong>{" "}
+        di Pengaturannya (default <Code>production</Code>);{" "}
+        <Code>{"${{project.KEY}}"}</Code> diambil dari environment itu.
+      </P>
+      <Ul>
+        <li>
+          Nilai disamarkan di daftar; <em>Tampilkan</em> adalah aksi yang
+          diaudit (audit log mencatatnya tanpa nilainya).
+        </li>
+        <li>
+          <Code>production</Code> <strong>dilindungi</strong>: hanya admin
+          project yang bisa menampilkan atau mengubah nilainya. Developer bisa
+          menampilkan dan mengubah environment lain; viewer hanya melihat nama
+          variabel.
+        </li>
+        <li>
+          Nilai disamarkan di log deployment (nilai di bawah 8 karakter dan
+          kata tunggal biasa seperti <Code>production</Code> tidak disamarkan).
+        </li>
+        <li>
+          <strong>Penautan juga dilindungi:</strong> menautkan aplikasi atau
+          stack <em>ke</em> environment terlindungi, atau memindahkannya{" "}
+          <em>dari</em> situ, membutuhkan admin project (developer mendapat 403;
+          pilihan Environment menampilkan environment terlindungi sebagai
+          nonaktif). Tanpa aturan ini developer bisa menautkan aplikasi ke{" "}
+          <Code>production</Code>, men-deploy-nya dan membaca nilainya dari
+          console container. Aplikasi atau stack baru yang dibuat developer
+          tanpa memilih environment dimulai di <Code>development</Code>.
+          Resource yang sudah tertaut sebelum aturan ini tetap tertaut, dan
+          siapa pun yang bisa membuka console resource yang tertaut ke{" "}
+          <Code>production</Code> tetap melihat nilainya saat runtime, seperti
+          env var pada umumnya.
+        </li>
+        <li>
+          <strong>Dari terminal:</strong>{" "}
+          <DocLink href="/id/docs/cli#env">aoox env dan aoox run</DocLink>{" "}
+          membaca dan mengubah environment dengan API token. Token bisa dibatasi
+          ke environment menurut nama (mis. hanya <Code>development</Code>) dan
+          tidak pernah melebihi akses pemiliknya sendiri.
+        </li>
+      </Ul>
+      <P>
+        Selengkapnya di <DocLink href="/id/docs/project#environments">Project</DocLink>.
+      </P>
+
+      <H2 id="riwayat">Riwayat dan restore</H2>
+      <P>
+        Setiap perubahan pada sebuah environment disimpan sebagai versi: edit
+        di dashboard, <Code>aoox env set|unset|push</Code>, restore, atau
+        promosi dari environment lain. Buka <strong>History</strong> pada
+        sebuah environment untuk melihat daftarnya, terbaru di atas.
+      </P>
+      <Ul>
+        <li>
+          Tiap baris menampilkan <strong>siapa</strong> (pengguna, atau token),{" "}
+          <strong>kapan</strong>, dan nama variabel yang <strong>+ditambah</strong>,{" "}
+          <strong>~diubah</strong> dan <strong>-dihapus</strong>. Nilai tidak
+          pernah ditampilkan di daftar.
+        </li>
+        <li>
+          <strong>Restore this version</strong> mengembalikan teks itu setelah
+          konfirmasi. Tidak ada yang dihapus: teks yang dipulihkan menjadi
+          versi <em>baru</em> di paling atas, jadi riwayat tidak pernah
+          ditulis ulang dan restore bisa dibatalkan dengan cara yang sama.
+        </li>
+        <li>
+          Siapa yang boleh restore: orang yang sama yang boleh mengedit
+          environment itu. Untuk <Code>production</Code> yang dilindungi, itu
+          admin project; viewer tidak melihat nilai dan tidak bisa restore.
+        </li>
+        <li>
+          Bila teks lama tidak lolos pemeriksaan hari ini (mis.{" "}
+          <Code>{"${{project.KEY}}"}</Code> yang menunjuk variabel yang sudah
+          Anda hapus), restore ditolak dengan pesan dan tidak ada yang berubah.
+          Memulihkan versi yang sudah menjadi isi saat ini juga ditolak.
+        </li>
+        <li>
+          Perubahan pertama pada environment yang sudah berisi juga menyimpan{" "}
+          <strong>baseline</strong> dari isi sebelumnya, sehingga edit pertama
+          pun bisa dibatalkan. Menyimpan tanpa perubahan nyata (hanya akhir
+          baris atau spasi di ujung) tidak membuat versi.
+        </li>
+        <li>
+          <strong>50 versi terbaru</strong> tiap environment disimpan; yang
+          lebih lama dihapus otomatis. Teks lama disimpan terenkripsi seperti
+          yang aktif. Versi juga mengingat tanda rahasianya.
+        </li>
+      </Ul>
+
+      <H2 id="bandingkan">Membandingkan dan mempromosikan</H2>
+      <P>
+        <strong>Compare</strong> memungkinkan Anda memilih dua environment dan
+        menampilkan hasilnya per key: variabel yang hanya ada di satu sisi,
+        variabel di kedua sisi dengan <strong>nilai berbeda</strong>, dan
+        berapa yang sama. Nilainya dibandingkan di server dan tidak pernah
+        dikirim ke browser Anda.
+      </P>
+      <Ul>
+        <li>
+          Untuk memberi tahu apakah suatu nilai berbeda, aoox harus boleh
+          membaca kedua sisi. Bila Anda tidak bisa membaca keduanya (developer
+          dan salah satu sisi adalah <Code>production</Code>), Anda tetap
+          melihat nama mana ada di mana, tetapi tidak nilai mana yang berbeda.
+        </li>
+        <li>
+          Pilih variabel yang diinginkan lalu tekan <strong>Promote</strong>.
+          Dialog konfirmasi menyebut variabel dan environment tujuan. Tiap
+          variabel disalin beserta nilai dan tanda rahasianya; tujuan
+          mempertahankan komentar dan urutannya sendiri, variabel baru
+          ditambahkan di akhir, dan versi <em>From &lt;sumber&gt;</em> tercatat.
+        </li>
+        <li>
+          Promosi membutuhkan hak untuk <strong>membaca sumber</strong> dan{" "}
+          <strong>mengubah tujuan</strong>, dengan aturan yang sama seperti
+          editor: <strong>developer tidak bisa mempromosikan ke atau dari
+          production</strong>; admin project dibutuhkan di sisi yang
+          dilindungi. Viewer tidak bisa mempromosikan.
+        </li>
+        <li>
+          Promosi ditolak bila akan meninggalkan{" "}
+          <Code>{"${{project.KEY}}"}</Code> yang menunjuk variabel yang tidak
+          ada di tujuan, dan bila orang lain mengubah tujuan di sela itu (tidak
+          ada yang ditulis; coba lagi).
+        </li>
+        <li>
+          Aplikasi yang berjalan tidak disentuh: seperti edit environment
+          lainnya, promosi berlaku di deploy berikutnya aplikasi yang memakai
+          environment tujuan.
+        </li>
+        <li>
+          Dari terminal:{" "}
+          <DocLink href="/id/docs/cli#env"><Code>aoox env diff</Code> dan <Code>aoox env promote</Code></DocLink>.
+        </li>
+      </Ul>
+
+      <H2 id="flag-rahasia">Variabel rahasia</H2>
+      <P>
+        Setiap variabel di editor environment punya sakelar{" "}
+        <strong>Secret</strong> (di CLI: <Code>aoox env set KEY=VALUE --secret</Code>{" "}
+        atau <Code>--no-secret</Code>). Sakelar ini menentukan apakah nilainya
+        disembunyikan di log deployment, output job, dan notifikasi error.
+      </P>
+      <Table
+        head={["Tanda", "Yang terjadi pada nilai di log"]}
+        rows={[
+          [<strong key="s">Secret</strong>, "Selalu disamarkan, sependek apa pun."],
+          [<strong key="n">Bukan rahasia</strong>, "Tidak pernah disamarkan."],
+          [<strong key="u">Belum diatur</strong>, <>Aturan biasa: disamarkan bila 8 karakter atau lebih, bukan satu kata biasa, dan bukan hanya angka. Jadi <Code>NODE_ENV=production</Code> tetap terbaca dan token panjang disembunyikan.</>],
+        ]}
+      />
+      <Ul>
+        <li>
+          <strong>Bukan rahasia berarti tidak pernah.</strong> Nilai panjang
+          pada variabel yang <em>belum</em> diberi tanda tetap disamarkan oleh
+          aturan biasa; hanya <Code>--no-secret</Code> yang eksplisit yang
+          mematikan penyamaran.
+        </li>
+        <li>
+          Tanda rahasia disimpan di samping <em>nama</em> variabel, bukan di
+          dalam teks, sehingga teks <Code>KEY=VALUE</Code>,{" "}
+          <Code>aoox env pull</Code>, ekspor dan <Code>.aoox.env</Code> compose
+          tetap persis seperti semula. Editor dan CLI menampilkan variabel mana
+          yang rahasia; nilainya tetap di balik Reveal.
+        </li>
+        <li>
+          <strong>Variabel lama dan baru:</strong> saat fitur ini diperkenalkan,
+          variabel yang namanya memuat <Code>password</Code>,{" "}
+          <Code>secret</Code>, <Code>token</Code>, <Code>key</Code>,{" "}
+          <Code>private</Code> atau <Code>credential</Code> otomatis ditandai
+          rahasia; variabel lain dibiarkan tanpa tanda, sehingga penyamaran
+          bekerja persis seperti sebelumnya. Aturan nama yang sama menandai
+          variabel baru yang Anda tambah tanpa memilih tanda. Karena hanya
+          mencocokkan nama, nama yang wajar seperti <Code>MONKEY</Code> atau{" "}
+          <Code>KEYBOARD</Code> ikut ditandai: matikan di editor bila perlu.
+        </li>
+        <li>
+          Promosi menyalin tandanya bersama nilai. Menghapus variabel juga
+          menghapus tandanya. Bila variabel rahasia berisi referensi seperti{" "}
+          <Code>{"${{database.app-db.password}}"}</Code>, nilai hasil
+          resolusinya juga disamarkan.
         </li>
       </Ul>
 

@@ -10,6 +10,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ### Added
 
+- **Docs: Environment variables in the CLI (English and Indonesian)**: a new section on the CLI page for `aoox env list|pull|set|unset` and `aoox run` (examples, quoting rules, concurrent edits, roles, tokens in CI) and two rows in the command reference. The Environment and Project pages describe the linking rule (a protected environment needs a project admin to link to or from) and the token restriction to environments.
+- **Docs: environment history, compare/promote and secret variables (English and Indonesian)**: the Environment page gains "History and restore" (who/when/names changed, Restore this version, 50 versions kept, same rights as editing), "Compare and promote" (key-level compare, Promote with confirmation, developers cannot touch production) and "Secret variables" (the Secret switch, the masking rule including unmarked variables and what not-secret means, migration of existing names). The CLI page documents `aoox env push|history|diff|promote`, `env set --secret/--no-secret`, `env pull --format dotenv|json|shell` and `--file -`, and `aoox run --file` with its precedence.
 - **Troubleshooting (English and Indonesian):** a row for "Bad Gateway from a domain while the container runs" (Container port is not the port the app listens on) and the new EXPOSE warning with its one-click fix.
 
 ### Changed

@@ -44,7 +44,7 @@ export const DOCS_NAV: DocGroup[] = [
       {
         href: "/id/docs/project",
         title: "Project",
-        description: "Wadah aplikasi, database, dan environment bersama.",
+        description: "Wadah aplikasi, database, dan environment (development, staging, production).",
       },
       {
         href: "/id/docs/aplikasi",
@@ -228,7 +228,7 @@ export const DOCS_NAV_EN: DocGroup[] = [
       {
         href: "/docs/project",
         title: "Project",
-        description: "The container for apps, databases, and shared environment.",
+        description: "The container for apps, databases, and environments.",
       },
       {
         href: "/docs/applications",

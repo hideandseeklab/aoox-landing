@@ -116,7 +116,7 @@ export default function Page() {
               [
                 "Environment variables",
                 <>
-                  Mendukung <Code>{"${{project.KEY}}"}</Code> dan{" "}
+                  Mendukung <Code>{"${{project.KEY}}"}</Code> (dari environment yang ditautkan ke stack) dan{" "}
                   <Code>{"${{database.<slug>.url}}"}</Code>.
                 </>,
               ],

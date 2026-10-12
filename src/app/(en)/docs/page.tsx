@@ -138,7 +138,7 @@ export default function Page() {
         rows={[
           [
             <strong key="p">Project</strong>,
-            "A container for related applications, compose stacks, and databases. Has a shared environment.",
+            "A container for related applications, compose stacks, and databases. Has environments (development, staging, production).",
           ],
           [
             <strong key="a">Application</strong>,

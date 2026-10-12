@@ -61,6 +61,16 @@ const COMMANDS = [
     flags: "--tag, --dockerfile/-f, --context, --registry",
   },
   {
+    cmd: "aoox env list | pull | push | set | unset | history | diff | promote",
+    what: "Lists, downloads, uploads, compares or changes the variables of a project environment (see Environment variables).",
+    flags: "--env/-e, --project, --reveal, --json (list); --file, --force, --format (pull); --file, --yes (push); --secret/--no-secret (set); --limit (history); --all, --yes (promote)",
+  },
+  {
+    cmd: "aoox run -- <command>",
+    what: "Runs a command with the variables of an environment, without writing them to disk.",
+    flags: "--env/-e, --project",
+  },
+  {
     cmd: "aoox domain set",
     what: "Sets a custom domain for the panel itself (dashboard + API) without SSH.",
     flags: "--web, --api, --acme-email",
@@ -103,6 +113,7 @@ const COMMANDS = [
 ]
 
 const NEXT = [
+  { title: "Environment variables", description: "Project environments, protection and references.", href: "/docs/environment#environments" },
   { title: "Users & roles", description: "Creating an API token and its scope.", href: "/docs/users-roles#account" },
   { title: "Installation", description: "The manual steps aoox install automates.", href: "/docs/installation" },
   { title: "Registry", description: "Where images from aoox deploy are stored.", href: "/docs/registry" },
@@ -362,6 +373,187 @@ Deployed: localhost:5000/shop/shop:a1b2c3d`}</Pre>
         A deployment already in progress for the same application is rejected
         (409) — wait for it to finish first.
       </Callout>
+
+      <H2 id="env">Environment variables (aoox env, aoox run)</H2>
+      <P>
+        <Code>aoox env</Code> reads and changes the variables of a{" "}
+        <DocLink href="/docs/environment#environments">project environment</DocLink>{" "}
+        (the same ones as the project&apos;s Environments tab), and{" "}
+        <Code>aoox run</Code> starts a command with them without writing a
+        file. The project is the one of the application linked with{" "}
+        <Code>aoox link</Code>, or <Code>--project &lt;id or name&gt;</Code>;
+        the environment is <Code>--env</Code> (default{" "}
+        <Code>development</Code>).
+      </P>
+      <Pre title="A typical session">{`$ aoox env list
+Project: shop
+NAME                    VARIABLES  USED BY
+development             3          -
+staging                 0          -
+production (protected)  7          shop
+
+$ aoox env set API_URL=https://api.example.com GREETING="hello world"
+development: added API_URL, GREETING (5 variables now)
+
+$ aoox env list --env development            # names only, values masked
+API_URL=••••••••
+$ aoox env list --env development --reveal   # values (audited)
+$ aoox env pull                              # writes ./.env (mode 0600)
+$ aoox env unset OLD_KEY
+$ aoox run -- npm run dev                    # starts it with the variables`}</Pre>
+      <Table
+        head={["Command", "Does"]}
+        rows={[
+          [<Code key="l">aoox env list [--env name] [--reveal] [--json]</Code>, "Without --env: the project's environments (protection, variable count, what uses them). With --env: that environment's variable names; --reveal shows the values through the audited reveal action."],
+          [<Code key="p">aoox env pull [--env name] [--file .env] [--format dotenv|json|shell] [--force]</Code>, <>Writes the variables to a file with mode <Code>0600</Code> (owner only, where the OS supports it). It never overwrites an existing file unless <Code>--force</Code>, and warns once when the file is not covered by <Code>.gitignore</Code> (it never edits <Code>.gitignore</Code> itself).</>],
+          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--env name] [--secret | --no-secret]</Code>, <>Adds or changes variables. Comments and the order of the existing lines are kept; a new variable goes at the end. <Code>--secret</Code> marks the variables as secret, <Code>--no-secret</Code> as explicitly not secret; without either, the flags stay as they are (see <DocLink href="/docs/environment#secret-flags">Secret variables</DocLink>).</>],
+          [<Code key="u">aoox env unset KEY [KEY2 …] [--env name]</Code>, "Removes variables; comments and the other lines stay."],
+          [<Code key="pu">aoox env push --file .env [--env name] [--yes]</Code>, "Replaces the whole environment with a local file, after showing which variables are added, changed and removed and asking for confirmation."],
+          [<Code key="h">aoox env history [--env name] [--limit 20] [--json]</Code>, "The version history of an environment, newest first: when, who, and the variable names added (+), changed (~) or removed (-). Never values."],
+          [<Code key="d">aoox env diff &lt;from&gt; &lt;to&gt;</Code>, "Compares two environments by variable name: only on one side, different values, same. Prints names only."],
+          [<Code key="pr">aoox env promote &lt;from&gt; &lt;to&gt; [KEY …] [--all] [--yes]</Code>, "Copies the named variables (or all of them) and their secret flag from one environment into another, after showing what changes and asking for confirmation."],
+          [<Code key="r">aoox run [--env name] [--file .env.local] -- command [args…]</Code>, "Fetches the variables and starts the command with them on top of your current environment (the panel's value wins on a clash; a local file, if given, wins over both). Nothing is written to disk. Output goes straight to your terminal, the command's exit code is the exit code of aoox run, and Ctrl+C or SIGTERM is passed to it."],
+        ]}
+      />
+      <H3>Pull formats, push and run --file</H3>
+      <Pre title="Formats and standard output">{`$ aoox env pull --env staging                        # ./.env, the stored text with its comments
+$ aoox env pull --format json                        # ./.env.json  {"KEY":"value"}
+$ aoox env pull --format shell                       # ./.env.sh    export KEY='value'
+$ aoox env pull --format json --file - | jq .PORT    # standard output only
+$ eval "$(aoox env pull --format shell --file -)"    # load into the current shell`}</Pre>
+      <Ul>
+        <li>
+          <Code>--file -</Code> writes the data to standard output and nothing
+          else there, so it can be piped or passed to <Code>eval</Code>. Notes
+          (such as the one about <Code>{"${{…}}"}</Code> references) go to
+          standard error. In this mode there is no &quot;file exists&quot; check
+          and no <Code>.gitignore</Code> warning, because no file is written.
+        </li>
+        <li>
+          The <Code>shell</Code> format wraps each value in single quotes and
+          writes a single quote inside a value as <Code>{"'\\''"}</Code>, so
+          spaces, <Code>$</Code> and quotes survive <Code>eval</Code>. Without{" "}
+          <Code>--file</Code> the file is <Code>.env</Code>,{" "}
+          <Code>.env.json</Code> or <Code>.env.sh</Code> by format, always with
+          mode <Code>0600</Code> where the OS supports it.
+        </li>
+      </Ul>
+      <Pre title="Upload a file and look at the result">{`$ aoox env push --file .env.staging --env staging
+Project: shop · environment: staging
+  + added (1): NEW_FLAG
+  ~ changed (1): API_URL
+  - removed (1): OLD_KEY
+  = unchanged: 6
+Variables that are not in the file are removed: this replaces the whole environment.
+? Replace "staging" with the contents of .env.staging? (y/N)`}</Pre>
+      <Ul>
+        <li>
+          The file is checked before anything is sent. Refused: invalid names,
+          an <Code>export </Code> prefix, trailing whitespace and duplicate
+          names. Quoted values (<Code>KEY=&quot;value&quot;</Code>) are
+          accepted with a warning, because the panel stores the quotes as part
+          of the value. Windows line endings and a leading BOM are normalised.
+        </li>
+        <li>
+          <Code>push</Code>, <Code>promote</Code> and <Code>diff</Code> never
+          print values. <Code>push</Code> and <Code>promote</Code> ask for
+          confirmation; without a terminal (CI) they refuse unless you pass{" "}
+          <Code>--yes</Code>. If someone else changed the environment in
+          between, nothing is written (409), as with <Code>set</Code>.
+        </li>
+        <li>
+          <Code>aoox run --file .env.local -- npm run dev</Code>: the order,
+          lowest to highest, is your current environment, then the aoox
+          environment, then the local file. The most specific source wins, like
+          a <Code>.env.local</Code> over shared config. The file is only read,
+          and <Code>{"${{…}}"}</Code> references inside it are not resolved
+          (only the panel does that).
+        </li>
+        <li>
+          Every change is recorded as a version (see{" "}
+          <DocLink href="/docs/environment#history">history and restore</DocLink>);
+          restoring an old version is done in the dashboard.
+        </li>
+      </Ul>
+      <H3>How values are stored (quoting)</H3>
+      <P>
+        The panel keeps one environment as plain <Code>KEY=VALUE</Code> text,
+        one variable per line. The key is everything before the first{" "}
+        <Code>=</Code>; the value is <strong>everything after it, exactly as
+        given</strong>. There is no quote or escape processing — not in the
+        CLI, not in the panel, not when the value is put into the container —
+        so the quotes you type are removed by <em>your shell</em>, and quotes
+        that are part of the value stay part of it.
+      </P>
+      <Table
+        head={["You type", "Stored value"]}
+        rows={[
+          [<Code key="1">{`GREETING="hello world"`}</Code>, <Code key="1b">hello world</Code>],
+          [<Code key="2">{`QUERY=a=b=c`}</Code>, <Code key="2b">a=b=c</Code>],
+          [<Code key="3">{`MSG='say "hi" # not a comment'`}</Code>, <Code key="3b">{`say "hi" # not a comment`}</Code>],
+          [<Code key="4">{`EMPTY=`}</Code>, "an empty value"],
+        ]}
+      />
+      <Ul>
+        <li>
+          Rejected before anything is sent: an invalid name (letters, digits
+          and <Code>_</Code>, not starting with a digit), a value with a
+          newline (one variable per line), and a value that ends with
+          whitespace (the panel trims the end of each line).
+        </li>
+        <li>
+          <Code>{"${{project.KEY}}"}</Code> and{" "}
+          <Code>{"${{database.<slug>.url}}"}</Code> references are stored and
+          pulled as written. Only the panel resolves them, when the container
+          is created, so <Code>aoox run</Code> passes them as text.
+        </li>
+        <li>
+          Compose stacks read the resolved text through Docker Compose&apos;s own{" "}
+          <Code>--env-file</Code> parser, which does strip quotes around a whole
+          value. Avoid surrounding quotes in values used by stacks.
+        </li>
+      </Ul>
+      <H3>Editing at the same time</H3>
+      <P>
+        <Code>set</Code> and <Code>unset</Code> read the environment, change
+        the text and save it back together with the version they read. If
+        someone else saved in between (the dashboard, another terminal), the
+        panel answers <Code>409</Code> and the CLI says that nothing was
+        written — run the command again to apply your change on top of the
+        latest version. The dashboard&apos;s editor does the same.
+      </P>
+      <H3>Who can do what</H3>
+      <Table
+        head={["Role", "development / staging / custom", "production (protected)"]}
+        rows={[
+          [<strong key="a">Project admin</strong>, "list, pull, set, unset, run", "list, pull, set, unset, run"],
+          [<strong key="d">Developer</strong>, "list, pull, set, unset, run", <>Only the variable names. Anything else prints <Code>❌ &quot;production&quot; is protected; only project admins can read it.</Code></>],
+          [<strong key="v">Viewer</strong>, "Variable names only", "Variable names only"],
+        ]}
+      />
+      <Ul>
+        <li>
+          <strong>In CI</strong> create an API token on a project admin (for{" "}
+          <Code>production</Code>) or a developer (other environments) and
+          export <Code>AOOX_TOKEN</Code>/<Code>AOOX_URL</Code>. The token can be
+          limited to certain <strong>environments</strong> by name (Settings
+          <PathArrow />API token<PathArrow />Limit to environments), e.g. only{" "}
+          <Code>development</Code>: other environments then answer 403.
+        </li>
+        <li>
+          A <strong>read-only</strong> token can still run{" "}
+          <Code>aoox env pull</Code>, <Code>aoox env list --reveal</Code> and{" "}
+          <Code>aoox run</Code> (reading changes nothing and is audited), but{" "}
+          <Code>set</Code>, <Code>unset</Code>, <Code>push</Code> and{" "}
+          <Code>promote</Code> are refused. Viewers can never
+          read values, with or without a token.
+        </li>
+        <li>
+          Every read of values is recorded in the audit log without the values.
+          Reading is a request to the API, so an environment is never cached on
+          disk by the CLI.
+        </li>
+      </Ul>
 
       <H2 id="registry-images">Build &amp; push images (aoox registry)</H2>
       <P>

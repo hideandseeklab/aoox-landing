@@ -25,16 +25,16 @@ export const metadata: Metadata = pageMetadata({
   lang: "en",
   title: "Project",
   description:
-    "The container for apps, databases, and shared environment.",
+    "The container for apps, databases, and environments.",
 })
 
 const SUMMARY = [
   { k: "Contains", v: "Applications · Compose stacks · Managed databases" },
-  { k: "Shares", v: "Shared environment + database references" },
+  { k: "Shares", v: "Environments + database references" },
   { k: "Access", v: "Member list + role per project" },
 ]
 
-const TREE = `shop/                      ← project (shared env: APP_ENV, SENTRY_DSN)
+const TREE = `shop/                      ← project (environments: development, staging, production)
 ├── shop        application  Next.js, domain shop.example.com
 ├── worker      application  queue worker, no domain
 ├── app-db      database     PostgreSQL 16
@@ -54,7 +54,7 @@ export default function Page() {
       href="/docs/project"
       title="Project"
       lang="en"
-      description="A project is a container for related applications, compose stacks, and managed databases, complete with a shared environment."
+      description="A project is a container for related applications, compose stacks, and managed databases, complete with environments (development, staging, production) for its variables."
     >
       <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
@@ -72,7 +72,7 @@ export default function Page() {
         rows={[
           [
             <>
-              Shared environment (<Code>{"${{project.KEY}}"}</Code>), references
+              Environments (<Code>{"${{project.KEY}}"}</Code>), references
               to a database in the same project (<Code>{"${{database.<slug>…}}"}</Code>),
               and the image repository name <Code>{"<project>/<app>"}</Code> in
               the registry.
@@ -89,8 +89,9 @@ export default function Page() {
       <Ul>
         <li>
           <strong>One project per product/environment</strong>: <Code>shop</Code>,{" "}
-          <Code>shop-staging</Code> — shared env and databases stay cleanly
-          separated.
+          <Code>shop-staging</Code> — environments and databases stay cleanly
+          separated. You don&apos;t need extra projects just for
+          development/staging variables — use the built-in environments.
         </li>
         <li>
           Applications that share a database <strong>must</strong> be in the
@@ -118,7 +119,7 @@ export default function Page() {
                 </>,
               ],
               ["Description", "Optional, shown in the project list."],
-              ["Shared environment", "Can be filled in later, in the Settings tab."],
+              ["Environments", "A new project starts with development, staging, and production. Fill in the variables later, in the Environments tab."],
             ]}
           />
         </Step>
@@ -129,38 +130,65 @@ export default function Page() {
             with an add button
             (<em>New application</em>, <em>New compose stack</em> / <em>From template</em>,{" "}
             <em>New database</em>) and a brief status for each item. The{" "}
-            <strong>Settings</strong> tab handles name, description, shared
-            env, and deleting the project.
+            <strong>Environments</strong> tab holds the variables per
+            environment; the <strong>Settings</strong> tab handles name,
+            description, and deleting the project.
           </P>
         </Step>
       </Steps>
 
-      <H2 id="shared-env">Shared environment</H2>
+      <H2 id="environments">Environments</H2>
       <P>
-        Edited in the project&apos;s Settings tab, one <Code>KEY=VALUE</Code> per
-        line (<Code>#</Code> comments are ignored). Values are{" "}
+        A project has <strong>environments</strong>: <Code>development</Code>,{" "}
+        <Code>staging</Code>, and <Code>production</Code> out of the box, and
+        you can add more. Each environment stores its own{" "}
+        <Code>KEY=VALUE</Code> variables (one per line, <Code>#</Code> comments
+        are ignored), <strong>encrypted at rest</strong>. Values are{" "}
         <em>not</em> automatically injected into containers — applications and
         stacks reference them explicitly:
       </P>
-      <Pre title="Project env">{`APP_ENV=production
+      <Pre title="production environment">{`APP_ENV=production
 SENTRY_DSN=https://abc@sentry.example.com/1
 SMTP_HOST=smtp.example.com`}</Pre>
       <Pre title="shop application env">{`NODE_ENV=\${{project.APP_ENV}}
 SENTRY_DSN=\${{project.SENTRY_DSN}}
 DATABASE_URL=\${{database.app-db.url}}`}</Pre>
+      <H3>Linking an application or stack</H3>
       <Ul>
         <li>
-          The same key in an application&apos;s env <strong>wins</strong> over the
-          project env.
+          Every application and compose stack is linked to{" "}
+          <strong>one environment</strong> of its project, chosen in the{" "}
+          <strong>Environment</strong> select in the application&apos;s Settings
+          (or the compose stack&apos;s settings). The default is{" "}
+          <Code>production</Code> for project admins and <Code>development</Code>{" "}
+          for developers.
         </li>
         <li>
-          A change to the project env only takes effect in containers that are{" "}
-          <strong>recreated</strong> afterward — deploy/rollback each
-          application that references it (not automatic).
+          Linking to <Code>production</Code> (or any protected environment), or
+          moving something away from it, needs a <strong>project admin</strong>:
+          developers get 403 and the select shows protected environments as
+          disabled. The same applies when creating an application or stack and
+          when deploying a template. Existing links stay as they are.
         </li>
         <li>
-          Good for: Sentry DSN, SMTP host, environment-wide feature flags. Not
-          a great fit for: per-application secrets (put those in the
+          <Code>{"${{project.KEY}}"}</Code> resolves from the{" "}
+          <strong>linked environment</strong>. Priority, lowest to highest:{" "}
+          environment &lt; external secret source (Infisical, when sync is on)
+          &lt; the application&apos;s own env.
+        </li>
+        <li>
+          Switching an application to an environment that lacks a{" "}
+          <Code>{"${{project.KEY}}"}</Code> it references is refused with a
+          message naming the missing key.
+        </li>
+        <li>
+          Changes only take effect in containers that are{" "}
+          <strong>recreated</strong> afterward — they apply to an application on
+          its <strong>next deploy</strong>, not live.
+        </li>
+        <li>
+          Good for: Sentry DSN, SMTP host, per-environment feature flags. Not a
+          great fit for: per-application secrets (put those in the
           application&apos;s env).
         </li>
         <li>
@@ -168,6 +196,51 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
           <DocLink href="/docs/environment#flow">Environment variables</DocLink>.
         </li>
       </Ul>
+      <H3>Viewing and protection</H3>
+      <P>
+        In the project&apos;s <strong>Environments</strong> tab the list shows
+        variable names with <strong>masked values</strong>. <em>Reveal</em> shows
+        the values; it is an audited action — the audit log records that it
+        happened, without the values.
+      </P>
+      <Table
+        head={["Who", "Development / staging / custom", "production (protected)"]}
+        rows={[
+          [<strong key="a">Project admin</strong>, "Reveal and edit.", "Reveal and edit."],
+          [<strong key="d">Developer</strong>, "Reveal and edit.", "Variable names only — cannot reveal or edit."],
+          [<strong key="v">Viewer</strong>, "Variable names only.", "Variable names only."],
+        ]}
+      />
+      <Ul>
+        <li>
+          Project admins are the platform owner and admins, the project&apos;s
+          creator, and members with the project role <Code>admin</Code>.
+        </li>
+        <li>
+          Developers can <strong>add</strong> environments; only project admins
+          can <strong>delete</strong> them. <Code>production</Code> can never be
+          deleted, and an environment still used by an application or stack
+          can&apos;t be deleted — the message names them.
+        </li>
+        <li>
+          Values are masked in deployment logs (values under 8 characters and
+          plain single words like <Code>production</Code> are not masked, to avoid
+          garbling ordinary log text).
+        </li>
+      </Ul>
+      <Callout kind="warn" title="What the protection covers">
+        It covers <em>viewing and editing the stored values</em> and{" "}
+        <em>linking</em> to or from a protected environment. Anyone who can
+        open the container console of a resource already linked to{" "}
+        <Code>production</Code> can still see the values at runtime — as with
+        any environment variable.
+      </Callout>
+      <Callout>
+        <strong>Upgrading:</strong> the single &ldquo;Shared environment&rdquo;
+        text a project used to have was moved into <Code>production</Code>, and
+        every application and stack was linked to it, so nothing changes at
+        upgrade time.
+      </Callout>
 
       <H2 id="members">Project members</H2>
       <P>
@@ -201,15 +274,18 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
         page downloads a portable definition: applications, databases, compose
         stacks along with their domains, mounts, jobs, and backup schedules.
         References to things outside the project (server, registry, Git
-        credentials, S3 destination) are carried <em>by name</em>.
+        credentials, S3 destination) are carried <em>by name</em>. Applications
+        and stacks keep their environment link; on import they are matched by
+        name. Old export files that carry a single project env import it into{" "}
+        <Code>production</Code>.
       </P>
       <Table
         head={["Option", "Contains"]}
         rows={[
-          [<strong key="n">Without secrets</strong>, "Default. Database passwords and secrets are not included."],
+          [<strong key="n">Without secrets</strong>, "Default. Environments are exported (names and links), but variables, database passwords, and secrets are not included."],
           [
-            <strong key="s">With database passwords</strong>,
-            "Instance owner only. The file contains credentials — treat it like a secret file.",
+            <strong key="s">With secrets</strong>,
+            "Instance owner only. Includes environment variables and database passwords in the clear — treat the file like a secret file.",
           ],
         ]}
       />
@@ -290,7 +366,9 @@ docker volume rm aoox_app_<slug>_<name> aoox_db_<slug>`}</Pre>
         head={["Symptom", "Cause & fix"]}
         rows={[
           ["A ${{database.x.url}} reference 400s even though the database exists", "The database is in another project. References only work within the same project."],
-          ["Project env changed, application didn't change", "The container hasn't been recreated yet. Deploy/rollback the application that references it."],
+          ["Environment changed, application didn't change", "The container hasn't been recreated yet. Deploy/rollback the application that references it."],
+          ["Can't delete an environment", "It is the protected production environment, or an application/stack is still linked to it (the message names them). Switch those first."],
+          ["Can't reveal production values", "Only project admins can reveal or edit production. Ask one, or use a non-production environment."],
           ["Can't remove a team member", "They still own a project. Delete that project, or leave their account as is."],
           ["A teammate can't see the project", "They haven't been added as a project member yet (instance members only see projects they're assigned to)."],
           ["Import: lots of reference warnings", "A server/registry/credential with that name doesn't exist yet on the target instance. Create it, then adjust the application."],
@@ -300,8 +378,7 @@ docker volume rm aoox_app_<slug>_<name> aoox_db_<slug>`}</Pre>
 
       <Callout kind="warn" title="Not available yet">
         Transferring project ownership; automatically stopping/removing
-        containers when a project is deleted; a separately encrypted project
-        env; import that brings data along (not just configuration).
+        containers when a project is deleted; import that brings data along (not just configuration).
       </Callout>
 
       <H2 id="next-steps">Next steps</H2>

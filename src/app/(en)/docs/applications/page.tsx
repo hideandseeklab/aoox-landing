@@ -280,7 +280,7 @@ success   old container replaced · application status Running`}</Pre>
           ["Settings", <>The same form as creation, plus build args (environment has its own tab). <strong>Host port, domains, and resource limits apply immediately</strong> to a running application — the container is recreated from the same image without a build (with a host port there is a brief downtime, since two containers cannot bind the same port). A stopped application picks up its new port when started again, and a host port change is rejected (409) while a deployment is active. Other settings take effect on the next deploy. Also holds the <a href="#maintenance">Maintenance mode</a> card.</>],
           ["Domain", "Hostname for the application + HTTPS toggle + DNS check."],
           ["Mount", "Volumes, binds, files — and volume backups."],
-          ["Environment", "The application's env variables, saved on their own, plus the secret source (Infisical). Applies on the next deploy."],
+          ["Environment", "The application's env variables, saved on their own, plus the secret source (Infisical). Also the Environment select: which project environment `${{project.KEY}}` resolves from (default production). Applies on the next deploy."],
           ["Jobs", "Scheduled commands."],
           ["Webhook", "Webhook URL, secret, and pull request previews."],
           ["Console", "Interactive shell straight into the running container."],

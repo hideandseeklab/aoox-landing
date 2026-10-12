@@ -25,16 +25,16 @@ export const metadata: Metadata = pageMetadata({
   lang: "id",
   title: "Project",
   description:
-    "Wadah aplikasi, database, dan environment bersama.",
+    "Wadah aplikasi, database, dan environment.",
 })
 
 const SUMMARY = [
   { k: "Isi", v: "Aplikasi · Stack compose · Managed database" },
-  { k: "Berbagi", v: "Environment bersama + referensi database" },
+  { k: "Berbagi", v: "Environment + referensi database" },
   { k: "Akses", v: "Daftar anggota + peran per project" },
 ]
 
-const TREE = `toko/                      ← project (env bersama: APP_ENV, SENTRY_DSN)
+const TREE = `toko/                      ← project (environment: development, staging, production)
 ├── shop        aplikasi   Next.js, domain shop.example.com
 ├── worker      aplikasi   antrean, tanpa domain
 ├── app-db      database   PostgreSQL 16
@@ -53,7 +53,7 @@ export default function Page() {
     <DocPage
       href="/id/docs/project"
       title="Project"
-      description="Project adalah wadah untuk aplikasi, stack compose, dan managed database yang saling terkait, lengkap dengan environment bersama."
+      description="Project adalah wadah untuk aplikasi, stack compose, dan managed database yang saling terkait, lengkap dengan environment (development, staging, production) untuk variabelnya."
     >
       <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
@@ -71,7 +71,7 @@ export default function Page() {
         rows={[
           [
             <>
-              Environment bersama (<Code>{"${{project.KEY}}"}</Code>), referensi{" "}
+              Environment (<Code>{"${{project.KEY}}"}</Code>), referensi{" "}
               <Code>{"${{database.<slug>…}}"}</Code> ke database di project yang
               sama, nama repository image <Code>{"<project>/<app>"}</Code> di
               registry.
@@ -88,7 +88,7 @@ export default function Page() {
       <Ul>
         <li>
           <strong>Satu project per produk/lingkungan</strong>: <Code>toko</Code>,{" "}
-          <Code>toko-staging</Code> — env bersama dan database terpisah rapi.
+          <Code>toko-staging</Code> — environment dan database terpisah rapi. Tidak perlu project tambahan hanya untuk variabel development/staging — pakai environment bawaan.
         </li>
         <li>
           Aplikasi yang berbagi database <strong>harus</strong> satu project
@@ -116,7 +116,7 @@ export default function Page() {
                 </>,
               ],
               ["Deskripsi", "Opsional, tampil di daftar project."],
-              ["Environment bersama", "Boleh diisi nanti di tab Pengaturan."],
+              ["Environment", "Project baru mulai dengan development, staging, dan production. Isi variabelnya nanti di tab Environment."],
             ]}
           />
         </Step>
@@ -126,43 +126,107 @@ export default function Page() {
             <strong>Database</strong> — masing-masing dengan tombol tambah
             (<em>Aplikasi baru</em>, <em>Stack compose baru</em> / <em>Dari template</em>,{" "}
             <em>Database baru</em>) dan status ringkas tiap item. Tab{" "}
-            <strong>Pengaturan</strong> untuk nama, deskripsi, env bersama, dan
-            hapus project.
+            <strong>Environment</strong> untuk variabel per environment; tab{" "}
+            <strong>Pengaturan</strong> untuk nama, deskripsi, dan hapus project.
           </P>
         </Step>
       </Steps>
 
-      <H2 id="env-bersama">Environment bersama</H2>
+      <H2 id="environments">Environment</H2>
       <P>
-        Editor di tab Pengaturan project, format <Code>KEY=VALUE</Code> per
-        baris (komentar <Code>#</Code> diabaikan). Nilainya <em>tidak</em>{" "}
-        otomatis masuk ke container — aplikasi/stack merujuknya secara
-        eksplisit:
+        Project punya <strong>environment</strong>: <Code>development</Code>,{" "}
+        <Code>staging</Code>, dan <Code>production</Code> sejak awal, dan Anda
+        bisa menambah yang lain. Tiap environment menyimpan variabel{" "}
+        <Code>KEY=VALUE</Code> sendiri (satu per baris, komentar <Code>#</Code>{" "}
+        diabaikan), <strong>terenkripsi saat disimpan</strong>. Nilainya{" "}
+        <em>tidak</em> otomatis masuk ke container — aplikasi/stack merujuknya
+        secara eksplisit:
       </P>
-      <Pre title="Env project">{`APP_ENV=production
+      <Pre title="Environment production">{`APP_ENV=production
 SENTRY_DSN=https://abc@sentry.example.com/1
 SMTP_HOST=smtp.example.com`}</Pre>
       <Pre title="Env aplikasi shop">{`NODE_ENV=\${{project.APP_ENV}}
 SENTRY_DSN=\${{project.SENTRY_DSN}}
 DATABASE_URL=\${{database.app-db.url}}`}</Pre>
+      <H3>Menautkan aplikasi atau stack</H3>
       <Ul>
         <li>
-          Key yang sama di env aplikasi <strong>menang</strong> atas env project.
+          Setiap aplikasi dan stack compose ditautkan ke{" "}
+          <strong>satu environment</strong> project-nya, dipilih lewat pilihan{" "}
+          <strong>Environment</strong> di Pengaturan aplikasi (atau pengaturan
+          stack compose). Defaultnya <Code>production</Code>.
         </li>
         <li>
-          Perubahan env project baru berlaku di container yang{" "}
-          <strong>dibuat ulang</strong> setelahnya — deploy/rollback tiap
-          aplikasi yang merujuknya (tidak otomatis).
+          <Code>{"${{project.KEY}}"}</Code> diambil dari{" "}
+          <strong>environment yang ditautkan</strong>. Prioritas, dari terendah
+          ke tertinggi: environment &lt; sumber secret eksternal (Infisical,
+          bila sync menyala) &lt; env aplikasi itu sendiri.
         </li>
         <li>
-          Cocok untuk: DSN Sentry, host SMTP, feature flag lingkungan. Kurang
-          cocok untuk: rahasia per aplikasi (taruh di env aplikasi).
+          Memindahkan aplikasi ke environment yang tidak punya{" "}
+          <Code>{"${{project.KEY}}"}</Code> yang dirujuknya ditolak dengan
+          pesan yang menyebut key-nya.
+        </li>
+        <li>
+          Perubahan baru berlaku di container yang <strong>dibuat ulang</strong>{" "}
+          setelahnya — untuk aplikasi, pada <strong>deploy berikutnya</strong>,
+          tidak langsung.
+        </li>
+        <li>
+          Cocok untuk: DSN Sentry, host SMTP, feature flag per environment.
+          Kurang cocok untuk: rahasia per aplikasi (taruh di env aplikasi).
         </li>
         <li>
           Detail sintaks dan urutan penggabungan di{" "}
           <DocLink href="/id/docs/environment#alur">Environment variables</DocLink>.
         </li>
       </Ul>
+      <H3>Melihat dan perlindungan</H3>
+      <P>
+        Di tab <strong>Environment</strong> project, daftar menampilkan nama
+        variabel dengan <strong>nilai disamarkan</strong>. <em>Tampilkan</em>{" "}
+        memperlihatkan nilainya; ini aksi yang diaudit — audit log mencatat
+        bahwa aksi itu terjadi, tanpa nilainya.
+      </P>
+      <Table
+        head={["Siapa", "Development / staging / kustom", "production (dilindungi)"]}
+        rows={[
+          [<strong key="a">Admin project</strong>, "Tampilkan dan ubah.", "Tampilkan dan ubah."],
+          [<strong key="d">Developer</strong>, "Tampilkan dan ubah.", "Hanya nama variabel — tidak bisa menampilkan atau mengubah."],
+          [<strong key="v">Viewer</strong>, "Hanya nama variabel.", "Hanya nama variabel."],
+        ]}
+      />
+      <Ul>
+        <li>
+          Admin project adalah owner dan admin platform, pembuat project, dan
+          anggota dengan peran project <Code>admin</Code>.
+        </li>
+        <li>
+          Developer bisa <strong>menambah</strong> environment; hanya admin
+          project yang bisa <strong>menghapus</strong>. <Code>production</Code>{" "}
+          tidak pernah bisa dihapus, dan environment yang masih dipakai
+          aplikasi atau stack tidak bisa dihapus — pesannya menyebut yang
+          memakainya.
+        </li>
+        <li>
+          Nilai disamarkan di log deployment (nilai di bawah 8 karakter dan
+          kata tunggal biasa seperti <Code>production</Code> tidak disamarkan,
+          agar teks log biasa tidak rusak).
+        </li>
+      </Ul>
+      <Callout kind="warn" title="Cakupan perlindungan">
+        Perlindungan mencakup <em>melihat dan mengubah nilai tersimpan</em> serta{" "}
+        <em>penautan</em> ke atau dari environment terlindungi. Siapa pun yang
+        bisa membuka console container resource yang sudah tertaut ke{" "}
+        <Code>production</Code> tetap bisa melihat nilainya saat runtime —
+        seperti env var pada umumnya.
+      </Callout>
+      <Callout>
+        <strong>Saat upgrade:</strong> teks &ldquo;Environment bersama&rdquo;
+        tunggal yang dulu dimiliki project dipindahkan ke{" "}
+        <Code>production</Code>, dan semua aplikasi serta stack ditautkan
+        ke sana, jadi tidak ada yang berubah saat upgrade.
+      </Callout>
 
       <H2 id="anggota">Anggota project</H2>
       <P>
@@ -196,15 +260,17 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
         mengunduh definisi portabel: aplikasi, database, stack compose beserta
         domain, mount, jobs, dan jadwal backup. Referensi ke hal di luar
         project (server, registry, kredensial Git, tujuan S3) dibawa{" "}
-        <em>berdasarkan nama</em>.
+        <em>berdasarkan nama</em>. Aplikasi dan stack mempertahankan tautan
+        environment-nya; saat impor dicocokkan berdasarkan nama. File ekspor
+        lama yang membawa satu env project diimpor ke <Code>production</Code>.
       </P>
       <Table
         head={["Pilihan", "Isi"]}
         rows={[
-          [<strong key="n">Tanpa rahasia</strong>, "Default. Password database dan secret tidak disertakan."],
+          [<strong key="n">Tanpa rahasia</strong>, "Default. Environment diekspor (nama dan tautan), tetapi variabel, password database, dan secret tidak disertakan."],
           [
-            <strong key="s">Dengan password database</strong>,
-            "Hanya owner instance. File berisi kredensial — perlakukan seperti file rahasia.",
+            <strong key="s">Dengan rahasia</strong>,
+            "Hanya owner instance. Berisi variabel environment dan password database apa adanya — perlakukan file seperti file rahasia.",
           ],
         ]}
       />
@@ -283,7 +349,9 @@ docker volume rm aoox_app_<slug>_<nama> aoox_db_<slug>`}</Pre>
         head={["Gejala", "Penyebab & solusi"]}
         rows={[
           ["Referensi ${{database.x.url}} 400 padahal database ada", "Database di project lain. Referensi hanya dalam project yang sama."],
-          ["Env project diubah, aplikasi tidak berubah", "Container belum dibuat ulang. Deploy/rollback aplikasi yang merujuknya."],
+          ["Environment diubah, aplikasi tidak berubah", "Container belum dibuat ulang. Deploy/rollback aplikasi yang merujuknya."],
+          ["Tidak bisa menghapus environment", "Itu environment production yang dilindungi, atau masih ada aplikasi/stack yang tertaut (pesan menyebutnya). Pindahkan dulu."],
+          ["Tidak bisa menampilkan nilai production", "Hanya admin project yang bisa menampilkan atau mengubah production. Minta salah satunya, atau pakai environment non-production."],
           ["Tidak bisa menghapus anggota tim", "Ia masih memiliki project. Hapus project itu, atau biarkan akunnya."],
           ["Project tidak terlihat oleh rekan", "Ia belum ditambahkan sebagai anggota project (member instance hanya melihat project yang ditugaskan)."],
           ["Impor: banyak peringatan referensi", "Server/registry/kredensial dengan nama itu belum ada di instance tujuan. Buat dulu, lalu sesuaikan aplikasi."],
@@ -293,7 +361,7 @@ docker volume rm aoox_app_<slug>_<nama> aoox_db_<slug>`}</Pre>
 
       <Callout kind="warn" title="Belum tersedia">
         Pindah kepemilikan project; menghentikan/menghapus container otomatis
-        saat project dihapus; env project terenkripsi terpisah; impor yang
+        saat project dihapus; impor yang
         membawa data (bukan hanya konfigurasi).
       </Callout>
 

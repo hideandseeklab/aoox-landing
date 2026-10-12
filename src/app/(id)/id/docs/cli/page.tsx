@@ -86,6 +86,16 @@ const COMMANDS = [
     flags: "--push, --registry, --dockerfile/-f, --context, --force",
   },
   {
+    cmd: "aoox env list | pull | push | set | unset | history | diff | promote",
+    what: "Menampilkan, mengunduh, mengunggah, membandingkan atau mengubah variabel sebuah environment project (lihat Variabel environment).",
+    flags: "--env/-e, --project, --reveal, --json (list); --file, --force, --format (pull); --file, --yes (push); --secret/--no-secret (set); --limit (history); --all, --yes (promote)",
+  },
+  {
+    cmd: "aoox run -- <perintah>",
+    what: "Menjalankan perintah dengan variabel sebuah environment, tanpa menulisnya ke disk.",
+    flags: "--env/-e, --project",
+  },
+  {
     cmd: "aoox registry push",
     what: "Push image lokal yang sudah ada ke registry; menolak versi yang sudah ada di sana.",
     flags: "--registry, --force",
@@ -103,6 +113,7 @@ const COMMANDS = [
 ]
 
 const NEXT = [
+  { title: "Variabel environment", description: "Environment project, perlindungan dan referensi.", href: "/id/docs/environment#environments" },
   { title: "Pengguna & peran", description: "Membuat API token dan scope-nya.", href: "/id/docs/pengguna-peran#akun" },
   { title: "Instalasi", description: "Langkah manual yang di-otomatisasi aoox install.", href: "/id/docs/instalasi" },
   { title: "Registry", description: "Tempat image dari aoox deploy disimpan.", href: "/id/docs/registry" },
@@ -356,6 +367,190 @@ Deployed: localhost:5000/toko/shop:a1b2c3d`}</Pre>
         Deploy yang masih berjalan untuk aplikasi yang sama ditolak (409) —
         tunggu selesai dulu.
       </Callout>
+
+      <H2 id="env">Variabel environment (aoox env, aoox run)</H2>
+      <P>
+        <Code>aoox env</Code> membaca dan mengubah variabel sebuah{" "}
+        <DocLink href="/id/docs/environment#environments">environment project</DocLink>{" "}
+        (yang sama dengan tab Environments di project), dan{" "}
+        <Code>aoox run</Code> menjalankan sebuah perintah dengan variabel itu
+        tanpa menulis file. Project-nya adalah milik aplikasi yang ditautkan
+        dengan <Code>aoox link</Code>, atau <Code>--project &lt;id atau nama&gt;</Code>;
+        environment-nya <Code>--env</Code> (default <Code>development</Code>).
+      </P>
+      <Pre title="Contoh sesi">{`$ aoox env list
+Project: shop
+NAME                    VARIABLES  USED BY
+development             3          -
+staging                 0          -
+production (protected)  7          shop
+
+$ aoox env set API_URL=https://api.example.com GREETING="hello world"
+development: added API_URL, GREETING (5 variables now)
+
+$ aoox env list --env development            # hanya nama, nilai disamarkan
+API_URL=••••••••
+$ aoox env list --env development --reveal   # nilai (diaudit)
+$ aoox env pull                              # menulis ./.env (mode 0600)
+$ aoox env unset OLD_KEY
+$ aoox run -- npm run dev                    # menjalankannya dengan variabel itu`}</Pre>
+      <Table
+        head={["Perintah", "Fungsi"]}
+        rows={[
+          [<Code key="l">aoox env list [--env nama] [--reveal] [--json]</Code>, "Tanpa --env: daftar environment project (perlindungan, jumlah variabel, pemakainya). Dengan --env: nama variabel environment itu; --reveal menampilkan nilainya lewat aksi reveal yang diaudit."],
+          [<Code key="p">aoox env pull [--env nama] [--file .env] [--format dotenv|json|shell] [--force]</Code>, <>Menulis variabel ke file dengan mode <Code>0600</Code> (hanya pemilik, bila OS mendukung). Tidak pernah menimpa file yang sudah ada kecuali <Code>--force</Code>, dan memperingatkan sekali bila file itu tidak tercakup <Code>.gitignore</Code> (<Code>.gitignore</Code> tidak pernah diubah otomatis).</>],
+          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--env nama] [--secret | --no-secret]</Code>, <>Menambah atau mengubah variabel. Komentar dan urutan baris yang ada dipertahankan; variabel baru ditaruh di akhir. <Code>--secret</Code> menandai variabel sebagai rahasia, <Code>--no-secret</Code> sebagai jelas-jelas bukan rahasia; tanpa keduanya, tandanya dibiarkan (lihat <DocLink href="/id/docs/environment#flag-rahasia">Variabel rahasia</DocLink>).</>],
+          [<Code key="u">aoox env unset KEY [KEY2 …] [--env nama]</Code>, "Menghapus variabel; komentar dan baris lain tetap."],
+          [<Code key="pu">aoox env push --file .env [--env nama] [--yes]</Code>, "Mengganti seluruh environment dengan file lokal, setelah menampilkan variabel yang ditambah, diubah dan dihapus lalu meminta konfirmasi."],
+          [<Code key="h">aoox env history [--env nama] [--limit 20] [--json]</Code>, "Riwayat versi sebuah environment, terbaru dulu: kapan, siapa, dan nama variabel yang ditambah (+), diubah (~) atau dihapus (-). Tidak pernah menampilkan nilai."],
+          [<Code key="d">aoox env diff &lt;dari&gt; &lt;ke&gt;</Code>, "Membandingkan dua environment menurut nama variabel: hanya di satu sisi, nilai berbeda, sama. Hanya mencetak nama."],
+          [<Code key="pr">aoox env promote &lt;dari&gt; &lt;ke&gt; [KEY …] [--all] [--yes]</Code>, "Menyalin variabel yang disebut (atau semuanya) beserta tanda rahasianya dari satu environment ke environment lain, setelah menampilkan perubahannya dan meminta konfirmasi."],
+          [<Code key="r">aoox run [--env nama] [--file .env.local] -- perintah [argumen…]</Code>, "Mengambil variabel dan menjalankan perintah dengan variabel itu di atas environment-mu saat ini (nilai dari panel menang bila bentrok; file lokal, bila diberikan, menang atas keduanya). Tidak ada yang ditulis ke disk. Output langsung ke terminalmu, exit code perintah menjadi exit code aoox run, dan Ctrl+C atau SIGTERM diteruskan."],
+        ]}
+      />
+      <H3>Format pull, push, dan run --file</H3>
+      <Pre title="Format dan standard output">{`$ aoox env pull --env staging                        # ./.env, teks tersimpan beserta komentarnya
+$ aoox env pull --format json                        # ./.env.json  {"KEY":"value"}
+$ aoox env pull --format shell                       # ./.env.sh    export KEY='value'
+$ aoox env pull --format json --file - | jq .PORT    # hanya ke standard output
+$ eval "$(aoox env pull --format shell --file -)"    # muat ke shell saat ini`}</Pre>
+      <Ul>
+        <li>
+          <Code>--file -</Code> menulis data ke standard output dan tidak ada
+          yang lain di sana, jadi bisa di-pipe atau diberikan ke{" "}
+          <Code>eval</Code>. Catatan (mis. soal referensi{" "}
+          <Code>{"${{…}}"}</Code>) dikirim ke standard error. Pada mode ini
+          tidak ada pemeriksaan &quot;file sudah ada&quot; dan tidak ada
+          peringatan <Code>.gitignore</Code>, karena tidak ada file yang ditulis.
+        </li>
+        <li>
+          Format <Code>shell</Code> membungkus tiap nilai dengan kutip tunggal
+          dan menulis kutip tunggal di dalam nilai sebagai{" "}
+          <Code>{"'\\''"}</Code>, sehingga spasi, <Code>$</Code> dan kutip
+          selamat saat <Code>eval</Code>. Tanpa <Code>--file</Code>, filenya{" "}
+          <Code>.env</Code>, <Code>.env.json</Code> atau <Code>.env.sh</Code>{" "}
+          menurut format, selalu dengan mode <Code>0600</Code> bila OS
+          mendukung.
+        </li>
+      </Ul>
+      <Pre title="Unggah file dan lihat hasilnya">{`$ aoox env push --file .env.staging --env staging
+Project: shop · environment: staging
+  + added (1): NEW_FLAG
+  ~ changed (1): API_URL
+  - removed (1): OLD_KEY
+  = unchanged: 6
+Variables that are not in the file are removed: this replaces the whole environment.
+? Replace "staging" with the contents of .env.staging? (y/N)`}</Pre>
+      <Ul>
+        <li>
+          File diperiksa sebelum apa pun dikirim. Ditolak: nama tidak valid,
+          awalan <Code>export </Code>, spasi di ujung baris, dan nama ganda.
+          Nilai ber-kutip (<Code>KEY=&quot;value&quot;</Code>) diterima dengan
+          peringatan, karena panel menyimpan kutipnya sebagai bagian dari
+          nilai. Akhir baris Windows dan BOM di awal dinormalkan.
+        </li>
+        <li>
+          <Code>push</Code>, <Code>promote</Code> dan <Code>diff</Code> tidak
+          pernah mencetak nilai. <Code>push</Code> dan <Code>promote</Code>{" "}
+          meminta konfirmasi; tanpa terminal (CI) keduanya menolak kecuali kamu
+          memberi <Code>--yes</Code>. Bila orang lain mengubah environment di
+          sela itu, tidak ada yang ditulis (409), sama seperti{" "}
+          <Code>set</Code>.
+        </li>
+        <li>
+          <Code>aoox run --file .env.local -- npm run dev</Code>: urutannya,
+          dari terendah ke tertinggi, adalah environment-mu saat ini, lalu
+          environment aoox, lalu file lokal. Sumber yang paling spesifik
+          menang, seperti <Code>.env.local</Code> di atas konfigurasi bersama.
+          File hanya dibaca, dan referensi <Code>{"${{…}}"}</Code> di dalamnya
+          tidak di-resolve (hanya panel yang melakukannya).
+        </li>
+        <li>
+          Setiap perubahan tercatat sebagai versi (lihat{" "}
+          <DocLink href="/id/docs/environment#riwayat">riwayat dan restore</DocLink>);
+          memulihkan versi lama dilakukan di dashboard.
+        </li>
+      </Ul>
+      <H3>Cara nilai disimpan (tanda kutip)</H3>
+      <P>
+        Panel menyimpan satu environment sebagai teks <Code>KEY=VALUE</Code>{" "}
+        biasa, satu variabel per baris. Key adalah semua sebelum{" "}
+        <Code>=</Code> pertama; nilainya adalah <strong>semua setelahnya,
+        persis seperti yang diberikan</strong>. Tidak ada pemrosesan kutip atau
+        escape — tidak di CLI, tidak di panel, tidak saat nilai dimasukkan ke
+        container — jadi tanda kutip yang kamu ketik dihapus oleh{" "}
+        <em>shell-mu</em>, dan kutip yang menjadi bagian nilai tetap menjadi
+        bagiannya.
+      </P>
+      <Table
+        head={["Yang kamu ketik", "Nilai tersimpan"]}
+        rows={[
+          [<Code key="1">{`GREETING="hello world"`}</Code>, <Code key="1b">hello world</Code>],
+          [<Code key="2">{`QUERY=a=b=c`}</Code>, <Code key="2b">a=b=c</Code>],
+          [<Code key="3">{`MSG='say "hi" # not a comment'`}</Code>, <Code key="3b">{`say "hi" # not a comment`}</Code>],
+          [<Code key="4">{`EMPTY=`}</Code>, "nilai kosong"],
+        ]}
+      />
+      <Ul>
+        <li>
+          Ditolak sebelum apa pun dikirim: nama tidak valid (huruf, angka dan{" "}
+          <Code>_</Code>, tidak diawali angka), nilai dengan baris baru (satu
+          variabel per baris), dan nilai yang berakhir dengan spasi (panel
+          memangkas ujung tiap baris).
+        </li>
+        <li>
+          Referensi <Code>{"${{project.KEY}}"}</Code> dan{" "}
+          <Code>{"${{database.<slug>.url}}"}</Code> disimpan dan di-pull
+          apa adanya. Hanya panel yang meresolusinya, saat container dibuat,
+          jadi <Code>aoox run</Code> meneruskannya sebagai teks.
+        </li>
+        <li>
+          Stack compose membaca teks hasil resolusi lewat parser{" "}
+          <Code>--env-file</Code> Docker Compose sendiri, yang menghapus kutip
+          yang membungkus seluruh nilai. Hindari kutip pembungkus pada nilai
+          yang dipakai stack.
+        </li>
+      </Ul>
+      <H3>Mengedit bersamaan</H3>
+      <P>
+        <Code>set</Code> dan <Code>unset</Code> membaca environment, mengubah
+        teksnya, lalu menyimpannya kembali bersama versi yang dibaca. Bila orang
+        lain menyimpan di sela itu (dashboard, terminal lain), panel menjawab{" "}
+        <Code>409</Code> dan CLI mengatakan tidak ada yang ditulis — jalankan
+        perintahnya lagi agar perubahanmu diterapkan di atas versi terbaru.
+        Editor di dashboard bekerja sama.
+      </P>
+      <H3>Siapa boleh apa</H3>
+      <Table
+        head={["Peran", "development / staging / custom", "production (dilindungi)"]}
+        rows={[
+          [<strong key="a">Admin project</strong>, "list, pull, set, unset, run", "list, pull, set, unset, run"],
+          [<strong key="d">Developer</strong>, "list, pull, set, unset, run", <>Hanya nama variabel. Lainnya menampilkan <Code>❌ &quot;production&quot; is protected; only project admins can read it.</Code></>],
+          [<strong key="v">Viewer</strong>, "Hanya nama variabel", "Hanya nama variabel"],
+        ]}
+      />
+      <Ul>
+        <li>
+          <strong>Di CI</strong> buat API token pada admin project (untuk{" "}
+          <Code>production</Code>) atau developer (environment lain) dan
+          ekspor <Code>AOOX_TOKEN</Code>/<Code>AOOX_URL</Code>. Token bisa
+          dibatasi ke <strong>environment</strong> tertentu menurut nama
+          (Pengaturan<PathArrow />API token<PathArrow />Batasi ke environment),
+          mis. hanya <Code>development</Code>: environment lain dijawab 403.
+        </li>
+        <li>
+          Token <strong>baca saja</strong> tetap bisa menjalankan{" "}
+          <Code>aoox env pull</Code>, <Code>aoox env list --reveal</Code> dan{" "}
+          <Code>aoox run</Code> (membaca tidak mengubah apa pun dan diaudit),
+          tetapi <Code>set</Code>, <Code>unset</Code>, <Code>push</Code> dan{" "}
+          <Code>promote</Code> ditolak. Viewer tidak
+          pernah bisa membaca nilai, dengan atau tanpa token.
+        </li>
+        <li>
+          Setiap pembacaan nilai tercatat di audit log tanpa nilainya. CLI tidak
+          pernah menyimpan environment di disk.
+        </li>
+      </Ul>
 
       <H2 id="registry-images">Build &amp; push image (aoox registry)</H2>
       <P>
