@@ -147,7 +147,7 @@ api.panel.example.com.   A   203.0.113.10`}</Pre>
         kalau file utamanya bernama persis <Code>docker-compose.yml</Code> —
         karena stack ini memakai <Code>-f docker-compose.dist.yml</Code> secara
         eksplisit, override <strong>tidak</strong> otomatis ikut kecuali disebut
-        juga. Panel (dan <Code>aoox update</Code>) sudah menyertakannya sendiri
+        juga. Panel (dan <Code>aoox update panel</Code>) sudah menyertakannya sendiri
         secara internal; ini hanya relevan kalau kamu menjalankan{" "}
         <Code>docker compose up</Code>/<Code>pull</Code> manual lewat SSH setelah
         set domain dari dashboard — tambahkan{" "}

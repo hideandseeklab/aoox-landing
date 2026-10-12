@@ -153,7 +153,7 @@ api.panel.example.com.   A   203.0.113.10`}</Pre>
         since this stack uses <Code>-f docker-compose.dist.yml</Code>{" "}
         explicitly, the override is <strong>not</strong> picked up
         automatically unless it&apos;s also named explicitly. The panel (and{" "}
-        <Code>aoox update</Code>) already do this internally; it only matters
+        <Code>aoox update panel</Code>) already do this internally; it only matters
         if you run <Code>docker compose up</Code>/<Code>pull</Code> by hand
         over SSH after setting a domain from the dashboard — add{" "}
         <Code>-f docker-compose.override.yml</Code> too, or the domain you set

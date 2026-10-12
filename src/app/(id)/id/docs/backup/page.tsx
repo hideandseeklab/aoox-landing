@@ -239,7 +239,7 @@ export default function Page() {
 
       <H2 id="s3">Tujuan S3</H2>
       <Steps>
-        <Step title={<>Settings<PathArrow />Tujuan backup (S3)<PathArrow />Tujuan backup baru (owner/admin)</>}>
+        <Step title={<>Integrasi<PathArrow />Tujuan backup<PathArrow />Tujuan backup baru (owner/admin)</>}>
           <Table
             head={["Field", "Keterangan"]}
             rows={[

@@ -42,7 +42,7 @@ const COMMANDS = [
   },
   {
     cmd: "aoox login",
-    what: "Menyimpan URL panel dan API token untuk perintah lain.",
+    what: "Menyimpan alamat dashboard dan API token untuk perintah lain (alamat API ditemukan otomatis).",
     flags: "--url/-u, --token/-t",
   },
   {
@@ -72,8 +72,23 @@ const COMMANDS = [
   },
   {
     cmd: "aoox update",
-    what: "Cek atau terapkan update untuk panel aoox itu sendiri.",
+    what: "Memperbarui CLI aoox itu sendiri dari npm (menggantikan update panel yang lama — lihat aoox update panel).",
+    flags: "--check",
+  },
+  {
+    cmd: "aoox update panel",
+    what: "Cek atau terapkan update untuk panel aoox itu sendiri (aoox update yang lama).",
     flags: "--apply",
+  },
+  {
+    cmd: "aoox registry build",
+    what: "Build ./Dockerfile menjadi image lokal bernama registry; menolak versi yang sudah ada di sana.",
+    flags: "--registry, --dockerfile/-f, --context, --force",
+  },
+  {
+    cmd: "aoox registry push",
+    what: "Push image lokal yang sudah ada ke registry; menolak versi yang sudah ada di sana.",
+    flags: "--registry, --force",
   },
   {
     cmd: "aoox reinstall",
@@ -135,10 +150,10 @@ aoox --version`}</Pre>
         <strong>bukan</strong> Alpine/musl) dan macOS, x64 maupun arm64.
       </P>
       <Callout kind="note" title="Windows, Alpine, atau sudah punya Node.js?">
-        Pakai npm — butuh <strong>Node.js 22+</strong> lebih dulu. Masih rilis{" "}
-        <Code>alpha</Code> — pasang eksplisit dengan tag itu.
+        Pakai npm — butuh <strong>Node.js 22+</strong> lebih dulu.
+        Nanti, perbarui dengan <Code>aoox update</Code>.
       </Callout>
-      <Pre title="Dari npm">{`npm install -g @hideandseeklab/aoox@alpha
+      <Pre title="Dari npm">{`npm install -g @hideandseeklab/aoox
 
 aoox --version`}</Pre>
       <P>
@@ -224,15 +239,32 @@ Create the first owner account at /setup.`}</Pre>
             <Code>aoox_…</Code> yang hanya tampil sekali. Token bertindak{" "}
             <strong>sebagai pemiliknya</strong> dengan peran yang sama — lihat{" "}
             <DocLink href="/id/docs/pengguna-peran#akun">Keamanan akun</DocLink>.
+            Dialog yang menampilkan token juga berisi baris{" "}
+            <Code>aoox login --url … --token …</Code> yang siap disalin.
           </P>
         </Step>
         <Step title="Jalankan aoox login">
           <Pre>{`$ aoox login
-Panel URL  https://panel.example.com
+Use the address you open the dashboard with: your panel domain (e.g. https://dashboard.example.com),
+or http://<server-IP>:3000 if no panel domain is set yet.
+? Dashboard URL https://panel.example.com
+Looking for the panel... ok
 API token (aoox_…) ********
 Verifying token... ok
 Logged in as kamu@example.com (owner) at https://panel.example.com
 Token saved to /home/kamu/.config/aoox/config.json`}</Pre>
+          <P>
+            Yang kamu isi hanya alamat <strong>dashboard</strong> — alamat yang
+            kamu buka di browser, bukan alamat API. CLI membaca alamat API dari
+            dashboard (<Code>/.well-known/aoox.json</Code>). Skema boleh
+            dihilangkan: host tanpa skema dicoba lewat https lalu http, dan IP
+            polos juga di port <Code>3000</Code>, jadi{" "}
+            <Code>203.0.113.10</Code> berfungsi pada instalasi baru tanpa domain
+            panel. Bila dashboard tidak mengumumkan alamat API publik, CLI
+            mengasumsikan <Code>&lt;host yang sama&gt;:3001</Code> dan
+            mengatakannya. Alamat API dari skrip lama tetap berfungsi (dengan
+            satu baris catatan).
+          </P>
           <P>
             Token diminta lewat prompt tersembunyi, bukan argumen, supaya tidak
             tertinggal di riwayat shell atau daftar proses. Sebelum disimpan,
@@ -250,6 +282,31 @@ Panel: https://panel.example.com`}</Pre>
           </P>
         </Step>
       </Steps>
+
+      <H2 id="connection">Terhubung ke panel yang mana?</H2>
+      <P>
+        Menjalankan <Code>aoox</Code> tanpa argumen menampilkan daftar perintah
+        dan, di bawahnya, ke mana CLI terhubung. Alamat dashboard dan API
+        diambil dari login tersimpan (tanpa jaringan); baris registry meminta
+        registry default ke panel dengan timeout singkat dan tidak pernah
+        menggagalkan perintah. <Code>aoox --help</Code> dan{" "}
+        <Code>aoox &lt;perintah&gt; --help</Code> tidak berubah.
+      </P>
+      <Pre>{`$ aoox
+...
+Connected to
+  Dashboard  https://dashboard.example.com
+  API        https://api.example.com
+  Registry   registry.example.com (self-hosted)
+
+$ aoox            # belum login
+Not connected — run: aoox login`}</Pre>
+      <P>
+        Kalau registry tidak bisa dicek muncul{" "}
+        <Code>Registry   (could not check: panel unreachable)</Code>; alamat
+        registry <Code>localhost:…</Code> mendapat peringatan singkat untuk
+        mengatur domain dengan <Code>aoox registry domain --set &lt;host&gt;</Code>.
+      </P>
 
       <H2 id="link-deploy">Build & deploy dari repo lokal</H2>
       <P>
@@ -300,6 +357,55 @@ Deployed: localhost:5000/toko/shop:a1b2c3d`}</Pre>
         tunggu selesai dulu.
       </Callout>
 
+      <H2 id="registry-images">Build &amp; push image (aoox registry)</H2>
+      <P>
+        Dua perintah untuk memasukkan image ke registry <em>tanpa</em>{" "}
+        men-deploy-nya — berguna kalau image dipilih nanti di dashboard (
+        <Code>Aplikasi baru</Code><PathArrow /><Code>Image siap pakai</Code>).
+        Keduanya tidak butuh <Code>aoox link</Code>; memakai login biasa (atau{" "}
+        <Code>--url</Code>/<Code>--token</Code>). Registry default adalah yang
+        self-hosted; pakai <Code>--registry &lt;id&gt;</Code> untuk yang lain.
+      </P>
+      <Pre>{`$ aoox registry build myapp:1.0.0
+==> Build registry.example.com/myapp:1.0.0
+...
+Built registry.example.com/myapp:1.0.0
+Next: aoox registry push myapp:1.0.0
+
+$ aoox registry push myapp:1.0.0
+==> docker login registry.example.com
+==> Push registry.example.com/myapp:1.0.0
+Pushed registry.example.com/myapp:1.0.0
+Use it in the dashboard: New application → Ready-made image`}</Pre>
+      <P>
+        <Code>build</Code> membaca <Code>./Dockerfile</Code> (
+        <Code>-f/--dockerfile</Code>, <Code>--context</Code>) dan menamai image{" "}
+        <Code>&lt;host registry&gt;/&lt;nama&gt;:&lt;versi&gt;</Code>.{" "}
+        <Code>push</Code> hanya mendorong image yang sudah ada secara lokal dan
+        menerima nama pendek maupun lengkap. Versi wajib diisi, huruf kecil.
+      </P>
+      <Table
+        head={["Yang muncul", "Artinya"]}
+        rows={[
+          [
+            <Code key="1">✖ myapp:1.0.0 already exists in registry.example.com.</Code>,
+            <>Versi itu sudah ada di registry (dicek sebelum build dan sebelum push). Pilih versi baru — petunjuknya menyarankan yang berikutnya — atau tambahkan <Code>--force</Code> untuk menimpa. <Code>latest</Code> selalu boleh ditimpa.</>,
+          ],
+          [
+            <Code key="2">✖ No local image myapp:1.0.0.</Code>,
+            <><Code>push</Code> tidak pernah build. Jalankan <Code>aoox registry build myapp:1.0.0</Code> dulu.</>,
+          ],
+          [
+            <Code key="3">✖ A version is required: &quot;myapp&quot; has none.</Code>,
+            <>Tulis <Code>nama:versi</Code>, mis. <Code>aoox registry build myapp:1.0.0</Code>.</>,
+          ],
+          [
+            <>Registry-nya <Code>localhost:5000</Code></>,
+            <>Peringatan: alamat itu hanya bekerja di server itu sendiri. Beri registry domain dengan <Code>aoox registry domain --set registry.example.com</Code>.</>,
+          ],
+        ]}
+      />
+
       <H2 id="domain">Ganti domain panel</H2>
       <P>
         Alternatif dari Settings<PathArrow />Domain panel di dashboard — cocok untuk
@@ -319,17 +425,56 @@ The panel will restart for a few seconds to apply it — the connection to this 
 
       <H2 id="update">Update aoox</H2>
       <P>
+        Ada dua hal berbeda yang diperbarui, dengan dua perintah.{" "}
+        <Code>aoox update</Code> memperbarui <strong>CLI itu sendiri</strong> di
+        komputermu; <Code>aoox update panel</Code> memperbarui{" "}
+        <strong>panel</strong> (image <Code>aoox-api</Code>/<Code>aoox-web</Code>{" "}
+        di server).
+      </P>
+      <Callout kind="warn" title="Arti aoox update berubah">
+        Sebelum rilis ini <Code>aoox update</Code> mengecek panel. Perilaku
+        lama sekarang jadi <Code>aoox update panel</Code>; menjalankan{" "}
+        <Code>aoox update --apply</Code> mencetak{" "}
+        <Code>Panel updates moved to: aoox update panel --apply</Code> dan
+        keluar dengan error tanpa mengubah apa pun.
+      </Callout>
+      <H3>CLI: aoox update</H3>
+      <P>
+        Mencari versi terbaru di npm (tanpa login, tanpa panel). Instalasi
+        pre-release mengikuti yang terbaru antara tag <Code>latest</Code> dan{" "}
+        <Code>alpha</Code>; instalasi stabil tidak pernah pindah ke
+        pre-release. Kalau CLI dipasang lewat npm, ia menjalankan{" "}
+        <Code>npm i -g @hideandseeklab/aoox@&lt;versi&gt;</Code> untukmu; untuk
+        tarball standalone atau source checkout ia mencetak perintah persisnya
+        alih-alih menebak.
+      </P>
+      <Pre>{`$ aoox update --check
+Update available: aoox CLI 0.1.0-alpha.7 → 0.1.0-alpha.8
+Run: aoox update
+
+$ aoox update
+==> npm i -g @hideandseeklab/aoox@0.1.0-alpha.8
+Updated aoox CLI 0.1.0-alpha.7 → 0.1.0-alpha.8
+
+$ aoox update
+aoox CLI 0.1.0-alpha.8 is up to date`}</Pre>
+      <P>
+        Kalau registry npm tidak terjangkau, perintah gagal dengan pesan jelas
+        (exit status bukan nol).
+      </P>
+      <H3>Panel: aoox update panel</H3>
+      <P>
         Cek dan terapkan update untuk panel itu sendiri (bukan aplikasi yang
         di-deploy) — bandingkan digest image <Code>aoox-api</Code>/
         <Code>aoox-web</Code> di registry, bukan sekadar nomor versi.
       </P>
-      <Pre>{`$ aoox update
+      <Pre>{`$ aoox update panel
 Running version: 0.1.0-alpha.1
   api: hideandseeklab/aoox-api:latest (update available)
   web: hideandseeklab/aoox-web:latest (up to date)
 Update available. Run with --apply to apply it.
 
-$ aoox update --apply
+$ aoox update panel --apply
 Update applied — the panel will restart for a few seconds to apply it.`}</Pre>
       <P>
         Sama seperti <Code>aoox domain set</Code>, butuh <Code>INSTALL_DIR</Code>{" "}
@@ -421,14 +566,14 @@ $ sudo aoox reinstall`}</Pre>
           [
             <Code key="1">config.json</Code>,
             <>
-              <Code>{'{ "url": "…", "token": "aoox_…" }'}</Code> di direktori
+              <Code>{'{ "url": "<api>", "webUrl": "<dashboard>", "token": "aoox_…" }'}</Code> di direktori
               konfigurasi oclif (<Code>~/.config/aoox/</Code> di Linux).
             </>,
             <>Ditulis dengan mode <Code>0600</Code>; jalur lengkapnya dicetak saat login.</>,
           ],
           [
             <><Code>--url</Code> / <Code>--token</Code></>,
-            "Menimpa isi file untuk satu perintah.",
+            "Menimpa isi file untuk satu perintah. --url adalah alamat dashboard (alamat API tetap diterima).",
             "Berguna saat berpindah antar panel (produksi vs staging).",
           ],
           [
@@ -480,7 +625,15 @@ $ sudo aoox reinstall`}</Pre>
           ],
           [
             <>Cannot reach the panel</>,
-            <>URL salah atau API tidak terjangkau dari mesin ini. Pakai <Code>PUBLIC_API_URL</Code> panel (bukan URL dashboard) dan uji dengan <Code>curl &lt;url&gt;/auth/setup-status</Code>.</>,
+            <>Alamat salah atau panel tidak terjangkau dari mesin ini. Pakai alamat yang kamu buka untuk dashboard, periksa firewall / security group, atau pasang domain panel (Infrastructure<PathArrow />Panel domain). Uji dengan <Code>curl &lt;url-dashboard&gt;/.well-known/aoox.json</Code>.</>,
+          ],
+          [
+            <>… answers plain HTTP</>,
+            <>Kamu memakai <Code>https://</Code> di port yang berbicara HTTP biasa (mis. <Code>:3000</Code>). Pakai alamat <Code>http://</Code>, atau pasang domain panel untuk mendapat HTTPS.</>,
+          ],
+          [
+            <>Your aoox CLI is older than the panel</>,
+            <>Peringatan, bukan error. Perbarui dengan <Code>aoox update</Code>.</>,
           ],
           [
             <>Config is corrupt (not valid JSON)</>,

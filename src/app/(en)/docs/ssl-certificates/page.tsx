@@ -27,7 +27,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const SUMMARY = [
-  { k: "Upload", v: <>Settings<PathArrow />Integrations<PathArrow />SSL certificates (owner/admin)</> },
+  { k: "Upload", v: <>Integrations<PathArrow />SSL certificates (owner/admin)</> },
   { k: "Attach", v: <>Application<PathArrow />Domain tab, per HTTPS domain</> },
   { k: "Applies to", v: "Application domains only" },
 ]
@@ -69,7 +69,7 @@ export default function Page() {
 
       <H2 id="upload">Uploading a certificate</H2>
       <Steps>
-        <Step title={<>Settings<PathArrow />Integrations<PathArrow />the SSL certificates card</>}>
+        <Step title={<>Integrations<PathArrow />SSL certificates</>}>
           <P>Only owners/admins see this card. Click <strong>Upload</strong>.</P>
         </Step>
         <Step title="Fill in the name, certificate, and private key">

@@ -28,7 +28,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const SUMMARY = [
-  { k: "Hubungkan", v: <>Pengaturan<PathArrow />Integrasi<PathArrow />Penyedia DNS (owner/admin)</> },
+  { k: "Hubungkan", v: <>Integrasi<PathArrow />Penyedia DNS (owner/admin)</> },
   { k: "Per domain", v: <>Aplikasi<PathArrow />tab Domain: Record DNS, mode sertifikat</> },
   { k: "Wildcard", v: <>Infrastruktur<PathArrow />Reverse proxy<PathArrow />Sertifikat DNS-01 (owner)</> },
 ]
@@ -93,7 +93,7 @@ export default function Page() {
 
       <H2 id="koneksi">Menambah koneksi</H2>
       <Steps>
-        <Step title={<>Pengaturan<PathArrow />Integrasi<PathArrow />kartu Penyedia DNS</>}>
+        <Step title={<>Integrasi<PathArrow />Penyedia DNS</>}>
           <P>
             Owner dan admin melihatnya. Klik tambah; dialognya bernama{" "}
             <strong>Koneksi Cloudflare baru</strong>.

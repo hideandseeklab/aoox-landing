@@ -45,7 +45,7 @@ type Row = [symptom: React.ReactNode, cause: React.ReactNode, fix: React.ReactNo
 const INSTALLATION: Row[] = [
   [
     <>Fixes/new features don&apos;t show up after a panel update (e.g. the webhook <Code>PUBLIC_API_URL</Code> is still <Code>localhost</Code>)</>,
-    <><Code>aoox update</Code> and the &ldquo;Apply update&rdquo; button only run <Code>pull</Code> + <Code>up -d</Code>: the compose file and new variables in <Code>.env.dist</Code> are not updated.</>,
+    <><Code>aoox update panel</Code> and the &ldquo;Apply update&rdquo; button only run <Code>pull</Code> + <Code>up -d</Code>: the compose file and new variables in <Code>.env.dist</Code> are not updated.</>,
     <>Run <DocLink href="/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (<Code>--dry-run</Code> first to see what changes). Without the CLI: edit <Code>.env.dist</Code> / use the Environment page, or adjust the compose file manually per the release notes — see <DocLink href="/docs/installation#update">Upgrading</DocLink>. Don&apos;t use <Code>aoox install --force</Code> (new secrets cut off the old data).</>,
   ],
   [
@@ -89,7 +89,7 @@ const DEPLOY: Row[] = [
   [
     <>Build: <em>repository not found</em> / 128</>,
     "A private repo without a Git credential, an expired token, or the wrong branch.",
-    <>Add a credential in Settings and select it on the application; double-check the branch name.</>,
+    <>Add a credential in Integrations<PathArrow />Git credentials and select it on the application; double-check the branch name.</>,
   ],
   [
     <>Build: <em>unknown flag --mount</em> / heredoc error</>,

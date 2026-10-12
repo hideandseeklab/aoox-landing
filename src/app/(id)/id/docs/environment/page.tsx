@@ -97,8 +97,7 @@ EMPTY=`}</Pre>
       </P>
       <Ul>
         <li>
-          <strong>Koneksi</strong>: owner/admin menambahkannya di Settings
-          <PathArrow />Integrasi
+          <strong>Koneksi</strong>: owner/admin menambahkannya di Integrasi
           <PathArrow />Secret manager (nama, URL opsional untuk instance
           self-hosted, Client ID, Client secret machine identity). Client
           secret disimpan terenkripsi dan tidak bisa dilihat lagi; tombol tes

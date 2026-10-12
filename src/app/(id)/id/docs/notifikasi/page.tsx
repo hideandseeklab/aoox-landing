@@ -110,7 +110,7 @@ export default function Page() {
 
       <H2 id="langkah">Menambahkan channel</H2>
       <Steps>
-        <Step title={<>Settings<PathArrow />Notifikasi<PathArrow />Channel notifikasi baru (owner/admin)</>}>
+        <Step title={<>Integrasi<PathArrow />Notifikasi<PathArrow />Channel notifikasi baru (owner/admin)</>}>
           <P>
             Isi <strong>Nama</strong>, pilih <strong>Tipe</strong>, isi
             field-nya, dan nyalakan toggle event yang diinginkan. Token/URL/

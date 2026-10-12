@@ -103,7 +103,7 @@ export default function Page() {
             ]}
           />
         </Step>
-        <Step title={<>Settings<PathArrow />Git credentials<PathArrow />New Git credential (owner/admin)</>}>
+        <Step title={<>Integrations<PathArrow />Git credentials<PathArrow />New Git credential (owner/admin)</>}>
           <P>
             Choose a <strong>Provider</strong>, fill in a <strong>Username</strong>{" "}
             and <strong>Password / token</strong>. The token is stored encrypted
@@ -343,7 +343,7 @@ export default function Page() {
               to the <Code>api</Code> service&apos;s <Code>environment:</Code>{" "}
               block in <Code>docker-compose.dist.yml</Code>, then{" "}
               <Code>docker compose -f docker-compose.dist.yml -f docker-compose.override.yml --env-file .env.dist up -d</Code>
-              . <Code>aoox update</Code> never rewrites the compose file, so
+              . <Code>aoox update panel</Code> never rewrites the compose file, so
               older installs need this manual step once.
             </>,
           ],

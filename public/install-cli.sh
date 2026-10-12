@@ -11,7 +11,7 @@
 # below for the panel itself, which is unrelated to this script. Alpine/musl,
 # Windows, and any other architecture need the npm package instead:
 #
-#   npm install -g @hideandseeklab/aoox@alpha   # needs Node.js 22+
+#   npm install -g @hideandseeklab/aoox   # needs Node.js 22+
 #
 # Env vars (all optional):
 #   AOOX_VERSION       Pin a specific CLI version, e.g. "0.1.0-alpha.3"
@@ -69,13 +69,13 @@ fi
 case "$(uname -s)" in
   Linux) PLATFORM=linux ;;
   Darwin) PLATFORM=darwin ;;
-  *) die "unsupported OS: $(uname -s). Install via npm instead: npm install -g @hideandseeklab/aoox@alpha (needs Node.js 22+)." ;;
+  *) die "unsupported OS: $(uname -s). Install via npm instead: npm install -g @hideandseeklab/aoox (needs Node.js 22+)." ;;
 esac
 
 case "$(uname -m)" in
   x86_64 | amd64) ARCH=x64 ;;
   aarch64 | arm64) ARCH=arm64 ;;
-  *) die "unsupported architecture: $(uname -m). Install via npm instead: npm install -g @hideandseeklab/aoox@alpha (needs Node.js 22+)." ;;
+  *) die "unsupported architecture: $(uname -m). Install via npm instead: npm install -g @hideandseeklab/aoox (needs Node.js 22+)." ;;
 esac
 
 # --- musl detection (e.g. Alpine) -------------------------------------------
@@ -92,7 +92,7 @@ if [ "$PLATFORM" = "linux" ]; then
     is_musl=1
   fi
   if [ "$is_musl" = "1" ]; then
-    die "musl libc detected (e.g. Alpine Linux) — this prebuilt CLI needs glibc. Install via npm instead: npm install -g @hideandseeklab/aoox@alpha (needs Node.js 22+, available via 'apk add nodejs npm')."
+    die "musl libc detected (e.g. Alpine Linux) — this prebuilt CLI needs glibc. Install via npm instead: npm install -g @hideandseeklab/aoox (needs Node.js 22+, available via 'apk add nodejs npm')."
   fi
 fi
 

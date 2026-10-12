@@ -45,7 +45,7 @@ type Row = [gejala: React.ReactNode, penyebab: React.ReactNode, solusi: React.Re
 const INSTALASI: Row[] = [
   [
     <>Perbaikan/fitur baru tidak muncul setelah update panel (mis. <Code>PUBLIC_API_URL</Code> di webhook masih <Code>localhost</Code>)</>,
-    <><Code>aoox update</Code> dan tombol &ldquo;Terapkan update&rdquo; hanya <Code>pull</Code> + <Code>up -d</Code>: file compose dan variabel baru di <Code>.env.dist</Code> tidak diperbarui.</>,
+    <><Code>aoox update panel</Code> dan tombol &ldquo;Terapkan update&rdquo; hanya <Code>pull</Code> + <Code>up -d</Code>: file compose dan variabel baru di <Code>.env.dist</Code> tidak diperbarui.</>,
     <>Jalankan <DocLink href="/id/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (<Code>--dry-run</Code> dulu untuk melihat perubahannya). Alternatif tanpa CLI: edit <Code>.env.dist</Code> / halaman Environment, atau sesuaikan compose manual sesuai catatan rilis — lihat <DocLink href="/id/docs/instalasi#update">Memperbarui versi</DocLink>. Jangan pakai <Code>aoox install --force</Code> (secret baru memutus akses ke data lama).</>,
   ],
   [
@@ -89,7 +89,7 @@ const DEPLOY: Row[] = [
   [
     <>Build: <em>repository not found</em> / 128</>,
     "Repo privat tanpa Kredensial Git, token kedaluwarsa, atau branch salah.",
-    <>Tambahkan kredensial di Settings dan pilih di aplikasi; cek nama branch.</>,
+    <>Tambahkan kredensial di Integrasi<PathArrow />Kredensial Git dan pilih di aplikasi; cek nama branch.</>,
   ],
   [
     <>Build: <em>unknown flag --mount</em> / heredoc error</>,

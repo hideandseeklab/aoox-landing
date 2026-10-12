@@ -98,8 +98,7 @@ EMPTY=`}</Pre>
       </P>
       <Ul>
         <li>
-          <strong>Connection</strong>: owner/admin add it under Settings
-          <PathArrow />Integrations
+          <strong>Connection</strong>: owner/admin add it under Integrations
           <PathArrow />Secret manager (name, optional URL for a self-hosted
           instance, the machine identity&apos;s Client ID and Client secret). The
           client secret is stored encrypted and can&apos;t be seen again; the test

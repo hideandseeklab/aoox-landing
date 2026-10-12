@@ -28,7 +28,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const SUMMARY = [
-  { k: "Connect", v: <>Settings<PathArrow />Integrations<PathArrow />DNS provider (owner/admin)</> },
+  { k: "Connect", v: <>Integrations<PathArrow />DNS providers (owner/admin)</> },
   { k: "Per domain", v: <>Application<PathArrow />Domain tab: DNS record, certificate mode</> },
   { k: "Wildcards", v: <>Infrastructure<PathArrow />Reverse proxy<PathArrow />DNS-01 certificates (owner)</> },
 ]
@@ -94,7 +94,7 @@ export default function Page() {
 
       <H2 id="connect">Add the connection</H2>
       <Steps>
-        <Step title={<>Settings<PathArrow />Integrations<PathArrow />the DNS provider card</>}>
+        <Step title={<>Integrations<PathArrow />DNS providers</>}>
           <P>
             Owners and admins see it. Click add; the dialog is called{" "}
             <strong>New Cloudflare connection</strong>.

@@ -115,7 +115,7 @@ host      : https://shop-pr42.preview.example.com`}</Pre>
             <Code>PREVIEW_DOMAIN=preview.example.com</Code> in <Code>.env.dist</Code>{" "}
             and run <Code>docker compose up -d</Code>. An install created before this
             variable was forwarded to the API container won&apos;t receive it until{" "}
-            <Code>aoox reinstall</Code> is run — <Code>aoox update</Code> doesn&apos;t
+            <Code>aoox reinstall</Code> is run — <Code>aoox update panel</Code> doesn&apos;t
             rewrite the compose file.
           </P>
         </Step>

@@ -246,7 +246,7 @@ export default function Page() {
 
       <H2 id="s3">S3 destinations</H2>
       <Steps>
-        <Step title={<>Settings<PathArrow />Backup destinations (S3)<PathArrow />New backup destination (owner/admin)</>}>
+        <Step title={<>Integrations<PathArrow />Backup destinations<PathArrow />New backup destination (owner/admin)</>}>
           <Table
             head={["Field", "Detail"]}
             rows={[

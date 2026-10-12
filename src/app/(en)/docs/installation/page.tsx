@@ -316,8 +316,8 @@ curl -s http://localhost:3001/auth/setup-status
         the <Code>:latest</Code> tag — if the image is pinned to another tag, the
         Update aoox page only lists the newest version for information.
       </P>
-      <Pre>{`aoox update            # check only
-aoox update --apply    # apply if an update is available`}</Pre>
+      <Pre>{`aoox update panel            # check only
+aoox update panel --apply    # apply if an update is available`}</Pre>
       <P>Manual, over SSH, if <Code>INSTALL_DIR</Code> isn&apos;t set:</P>
       <Pre>{`docker compose -f docker-compose.dist.yml --env-file .env.dist pull
 docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
@@ -334,7 +334,7 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         is refreshed too).
       </P>
       <P>
-        <strong>Important limitation</strong>: both <Code>aoox update</Code> and
+        <strong>Important limitation</strong>: both <Code>aoox update panel</Code> and
         the &ldquo;Apply update&rdquo; button only run <Code>pull</Code> +{" "}
         <Code>up -d</Code> against the <Code>docker-compose.dist.yml</Code> that
         is <strong>already on the server</strong> — neither one ever rewrites

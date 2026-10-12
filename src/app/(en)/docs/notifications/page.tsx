@@ -111,7 +111,7 @@ export default function Page() {
 
       <H2 id="steps">Adding a channel</H2>
       <Steps>
-        <Step title={<>Settings<PathArrow />Notifications<PathArrow />New notification channel (owner/admin)</>}>
+        <Step title={<>Integrations<PathArrow />Notifications<PathArrow />New notification channel (owner/admin)</>}>
           <P>
             Fill in a <strong>Name</strong>, pick a <strong>Type</strong>, fill
             in its fields, and enable the toggles for the events you want.

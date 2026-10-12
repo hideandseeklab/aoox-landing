@@ -313,8 +313,8 @@ curl -s http://localhost:3001/auth/setup-status
         dikunci ke tag lain, halaman Update aoox hanya menampilkan versi terbaru
         sebagai informasi.
       </P>
-      <Pre>{`aoox update            # cek saja
-aoox update --apply    # terapkan kalau ada update`}</Pre>
+      <Pre>{`aoox update panel            # cek saja
+aoox update panel --apply    # terapkan kalau ada update`}</Pre>
       <P>Manual lewat SSH, kalau <Code>INSTALL_DIR</Code> belum diisi:</P>
       <Pre>{`docker compose -f docker-compose.dist.yml --env-file .env.dist pull
 docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
@@ -331,7 +331,7 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         diperbarui).
       </P>
       <P>
-        <strong>Catatan penting</strong>: baik <Code>aoox update</Code> maupun tombol
+        <strong>Catatan penting</strong>: baik <Code>aoox update panel</Code> maupun tombol
         &ldquo;Terapkan update&rdquo; hanya menjalankan <Code>pull</Code> +{" "}
         <Code>up -d</Code> dengan file <Code>docker-compose.dist.yml</Code> yang
         <strong> sudah ada</strong> di server — keduanya tidak pernah menulis ulang

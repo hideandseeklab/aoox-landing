@@ -102,7 +102,7 @@ export default function Page() {
             ]}
           />
         </Step>
-        <Step title={<>Settings<PathArrow />Kredensial Git<PathArrow />Kredensial Git baru (owner/admin)</>}>
+        <Step title={<>Integrasi<PathArrow />Kredensial Git<PathArrow />Kredensial Git baru (owner/admin)</>}>
           <P>
             Pilih <strong>Provider</strong>, isi <strong>Username</strong> dan{" "}
             <strong>Password / token</strong>. Token disimpan terenkripsi
@@ -340,7 +340,7 @@ export default function Page() {
               ke <Code>environment:</Code> service <Code>api</Code> di{" "}
               <Code>docker-compose.dist.yml</Code>, lalu{" "}
               <Code>docker compose -f docker-compose.dist.yml -f docker-compose.override.yml --env-file .env.dist up -d</Code>
-              . <Code>aoox update</Code> tidak menulis ulang file compose, jadi
+              . <Code>aoox update panel</Code> tidak menulis ulang file compose, jadi
               instalasi lama butuh langkah manual ini sekali.
             </>,
           ],

@@ -42,7 +42,7 @@ const COMMANDS = [
   },
   {
     cmd: "aoox login",
-    what: "Stores the panel URL and API token for other commands.",
+    what: "Stores the dashboard address and API token for other commands (the API address is discovered automatically).",
     flags: "--url/-u, --token/-t",
   },
   {
@@ -72,8 +72,23 @@ const COMMANDS = [
   },
   {
     cmd: "aoox update",
-    what: "Checks or applies an update for the aoox panel itself.",
+    what: "Updates the aoox CLI itself from npm (replaces the old panel update — see aoox update panel).",
+    flags: "--check",
+  },
+  {
+    cmd: "aoox update panel",
+    what: "Checks or applies an update for the aoox panel itself (the old aoox update).",
     flags: "--apply",
+  },
+  {
+    cmd: "aoox registry build",
+    what: "Builds ./Dockerfile into a local image named for the registry; refuses a version that already exists there.",
+    flags: "--registry, --dockerfile/-f, --context, --force",
+  },
+  {
+    cmd: "aoox registry push",
+    what: "Pushes an existing local image to the registry; refuses a version that already exists there.",
+    flags: "--registry, --force",
   },
   {
     cmd: "aoox reinstall",
@@ -138,10 +153,10 @@ aoox --version`}</Pre>
         <strong>not</strong> Alpine/musl) and macOS, x64 and arm64.
       </P>
       <Callout kind="note" title="Windows, Alpine, or already have Node.js?">
-        Use npm instead — requires <strong>Node.js 22+</strong> first. Still
-        an <Code>alpha</Code> release — install with that tag explicitly.
+        Use npm instead — requires <strong>Node.js 22+</strong> first.
+        Later, update with <Code>aoox update</Code>.
       </Callout>
-      <Pre title="From npm">{`npm install -g @hideandseeklab/aoox@alpha
+      <Pre title="From npm">{`npm install -g @hideandseeklab/aoox
 
 aoox --version`}</Pre>
       <P>
@@ -229,15 +244,32 @@ Create the first owner account at /setup.`}</Pre>
             <Code>aoox_…</Code> token — it&apos;s only shown once. A token acts{" "}
             <strong>as its owner</strong>, with the same role — see{" "}
             <DocLink href="/docs/users-roles#account">Account security</DocLink>.
+            The dialog that shows the token also has a copy-ready{" "}
+            <Code>aoox login --url … --token …</Code> line.
           </P>
         </Step>
         <Step title="Run aoox login">
           <Pre>{`$ aoox login
-Panel URL  https://panel.example.com
+Use the address you open the dashboard with: your panel domain (e.g. https://dashboard.example.com),
+or http://<server-IP>:3000 if no panel domain is set yet.
+? Dashboard URL https://panel.example.com
+Looking for the panel... ok
 API token (aoox_…) ********
 Verifying token... ok
 Logged in as you@example.com (owner) at https://panel.example.com
 Token saved to /home/you/.config/aoox/config.json`}</Pre>
+          <P>
+            You only ever enter the <strong>dashboard</strong> address — the
+            one you open in your browser, never the API address. The CLI reads
+            the API address from the dashboard (
+            <Code>/.well-known/aoox.json</Code>). You can leave out the scheme:
+            a bare host is tried over https, then http, and a bare IP also on
+            port <Code>3000</Code>, so <Code>203.0.113.10</Code> works on a
+            fresh install with no panel domain. If the dashboard does not
+            advertise a public API address, the CLI assumes{" "}
+            <Code>&lt;same host&gt;:3001</Code> and says so. An API address given
+            by an older script still works (with a one-line note).
+          </P>
           <P>
             The token is asked for via a hidden prompt, not an argument, so
             it doesn&apos;t end up in shell history or the process list. Before
@@ -255,6 +287,31 @@ Panel: https://panel.example.com`}</Pre>
           </P>
         </Step>
       </Steps>
+
+      <H2 id="connection">Which panel am I connected to?</H2>
+      <P>
+        Running <Code>aoox</Code> with no arguments lists the commands and,
+        below them, where the CLI is connected. The dashboard and API
+        addresses come from the saved login (no network); the registry line
+        asks the panel for its default registry with a short timeout and
+        never fails the command. <Code>aoox --help</Code> and{" "}
+        <Code>aoox &lt;command&gt; --help</Code> are unchanged.
+      </P>
+      <Pre>{`$ aoox
+...
+Connected to
+  Dashboard  https://dashboard.example.com
+  API        https://api.example.com
+  Registry   registry.example.com (self-hosted)
+
+$ aoox            # not logged in
+Not connected — run: aoox login`}</Pre>
+      <P>
+        If the registry cannot be checked you see{" "}
+        <Code>Registry   (could not check: panel unreachable)</Code>; a{" "}
+        <Code>localhost:…</Code> registry address gets a short warning to set
+        a domain with <Code>aoox registry domain --set &lt;host&gt;</Code>.
+      </P>
 
       <H2 id="link-deploy">Build & deploy from a local repo</H2>
       <P>
@@ -306,6 +363,57 @@ Deployed: localhost:5000/shop/shop:a1b2c3d`}</Pre>
         (409) — wait for it to finish first.
       </Callout>
 
+      <H2 id="registry-images">Build &amp; push images (aoox registry)</H2>
+      <P>
+        Two commands for getting an image into the registry <em>without</em>{" "}
+        deploying it — handy when you want to pick the image later in the
+        dashboard (<Code>New application</Code><PathArrow />
+        <Code>Ready-made image</Code>). Neither needs <Code>aoox link</Code>;
+        they use your normal login (or <Code>--url</Code>/<Code>--token</Code>).
+        The registry is the self-hosted one by default; pass{" "}
+        <Code>--registry &lt;id&gt;</Code> to use another.
+      </P>
+      <Pre>{`$ aoox registry build myapp:1.0.0
+==> Build registry.example.com/myapp:1.0.0
+...
+Built registry.example.com/myapp:1.0.0
+Next: aoox registry push myapp:1.0.0
+
+$ aoox registry push myapp:1.0.0
+==> docker login registry.example.com
+==> Push registry.example.com/myapp:1.0.0
+Pushed registry.example.com/myapp:1.0.0
+Use it in the dashboard: New application → Ready-made image`}</Pre>
+      <P>
+        <Code>build</Code> reads <Code>./Dockerfile</Code> (
+        <Code>-f/--dockerfile</Code>, <Code>--context</Code>) and names the
+        image <Code>&lt;registry host&gt;/&lt;name&gt;:&lt;version&gt;</Code>.{" "}
+        <Code>push</Code> only pushes an image that already exists locally and
+        accepts the short name or the full one. A version is required, in
+        lowercase.
+      </P>
+      <Table
+        head={["You see", "Meaning"]}
+        rows={[
+          [
+            <Code key="1">✖ myapp:1.0.0 already exists in registry.example.com.</Code>,
+            <>That version is already in the registry (checked before building, and before pushing). Pick a new version — the hint suggests the next one — or add <Code>--force</Code> to overwrite it. <Code>latest</Code> can always be overwritten.</>,
+          ],
+          [
+            <Code key="2">✖ No local image myapp:1.0.0.</Code>,
+            <><Code>push</Code> never builds. Run <Code>aoox registry build myapp:1.0.0</Code> first.</>,
+          ],
+          [
+            <Code key="3">✖ A version is required: &quot;myapp&quot; has none.</Code>,
+            <>Write <Code>name:version</Code>, e.g. <Code>aoox registry build myapp:1.0.0</Code>.</>,
+          ],
+          [
+            <>The registry is <Code>localhost:5000</Code></>,
+            <>A warning: that address only works on the server itself. Give the registry a domain with <Code>aoox registry domain --set registry.example.com</Code>.</>,
+          ],
+        ]}
+      />
+
       <H2 id="domain">Changing the panel&apos;s domain</H2>
       <P>
         An alternative to Settings<PathArrow />Domain panel in the dashboard — good for
@@ -326,18 +434,57 @@ The panel will restart for a few seconds to apply it — the connection to this 
 
       <H2 id="update">Updating aoox</H2>
       <P>
+        Two different things get updated, with two commands.{" "}
+        <Code>aoox update</Code> updates <strong>the CLI itself</strong> on
+        your machine; <Code>aoox update panel</Code> updates{" "}
+        <strong>the panel</strong> (the <Code>aoox-api</Code>/
+        <Code>aoox-web</Code> images on the server).
+      </P>
+      <Callout kind="warn" title="aoox update changed meaning">
+        Before this release <Code>aoox update</Code> checked the panel. The old
+        behaviour is now <Code>aoox update panel</Code>; running{" "}
+        <Code>aoox update --apply</Code> prints{" "}
+        <Code>Panel updates moved to: aoox update panel --apply</Code> and exits
+        with an error instead of touching anything.
+      </Callout>
+      <H3>The CLI: aoox update</H3>
+      <P>
+        Looks up the newest version on npm (no login, no panel needed). A
+        pre-release install follows the newest of the <Code>latest</Code> and{" "}
+        <Code>alpha</Code> tags; a stable install never moves to a
+        pre-release. If the CLI was installed with npm it runs{" "}
+        <Code>npm i -g @hideandseeklab/aoox@&lt;version&gt;</Code> for you;
+        for the standalone tarball or a source checkout it prints the exact
+        command to run instead of guessing.
+      </P>
+      <Pre>{`$ aoox update --check
+Update available: aoox CLI 0.1.0-alpha.7 → 0.1.0-alpha.8
+Run: aoox update
+
+$ aoox update
+==> npm i -g @hideandseeklab/aoox@0.1.0-alpha.8
+Updated aoox CLI 0.1.0-alpha.7 → 0.1.0-alpha.8
+
+$ aoox update
+aoox CLI 0.1.0-alpha.8 is up to date`}</Pre>
+      <P>
+        If the npm registry cannot be reached the command fails with a clear
+        message (non-zero exit status).
+      </P>
+      <H3>The panel: aoox update panel</H3>
+      <P>
         Checks and applies an update for the panel itself (not the
         applications it deploys) — compares the <Code>aoox-api</Code>/
         <Code>aoox-web</Code> image digests on the registry, not just a
         version number.
       </P>
-      <Pre>{`$ aoox update
+      <Pre>{`$ aoox update panel
 Running version: 0.1.0-alpha.1
   api: hideandseeklab/aoox-api:latest (update available)
   web: hideandseeklab/aoox-web:latest (up to date)
 Update available. Run with --apply to apply it.
 
-$ aoox update --apply
+$ aoox update panel --apply
 Update applied — the panel will restart for a few seconds to apply it.`}</Pre>
       <P>
         Same as <Code>aoox domain set</Code>, needs <Code>INSTALL_DIR</Code>{" "}
@@ -429,14 +576,14 @@ $ sudo aoox reinstall`}</Pre>
           [
             <Code key="1">config.json</Code>,
             <>
-              <Code>{'{ "url": "…", "token": "aoox_…" }'}</Code> in oclif&apos;s
+              <Code>{'{ "url": "<api>", "webUrl": "<dashboard>", "token": "aoox_…" }'}</Code> in oclif&apos;s
               config directory (<Code>~/.config/aoox/</Code> on Linux).
             </>,
             <>Written with mode <Code>0600</Code>; the full path is printed at login.</>,
           ],
           [
             <><Code>--url</Code> / <Code>--token</Code></>,
-            "Override the file's contents for a single command.",
+            "Override the file's contents for a single command. --url is the dashboard address (an API address is still accepted).",
             "Useful when switching between panels (production vs. staging).",
           ],
           [
@@ -490,7 +637,15 @@ $ sudo aoox reinstall`}</Pre>
           ],
           [
             <>Cannot reach the panel</>,
-            <>Wrong URL, or the API isn&apos;t reachable from this machine. Use the panel&apos;s <Code>PUBLIC_API_URL</Code> (not the dashboard URL) and test with <Code>curl &lt;url&gt;/auth/setup-status</Code>.</>,
+            <>Wrong address, or the panel isn&apos;t reachable from this machine. Use the address you open the dashboard with, check the firewall / security group, or set a panel domain (Infrastructure<PathArrow />Panel domain). Test with <Code>curl &lt;dashboard-url&gt;/.well-known/aoox.json</Code>.</>,
+          ],
+          [
+            <>… answers plain HTTP</>,
+            <>You used <Code>https://</Code> on a port that speaks plain HTTP (e.g. <Code>:3000</Code>). Use the <Code>http://</Code> address, or set a panel domain to get HTTPS.</>,
+          ],
+          [
+            <>Your aoox CLI is older than the panel</>,
+            <>A warning, not an error. Update with <Code>aoox update</Code>.</>,
           ],
           [
             <>Config is corrupt (not valid JSON)</>,

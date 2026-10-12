@@ -27,7 +27,7 @@ export const metadata: Metadata = pageMetadata({
 })
 
 const SUMMARY = [
-  { k: "Unggah", v: <>Settings<PathArrow />Integrasi<PathArrow />Sertifikat SSL (owner/admin)</> },
+  { k: "Unggah", v: <>Integrasi<PathArrow />Sertifikat SSL (owner/admin)</> },
   { k: "Pasang", v: <>Aplikasi<PathArrow />tab Domain, per domain HTTPS</> },
   { k: "Berlaku untuk", v: "Domain aplikasi saja" },
 ]
@@ -69,7 +69,7 @@ export default function Page() {
 
       <H2 id="unggah">Mengunggah sertifikat</H2>
       <Steps>
-        <Step title={<>Settings<PathArrow />Integrasi<PathArrow />kartu Sertifikat SSL</>}>
+        <Step title={<>Integrasi<PathArrow />Sertifikat SSL</>}>
           <P>Hanya owner/admin yang melihat kartu ini. Klik <strong>Unggah</strong>.</P>
         </Step>
         <Step title="Isi nama, sertifikat, dan kunci privat">

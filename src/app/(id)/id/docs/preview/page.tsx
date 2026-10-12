@@ -114,7 +114,7 @@ host      : https://shop-pr42.preview.example.com`}</Pre>
             di <Code>.env.dist</Code> lalu <Code>docker compose up -d</Code>. Instalasi
             yang dibuat sebelum variabel ini diteruskan ke container API belum
             menerimanya sampai <Code>aoox reinstall</Code> dijalankan —{" "}
-            <Code>aoox update</Code> tidak menulis ulang file compose.
+            <Code>aoox update panel</Code> tidak menulis ulang file compose.
           </P>
         </Step>
         <Step title="Buka pull request di provider">
