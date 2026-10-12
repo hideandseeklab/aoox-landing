@@ -31,7 +31,7 @@ const FAQ_ID: Faq[] = [
       <>
         Tidak. Satu host dengan Docker Engine sudah cukup. Untuk beberapa
         mesin ada dua jalan tanpa Kubernetes: hubungkan server lewat SSH
-        sebagai target deploy terpisah (<A href="/docs/server-remote">Server
+        sebagai target deploy terpisah (<A href="/id/docs/server-remote">Server
         remote</A>), atau aktifkan <strong>Docker Swarm</strong> dan jalankan
         aplikasi sebagai service dengan replika, rolling update, dan
         penempatan per node.
@@ -44,7 +44,7 @@ const FAQ_ID: Faq[] = [
       <>
         Bisa, pilih cara build <strong>Nixpacks</strong>: stack dideteksi
         otomatis dan Dockerfile dibuat untukmu. Build pertama lebih lama dan
-        tanpa cache dependensi — <A href="/docs/build">detail di Cara build</A>.
+        tanpa cache dependensi — <A href="/id/docs/build">detail di Cara build</A>.
       </>
     ),
   },
@@ -56,7 +56,7 @@ const FAQ_ID: Faq[] = [
         mount untuk konfigurasi. Database dan volume bisa di-backup manual atau
         terjadwal dengan salinan ke S3 — begitu juga panel aoox sendiri,
         sehingga instance bisa dipulihkan di server baru —{" "}
-        <A href="/docs/backup">Backup &amp; restore</A>.
+        <A href="/id/docs/backup">Backup &amp; restore</A>.
       </>
     ),
   },
@@ -67,8 +67,8 @@ const FAQ_ID: Faq[] = [
         Ya, lewat webhook GitHub/GitLab dengan secret opsional. Pull request
         juga bisa mendapat preview di subdomain sendiri, dan aplikasi yang
         dijalankan dari image bisa memperbarui dirinya saat tag-nya berubah —{" "}
-        <A href="/docs/webhook">Webhook</A> dan{" "}
-        <A href="/docs/preview">Preview PR</A>.
+        <A href="/id/docs/webhook">Webhook</A> dan{" "}
+        <A href="/id/docs/preview">Preview PR</A>.
       </>
     ),
   },
@@ -120,7 +120,7 @@ const FAQ_EN: Faq[] = [
       <>
         No. A single host with the Docker Engine is enough. For several
         machines there are two paths without Kubernetes: connect a server over
-        SSH as a separate deploy target (<A href="/en/docs/remote-servers">Remote
+        SSH as a separate deploy target (<A href="/docs/remote-servers">Remote
         server</A>), or turn on <strong>Docker Swarm</strong> and run apps as
         a service with replicas, rolling updates, and per-node placement.
       </>
@@ -133,7 +133,7 @@ const FAQ_EN: Faq[] = [
         Yes, pick the <strong>Nixpacks</strong> build method: the stack is
         auto-detected and a Dockerfile is generated for you. The first build
         is slower and has no dependency cache —{" "}
-        <A href="/en/docs/build">details in the build docs</A>.
+        <A href="/docs/build">details in the build docs</A>.
       </>
     ),
   },
@@ -145,7 +145,7 @@ const FAQ_EN: Faq[] = [
         mounts for config. Databases and volumes can be backed up manually or
         on a schedule with copies to S3 — and so can the aoox panel
         itself, so an instance can be restored on a new server —{" "}
-        <A href="/en/docs/backup">Backup &amp; restore</A>.
+        <A href="/docs/backup">Backup &amp; restore</A>.
       </>
     ),
   },
@@ -156,8 +156,8 @@ const FAQ_EN: Faq[] = [
         Yes, via a GitHub/GitLab webhook with an optional secret. Pull
         requests can also get a preview on their own subdomain, and an app run
         from an image can update itself when its tag changes —{" "}
-        <A href="/en/docs/webhook">Webhook</A> and{" "}
-        <A href="/en/docs/preview">PR previews</A>.
+        <A href="/docs/webhook">Webhook</A> and{" "}
+        <A href="/docs/preview">PR previews</A>.
       </>
     ),
   },
@@ -226,7 +226,7 @@ const COPY: Record<Lang, Copy> = {
   },
 }
 
-function FaqSection({ lang = "id" }: { lang?: Lang }) {
+function FaqSection({ lang = "en" }: { lang?: Lang }) {
   const t = COPY[lang]
   return (
     <Section id="faq">
@@ -237,7 +237,7 @@ function FaqSection({ lang = "id" }: { lang?: Lang }) {
             <span>{t.moreQuestions}</span>
             <div className="flex flex-wrap gap-x-4 gap-y-1">
               <Link
-                href="/docs"
+                href={lang === "en" ? "/docs" : "/id/docs"}
                 className="inline-flex items-center gap-1 text-foreground underline underline-offset-4 hover:no-underline"
               >
                 {t.readDocs}

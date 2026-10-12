@@ -11,7 +11,7 @@ version does **not** trigger a deploy; merging to `main` does.
 
 ## Product changelog page and the homepage version badge
 
-The site's `/changelog` and `/en/changelog` pages and the version badge on both homepages are
+The site's `/changelog` and `/id/changelog` pages and the version badge on both homepages are
 generated from one typed file, [src/content/changelog.ts](src/content/changelog.ts) — the
 **product-level** changelog for the whole aoox release (panel API + dashboard, CLI, docs), not a copy
 of the per-repo CHANGELOG.md files. `RELEASES[0]` is the current release and is what the badge shows.

@@ -6,8 +6,8 @@ export const SITE_URL = "https://aoox.dev"
 export const SITE_NAME = "aoox"
 
 /**
- * Icons, declared explicitly on every root layout (both language groups and
- * `not-found.tsx`). They live in `public/` as plain files: the
+ * Icons, declared explicitly on every root layout (the language groups, the
+ * redirect stubs and `not-found.tsx`). They live in `public/` as plain files: the
  * `app/icon.svg` file convention only reaches pages under the layout in the
  * same folder, and this site has no root `app/layout.tsx` (each route group
  * has its own), so that convention rendered no `<link rel="icon">` at all.
@@ -47,23 +47,23 @@ const OG_IMAGE = {
  *
  * Docs pages are paired through the explicit slug table in `doc-slugs.ts`
  * (Indonesian and English slugs differ for some pages); the landing pages and
- * changelog mirror each other structurally (`/` ⇄ `/en`, `/changelog` ⇄
- * `/en/changelog`). Anything without a real counterpart (an unknown docs slug,
+ * changelog mirror each other structurally (`/` ⇄ `/id`, `/changelog` ⇄
+ * `/id/changelog`). Anything without a real counterpart (an unknown docs slug,
  * a redirect stub) returns `null`, so callers never emit a link or hreflang to
  * a 404.
  */
 export function otherLangPath(pathname: string, lang: Lang): string | null {
-  if (pathname === "/" || pathname === "/en") {
-    return lang === "en" ? "/" : "/en"
+  if (pathname === "/" || pathname === "/id") {
+    return lang === "en" ? "/id" : "/"
   }
-  if (pathname === "/changelog" || pathname === "/en/changelog") {
-    return lang === "en" ? "/changelog" : "/en/changelog"
+  if (pathname === "/changelog" || pathname === "/id/changelog") {
+    return lang === "en" ? "/id/changelog" : "/changelog"
   }
   return otherLangDocPath(pathname, lang)
 }
 
 export interface PageSeoInput {
-  /** Path of this exact page, e.g. `/docs/registry`, `/en`, `/`. */
+  /** Path of this exact page, e.g. `/docs/registry`, `/id`, `/`. */
   path: string
   lang: Lang
   title: string
@@ -75,7 +75,7 @@ export interface PageSeoInput {
    * same folder as the layout defining the template (every docs index page,
    * and both homepages, which share a folder with their root layout) skips
    * it and falls through to the next ancestor's template instead, which is
-   * surprising and inconsistent between /  and /en in particular. Set this
+   * surprising and inconsistent between / and /id in particular. Set this
    * to render `title` as-is (`title.absolute`) and sidestep the whole
    * lookup for those cases; leave it off for the ~50 docs detail pages,
    * which sit one segment deeper than `docs/layout.tsx` and get its
@@ -86,7 +86,7 @@ export interface PageSeoInput {
 
 /**
  * Builds a page's `export const metadata` object: description, canonical,
- * hreflang (`alternates.languages`, id/en/x-default — only for languages
+ * hreflang (`alternates.languages`, en/id/x-default — only for languages
  * that actually have a page, via `otherLangPath`), and Open Graph/Twitter
  * card data. `title`/`description` still need to be unique per call site;
  * this only standardizes the URL/social plumbing around them.
@@ -103,9 +103,9 @@ export function pageMetadata({
   const enPath = lang === "en" ? path : sibling
 
   const languages: Record<string, string> = {}
-  if (idPath) languages.id = idPath
   if (enPath) languages.en = enPath
-  if (idPath) languages["x-default"] = idPath
+  if (idPath) languages.id = idPath
+  if (enPath) languages["x-default"] = enPath
 
   const url = `${SITE_URL}${path}`
 

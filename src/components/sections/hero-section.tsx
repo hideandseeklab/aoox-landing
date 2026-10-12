@@ -55,7 +55,7 @@ const COPY: Record<Lang, Copy> = {
   },
 }
 
-function HeroSection({ lang = "id" }: { lang?: Lang }) {
+function HeroSection({ lang = "en" }: { lang?: Lang }) {
   const t = COPY[lang]
   return (
     <section className="relative overflow-hidden border-b border-border">
@@ -73,7 +73,7 @@ function HeroSection({ lang = "id" }: { lang?: Lang }) {
               {t.badge}
             </span>
             <Link
-              href={lang === "en" ? "/en/changelog" : "/changelog"}
+              href={lang === "en" ? "/changelog" : "/id/changelog"}
               aria-label={`${t.releaseLabel} v${LATEST_RELEASE.version} — Changelog`}
               className="group inline-flex w-fit items-center gap-1.5 border border-primary/60 bg-card px-2.5 py-1 font-mono text-[0.7rem] text-foreground transition-colors hover:bg-primary/15 rounded-md"
             >
@@ -98,7 +98,7 @@ function HeroSection({ lang = "id" }: { lang?: Lang }) {
 
           <div className="flex flex-wrap gap-3">
             <Button size="lg" asChild>
-              <Link href={lang === "en" ? "/en/docs/installation" : "/docs/instalasi"}>
+              <Link href={lang === "en" ? "/docs/installation" : "/id/docs/instalasi"}>
                 {t.ctaPrimary}
               </Link>
             </Button>
@@ -106,7 +106,7 @@ function HeroSection({ lang = "id" }: { lang?: Lang }) {
               <a href={lang === "en" ? "#features" : "#fitur"}>{t.ctaSecondary}</a>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href={lang === "en" ? "/en/changelog" : "/changelog"}>
+              <Link href={lang === "en" ? "/changelog" : "/id/changelog"}>
                 {t.ctaChangelog}
               </Link>
             </Button>

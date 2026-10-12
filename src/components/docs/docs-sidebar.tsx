@@ -22,7 +22,7 @@ const COPY: Record<Lang, { placeholder: string; ariaLabel: string; empty: (q: st
   },
 }
 
-function DocsSidebar({ lang = "id" }: { lang?: Lang }) {
+function DocsSidebar({ lang = "en" }: { lang?: Lang }) {
   const pathname = usePathname()
   const [query, setQuery] = React.useState("")
   const q = query.trim().toLowerCase()

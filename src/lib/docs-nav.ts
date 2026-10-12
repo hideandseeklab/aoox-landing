@@ -11,27 +11,28 @@ export type DocGroup = {
   items: DocLink[]
 }
 
+/** Indonesian navigation, under /id/docs. */
 export const DOCS_NAV: DocGroup[] = [
   {
     title: "Mulai",
     items: [
       {
-        href: "/docs",
+        href: "/id/docs",
         title: "Ikhtisar",
         description: "Apa itu aoox dan bagaimana dokumentasi ini disusun.",
       },
       {
-        href: "/docs/instalasi",
+        href: "/id/docs/instalasi",
         title: "Instalasi",
         description: "Menjalankan aoox di server sendiri dengan Docker Compose.",
       },
       {
-        href: "/docs/domain-panel",
+        href: "/id/docs/domain-panel",
         title: "Domain untuk panel",
         description: "Melayani dashboard dan API lewat domain sendiri dengan HTTPS.",
       },
       {
-        href: "/docs/pengguna-peran",
+        href: "/id/docs/pengguna-peran",
         title: "Pengguna & peran",
         description: "Akun owner pertama, undangan, batas tiap peran, 2FA, API token, audit log.",
       },
@@ -41,47 +42,47 @@ export const DOCS_NAV: DocGroup[] = [
     title: "Aplikasi",
     items: [
       {
-        href: "/docs/project",
+        href: "/id/docs/project",
         title: "Project",
         description: "Wadah aplikasi, database, dan environment bersama.",
       },
       {
-        href: "/docs/aplikasi",
+        href: "/id/docs/aplikasi",
         title: "Membuat aplikasi",
         description: "Dari repo Git atau image siap pakai, plus mode deploy.",
       },
       {
-        href: "/docs/build",
+        href: "/id/docs/build",
         title: "Cara build",
         description: "Dockerfile, Nixpacks, atau situs statis, plus build args.",
       },
       {
-        href: "/docs/deploy",
+        href: "/id/docs/deploy",
         title: "Deploy & rollback",
         description: "Alur deploy, log realtime, health check, blue/green, rollback.",
       },
       {
-        href: "/docs/environment",
+        href: "/id/docs/environment",
         title: "Environment variables",
         description: "Env project vs aplikasi dan referensi ke database.",
       },
       {
-        href: "/docs/mount",
+        href: "/id/docs/mount",
         title: "Mount",
         description: "Volume, bind mount, dan file konfigurasi untuk aplikasi dan database.",
       },
       {
-        href: "/docs/jobs",
+        href: "/id/docs/jobs",
         title: "Scheduled jobs",
         description: "Perintah terjadwal (cron) untuk aplikasi, database, dan stack compose.",
       },
       {
-        href: "/docs/webhook",
+        href: "/id/docs/webhook",
         title: "Webhook auto-deploy",
         description: "Deploy otomatis saat push dari GitHub/GitLab.",
       },
       {
-        href: "/docs/preview",
+        href: "/id/docs/preview",
         title: "Preview pull request",
         description: "Container sementara per PR dengan subdomain sendiri.",
       },
@@ -91,32 +92,32 @@ export const DOCS_NAV: DocGroup[] = [
     title: "Stack & database",
     items: [
       {
-        href: "/docs/compose",
+        href: "/id/docs/compose",
         title: "Stack compose",
         description: "Deploy docker-compose multi-service dari repo.",
       },
       {
-        href: "/docs/template",
+        href: "/id/docs/template",
         title: "Template one-click",
         description: "WordPress, Ghost, n8n, dan lainnya dalam beberapa klik.",
       },
       {
-        href: "/docs/database",
+        href: "/id/docs/database",
         title: "Managed database",
         description: "PostgreSQL, MySQL, MariaDB, Redis per project.",
       },
       {
-        href: "/docs/data-browser",
+        href: "/id/docs/data-browser",
         title: "Data browser",
         description: "Melihat tabel dan menjalankan query dari dashboard.",
       },
       {
-        href: "/docs/admin-database",
+        href: "/id/docs/admin-database",
         title: "Admin UI database",
         description: "Adminer, phpMyAdmin, pgAdmin, dan lainnya, dipasang sekali klik.",
       },
       {
-        href: "/docs/backup",
+        href: "/id/docs/backup",
         title: "Backup & restore",
         description: "Backup database dan volume, jadwal, retensi, tujuan S3.",
       },
@@ -126,7 +127,7 @@ export const DOCS_NAV: DocGroup[] = [
     title: "CLI",
     items: [
       {
-        href: "/docs/cli",
+        href: "/id/docs/cli",
         title: "Mulai dengan CLI",
         description: "Pasang aoox, simpan token panel, dan pakai di CI.",
       },
@@ -136,52 +137,52 @@ export const DOCS_NAV: DocGroup[] = [
     title: "Infrastruktur",
     items: [
       {
-        href: "/docs/registry",
+        href: "/id/docs/registry",
         title: "Registry",
         description: "Registry lokal untuk image hasil build dan registry eksternal.",
       },
       {
-        href: "/docs/domain",
+        href: "/id/docs/domain",
         title: "Proxy & domain",
         description: "Traefik, domain aplikasi, HTTPS otomatis, cek DNS.",
       },
       {
-        href: "/docs/sertifikat-ssl",
+        href: "/id/docs/sertifikat-ssl",
         title: "Sertifikat SSL kustom",
         description: "Sertifikat sendiri (CA perusahaan, wildcard) sebagai ganti Let's Encrypt.",
       },
       {
-        href: "/docs/konfigurasi-proxy",
+        href: "/id/docs/konfigurasi-proxy",
         title: "Konfigurasi proxy",
         description: "Middleware Traefik sendiri (basic auth, header, rate limit) dan pasang per domain.",
       },
       {
-        href: "/docs/server-remote",
+        href: "/id/docs/server-remote",
         title: "Server remote",
         description: "Deploy ke server lain lewat SSH.",
       },
       {
-        href: "/docs/swarm",
+        href: "/id/docs/swarm",
         title: "Docker Swarm",
         description: "Multi-node: aplikasi sebagai service dengan replika.",
       },
       {
-        href: "/docs/terminal",
+        href: "/id/docs/terminal",
         title: "Web terminal",
         description: "Shell ke host atau server remote dari browser.",
       },
       {
-        href: "/docs/monitoring",
+        href: "/id/docs/monitoring",
         title: "Monitoring",
         description: "Metrik host dan container, batas sumber daya.",
       },
       {
-        href: "/docs/notifikasi",
+        href: "/id/docs/notifikasi",
         title: "Notifikasi",
         description: "Telegram, Slack, Discord, webhook, email.",
       },
       {
-        href: "/docs/troubleshooting",
+        href: "/id/docs/troubleshooting",
         title: "Troubleshooting",
         description: "Masalah umum dan cara mengatasinya.",
       },
@@ -189,28 +190,28 @@ export const DOCS_NAV: DocGroup[] = [
   },
 ]
 
-/** English mirror of DOCS_NAV — same order/slugs, under /en/docs. */
+/** English navigation (the default language), under /docs. */
 export const DOCS_NAV_EN: DocGroup[] = [
   {
     title: "Start here",
     items: [
       {
-        href: "/en/docs",
+        href: "/docs",
         title: "Overview",
         description: "What aoox is and how these docs are organized.",
       },
       {
-        href: "/en/docs/installation",
+        href: "/docs/installation",
         title: "Installation",
         description: "Running aoox on your own server with Docker Compose.",
       },
       {
-        href: "/en/docs/panel-domain",
+        href: "/docs/panel-domain",
         title: "Domain for the panel",
         description: "Serve the dashboard and API on your own domain with HTTPS.",
       },
       {
-        href: "/en/docs/users-roles",
+        href: "/docs/users-roles",
         title: "Users & roles",
         description: "First owner account, invitations, per-role limits, 2FA, API tokens, audit log.",
       },
@@ -220,47 +221,47 @@ export const DOCS_NAV_EN: DocGroup[] = [
     title: "Applications",
     items: [
       {
-        href: "/en/docs/project",
+        href: "/docs/project",
         title: "Project",
         description: "The container for apps, databases, and shared environment.",
       },
       {
-        href: "/en/docs/applications",
+        href: "/docs/applications",
         title: "Creating an application",
         description: "From a Git repo or a ready-made image, plus deploy modes.",
       },
       {
-        href: "/en/docs/build",
+        href: "/docs/build",
         title: "How builds work",
         description: "Dockerfile, Nixpacks, or a static site, plus build args.",
       },
       {
-        href: "/en/docs/deploy",
+        href: "/docs/deploy",
         title: "Deploy & rollback",
         description: "The deploy flow, realtime logs, health checks, blue/green, rollback.",
       },
       {
-        href: "/en/docs/environment",
+        href: "/docs/environment",
         title: "Environment variables",
         description: "Project vs. application env, and database references.",
       },
       {
-        href: "/en/docs/mount",
+        href: "/docs/mount",
         title: "Mounts",
         description: "Volumes, bind mounts, and config files for apps and databases.",
       },
       {
-        href: "/en/docs/jobs",
+        href: "/docs/jobs",
         title: "Scheduled jobs",
         description: "Cron commands for applications, databases, and compose stacks.",
       },
       {
-        href: "/en/docs/webhook",
+        href: "/docs/webhook",
         title: "Webhook auto-deploy",
         description: "Automatic deploy on push from GitHub/GitLab.",
       },
       {
-        href: "/en/docs/preview",
+        href: "/docs/preview",
         title: "Pull request previews",
         description: "A temporary container per PR with its own subdomain.",
       },
@@ -270,32 +271,32 @@ export const DOCS_NAV_EN: DocGroup[] = [
     title: "Stacks & databases",
     items: [
       {
-        href: "/en/docs/compose",
+        href: "/docs/compose",
         title: "Compose stacks",
         description: "Deploy a multi-service docker-compose stack from a repo.",
       },
       {
-        href: "/en/docs/template",
+        href: "/docs/template",
         title: "One-click templates",
         description: "WordPress, Ghost, n8n, and more in a few clicks.",
       },
       {
-        href: "/en/docs/database",
+        href: "/docs/database",
         title: "Managed databases",
         description: "Run PostgreSQL, MySQL, MariaDB, or Redis as a managed database per project.",
       },
       {
-        href: "/en/docs/data-browser",
+        href: "/docs/data-browser",
         title: "Data browser",
         description: "Browse tables and run queries from the dashboard.",
       },
       {
-        href: "/en/docs/database-admin",
+        href: "/docs/database-admin",
         title: "Database admin UI",
         description: "Adminer, phpMyAdmin, pgAdmin, and more, installed in one click.",
       },
       {
-        href: "/en/docs/backup",
+        href: "/docs/backup",
         title: "Backup & restore",
         description: "Back up databases and volumes, schedules, retention, S3 destinations.",
       },
@@ -305,7 +306,7 @@ export const DOCS_NAV_EN: DocGroup[] = [
     title: "CLI",
     items: [
       {
-        href: "/en/docs/cli",
+        href: "/docs/cli",
         title: "Getting started with the CLI",
         description: "Install aoox, store a panel token, and use it in CI.",
       },
@@ -315,52 +316,52 @@ export const DOCS_NAV_EN: DocGroup[] = [
     title: "Infrastructure",
     items: [
       {
-        href: "/en/docs/registry",
+        href: "/docs/registry",
         title: "Registry",
         description: "A local registry for built images, and external registries.",
       },
       {
-        href: "/en/docs/domain",
+        href: "/docs/domain",
         title: "Proxy & domain",
         description: "Traefik, application domains, automatic HTTPS, DNS checks.",
       },
       {
-        href: "/en/docs/ssl-certificates",
+        href: "/docs/ssl-certificates",
         title: "Custom SSL certificates",
         description: "Your own certificate (corporate CA, wildcard) instead of Let's Encrypt.",
       },
       {
-        href: "/en/docs/proxy-configuration",
+        href: "/docs/proxy-configuration",
         title: "Proxy configuration",
         description: "Your own Traefik middlewares (basic auth, headers, rate limit) attached per domain.",
       },
       {
-        href: "/en/docs/remote-servers",
+        href: "/docs/remote-servers",
         title: "Remote servers",
         description: "Deploy to another server over SSH.",
       },
       {
-        href: "/en/docs/swarm",
+        href: "/docs/swarm",
         title: "Docker Swarm",
         description: "Multi-node: applications as a service with replicas.",
       },
       {
-        href: "/en/docs/terminal",
+        href: "/docs/terminal",
         title: "Web terminal",
         description: "A shell into the host or a remote server, from the browser.",
       },
       {
-        href: "/en/docs/monitoring",
+        href: "/docs/monitoring",
         title: "Monitoring",
         description: "Host and container metrics, resource limits.",
       },
       {
-        href: "/en/docs/notifications",
+        href: "/docs/notifications",
         title: "Notifications",
         description: "Send deploy and health alerts to Telegram, Slack, Discord, a webhook, or email.",
       },
       {
-        href: "/en/docs/troubleshooting",
+        href: "/docs/troubleshooting",
         title: "Troubleshooting",
         description: "Common problems and how to fix them.",
       },
@@ -375,7 +376,7 @@ export function docsNavFor(lang: Lang): DocGroup[] {
 export const DOCS_FLAT: DocLink[] = DOCS_NAV.flatMap((group) => group.items)
 export const DOCS_FLAT_EN: DocLink[] = DOCS_NAV_EN.flatMap((group) => group.items)
 
-export function getDocNeighbors(href: string, lang: Lang = "id") {
+export function getDocNeighbors(href: string, lang: Lang = "en") {
   const flat = lang === "en" ? DOCS_FLAT_EN : DOCS_FLAT
   const index = flat.findIndex((item) => item.href === href)
   return {

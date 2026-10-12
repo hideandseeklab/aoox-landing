@@ -10,7 +10,7 @@ import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import type { Lang } from "@/lib/lang"
 
-/** Shared by app/page.tsx (id) and app/en/page.tsx (en) so the section list lives in one place. */
+/** Shared by app/(en)/page.tsx (en) and app/(id)/id/page.tsx (id) so the section list lives in one place. */
 function LandingPage({ lang }: { lang: Lang }) {
   return (
     <>

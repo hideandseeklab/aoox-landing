@@ -19,7 +19,7 @@ const OPTIONS_ID: Option[] = [
     file: "./Dockerfile",
     description: "Kontrol penuh. Tunjuk path Dockerfile di repo, sisanya urusan Docker.",
     fit: "Produksi, image ramping",
-    href: "/docs/build#dockerfile",
+    href: "/id/docs/build#dockerfile",
     snippet: (
       <Code
         lines={[
@@ -37,7 +37,7 @@ const OPTIONS_ID: Option[] = [
     file: "(tanpa Dockerfile)",
     description: "Stack dideteksi otomatis dari isi repo, Dockerfile dibuat untukmu.",
     fit: "Prototipe, repo tanpa Dockerfile",
-    href: "/docs/build#nixpacks",
+    href: "/id/docs/build#nixpacks",
     snippet: (
       <div className="flex flex-col gap-1">
         <Row k="detected" v="node · npm" ok />
@@ -52,7 +52,7 @@ const OPTIONS_ID: Option[] = [
     file: "dist/ → nginx",
     description: "Tahap build Node opsional, lalu nginx melayani folder output. Mode SPA untuk client-side routing.",
     fit: "Vite, Astro, dokumentasi",
-    href: "/docs/build#static",
+    href: "/id/docs/build#static",
     snippet: (
       <div className="flex flex-col gap-1">
         <Row k="build" v="npm ci && npm run build" />
@@ -67,7 +67,7 @@ const OPTIONS_ID: Option[] = [
     file: "registry → pull",
     description: "Tanpa build: tarik image dari Docker Hub, GHCR, atau registry sendiri. Update otomatis saat digest tag berubah.",
     fit: "n8n, Uptime Kuma, image internal",
-    href: "/docs/deploy",
+    href: "/id/docs/deploy",
     snippet: (
       <div className="flex flex-col gap-1">
         <Row k="image" v="ghcr.io/acme/api:latest" />
@@ -82,7 +82,7 @@ const OPTIONS_ID: Option[] = [
     file: "./docker-compose.yml",
     description: "Deploy stack multi-service dari file compose yang sudah ada.",
     fit: "web + worker + queue",
-    href: "/docs/compose",
+    href: "/id/docs/compose",
     snippet: (
       <Code
         lines={[
@@ -99,7 +99,7 @@ const OPTIONS_ID: Option[] = [
     file: "katalog bawaan",
     description: "Aplikasi siap pakai, dijalankan sebagai stack compose dalam beberapa klik.",
     fit: "WordPress, Nextcloud, Vaultwarden, …",
-    href: "/docs/template",
+    href: "/id/docs/template",
     snippet: (
       <ul className="grid grid-cols-2 gap-1">
         {["wordpress", "nextcloud", "vaultwarden", "grafana", "n8n", "gitea"].map((t) => (
@@ -121,7 +121,7 @@ const OPTIONS_EN: Option[] = [
     file: "./Dockerfile",
     description: "Full control. Point at the Dockerfile in your repo, Docker handles the rest.",
     fit: "Production, lean images",
-    href: "/en/docs/build#dockerfile",
+    href: "/docs/build#dockerfile",
     snippet: (
       <Code
         lines={[
@@ -139,7 +139,7 @@ const OPTIONS_EN: Option[] = [
     file: "(no Dockerfile)",
     description: "The stack is auto-detected from your repo's contents, a Dockerfile is generated for you.",
     fit: "Prototypes, repos without a Dockerfile",
-    href: "/en/docs/build#nixpacks",
+    href: "/docs/build#nixpacks",
     snippet: (
       <div className="flex flex-col gap-1">
         <Row k="detected" v="node · npm" ok />
@@ -154,7 +154,7 @@ const OPTIONS_EN: Option[] = [
     file: "dist/ → nginx",
     description: "An optional Node build stage, then nginx serves the output folder. SPA mode for client-side routing.",
     fit: "Vite, Astro, docs sites",
-    href: "/en/docs/build#static",
+    href: "/docs/build#static",
     snippet: (
       <div className="flex flex-col gap-1">
         <Row k="build" v="npm ci && npm run build" />
@@ -169,7 +169,7 @@ const OPTIONS_EN: Option[] = [
     file: "registry → pull",
     description: "No build: pull an image from Docker Hub, GHCR, or your own registry. Auto-updates when the tag's digest changes.",
     fit: "n8n, Uptime Kuma, internal images",
-    href: "/en/docs/deploy",
+    href: "/docs/deploy",
     snippet: (
       <div className="flex flex-col gap-1">
         <Row k="image" v="ghcr.io/acme/api:latest" />
@@ -184,7 +184,7 @@ const OPTIONS_EN: Option[] = [
     file: "./docker-compose.yml",
     description: "Deploy a multi-service stack from an existing compose file.",
     fit: "web + worker + queue",
-    href: "/en/docs/compose",
+    href: "/docs/compose",
     snippet: (
       <Code
         lines={[
@@ -201,7 +201,7 @@ const OPTIONS_EN: Option[] = [
     file: "built-in catalog",
     description: "Ready-made apps, run as a compose stack in a few clicks.",
     fit: "WordPress, Nextcloud, Vaultwarden, …",
-    href: "/en/docs/template",
+    href: "/docs/template",
     snippet: (
       <ul className="grid grid-cols-2 gap-1">
         {["wordpress", "nextcloud", "vaultwarden", "grafana", "n8n", "gitea"].map((t) => (
@@ -242,7 +242,7 @@ const COPY: Record<Lang, Copy> = {
   },
 }
 
-function BuildOptionsSection({ lang = "id" }: { lang?: Lang }) {
+function BuildOptionsSection({ lang = "en" }: { lang?: Lang }) {
   const t = COPY[lang]
   return (
     <Section id="build">

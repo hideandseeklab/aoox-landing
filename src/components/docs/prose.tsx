@@ -4,7 +4,7 @@ import Link from "next/link"
 import { CopyButton } from "@/components/copy-button"
 import { DocToc } from "@/components/docs/doc-toc"
 import { docsNavFor, getDocNeighbors } from "@/lib/docs-nav"
-import type { Lang } from "@/lib/lang"
+import { langFromPathname, type Lang } from "@/lib/lang"
 import { cn } from "@/lib/utils"
 
 const EDIT_BASE =
@@ -29,7 +29,7 @@ function DocPage({
   href,
   title,
   description,
-  lang = "id",
+  lang = langFromPathname(href),
   children,
 }: {
   href: string
@@ -42,8 +42,8 @@ function DocPage({
   const { prev, next } = getDocNeighbors(href, lang)
   const nav = docsNavFor(lang)
   const group = nav.find((g) => g.items.some((i) => i.href === href))
-  const docsRoot = lang === "en" ? "/en/docs" : "/docs"
-  // The URL mirrors the file path inside its route group: src/app/(id)/docs/* or src/app/(en)/en/docs/*.
+  const docsRoot = lang === "en" ? "/docs" : "/id/docs"
+  // The URL mirrors the file path inside its route group: src/app/(en)/docs/* or src/app/(id)/id/docs/*.
   const editHref = `${EDIT_BASE}/(${lang})${href}/page.tsx`
 
   return (

@@ -47,7 +47,7 @@ const COPY: Record<Lang, Copy> = {
   },
 }
 
-function CtaSection({ lang = "id" }: { lang?: Lang }) {
+function CtaSection({ lang = "en" }: { lang?: Lang }) {
   const t = COPY[lang]
   return (
     <section className="relative overflow-hidden border-b border-border">
@@ -86,7 +86,7 @@ function CtaSection({ lang = "id" }: { lang?: Lang }) {
 
         <div className="flex flex-wrap justify-center gap-3">
           <Button size="lg" asChild>
-            <Link href={lang === "en" ? "/en/docs/installation" : "/docs/instalasi"}>
+            <Link href={lang === "en" ? "/docs/installation" : "/id/docs/instalasi"}>
               {t.ctaPrimary}
               <ArrowRight data-icon="inline-end" />
             </Link>

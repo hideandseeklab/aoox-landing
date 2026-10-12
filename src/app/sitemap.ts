@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next"
 import { DOCS_FLAT, DOCS_FLAT_EN } from "@/lib/docs-nav"
+import { langFromPathname } from "@/lib/lang"
 import { otherLangPath, SITE_URL } from "@/lib/seo"
 
 // Required for `output: "export"` — a dynamic sitemap route has no server to
@@ -7,25 +8,26 @@ import { otherLangPath, SITE_URL } from "@/lib/seo"
 export const dynamic = "force-static"
 
 /**
- * Every ID + EN page, derived from `docs-nav.ts` (the same single source of
+ * Every EN + ID page, derived from `docs-nav.ts` (the same single source of
  * truth the docs sidebar and metadata use) plus the two homepages and the two changelog pages — never
  * hand-maintained, so a new doc page only needs adding there to also show up
  * here. `install.sh`/`install-cli.sh` in `public/` are scripts, not pages,
- * and are intentionally left out (see `robots.ts`).
+ * and are intentionally left out (see `robots.ts`), as are the redirect stubs
+ * for old URLs (see `doc-slugs.ts`).
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date()
   const paths = [
     "/",
-    "/en",
+    "/id",
     "/changelog",
-    "/en/changelog",
-    ...DOCS_FLAT.map((doc) => doc.href),
+    "/id/changelog",
     ...DOCS_FLAT_EN.map((doc) => doc.href),
+    ...DOCS_FLAT.map((doc) => doc.href),
   ]
 
   return paths.map((path) => {
-    const lang = path === "/en" || path.startsWith("/en/") ? "en" : "id"
+    const lang = langFromPathname(path)
     const sibling = otherLangPath(path, lang)
     // Fail the build if a nav entry has no counterpart in `doc-slugs.ts`.
     if (!sibling) throw new Error(`No paired page for ${path} — add it to src/lib/doc-slugs.ts`)
@@ -34,9 +36,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const enPath = lang === "en" ? path : sibling
 
     const languages: Record<string, string> = {}
-    if (idPath) languages.id = `${SITE_URL}${idPath}`
     if (enPath) languages.en = `${SITE_URL}${enPath}`
-    if (idPath) languages["x-default"] = `${SITE_URL}${idPath}`
+    if (idPath) languages.id = `${SITE_URL}${idPath}`
+    if (enPath) languages["x-default"] = `${SITE_URL}${enPath}`
 
     return {
       url: `${SITE_URL}${path}`,

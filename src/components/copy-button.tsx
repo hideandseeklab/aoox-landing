@@ -4,6 +4,7 @@ import * as React from "react"
 import { usePathname } from "next/navigation"
 import { Check, Copy } from "lucide-react"
 
+import { langFromPathname } from "@/lib/lang"
 import { cn } from "@/lib/utils"
 
 const LABELS = {
@@ -19,9 +20,9 @@ function CopyButton({
   className?: string
 }) {
   const [copied, setCopied] = React.useState(false)
-  // Same rule as the header: `/en` and `/en/...` are English, everything else Indonesian.
+  // Same rule as the header: `/id` and `/id/...` are Indonesian, everything else English.
   const pathname = usePathname()
-  const labels = LABELS[pathname === "/en" || pathname.startsWith("/en/") ? "en" : "id"]
+  const labels = LABELS[langFromPathname(pathname)]
 
   async function onCopy() {
     if (await copyText(text)) {

@@ -120,7 +120,7 @@ Use the one-line installer on a fresh VPS (installs Docker if needed and starts 
 curl -fsSL https://aoox.dev/install.sh | sudo sh
 ```
 
-Or install the CLI and run `aoox install` — see https://aoox.dev/docs/instalasi. This image is meant to run
+Or install the CLI and run `aoox install` — see https://aoox.dev/docs/installation. This image is meant to run
 together with `hideandseeklab/aoox-web` and PostgreSQL through the compose file the installer writes.
 
 ## Tags
@@ -147,7 +147,7 @@ Runs together with `hideandseeklab/aoox-api` and PostgreSQL. Install everything 
 curl -fsSL https://aoox.dev/install.sh | sudo sh
 ```
 
-Details: https://aoox.dev/docs/instalasi
+Details: https://aoox.dev/docs/installation
 ````
 
 ## 3. npm (`@hideandseeklab/aoox`)
@@ -170,8 +170,8 @@ Details: https://aoox.dev/docs/instalasi
 ## 4. Search engines
 
 - Google Search Console: add the property `https://aoox.dev` (DNS TXT verification is the most stable), submit
-  `https://aoox.dev/sitemap.xml`, then "Request indexing" for the home page, `/docs`, `/docs/instalasi`, and
-  `/changelog` (ID and EN). Check the Pages report and make sure `hreflang` id/en is not reported as an error.
+  `https://aoox.dev/sitemap.xml`, then "Request indexing" for the home page, `/docs`, `/docs/installation`, and
+  `/changelog` (English at the root, Indonesian under `/id`). Check the Pages report and make sure `hreflang` en/id is not reported as an error.
 - Bing Webmaster Tools: import from Search Console (one click).
 - Bing, Yandex, and several other engines use IndexNow; optional, not required.
 

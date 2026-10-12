@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-import type { Lang } from "@/lib/lang"
+import { langFromPathname, type Lang } from "@/lib/lang"
 
 type Group = { title: string; links: { label: string; href: string; external?: boolean }[] }
 
@@ -11,22 +11,22 @@ const GROUPS_ID: Group[] = [
   {
     title: "Produk",
     links: [
-      { label: "Fitur", href: "/#fitur" },
-      { label: "Cara kerja", href: "/#cara-kerja" },
-      { label: "Cara build", href: "/#build" },
-      { label: "Self-host", href: "/#self-host" },
-      { label: "FAQ", href: "/#faq" },
-      { label: "Changelog", href: "/changelog" },
+      { label: "Fitur", href: "/id#fitur" },
+      { label: "Cara kerja", href: "/id#cara-kerja" },
+      { label: "Cara build", href: "/id#build" },
+      { label: "Self-host", href: "/id#self-host" },
+      { label: "FAQ", href: "/id#faq" },
+      { label: "Changelog", href: "/id/changelog" },
     ],
   },
   {
     title: "Dokumentasi",
     links: [
-      { label: "Ikhtisar", href: "/docs" },
-      { label: "Instalasi", href: "/docs/instalasi" },
-      { label: "Membuat aplikasi", href: "/docs/aplikasi" },
-      { label: "Managed database", href: "/docs/database" },
-      { label: "Troubleshooting", href: "/docs/troubleshooting" },
+      { label: "Ikhtisar", href: "/id/docs" },
+      { label: "Instalasi", href: "/id/docs/instalasi" },
+      { label: "Membuat aplikasi", href: "/id/docs/aplikasi" },
+      { label: "Managed database", href: "/id/docs/database" },
+      { label: "Troubleshooting", href: "/id/docs/troubleshooting" },
     ],
   },
   {
@@ -47,22 +47,22 @@ const GROUPS_EN: Group[] = [
   {
     title: "Product",
     links: [
-      { label: "Features", href: "/en#features" },
-      { label: "How it works", href: "/en#how-it-works" },
-      { label: "Build methods", href: "/en#build" },
-      { label: "Self-host", href: "/en#self-host" },
-      { label: "FAQ", href: "/en#faq" },
-      { label: "Changelog", href: "/en/changelog" },
+      { label: "Features", href: "/#features" },
+      { label: "How it works", href: "/#how-it-works" },
+      { label: "Build methods", href: "/#build" },
+      { label: "Self-host", href: "/#self-host" },
+      { label: "FAQ", href: "/#faq" },
+      { label: "Changelog", href: "/changelog" },
     ],
   },
   {
     title: "Docs",
     links: [
-      { label: "Overview", href: "/en/docs" },
-      { label: "Installation", href: "/en/docs/installation" },
-      { label: "Creating an app", href: "/en/docs/applications" },
-      { label: "Managed database", href: "/en/docs/database" },
-      { label: "Troubleshooting", href: "/en/docs/troubleshooting" },
+      { label: "Overview", href: "/docs" },
+      { label: "Installation", href: "/docs/installation" },
+      { label: "Creating an app", href: "/docs/applications" },
+      { label: "Managed database", href: "/docs/database" },
+      { label: "Troubleshooting", href: "/docs/troubleshooting" },
     ],
   },
   {
@@ -90,7 +90,7 @@ const COPY_ID = {
     </>
   ),
   groups: GROUPS_ID,
-  home: "/",
+  home: "/id",
 }
 
 const COPY: Record<Lang, typeof COPY_ID> = {
@@ -106,13 +106,13 @@ const COPY: Record<Lang, typeof COPY_ID> = {
       </>
     ),
     groups: GROUPS_EN,
-    home: "/en",
+    home: "/",
   },
 }
 
 function SiteFooter() {
   const pathname = usePathname()
-  const lang: Lang = pathname === "/en" || pathname.startsWith("/en/") ? "en" : "id"
+  const lang: Lang = langFromPathname(pathname)
   const t = COPY[lang]
   const year = new Date().getFullYear()
 

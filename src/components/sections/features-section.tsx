@@ -32,7 +32,7 @@ const FEATURES_ID: Feature[] = [
     description:
       "Hubungkan repo GitHub/GitLab — Dockerfile, Nixpacks, Railpack (dengan cache antar deploy), atau situs statis — dan webhook memicu deploy tiap push. Atau tarik image siap pakai dari registry, lengkap dengan update otomatis saat tag-nya berubah. Tanpa repo, CLI aoox build & push langsung dari mesinmu.",
     tags: ["dockerfile", "nixpacks", "railpack", "image", "cli"],
-    href: "/docs/deploy",
+    href: "/id/docs/deploy",
     span: true,
   },
   {
@@ -41,7 +41,7 @@ const FEATURES_ID: Feature[] = [
     description:
       "Health check menentukan sukses/gagal. Blue/green swap tanpa putus, rollback ke image sebelumnya sekali klik.",
     tags: ["blue/green", "healthcheck"],
-    href: "/docs/deploy#health-check",
+    href: "/id/docs/deploy#health-check",
   },
   {
     icon: Boxes,
@@ -49,7 +49,7 @@ const FEATURES_ID: Feature[] = [
     description:
       "Jadikan host manager, gabungkan node lain, jalankan aplikasi sebagai service dengan replika. Rolling update, rollback otomatis, dan penempatan per node atau label.",
     tags: ["swarm", "replika", "rolling update"],
-    href: "/docs/swarm",
+    href: "/id/docs/swarm",
   },
   {
     icon: Database,
@@ -57,7 +57,7 @@ const FEATURES_ID: Feature[] = [
     description:
       "PostgreSQL, MySQL, MariaDB, Redis per project. Referensikan kredensialnya di env, jelajahi tabel dan jalankan query dari dashboard.",
     tags: ["postgres", "mysql", "redis"],
-    href: "/docs/database",
+    href: "/id/docs/database",
   },
   {
     icon: HardDriveDownload,
@@ -65,7 +65,7 @@ const FEATURES_ID: Feature[] = [
     description:
       "Database dan volume aplikasi, manual atau terjadwal, dengan retensi dan salinan ke S3. Panel sendiri pun bisa di-backup dan dipulihkan.",
     tags: ["cron", "s3", "instance"],
-    href: "/docs/backup",
+    href: "/id/docs/backup",
   },
   {
     icon: Globe,
@@ -73,7 +73,7 @@ const FEATURES_ID: Feature[] = [
     description:
       "Arahkan domain ke aplikasi lewat Traefik, sertifikat Let's Encrypt otomatis, cek DNS dari dashboard — di host maupun di server remote.",
     tags: ["traefik", "acme"],
-    href: "/docs/domain",
+    href: "/id/docs/domain",
   },
   {
     icon: Terminal,
@@ -81,7 +81,7 @@ const FEATURES_ID: Feature[] = [
     description:
       "Shell ke host atau server lain lewat SSH dari browser. Deploy ke server remote tanpa agen tambahan.",
     tags: ["ssh", "xterm"],
-    href: "/docs/terminal",
+    href: "/id/docs/terminal",
   },
   {
     icon: Activity,
@@ -89,7 +89,7 @@ const FEATURES_ID: Feature[] = [
     description:
       "Log realtime, metrik CPU/RAM host dan container dengan riwayat 1 jam sampai 30 hari, notifikasi ke Telegram, Slack, Discord, webhook, email.",
     tags: ["metrics", "alerts"],
-    href: "/docs/monitoring",
+    href: "/id/docs/monitoring",
   },
 ]
 
@@ -100,7 +100,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "Connect a GitHub/GitLab repo — Dockerfile, Nixpacks, Railpack (with cache between deploys), or a static site — and a webhook triggers a deploy on every push. Or pull a ready-made image from a registry, with auto-update when its tag changes. No repo? The aoox CLI builds and pushes straight from your machine.",
     tags: ["dockerfile", "nixpacks", "railpack", "image", "cli"],
-    href: "/en/docs/deploy",
+    href: "/docs/deploy",
     span: true,
   },
   {
@@ -109,7 +109,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "A health check decides success or failure. Blue/green swaps without downtime, one-click rollback to the previous image.",
     tags: ["blue/green", "healthcheck"],
-    href: "/en/docs/deploy#health-check",
+    href: "/docs/deploy#health-check",
   },
   {
     icon: Boxes,
@@ -117,7 +117,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "Turn the host into a manager, join other nodes, run apps as a service with replicas. Rolling updates, automatic rollback, and placement per node or label.",
     tags: ["swarm", "replicas", "rolling update"],
-    href: "/en/docs/swarm",
+    href: "/docs/swarm",
   },
   {
     icon: Database,
@@ -125,7 +125,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "PostgreSQL, MySQL, MariaDB, Redis per project. Reference credentials in env, browse tables and run queries from the dashboard.",
     tags: ["postgres", "mysql", "redis"],
-    href: "/en/docs/database",
+    href: "/docs/database",
   },
   {
     icon: HardDriveDownload,
@@ -133,7 +133,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "Database and app volumes, manual or scheduled, with retention and copies to S3. The panel itself can be backed up and restored too.",
     tags: ["cron", "s3", "instance"],
-    href: "/en/docs/backup",
+    href: "/docs/backup",
   },
   {
     icon: Globe,
@@ -141,7 +141,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "Point a domain at your app through Traefik, automatic Let's Encrypt certificates, DNS checks from the dashboard — on the host or a remote server.",
     tags: ["traefik", "acme"],
-    href: "/en/docs/domain",
+    href: "/docs/domain",
   },
   {
     icon: Terminal,
@@ -149,7 +149,7 @@ const FEATURES_EN: Feature[] = [
     description:
       "Shell into the host or another server over SSH, right from the browser. Deploy to a remote server without an extra agent.",
     tags: ["ssh", "xterm"],
-    href: "/en/docs/terminal",
+    href: "/docs/terminal",
   },
   {
     icon: Activity,
@@ -157,36 +157,36 @@ const FEATURES_EN: Feature[] = [
     description:
       "Realtime logs, host and container CPU/RAM metrics with 1-hour-to-30-day history, notifications to Telegram, Slack, Discord, webhook, email.",
     tags: ["metrics", "alerts"],
-    href: "/en/docs/monitoring",
+    href: "/docs/monitoring",
   },
 ]
 
 const MORE_ID = [
-  { label: "Domain sendiri untuk panel (bukan cuma aplikasi)", href: "/docs/domain-panel" },
-  { label: "Preview pull request", href: "/docs/preview" },
-  { label: "Scheduled jobs", href: "/docs/jobs" },
-  { label: "Stack compose: riwayat, webhook, metrik", href: "/docs/compose" },
-  { label: "Template one-click", href: "/docs/template" },
-  { label: "Export & import project", href: "/docs/project" },
-  { label: "Volume & mount", href: "/docs/mount" },
-  { label: "Data browser: edit baris & CSV", href: "/docs/data-browser" },
-  { label: "2FA, API token dengan scope, audit log", href: "/docs/pengguna-peran#akun" },
-  { label: "Registry lokal & cleanup disk", href: "/docs/registry" },
-  { label: "CLI aoox: install, link, deploy", href: "/docs/cli" },
+  { label: "Domain sendiri untuk panel (bukan cuma aplikasi)", href: "/id/docs/domain-panel" },
+  { label: "Preview pull request", href: "/id/docs/preview" },
+  { label: "Scheduled jobs", href: "/id/docs/jobs" },
+  { label: "Stack compose: riwayat, webhook, metrik", href: "/id/docs/compose" },
+  { label: "Template one-click", href: "/id/docs/template" },
+  { label: "Export & import project", href: "/id/docs/project" },
+  { label: "Volume & mount", href: "/id/docs/mount" },
+  { label: "Data browser: edit baris & CSV", href: "/id/docs/data-browser" },
+  { label: "2FA, API token dengan scope, audit log", href: "/id/docs/pengguna-peran#akun" },
+  { label: "Registry lokal & cleanup disk", href: "/id/docs/registry" },
+  { label: "CLI aoox: install, link, deploy", href: "/id/docs/cli" },
 ]
 
 const MORE_EN = [
-  { label: "Your own domain for the panel (not just apps)", href: "/en/docs/panel-domain" },
-  { label: "Pull request previews", href: "/en/docs/preview" },
-  { label: "Scheduled jobs", href: "/en/docs/jobs" },
-  { label: "Compose stacks: history, webhook, metrics", href: "/en/docs/compose" },
-  { label: "One-click templates", href: "/en/docs/template" },
-  { label: "Project export & import", href: "/en/docs/project" },
-  { label: "Volumes & mounts", href: "/en/docs/mount" },
-  { label: "Data browser: row edit & CSV", href: "/en/docs/data-browser" },
-  { label: "2FA, scoped API tokens, audit log", href: "/en/docs/users-roles#account" },
-  { label: "Local registry & disk cleanup", href: "/en/docs/registry" },
-  { label: "aoox CLI: install, link, deploy", href: "/en/docs/cli" },
+  { label: "Your own domain for the panel (not just apps)", href: "/docs/panel-domain" },
+  { label: "Pull request previews", href: "/docs/preview" },
+  { label: "Scheduled jobs", href: "/docs/jobs" },
+  { label: "Compose stacks: history, webhook, metrics", href: "/docs/compose" },
+  { label: "One-click templates", href: "/docs/template" },
+  { label: "Project export & import", href: "/docs/project" },
+  { label: "Volumes & mounts", href: "/docs/mount" },
+  { label: "Data browser: row edit & CSV", href: "/docs/data-browser" },
+  { label: "2FA, scoped API tokens, audit log", href: "/docs/users-roles#account" },
+  { label: "Local registry & disk cleanup", href: "/docs/registry" },
+  { label: "aoox CLI: install, link, deploy", href: "/docs/cli" },
 ]
 
 const COPY_ID = {
@@ -216,7 +216,7 @@ const COPY: Record<Lang, Copy> = {
   },
 }
 
-function FeaturesSection({ lang = "id" }: { lang?: Lang }) {
+function FeaturesSection({ lang = "en" }: { lang?: Lang }) {
   const t = COPY[lang]
   return (
     <Section id={lang === "en" ? "features" : "fitur"}>

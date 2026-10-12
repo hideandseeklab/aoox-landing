@@ -16,7 +16,7 @@ const COPY: Record<Lang, string> = {
  * Table of contents per page: reads h2[id] inside <article> after mount,
  * then highlights the heading currently in view via IntersectionObserver.
  */
-function DocToc({ lang = "id" }: { lang?: Lang }) {
+function DocToc({ lang = "en" }: { lang?: Lang }) {
   const [headings, setHeadings] = React.useState<Heading[]>([])
   const [active, setActive] = React.useState<string | null>(null)
 

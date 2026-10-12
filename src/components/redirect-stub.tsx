@@ -1,17 +1,23 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { LEGACY_EN_DOCS } from "@/lib/doc-slugs"
+import { EN_DOC_SLUGS, LEGACY_EN_DOCS } from "@/lib/doc-slugs"
 
-function entryFor(from: string) {
-  const entry = LEGACY_EN_DOCS.find((e) => e.from === from)
-  if (!entry) throw new Error(`No legacy English docs redirect for "${from}"`)
-  return { ...entry, target: `/en/docs/${entry.to}` }
+/**
+ * Where an old URL now lives. `anchors` maps old heading/section ids to the
+ * new ones (only needed where an id was renamed; unknown ids pass through).
+ */
+export type RedirectTarget = { target: string; anchors?: Record<string, string> }
+
+/** Old `/en/docs/<slug>` URL -> its target, or `null` when `slug` never existed. */
+export function legacyEnDocTarget(slug: string): RedirectTarget | null {
+  if (EN_DOC_SLUGS.includes(slug)) return { target: `/docs/${slug}` }
+  const old = LEGACY_EN_DOCS.find((e) => e.from === slug)
+  return old ? { target: `/docs/${old.to}`, anchors: old.anchors } : null
 }
 
 /** Metadata for a redirect stub: not indexable, canonical points at the new URL. */
-export function redirectMetadata(from: string): Metadata {
-  const { target } = entryFor(from)
+export function redirectMetadata(target: string): Metadata {
   return {
     title: "Redirecting…",
     robots: { index: false, follow: true },
@@ -20,14 +26,13 @@ export function redirectMetadata(from: string): Metadata {
 }
 
 /**
- * Static redirect page kept at an old English docs URL (GitHub Pages has no
- * server-side redirects). Three layers, in order of speed: an inline script
- * that preserves the hash fragment (mapping old Indonesian heading ids to the
- * new English ones), a `<meta http-equiv="refresh">` for clients without
- * JavaScript, and a visible link.
+ * Static redirect page kept at an old URL (GitHub Pages has no server-side
+ * redirects). Three layers, in order of speed: an inline script that
+ * preserves the hash fragment (mapping renamed ids to their new names), a
+ * `<meta http-equiv="refresh">` for clients without JavaScript, and a
+ * visible link.
  */
-function RedirectStub({ from }: { from: string }) {
-  const { target, anchors } = entryFor(from)
+function RedirectStub({ target, anchors = {} }: RedirectTarget) {
   const script =
     "(function(){var m=" +
     JSON.stringify(anchors) +
@@ -36,7 +41,7 @@ function RedirectStub({ from }: { from: string }) {
     '+(h?"#"+(m[h]||h):""))})()'
 
   return (
-    <article className="flex flex-col gap-3">
+    <article className="flex flex-col gap-3 p-6">
       <meta httpEquiv="refresh" content={`0; url=${target}`} />
       <script dangerouslySetInnerHTML={{ __html: script.replace(/</g, "\u003c") }} />
       <h1 className="text-2xl font-semibold">This page has moved</h1>

@@ -135,7 +135,7 @@ const COPY: Record<Lang, Copy> = {
   },
 }
 
-function TeamSection({ lang = "id" }: { lang?: Lang }) {
+function TeamSection({ lang = "en" }: { lang?: Lang }) {
   const t = COPY[lang]
   return (
     <Section id={lang === "en" ? "team" : "tim"}>
@@ -234,7 +234,7 @@ function TeamSection({ lang = "id" }: { lang?: Lang }) {
           </div>
 
           <Link
-            href={lang === "en" ? "/en/docs/users-roles" : "/docs/pengguna-peran"}
+            href={lang === "en" ? "/docs/users-roles" : "/id/docs/pengguna-peran"}
             className="inline-flex items-center gap-1 text-xs text-foreground underline underline-offset-4 hover:no-underline"
           >
             {t.more}

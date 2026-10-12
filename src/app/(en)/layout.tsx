@@ -20,9 +20,9 @@ export const metadata: Metadata = {
   icons: ICONS,
 }
 
-// Root layout for every English-language route (`/en`, `/en/docs/**`) — see
+// Root layout for every English-language route (`/`, `/docs/**`, `/changelog`) — see
 // "Multiple root layouts" in the Next.js docs. The (id) group has its own
-// sibling layout with lang="id"; each `<html>` is only ever rendered once
+// sibling layout with lang="id" (served under `/id`); each `<html>` is only ever rendered once
 // per request since the two groups never share a route.
 export default function RootLayout({
   children,

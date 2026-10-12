@@ -7,33 +7,29 @@ import { useTheme } from "next-themes"
 import { Menu, Moon, Sun, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import type { Lang } from "@/lib/lang"
+import { langFromPathname, type Lang } from "@/lib/lang"
 import { otherLangPath } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
-const NAV_ID = [
-  { href: "/#fitur", label: "Fitur" },
-  { href: "/#cara-kerja", label: "Cara kerja" },
+const NAV_EN = [
+  { href: "/#features", label: "Features" },
+  { href: "/#how-it-works", label: "How it works" },
   { href: "/#self-host", label: "Self-host" },
   { href: "/#faq", label: "FAQ" },
   { href: "/docs", label: "Docs" },
   { href: "/changelog", label: "Changelog" },
 ]
 
-const NAV_EN = [
-  { href: "/en#features", label: "Features" },
-  { href: "/en#how-it-works", label: "How it works" },
-  { href: "/en#self-host", label: "Self-host" },
-  { href: "/en#faq", label: "FAQ" },
-  { href: "/en/docs", label: "Docs" },
-  { href: "/en/changelog", label: "Changelog" },
+const NAV_ID = [
+  { href: "/id#fitur", label: "Fitur" },
+  { href: "/id#cara-kerja", label: "Cara kerja" },
+  { href: "/id#self-host", label: "Self-host" },
+  { href: "/id#faq", label: "FAQ" },
+  { href: "/id/docs", label: "Docs" },
+  { href: "/id/changelog", label: "Changelog" },
 ]
 
 const REPO = "https://github.com/hideandseeklab/aoox-api"
-
-function langFromPathname(pathname: string): Lang {
-  return pathname === "/en" || pathname.startsWith("/en/") ? "en" : "id"
-}
 
 function SiteHeader() {
   const pathname = usePathname()
@@ -44,7 +40,7 @@ function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-4 px-4 sm:px-6">
-        <Link href={lang === "en" ? "/en" : "/"} className="text-sm font-semibold tracking-tight">
+        <Link href={lang === "en" ? "/" : "/id"} className="text-sm font-semibold tracking-tight">
           <span className="text-primary-foreground dark:text-primary">$</span>{" "}
           aoox
         </Link>
@@ -68,7 +64,7 @@ function SiteHeader() {
           <LangSwitch pathname={pathname} lang={lang} />
           <ThemeToggle lang={lang} />
           <Button size="sm" className="hidden sm:inline-flex" asChild>
-            <Link href={lang === "en" ? "/en/docs/installation" : "/docs/instalasi"}>{cta}</Link>
+            <Link href={lang === "en" ? "/docs/installation" : "/id/docs/instalasi"}>{cta}</Link>
           </Button>
           {/* key = pathname: the menu closes automatically when the page changes */}
           <MobileMenu key={pathname} pathname={pathname} lang={lang} nav={nav} cta={cta} />
@@ -113,7 +109,7 @@ function NavLink({
   )
 }
 
-/** Toggles between the landing page and its /en mirror, or between /docs/x and its /en/docs/x mirror. */
+/** Toggles between the landing page and its /id mirror, or between /docs/x and its /id/docs/x mirror. */
 function LangSwitch({ pathname, lang }: { pathname: string; lang: Lang }) {
   const target = otherLangPath(pathname, lang)
   if (!target) return null
@@ -184,7 +180,7 @@ function MobileMenu({
             ))}
             <div className="mt-3 flex items-center gap-3 border-t border-border pt-3">
               <Button size="sm" asChild>
-                <Link href={lang === "en" ? "/en/docs/installation" : "/docs/instalasi"}>{cta}</Link>
+                <Link href={lang === "en" ? "/docs/installation" : "/id/docs/instalasi"}>{cta}</Link>
               </Button>
               <a
                 href={REPO}

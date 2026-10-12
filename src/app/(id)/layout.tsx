@@ -20,9 +20,9 @@ export const metadata: Metadata = {
   icons: ICONS,
 }
 
-// Root layout for every Indonesian-language route (`/`, `/docs/**`) — see
+// Root layout for every Indonesian-language route (`/id`, `/id/docs/**`, `/id/changelog`) — see
 // "Multiple root layouts" in the Next.js docs. The (en) group has its own
-// sibling layout with lang="en"; each `<html>` is only ever rendered once
+// sibling layout with lang="en" (served at the site root); each `<html>` is only ever rendered once
 // per request since the two groups never share a route.
 export default function RootLayout({
   children,
