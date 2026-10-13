@@ -162,7 +162,7 @@ EMPTY=`}</Pre>
       <Table
         head={["Syntax", "Resolves to"]}
         rows={[
-          [<Code key="1">{"${{project.KEY}}"}</Code>, "The value of KEY from the environment the application is linked to (production by default)."],
+          [<Code key="1">{"${{project.KEY}}"}</Code>, "The value of KEY from the environment the application is linked to (when none was chosen: production for project admins, development for everyone else)."],
           [<Code key="2">{"${{database.<slug>.url}}"}</Code>, "The managed database's internal connection URL (host = container name)."],
           [<Code key="3">{"${{database.<slug>.host}}"}</Code>, "The database container's name, e.g. aoox-db-app-db."],
           [<Code key="4">{"${{database.<slug>.port}}"}</Code>, "The engine's port inside the network (5432, 3306, 6379)."],
@@ -217,8 +217,10 @@ PORT=3000`}</Pre>
           from deployment logs and error messages.
         </li>
         <li>
-          Other env values are <strong>not</strong> redacted — don&apos;t print env to
-          stdout from your application.
+          Other env values are redacted only by the rules in{" "}
+          <DocLink href="/docs/environment#secret-flags">Secret variables</DocLink>{" "}
+          (project environments); don&apos;t rely on masking and don&apos;t print
+          env to stdout from your application.
         </li>
         <li>
           Application env is stored as plain text in aoox&apos;s own database;
@@ -235,7 +237,8 @@ PORT=3000`}</Pre>
         in the project&apos;s <strong>Environments</strong> tab. Every
         application and compose stack is linked to <strong>one</strong>{" "}
         environment through the <strong>Environment</strong> select in its
-        Settings (default <Code>production</Code>);{" "}
+        Settings (when none is chosen: <Code>production</Code> for project admins,{" "}
+        <Code>development</Code> for everyone else);{" "}
         <Code>{"${{project.KEY}}"}</Code> resolves from that environment.
       </P>
       <Ul>
@@ -249,8 +252,15 @@ PORT=3000`}</Pre>
           the other environments; viewers see variable names only.
         </li>
         <li>
-          Values are masked in deployment logs (values under 8 characters and
-          plain single words like <Code>production</Code> are not masked).
+          Values are masked in deployment logs, job output and error
+          notifications by this rule: variables marked <em>Secret</em> are
+          always masked, whatever their length; variables explicitly marked{" "}
+          <em>not secret</em> are never masked; unmarked variables are masked
+          only when the value looks like a secret (8 or more characters, not a
+          single plain word such as <Code>production</Code>, not only digits).
+          Names that look secret (password, secret, token, key, private,
+          credential) are marked Secret automatically; see{" "}
+          <DocLink href="/docs/environment#secret-flags">Secret variables</DocLink>.
         </li>
         <li>
           <strong>Linking is protected too:</strong> linking an application or
@@ -259,8 +269,11 @@ PORT=3000`}</Pre>
           select shows protected environments as disabled). Without that, a
           developer could link an app to <Code>production</Code>, deploy it and
           read the values from its container console. A new application or stack
-          created by a developer without choosing an environment starts in{" "}
-          <Code>development</Code>. Resources linked before this rule keep
+          created without choosing an environment starts in{" "}
+          <Code>production</Code> when a project admin creates it and in{" "}
+          <Code>development</Code> (the first unprotected environment) for
+          everyone else; if the project has only <Code>production</Code>, a
+          non-admin gets 403. Resources linked before this rule keep
           their link, and anyone who can open the console of a resource linked
           to <Code>production</Code> still sees its values at runtime, as with
           any env var.

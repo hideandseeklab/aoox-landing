@@ -63,12 +63,12 @@ const COMMANDS = [
   {
     cmd: "aoox env list | pull | push | set | unset | history | diff | promote",
     what: "Lists, downloads, uploads, compares or changes the variables of a project environment (see Environment variables).",
-    flags: "--env/-e, --project, --reveal, --json (list); --file, --force, --format (pull); --file, --yes (push); --secret/--no-secret (set); --limit (history); --all, --yes (promote)",
+    flags: "--project, --url/-u, --token/-t (all); --env/-e, --reveal, --json (list); --env, --file, --force, --format (pull); --env, --file, --yes (push); --env, --secret/--no-secret (set); --env (unset); --env, --limit, --json (history); --json (diff); --all, --yes (promote)",
   },
   {
     cmd: "aoox run -- <command>",
     what: "Runs a command with the variables of an environment, without writing them to disk.",
-    flags: "--env/-e, --project",
+    flags: "--env/-e, --project, --file, --url/-u, --token/-t",
   },
   {
     cmd: "aoox domain set",
@@ -406,12 +406,12 @@ $ aoox run -- npm run dev                    # starts it with the variables`}</P
         rows={[
           [<Code key="l">aoox env list [--env name] [--reveal] [--json]</Code>, "Without --env: the project's environments (protection, variable count, what uses them). With --env: that environment's variable names; --reveal shows the values through the audited reveal action."],
           [<Code key="p">aoox env pull [--env name] [--file .env] [--format dotenv|json|shell] [--force]</Code>, <>Writes the variables to a file with mode <Code>0600</Code> (owner only, where the OS supports it). It never overwrites an existing file unless <Code>--force</Code>, and warns once when the file is not covered by <Code>.gitignore</Code> (it never edits <Code>.gitignore</Code> itself).</>],
-          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--env name] [--secret | --no-secret]</Code>, <>Adds or changes variables. Comments and the order of the existing lines are kept; a new variable goes at the end. <Code>--secret</Code> marks the variables as secret, <Code>--no-secret</Code> as explicitly not secret; without either, the flags stay as they are (see <DocLink href="/docs/environment#secret-flags">Secret variables</DocLink>).</>],
+          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--env name] [--secret | --no-secret]</Code>, <>Adds or changes variables. Comments and the order of the existing lines are kept; a new variable goes at the end. <Code>--secret</Code> marks the variables as secret, <Code>--no-secret</Code> as explicitly not secret; without either, the flags stay as they are, except that a <em>new</em> variable whose name looks secret (password, secret, token, key, private, credential) is marked secret automatically (see <DocLink href="/docs/environment#secret-flags">Secret variables</DocLink>). The default <Code>--env</Code> is <Code>development</Code>; changing the protected <Code>production</Code> needs a project admin, and anyone else gets 403.</>],
           [<Code key="u">aoox env unset KEY [KEY2 …] [--env name]</Code>, "Removes variables; comments and the other lines stay."],
           [<Code key="pu">aoox env push --file .env [--env name] [--yes]</Code>, "Replaces the whole environment with a local file, after showing which variables are added, changed and removed and asking for confirmation."],
           [<Code key="h">aoox env history [--env name] [--limit 20] [--json]</Code>, "The version history of an environment, newest first: when, who, and the variable names added (+), changed (~) or removed (-). Never values."],
-          [<Code key="d">aoox env diff &lt;from&gt; &lt;to&gt;</Code>, "Compares two environments by variable name: only on one side, different values, same. Prints names only."],
-          [<Code key="pr">aoox env promote &lt;from&gt; &lt;to&gt; [KEY …] [--all] [--yes]</Code>, "Copies the named variables (or all of them) and their secret flag from one environment into another, after showing what changes and asking for confirmation."],
+          [<Code key="d">aoox env diff &lt;from&gt; &lt;to&gt; [--project name] [--json]</Code>, "Compares two environments by variable name: only on one side, different values, same. Prints names only."],
+          [<Code key="pr">aoox env promote &lt;from&gt; &lt;to&gt; [KEY …] [--all] [--yes] [--project name]</Code>, "Copies the named variables (or all of them) and their secret flag from one environment into another, after showing what changes and asking for confirmation."],
           [<Code key="r">aoox run [--env name] [--file .env.local] -- command [args…]</Code>, "Fetches the variables and starts the command with them on top of your current environment (the panel's value wins on a clash; a local file, if given, wins over both). Nothing is written to disk. Output goes straight to your terminal, the command's exit code is the exit code of aoox run, and Ctrl+C or SIGTERM is passed to it."],
         ]}
       />
@@ -533,8 +533,8 @@ Variables that are not in the file are removed: this replaces the whole environm
       />
       <Ul>
         <li>
-          <strong>In CI</strong> create an API token on a project admin (for{" "}
-          <Code>production</Code>) or a developer (other environments) and
+          <strong>In CI</strong> create an API token as a project admin (for{" "}
+          <Code>production</Code>) or as a developer (other environments) and
           export <Code>AOOX_TOKEN</Code>/<Code>AOOX_URL</Code>. The token can be
           limited to certain <strong>environments</strong> by name (Settings
           <PathArrow />API token<PathArrow />Limit to environments), e.g. only{" "}

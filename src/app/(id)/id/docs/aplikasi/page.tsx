@@ -276,7 +276,7 @@ success   container lama diganti · status aplikasi Running`}</Pre>
           ["Pengaturan", <>Form yang sama dengan saat membuat, plus Build args (Environment punya tab sendiri). <strong>Port host, domain, dan limit resource berlaku langsung</strong> pada aplikasi yang berjalan — container dibuat ulang dari image yang sama tanpa build (dengan Port host ada downtime singkat, karena dua container tidak bisa memakai port yang sama). Aplikasi yang sedang berhenti memakai port barunya saat dijalankan lagi, dan perubahan Port host ditolak (409) selama ada deployment aktif. Pengaturan lain berlaku pada deploy berikutnya. Juga memuat kartu <a href="#maintenance">Mode perawatan</a>.</>],
           ["Domain", "Hostname untuk aplikasi + toggle HTTPS + cek DNS."],
           ["Mount", "Volume, bind, file — dan backup volume."],
-          ["Environment", "Variabel env aplikasi, disimpan sendiri, plus sumber secret (Infisical). Juga pilihan Environment: dari environment project mana `${{project.KEY}}` diambil (default production). Berlaku pada deploy berikutnya."],
+          ["Environment", <>Variabel env aplikasi, disimpan sendiri, plus sumber secret (Infisical). Juga pilihan Environment: dari environment project mana <Code>{"${{project.KEY}}"}</Code> diambil (bila tidak dipilih: production untuk admin project, development untuk yang lain). Berlaku pada deploy berikutnya.</>],
           ["Jobs", "Perintah terjadwal."],
           ["Webhook", "URL webhook, secret, dan preview pull request."],
           ["Console", "Shell interaktif langsung ke dalam container yang berjalan."],

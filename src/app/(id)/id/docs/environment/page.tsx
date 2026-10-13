@@ -161,7 +161,7 @@ EMPTY=`}</Pre>
       <Table
         head={["Sintaks", "Menghasilkan"]}
         rows={[
-          [<Code key="1">{"${{project.KEY}}"}</Code>, "Nilai KEY dari environment yang ditautkan ke aplikasi (default production)."],
+          [<Code key="1">{"${{project.KEY}}"}</Code>, "Nilai KEY dari environment yang ditautkan ke aplikasi (bila tidak dipilih: production untuk admin project, development untuk yang lain)."],
           [<Code key="2">{"${{database.<slug>.url}}"}</Code>, "URL koneksi internal managed database (host = nama container)."],
           [<Code key="3">{"${{database.<slug>.host}}"}</Code>, "Nama container database, mis. aoox-db-app-db."],
           [<Code key="4">{"${{database.<slug>.port}}"}</Code>, "Port engine di dalam network (5432, 3306, 6379)."],
@@ -216,8 +216,10 @@ PORT=3000`}</Pre>
           dari log deployment dan pesan error.
         </li>
         <li>
-          Nilai env lain <strong>tidak</strong> disensor — jangan mencetak env ke
-          stdout dari aplikasi.
+          Nilai env lain disensor hanya menurut aturan di{" "}
+          <DocLink href="/id/docs/environment#flag-rahasia">Variabel rahasia</DocLink>{" "}
+          (environment project); jangan mengandalkan penyamaran dan jangan
+          mencetak env ke stdout dari aplikasi.
         </li>
         <li>
           Env aplikasi disimpan sebagai teks di database aoox; akses ke halaman
@@ -234,7 +236,8 @@ PORT=3000`}</Pre>
         terenkripsi saat disimpan, diedit di tab <strong>Environment</strong>{" "}
         project. Setiap aplikasi dan stack compose ditautkan ke{" "}
         <strong>satu</strong> environment lewat pilihan <strong>Environment</strong>{" "}
-        di Pengaturannya (default <Code>production</Code>);{" "}
+        di Pengaturannya (bila tidak dipilih: <Code>production</Code> untuk admin{" "}
+        project, <Code>development</Code> untuk yang lain);{" "}
         <Code>{"${{project.KEY}}"}</Code> diambil dari environment itu.
       </P>
       <Ul>
@@ -249,8 +252,15 @@ PORT=3000`}</Pre>
           variabel.
         </li>
         <li>
-          Nilai disamarkan di log deployment (nilai di bawah 8 karakter dan
-          kata tunggal biasa seperti <Code>production</Code> tidak disamarkan).
+          Nilai disamarkan di log deployment, output job, dan notifikasi error
+          dengan aturan ini: variabel yang ditandai <em>Rahasia</em> selalu
+          disamarkan, berapa pun panjangnya; variabel yang ditandai eksplisit{" "}
+          <em>bukan rahasia</em> tidak pernah disamarkan; variabel tanpa tanda
+          disamarkan hanya bila nilainya tampak seperti rahasia (8 karakter
+          atau lebih, bukan satu kata biasa seperti <Code>production</Code>,
+          bukan hanya angka). Nama yang tampak rahasia (password, secret,
+          token, key, private, credential) otomatis ditandai Rahasia; lihat{" "}
+          <DocLink href="/id/docs/environment#flag-rahasia">Variabel rahasia</DocLink>.
         </li>
         <li>
           <strong>Penautan juga dilindungi:</strong> menautkan aplikasi atau
@@ -259,8 +269,11 @@ PORT=3000`}</Pre>
           pilihan Environment menampilkan environment terlindungi sebagai
           nonaktif). Tanpa aturan ini developer bisa menautkan aplikasi ke{" "}
           <Code>production</Code>, men-deploy-nya dan membaca nilainya dari
-          console container. Aplikasi atau stack baru yang dibuat developer
-          tanpa memilih environment dimulai di <Code>development</Code>.
+          console container. Aplikasi atau stack baru yang dibuat tanpa memilih
+          environment dimulai di <Code>production</Code> bila dibuat admin
+          project, dan di <Code>development</Code> (environment pertama yang
+          tidak dilindungi) bila dibuat oleh yang lain; jika project hanya
+          punya <Code>production</Code>, non-admin mendapat 403.
           Resource yang sudah tertaut sebelum aturan ini tetap tertaut, dan
           siapa pun yang bisa membuka console resource yang tertaut ke{" "}
           <Code>production</Code> tetap melihat nilainya saat runtime, seperti

@@ -30,6 +30,80 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.0-alpha.9",
+    date: "2026-10-13",
+    channel: "alpha",
+    groups: [
+      {
+        kind: "added",
+        items: [
+          {
+            id: "**Environment project (development, staging, production)**: setiap project punya environment dengan variabel terenkripsi; aplikasi dan stack ditautkan ke satu environment dan `${{project.KEY}}` diambil darinya. `production` dilindungi: hanya admin project yang bisa menampilkan, mengubah, atau menautkan ke sana.",
+            en: "**Project environments (development, staging, production)**: every project has environments with encrypted variables; applications and stacks are linked to one and `${{project.KEY}}` resolves from it. `production` is protected: only project admins can reveal, edit or link to it.",
+          },
+          {
+            id: "**Riwayat, restore, bandingkan, dan promosikan variabel**: tiap perubahan environment tersimpan sebagai versi (siapa, kapan, nama variabel yang berubah) dan bisa dipulihkan; dua environment bisa dibandingkan per variabel dan variabel bisa disalin dari satu ke yang lain.",
+            en: "**History, restore, compare and promote for variables**: every change to an environment is stored as a version (who, when, which names changed) and can be restored; two environments can be compared variable by variable and variables copied from one into another.",
+          },
+          {
+            id: "**Tanda Rahasia per variabel**: variabel rahasia selalu disamarkan di log deployment, output job, dan notifikasi; nama seperti password, token, atau key otomatis ditandai.",
+            en: "**A Secret switch per variable**: secret variables are always masked in deployment logs, job output and notifications; names such as password, token or key are marked automatically.",
+          },
+          {
+            id: "**`aoox env` dan `aoox run`**: `list`, `pull`, `push`, `set`, `unset`, `history`, `diff`, dan `promote` dari terminal, plus `aoox run -- <perintah>` yang menjalankan perintah dengan variabel sebuah environment tanpa menulisnya ke disk.",
+            en: "**`aoox env` and `aoox run`**: `list`, `pull`, `push`, `set`, `unset`, `history`, `diff` and `promote` from the terminal, plus `aoox run -- <command>` to start a command with an environment's variables without writing them to disk.",
+          },
+          {
+            id: "**API token bisa dibatasi ke environment tertentu**: misalnya token CI yang hanya boleh membaca `development`.",
+            en: "**API tokens can be limited to certain environments**: for example a CI token that may only read `development`.",
+          },
+          {
+            id: "**Peringatan port container**: bila image mendeklarasikan port `EXPOSE` tetapi Container port bukan salah satunya, log deployment dan tab Pengaturan serta Domain memperingatkan (sumber umum \"Bad Gateway\"), dengan tombol sekali klik untuk memakai port yang benar.",
+            en: "**Container port warning**: when an image declares `EXPOSE` ports and the Container port is none of them, the deployment log and the Settings and Domains tabs warn about it (a common cause of \"Bad Gateway\"), with a one-click button to use the right port.",
+          },
+          {
+            id: "**`aoox registry build --push`**: build dan push image dalam satu langkah.",
+            en: "**`aoox registry build --push`**: build and push an image in one step.",
+          },
+        ],
+      },
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Env bersama project pindah ke `production`**: upgrade menyalin env bersama lama ke environment `production` dan menautkan semua aplikasi dan stack ke sana, jadi deploy berjalan seperti sebelumnya. Aplikasi atau stack baru yang dibuat non-admin dimulai di `development`.",
+            en: "**The project's shared env moved into `production`**: the upgrade copies the old shared env into the `production` environment and links every application and stack to it, so deploys behave as before. A new application or stack created by a non-admin starts in `development`.",
+          },
+          {
+            id: "**Ekspor project tidak lagi selalu menyertakan env bersama**: variabel environment hanya ikut diekspor dengan database passwords (khusus owner).",
+            en: "**Project export no longer always includes the shared env**: environment variables are only exported together with database passwords (owner only).",
+          },
+          {
+            id: "**Layar update lebih jelas**: overlay penuh layar dengan langkah dan timer saat panel diperbarui, dan tidak lagi macet setelah \"Apply update\".",
+            en: "**A clearer update screen**: a full-screen overlay with steps and a timer while the panel updates, and it no longer hangs after \"Apply update\".",
+          },
+          {
+            id: "Halaman 404 situs ini kini memakai ilustrasi yang sama dengan panel.",
+            en: "The site's 404 page now uses the same illustration as the panel.",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "**Mengubah Container port aplikasi yang berjalan kini langsung berlaku**: sebelumnya hanya tersimpan sehingga proxy tetap ke port lama (\"Bad Gateway\") sampai deploy berikutnya; aplikasi yang dihentikan memakai port baru saat dinyalakan.",
+            en: "**Changing the Container port of a running application now takes effect**: it used to be saved only, so the proxy kept the old port (\"Bad Gateway\") until the next deploy; a stopped application uses the new port when started.",
+          },
+          {
+            id: "**Impor project berisi stack compose tidak lagi gagal dengan 500**, dan pesan error CLI memakai tanda ❌ yang tampil benar di Windows Terminal.",
+            en: "**Importing a project that contains a compose stack no longer fails with a 500**, and CLI error lines use a ❌ that renders correctly in Windows Terminal.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.0-alpha.8",
     date: "2026-10-12",
     channel: "alpha",

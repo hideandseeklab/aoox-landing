@@ -8,6 +8,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.9] - 2026-10-13
+
 ### Added
 
 - **Docs: Environment variables in the CLI (English and Indonesian)**: a new section on the CLI page for `aoox env list|pull|set|unset` and `aoox run` (examples, quoting rules, concurrent edits, roles, tokens in CI) and two rows in the command reference. The Environment and Project pages describe the linking rule (a protected environment needs a project admin to link to or from) and the token restriction to environments.
@@ -16,7 +18,9 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ### Changed
 
+- **Docs: environment corrections (English and Indonesian).** Where an application or stack is linked when no environment is chosen is now stated correctly everywhere (production for project admins, development for everyone else, 403 for a non-admin when the project has only production; the Indonesian Project page gained the protected-linking rule the English page already had). The log-masking rule is explained in full (Secret always masked, not secret never masked, unmarked masked by the 8-character heuristic, names that look secret marked automatically) on the Environment and Project pages. The CLI command tables list every flag of `aoox env *` and `aoox run` (`--project`, `--url`, `--token`, `--file`, `--json`), and the `set` row describes automatic secret marking. The Applications Environment row renders `${{project.KEY}}` as code, and a few stiff Indonesian phrases on the CLI page were reworded.
 - **CLI docs (English and Indonesian):** `aoox registry build --push` (build and push in one step). The example error lines of `aoox registry build|push` start with ❌, as the CLI now prints.
+- **404 page**: shows the dashboard's not-found illustration above the 404 label, title and buttons (light and dark), and no longer reports a hydration mismatch in development (the 404 now uses Next.js's `global-not-found` page, the documented way to do a 404 in an app with several root layouts, instead of a `not-found` file that rendered its own `<html>`; the static `404.html` is still produced).
 
 ## [0.1.0-alpha.8] - 2026-10-12
 
@@ -382,7 +386,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.8...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.9...HEAD
+[0.1.0-alpha.9]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.8...v0.1.0-alpha.9
 [0.1.0-alpha.8]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.7...v0.1.0-alpha.8
 [0.1.0-alpha.7]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.6...v0.1.0-alpha.7
 [0.1.0-alpha.6]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.5...v0.1.0-alpha.6

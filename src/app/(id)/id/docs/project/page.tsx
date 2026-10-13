@@ -154,7 +154,18 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
           Setiap aplikasi dan stack compose ditautkan ke{" "}
           <strong>satu environment</strong> project-nya, dipilih lewat pilihan{" "}
           <strong>Environment</strong> di Pengaturan aplikasi (atau pengaturan
-          stack compose). Defaultnya <Code>production</Code>.
+          stack compose). Bila tidak dipilih: <Code>production</Code> untuk admin
+          project, dan environment pertama yang tidak dilindungi (
+          <Code>development</Code>) untuk yang lain; jika project hanya punya{" "}
+          <Code>production</Code>, non-admin mendapat 403.
+        </li>
+        <li>
+          Menautkan ke <Code>production</Code> (atau environment terlindungi
+          mana pun), atau memindahkan sesuatu dari situ, membutuhkan{" "}
+          <strong>admin project</strong>: developer mendapat 403 dan pilihan
+          Environment menampilkan environment terlindungi sebagai nonaktif.
+          Aturan yang sama berlaku saat membuat aplikasi atau stack dan saat
+          men-deploy template. Tautan yang sudah ada tidak berubah.
         </li>
         <li>
           <Code>{"${{project.KEY}}"}</Code> diambil dari{" "}
@@ -209,9 +220,16 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
           memakainya.
         </li>
         <li>
-          Nilai disamarkan di log deployment (nilai di bawah 8 karakter dan
-          kata tunggal biasa seperti <Code>production</Code> tidak disamarkan,
-          agar teks log biasa tidak rusak).
+          Nilai disamarkan di log deployment menurut tanda rahasia variabelnya:
+          variabel <em>Rahasia</em> selalu disamarkan, berapa pun panjangnya;
+          variabel yang ditandai <em>bukan rahasia</em> tidak pernah
+          disamarkan; variabel tanpa tanda disamarkan hanya bila nilainya
+          tampak seperti rahasia (8 karakter atau lebih, bukan satu kata biasa
+          seperti <Code>production</Code>, bukan hanya angka), agar teks log
+          biasa tidak rusak. Nama yang memuat password, secret, token, key,
+          private, atau credential otomatis ditandai Rahasia saat pertama kali
+          ditambahkan (upgrade menandai yang sudah ada). Lihat{" "}
+          <DocLink href="/id/docs/environment#flag-rahasia">Variabel rahasia</DocLink>.
         </li>
       </Ul>
       <Callout kind="warn" title="Cakupan perlindungan">

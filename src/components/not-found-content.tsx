@@ -3,6 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 
+import { NotFoundIllustration } from "@/components/illustrations/not-found-illustration"
 import { Button } from "@/components/ui/button"
 import { langFromPathname, type Lang } from "@/lib/lang"
 
@@ -51,11 +52,18 @@ export function NotFoundContent() {
   const t = COPY[lang]
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 px-4 text-center">
-      <p className="font-mono text-sm text-muted-foreground">404</p>
-      <h1 className="text-3xl font-semibold tracking-tight">{t.title}</h1>
-      <p className="max-w-md text-sm text-muted-foreground">{t.body}</p>
-      <div className="flex gap-3">
+    <main className="flex min-h-svh flex-col items-center justify-center px-4 py-12 text-center">
+      <NotFoundIllustration className="h-auto w-full max-w-60 sm:max-w-72" />
+      <p className="mt-6 font-mono text-xs font-medium tracking-widest text-muted-foreground uppercase">
+        404
+      </p>
+      <h1 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+        {t.title}
+      </h1>
+      <p className="mt-3 max-w-md text-sm text-balance text-muted-foreground">
+        {t.body}
+      </p>
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <Button asChild>
           <Link href={t.homeHref}>{t.home}</Link>
         </Button>
@@ -63,6 +71,6 @@ export function NotFoundContent() {
           <Link href={t.docsHref}>{t.docs}</Link>
         </Button>
       </div>
-    </div>
+    </main>
   )
 }

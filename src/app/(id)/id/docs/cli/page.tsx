@@ -88,12 +88,12 @@ const COMMANDS = [
   {
     cmd: "aoox env list | pull | push | set | unset | history | diff | promote",
     what: "Menampilkan, mengunduh, mengunggah, membandingkan atau mengubah variabel sebuah environment project (lihat Variabel environment).",
-    flags: "--env/-e, --project, --reveal, --json (list); --file, --force, --format (pull); --file, --yes (push); --secret/--no-secret (set); --limit (history); --all, --yes (promote)",
+    flags: "--project, --url/-u, --token/-t (all); --env/-e, --reveal, --json (list); --env, --file, --force, --format (pull); --env, --file, --yes (push); --env, --secret/--no-secret (set); --env (unset); --env, --limit, --json (history); --json (diff); --all, --yes (promote)",
   },
   {
     cmd: "aoox run -- <perintah>",
     what: "Menjalankan perintah dengan variabel sebuah environment, tanpa menulisnya ke disk.",
-    flags: "--env/-e, --project",
+    flags: "--env/-e, --project, --file, --url/-u, --token/-t",
   },
   {
     cmd: "aoox registry push",
@@ -185,7 +185,7 @@ aoox --version`}</Pre>
         Perintah ini berbeda dari bagian sebelumnya: <Code>aoox install</Code>{" "}
         tidak menyambung ke panel yang sudah ada — ia{" "}
         <strong>memasang panelnya sendiri</strong> (postgres + api + web) di
-        VPS Linux yang masih kosong, sebagai alternatif cara manual di{" "}
+        VPS Linux yang masih kosong, sebagai alternatif dari cara manual di{" "}
         <DocLink href="/id/docs/instalasi">Instalasi</DocLink>. Jalankan sebagai
         root, langsung di server tujuan.
       </P>
@@ -212,8 +212,8 @@ Create the first owner account at /setup.`}</Pre>
           belum ada — minta konfirmasi kecuali <Code>--yes</Code>.
         </li>
         <li>
-          <Code>--web-domain</Code> dan <Code>--api-domain</Code> saling
-          mensyaratkan, dan keduanya butuh <Code>--acme-email</Code> untuk
+          <Code>--web-domain</Code> dan <Code>--api-domain</Code> harus
+          dipakai bersamaan, dan keduanya butuh <Code>--acme-email</Code> untuk
           sertifikat Let&apos;s Encrypt lewat proxy bawaan.
         </li>
         <li>
@@ -399,12 +399,12 @@ $ aoox run -- npm run dev                    # menjalankannya dengan variabel it
         rows={[
           [<Code key="l">aoox env list [--env nama] [--reveal] [--json]</Code>, "Tanpa --env: daftar environment project (perlindungan, jumlah variabel, pemakainya). Dengan --env: nama variabel environment itu; --reveal menampilkan nilainya lewat aksi reveal yang diaudit."],
           [<Code key="p">aoox env pull [--env nama] [--file .env] [--format dotenv|json|shell] [--force]</Code>, <>Menulis variabel ke file dengan mode <Code>0600</Code> (hanya pemilik, bila OS mendukung). Tidak pernah menimpa file yang sudah ada kecuali <Code>--force</Code>, dan memperingatkan sekali bila file itu tidak tercakup <Code>.gitignore</Code> (<Code>.gitignore</Code> tidak pernah diubah otomatis).</>],
-          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--env nama] [--secret | --no-secret]</Code>, <>Menambah atau mengubah variabel. Komentar dan urutan baris yang ada dipertahankan; variabel baru ditaruh di akhir. <Code>--secret</Code> menandai variabel sebagai rahasia, <Code>--no-secret</Code> sebagai jelas-jelas bukan rahasia; tanpa keduanya, tandanya dibiarkan (lihat <DocLink href="/id/docs/environment#flag-rahasia">Variabel rahasia</DocLink>).</>],
+          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--env nama] [--secret | --no-secret]</Code>, <>Menambah atau mengubah variabel. Komentar dan urutan baris yang ada dipertahankan; variabel baru ditaruh di akhir. <Code>--secret</Code> menandai variabel sebagai rahasia, <Code>--no-secret</Code> sebagai secara eksplisit bukan rahasia; tanpa keduanya, tandanya dibiarkan, kecuali variabel <em>baru</em> yang namanya tampak rahasia (password, secret, token, key, private, credential) otomatis ditandai rahasia (lihat <DocLink href="/id/docs/environment#flag-rahasia">Variabel rahasia</DocLink>). <Code>--env</Code> bawaannya <Code>development</Code>; mengubah <Code>production</Code> yang dilindungi membutuhkan admin project, yang lain mendapat 403.</>],
           [<Code key="u">aoox env unset KEY [KEY2 …] [--env nama]</Code>, "Menghapus variabel; komentar dan baris lain tetap."],
           [<Code key="pu">aoox env push --file .env [--env nama] [--yes]</Code>, "Mengganti seluruh environment dengan file lokal, setelah menampilkan variabel yang ditambah, diubah dan dihapus lalu meminta konfirmasi."],
           [<Code key="h">aoox env history [--env nama] [--limit 20] [--json]</Code>, "Riwayat versi sebuah environment, terbaru dulu: kapan, siapa, dan nama variabel yang ditambah (+), diubah (~) atau dihapus (-). Tidak pernah menampilkan nilai."],
-          [<Code key="d">aoox env diff &lt;dari&gt; &lt;ke&gt;</Code>, "Membandingkan dua environment menurut nama variabel: hanya di satu sisi, nilai berbeda, sama. Hanya mencetak nama."],
-          [<Code key="pr">aoox env promote &lt;dari&gt; &lt;ke&gt; [KEY …] [--all] [--yes]</Code>, "Menyalin variabel yang disebut (atau semuanya) beserta tanda rahasianya dari satu environment ke environment lain, setelah menampilkan perubahannya dan meminta konfirmasi."],
+          [<Code key="d">aoox env diff &lt;dari&gt; &lt;ke&gt; [--project nama] [--json]</Code>, "Membandingkan dua environment menurut nama variabel: hanya di satu sisi, nilai berbeda, sama. Hanya mencetak nama."],
+          [<Code key="pr">aoox env promote &lt;dari&gt; &lt;ke&gt; [KEY …] [--all] [--yes] [--project nama]</Code>, "Menyalin variabel yang disebut (atau semuanya) beserta tanda rahasianya dari satu environment ke environment lain, setelah menampilkan perubahannya dan meminta konfirmasi."],
           [<Code key="r">aoox run [--env nama] [--file .env.local] -- perintah [argumen…]</Code>, "Mengambil variabel dan menjalankan perintah dengan variabel itu di atas environment-mu saat ini (nilai dari panel menang bila bentrok; file lokal, bila diberikan, menang atas keduanya). Tidak ada yang ditulis ke disk. Output langsung ke terminalmu, exit code perintah menjadi exit code aoox run, dan Ctrl+C atau SIGTERM diteruskan."],
         ]}
       />
@@ -518,25 +518,25 @@ Variables that are not in the file are removed: this replaces the whole environm
         lain menyimpan di sela itu (dashboard, terminal lain), panel menjawab{" "}
         <Code>409</Code> dan CLI mengatakan tidak ada yang ditulis — jalankan
         perintahnya lagi agar perubahanmu diterapkan di atas versi terbaru.
-        Editor di dashboard bekerja sama.
+        Editor di dashboard bekerja dengan cara yang sama.
       </P>
       <H3>Siapa boleh apa</H3>
       <Table
         head={["Peran", "development / staging / custom", "production (dilindungi)"]}
         rows={[
           [<strong key="a">Admin project</strong>, "list, pull, set, unset, run", "list, pull, set, unset, run"],
-          [<strong key="d">Developer</strong>, "list, pull, set, unset, run", <>Hanya nama variabel. Lainnya menampilkan <Code>❌ &quot;production&quot; is protected; only project admins can read it.</Code></>],
+          [<strong key="d">Developer</strong>, "list, pull, set, unset, run", <>Hanya nama variabel. Selebihnya menampilkan <Code>❌ &quot;production&quot; is protected; only project admins can read it.</Code></>],
           [<strong key="v">Viewer</strong>, "Hanya nama variabel", "Hanya nama variabel"],
         ]}
       />
       <Ul>
         <li>
-          <strong>Di CI</strong> buat API token pada admin project (untuk{" "}
-          <Code>production</Code>) atau developer (environment lain) dan
+          <strong>Di CI</strong> buat API token dari akun admin project (untuk{" "}
+          <Code>production</Code>) atau developer (environment lain), lalu
           ekspor <Code>AOOX_TOKEN</Code>/<Code>AOOX_URL</Code>. Token bisa
           dibatasi ke <strong>environment</strong> tertentu menurut nama
           (Pengaturan<PathArrow />API token<PathArrow />Batasi ke environment),
-          mis. hanya <Code>development</Code>: environment lain dijawab 403.
+          mis. hanya <Code>development</Code>: environment lain ditolak dengan 403.
         </li>
         <li>
           Token <strong>baca saja</strong> tetap bisa menjalankan{" "}

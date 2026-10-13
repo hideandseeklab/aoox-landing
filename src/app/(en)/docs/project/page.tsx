@@ -160,8 +160,9 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
           <strong>one environment</strong> of its project, chosen in the{" "}
           <strong>Environment</strong> select in the application&apos;s Settings
           (or the compose stack&apos;s settings). The default is{" "}
-          <Code>production</Code> for project admins and <Code>development</Code>{" "}
-          for developers.
+          <Code>production</Code> for project admins and the first unprotected
+          environment (<Code>development</Code>) for everyone else; if the
+          project has only <Code>production</Code>, a non-admin gets 403.
         </li>
         <li>
           Linking to <Code>production</Code> (or any protected environment), or
@@ -223,9 +224,16 @@ DATABASE_URL=\${{database.app-db.url}}`}</Pre>
           can&apos;t be deleted — the message names them.
         </li>
         <li>
-          Values are masked in deployment logs (values under 8 characters and
-          plain single words like <Code>production</Code> are not masked, to avoid
-          garbling ordinary log text).
+          Values are masked in deployment logs by the variable&apos;s secret
+          flag: <em>Secret</em> variables are always masked, whatever their
+          length; variables marked <em>not secret</em> are never masked;
+          unmarked variables are masked only when the value looks like a secret
+          (8 or more characters, not a single plain word like{" "}
+          <Code>production</Code>, not only digits), to avoid garbling ordinary
+          log text. Names matching password, secret, token, key, private or
+          credential are marked Secret automatically the first time they are
+          added (the upgrade marked the existing ones). See{" "}
+          <DocLink href="/docs/environment#secret-flags">Secret variables</DocLink>.
         </li>
       </Ul>
       <Callout kind="warn" title="What the protection covers">
