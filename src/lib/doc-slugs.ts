@@ -37,6 +37,7 @@ export const DOC_SLUGS: readonly { id: string; en: string }[] = [
   { id: "template", en: "template" },
   { id: "terminal", en: "terminal" },
   { id: "troubleshooting", en: "troubleshooting" },
+  { id: "variabel", en: "variables" },
   { id: "webhook", en: "webhook" },
 ]
 

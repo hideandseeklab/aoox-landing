@@ -23,26 +23,26 @@ export const metadata: Metadata = pageMetadata({
   lang: "en",
   title: "Environment variables",
   description:
-    "Project environments, application env, and database references.",
+    "Application env, variable set links, the Infisical secret source, and database references.",
 })
 
 const SUMMARY = [
-  { k: "Layers", v: "Project environment + secret source + application env" },
+  { k: "Layers", v: "Linked variable sets + secret source + application env" },
   { k: "Applied", v: "When the container is created, not at build time" },
-  { k: "References", v: "${{project.KEY}} · ${{database.<slug>.url}}" },
+  { k: "References", v: "${{vars.KEY}} · ${{database.<slug>.url}}" },
 ]
 
 const RESOLVE = [
-  { s: "environment", d: "the app's linked project environment (lowest)" },
+  { s: "variable sets", d: "the linked set environments, in order (lowest)" },
   { s: "secret source", d: "Infisical, when sync is on, overrides it" },
   { s: "application env", d: "overrides the same key (highest)" },
-  { s: "resolve ${{…}}", d: "project & database in the same project" },
+  { s: "resolve ${{…}}", d: "vars, secrets & databases of the same project" },
   { s: "container", d: "the final result goes into the container" },
 ]
 
 const NEXT = [
   { title: "Managed database", description: "The database slugs you can reference.", href: "/docs/database" },
-  { title: "Project", description: "Environments, protection, and linking.", href: "/docs/project" },
+  { title: "Variables", description: "Variable sets, protection, and linking.", href: "/docs/variables" },
   { title: "How builds work", description: "Build args for build-time values.", href: "/docs/build#build-args" },
   { title: "Compose stacks", description: "Env as a source of compose interpolation.", href: "/docs/compose#env" },
 ]
@@ -53,7 +53,7 @@ export default function Page() {
       href="/docs/environment"
       title="Environment variables"
       lang="en"
-      description="Application env, project environments, and references to managed database credentials — all resolved when the container is created."
+      description="Application env, linked variable sets, and references to managed database credentials — all resolved when the container is created."
     >
       <dl className="grid gap-px border border-border bg-border text-xs sm:grid-cols-3 rounded-lg overflow-hidden">
         {SUMMARY.map((item) => (
@@ -140,15 +140,17 @@ EMPTY=`}</Pre>
       </ol>
       <Ul>
         <li>
-          Priority, lowest to highest: the linked <strong>project
-          environment</strong> &lt; the <strong>external secret source</strong>{" "}
-          (Infisical, when sync is on) &lt; the <strong>application&apos;s own
-          env</strong>. If the same key exists in several, the higher one wins.
+          Priority, lowest to highest: the linked{" "}
+          <DocLink href="/docs/variables">variable set environments</DocLink>{" "}
+          in their order (a later link wins over an earlier one) &lt; the{" "}
+          <strong>external secret source</strong> (Infisical, when sync is on)
+          &lt; the <strong>application&apos;s own env</strong>. If the same key
+          exists in several, the higher one wins.
         </li>
         <li>
           Merging and resolution happen <strong>every time the container is
           created</strong>: deploy, rollback, or a recreate triggered by a
-          domain/mount change. Editing an environment does not change running
+          domain/mount change. Editing a variable set does not change running
           containers — it applies on the application&apos;s <strong>next
           deploy</strong>.
         </li>
@@ -162,7 +164,8 @@ EMPTY=`}</Pre>
       <Table
         head={["Syntax", "Resolves to"]}
         rows={[
-          [<Code key="1">{"${{project.KEY}}"}</Code>, "The value of KEY from the environment the application is linked to (when none was chosen: production for project admins, development for everyone else)."],
+          [<Code key="1">{"${{vars.KEY}}"}</Code>, <>The merged value of KEY across the application&apos;s linked variable set environments (a later link wins), one level deep. See <DocLink href="/docs/variables#references">Variables</DocLink>.</>],
+          [<Code key="1s">{"${{secret.KEY}}"}</Code>, "One secret from the Infisical source (see above)."],
           [<Code key="2">{"${{database.<slug>.url}}"}</Code>, "The managed database's internal connection URL (host = container name)."],
           [<Code key="3">{"${{database.<slug>.host}}"}</Code>, "The database container's name, e.g. aoox-db-app-db."],
           [<Code key="4">{"${{database.<slug>.port}}"}</Code>, "The engine's port inside the network (5432, 3306, 6379)."],
@@ -176,10 +179,10 @@ EMPTY=`}</Pre>
         ]}
       />
       <H3>A full example</H3>
-      <Pre title="production environment (linked to the app)">{`APP_ENV=production
+      <Pre title="shared/production (a variable set environment linked to the app)">{`APP_ENV=production
 SENTRY_DSN=https://abc@sentry.example.com/1`}</Pre>
-      <Pre title="Web application env">{`NODE_ENV=\${{project.APP_ENV}}
-SENTRY_DSN=\${{project.SENTRY_DSN}}
+      <Pre title="Web application env">{`NODE_ENV=\${{vars.APP_ENV}}
+SENTRY_DSN=\${{vars.SENTRY_DSN}}
 DATABASE_URL=\${{database.app-db.url}}
 REDIS_URL=\${{database.cache.url}}
 PORT=3000`}</Pre>
@@ -195,9 +198,10 @@ PORT=3000`}</Pre>
           the name shown on the database page.
         </li>
         <li>
-          Switching an application to an environment that lacks a{" "}
-          <Code>{"${{project.KEY}}"}</Code> it references is refused with a
-          message naming the key.
+          Changing the links so that a <Code>{"${{vars.KEY}}"}</Code> the env
+          references no longer exists is refused with a message naming the
+          key. <Code>{"${{project.KEY}}"}</Code> was renamed to{" "}
+          <Code>{"${{vars.KEY}}"}</Code> and is refused.
         </li>
         <li>
           An unknown reference<PathArrow /><strong>400</strong> when saving Settings; if
@@ -218,211 +222,28 @@ PORT=3000`}</Pre>
         </li>
         <li>
           Other env values are redacted only by the rules in{" "}
-          <DocLink href="/docs/environment#secret-flags">Secret variables</DocLink>{" "}
-          (project environments); don&apos;t rely on masking and don&apos;t print
+          <DocLink href="/docs/variables#secret-flags">Secret variables</DocLink>{" "}
+          (variable sets); don&apos;t rely on masking and don&apos;t print
           env to stdout from your application.
         </li>
         <li>
           Application env is stored as plain text in aoox&apos;s own database;
-          access to the Settings page means access to its values. Project
-          environment variables are encrypted at rest and protected — see below.
+          access to the Settings page means access to its values. Variable set
+          values are encrypted at rest and can be protected — see{" "}
+          <DocLink href="/docs/variables">Variables</DocLink>.
         </li>
       </Ul>
 
-      <H2 id="environments">Project environments</H2>
+      <H2 id="variable-sets">Variable sets</H2>
       <P>
-        A project has environments (<Code>development</Code>,{" "}
-        <Code>staging</Code>, <Code>production</Code>, plus any you add). Each
-        holds its own <Code>KEY=VALUE</Code> variables, encrypted at rest, edited
-        in the project&apos;s <strong>Environments</strong> tab. Every
-        application and compose stack is linked to <strong>one</strong>{" "}
-        environment through the <strong>Environment</strong> select in its
-        Settings (when none is chosen: <Code>production</Code> for project admins,{" "}
-        <Code>development</Code> for everyone else);{" "}
-        <Code>{"${{project.KEY}}"}</Code> resolves from that environment.
+        Variables shared by several applications (or kept per stage, such as
+        staging and production) live in{" "}
+        <DocLink href="/docs/variables">variable sets</DocLink>: instance-wide
+        groups with their own environments, history, compare/promote and
+        secret flags. On the <strong>Environment</strong> tab, the{" "}
+        <strong>Variable sets</strong> card links set environments to the
+        application in order; the own env above always wins over them.
       </P>
-      <Ul>
-        <li>
-          Values are masked in the list; <em>Reveal</em> is an audited action
-          (the audit log records it without the values).
-        </li>
-        <li>
-          <Code>production</Code> is <strong>protected</strong>: only project
-          admins can reveal or edit its values. Developers can reveal and edit
-          the other environments; viewers see variable names only.
-        </li>
-        <li>
-          Values are masked in deployment logs, job output and error
-          notifications by this rule: variables marked <em>Secret</em> are
-          always masked, whatever their length; variables explicitly marked{" "}
-          <em>not secret</em> are never masked; unmarked variables are masked
-          only when the value looks like a secret (8 or more characters, not a
-          single plain word such as <Code>production</Code>, not only digits).
-          Names that look secret (password, secret, token, key, private,
-          credential) are marked Secret automatically; see{" "}
-          <DocLink href="/docs/environment#secret-flags">Secret variables</DocLink>.
-        </li>
-        <li>
-          <strong>Linking is protected too:</strong> linking an application or
-          stack <em>to</em> a protected environment, or moving one <em>away</em>{" "}
-          from it, needs a project admin (developers get 403; the Environment
-          select shows protected environments as disabled). Without that, a
-          developer could link an app to <Code>production</Code>, deploy it and
-          read the values from its container console. A new application or stack
-          created without choosing an environment starts in{" "}
-          <Code>production</Code> when a project admin creates it and in{" "}
-          <Code>development</Code> (the first unprotected environment) for
-          everyone else; if the project has only <Code>production</Code>, a
-          non-admin gets 403. Resources linked before this rule keep
-          their link, and anyone who can open the console of a resource linked
-          to <Code>production</Code> still sees its values at runtime, as with
-          any env var.
-        </li>
-        <li>
-          <strong>From a terminal:</strong>{" "}
-          <DocLink href="/docs/cli#env">aoox env and aoox run</DocLink> read
-          and change environments with an API token. A token can be limited to
-          environments by name (e.g. only <Code>development</Code>) and still
-          never exceeds its owner&apos;s own access.
-        </li>
-      </Ul>
-      <P>
-        More in <DocLink href="/docs/project#environments">Project</DocLink>.
-      </P>
-
-      <H2 id="history">History and restore</H2>
-      <P>
-        Every change to an environment is kept as a version: an edit in the
-        dashboard, <Code>aoox env set|unset|push</Code>, a restore, or a
-        promotion from another environment. Open <strong>History</strong> on an
-        environment to see the list, newest first.
-      </P>
-      <Ul>
-        <li>
-          Each row shows <strong>who</strong> (a user, or a token), <strong>when</strong>,
-          and the variable names <strong>+added</strong>, <strong>~changed</strong>{" "}
-          and <strong>-removed</strong>. Values are never shown in the list.
-        </li>
-        <li>
-          <strong>Restore this version</strong> puts that text back after a
-          confirmation. It does not delete anything: the restored text becomes a
-          <em> new</em> version at the top, so the history is never rewritten and
-          you can undo a restore the same way.
-        </li>
-        <li>
-          Who can restore: the same people who can edit that environment. For
-          the protected <Code>production</Code> that is a project admin;
-          viewers see no values and cannot restore.
-        </li>
-        <li>
-          If the old text no longer passes today&apos;s checks (for example a{" "}
-          <Code>{"${{project.KEY}}"}</Code> that points to a variable you have
-          since removed), the restore is refused with a message and nothing
-          changes. Restoring the version that is already current is refused too.
-        </li>
-        <li>
-          The first change you make to an environment that already had content
-          also saves a <strong>baseline</strong> of what was there before, so
-          even that first edit can be undone. Saving without a real change (only
-          line endings or trailing blank space) creates no version.
-        </li>
-        <li>
-          The <strong>newest 50 versions</strong> of each environment are kept;
-          older ones are removed automatically. Old texts are stored encrypted
-          like the live one. A version also remembers its secret flags.
-        </li>
-      </Ul>
-
-      <H2 id="compare">Compare and promote</H2>
-      <P>
-        <strong>Compare</strong> lets you choose two environments and shows the
-        result key by key: variables that exist only on one side, variables on
-        both sides with <strong>different values</strong>, and how many are the
-        same. The values themselves are compared on the server and are never
-        sent to your browser.
-      </P>
-      <Ul>
-        <li>
-          To tell you whether a value is different, aoox must be allowed to read
-          both sides. If you cannot read both (you are a developer and one side
-          is <Code>production</Code>), you still see which names exist where,
-          but not which values differ.
-        </li>
-        <li>
-          Select the variables you want and press <strong>Promote</strong>. A
-          confirmation names the variables and the target environment. Each
-          variable is copied with its value and its secret flag; the target
-          keeps its own comments and order, new variables are added at the end,
-          and a version <em>From &lt;source&gt;</em> is recorded.
-        </li>
-        <li>
-          Promotion needs the right to <strong>read the source</strong> and to{" "}
-          <strong>change the target</strong>, with the same rules as the editor:
-          <strong> developers cannot promote to or from production</strong>; a
-          project admin is needed on a protected side. Viewers cannot promote.
-        </li>
-        <li>
-          A promotion is refused when it would leave a{" "}
-          <Code>{"${{project.KEY}}"}</Code> pointing to a variable that does not
-          exist in the target, and when someone changed the target in between
-          (nothing is written; try again).
-        </li>
-        <li>
-          Running applications are not touched: like any environment edit, a
-          promotion applies on the next deploy of the apps that use the target.
-        </li>
-        <li>
-          From a terminal:{" "}
-          <DocLink href="/docs/cli#env"><Code>aoox env diff</Code> and <Code>aoox env promote</Code></DocLink>.
-        </li>
-      </Ul>
-
-      <H2 id="secret-flags">Secret variables</H2>
-      <P>
-        Each variable in the environment editor has a <strong>Secret</strong>{" "}
-        switch (in the CLI: <Code>aoox env set KEY=VALUE --secret</Code> or{" "}
-        <Code>--no-secret</Code>). It decides whether the value is hidden in
-        deployment logs, job output and error notifications.
-      </P>
-      <Table
-        head={["Flag", "What happens to the value in logs"]}
-        rows={[
-          [<strong key="s">Secret</strong>, "Always masked, however short it is."],
-          [<strong key="n">Not secret</strong>, "Never masked."],
-          [<strong key="u">Not set</strong>, <>The usual rule: masked when it is 8 characters or longer, not a single plain word and not just digits. So <Code>NODE_ENV=production</Code> stays readable and a long token is hidden.</>],
-        ]}
-      />
-      <Ul>
-        <li>
-          <strong>Not secret really means never.</strong> A long value on a
-          variable with <em>no</em> flag is still masked by the usual rule; only
-          an explicit <Code>--no-secret</Code> turns masking off.
-        </li>
-        <li>
-          Secret flags are stored next to the variable <em>names</em>, not in the
-          text, so the <Code>KEY=VALUE</Code> text, <Code>aoox env pull</Code>,
-          export and the compose <Code>.aoox.env</Code> stay exactly as they
-          were. The editor and the CLI show which variables are secret; the
-          values stay behind Reveal.
-        </li>
-        <li>
-          <strong>Existing and new variables:</strong> when this was introduced,
-          variables whose name contains <Code>password</Code>,{" "}
-          <Code>secret</Code>, <Code>token</Code>, <Code>key</Code>,{" "}
-          <Code>private</Code> or <Code>credential</Code> were marked secret
-          automatically; all other variables were left unmarked, so masking
-          behaves exactly as before. The same name rule marks a new variable
-          that you add without choosing a flag. It is a name match, so an
-          innocent name such as <Code>MONKEY</Code> or <Code>KEYBOARD</Code>{" "}
-          is marked too: switch it off in the editor if you want.
-        </li>
-        <li>
-          A promotion copies the flag with the value. Removing a variable also
-          removes its flag. If a secret variable holds a reference such as{" "}
-          <Code>{"${{database.app-db.password}}"}</Code>, the resolved value is
-          masked as well.
-        </li>
-      </Ul>
 
       <H2 id="compose">Compose stacks</H2>
       <Callout>

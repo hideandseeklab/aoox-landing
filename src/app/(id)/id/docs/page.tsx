@@ -136,7 +136,11 @@ export default function Page() {
         rows={[
           [
             <strong key="p">Project</strong>,
-            "Wadah untuk aplikasi, stack compose, dan database yang saling terkait. Punya environment (development, staging, production).",
+            "Wadah untuk aplikasi, stack compose, dan database yang saling terkait.",
+          ],
+          [
+            <strong key="v">Set variabel</strong>,
+            "Variabel bersama dengan environment sendiri (development, staging, production), dibagikan ke project dan ditautkan ke aplikasi serta stack secara berurutan.",
           ],
           [
             <strong key="a">Aplikasi</strong>,

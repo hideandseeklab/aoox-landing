@@ -118,7 +118,7 @@ export default function Page() {
               [
                 "Environment variables",
                 <>
-                  Supports <Code>{"${{project.KEY}}"}</Code> (from the stack&apos;s linked environment) and{" "}
+                  Supports <Code>{"${{vars.KEY}}"}</Code> (from the stack&apos;s linked variable set environments, in order; the stack&apos;s own env wins) and{" "}
                   <Code>{"${{database.<slug>.url}}"}</Code>.
                 </>,
               ],

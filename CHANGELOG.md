@@ -8,6 +8,15 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Added
+
+- **Docs: Variables (English and Indonesian)**: a new page `/docs/variables` (`/id/docs/variabel`) for variable sets: concepts and slugs, sharing with all or selected projects, who may reveal and edit (protected environments are instance owner/admin only), linking to applications and stacks and the merge order, `${{vars.KEY}}` (one level), history and restore, compare and promote, secret flags, API token `variableScopes` (`set/env`, `set/*`, `*/env`), export/import, and the upgrade note for 0.1.0-alpha.9 environments. Added to the docs sidebar, the core concepts table and the sitemap.
+
+### Changed
+
+- **Docs: project environments replaced by variable sets (English and Indonesian)**: the Environment variables page now describes the merge order with linked variable set environments and `${{vars.KEY}}`; its project environment, history, compare/promote and secret-flag sections moved to the Variables page. The Project page drops the per-project environments (a short Variables section and new export/import wording), and the Applications, Compose and Users & roles pages use variable sets, `${{vars.KEY}}` and the new token scope.
+- **Docs: CLI reference for the new `aoox env` (English and Indonesian)**: `--set`/`--env` with their defaults, `env list`/`sets`, `diff`/`promote --from --to`, the new `env links`, `env link` and `env unlink`, and what `aoox run` passes (linked environments in order, then the own env; `${{vars.KEY}}` resolved, database and secret references left as written).
+
 ## [0.1.0-alpha.9] - 2026-10-13
 
 ### Added

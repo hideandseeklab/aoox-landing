@@ -313,13 +313,17 @@ export default function Page() {
             1 tahun, atau tidak kedaluwarsa.
           </P>
         </Step>
-        <Step title="Atur Hak (opsional): Baca saja dan Batasi ke project">
+        <Step title="Atur Hak (opsional): Baca saja, Batasi ke project, variabel">
           <P>
             <strong>Baca saja</strong> menolak semua request yang mengubah
             state — sama seperti peran viewer, termasuk tiket log websocket.{" "}
             <strong>Batasi ke project</strong> memilih satu atau beberapa
             project; token menjadi 404 di luar itu dan ditolak di semua rute
-            Settings instance (server, registry, proxy).
+            Settings instance (server, registry, proxy).{" "}
+            <strong>Batas variabel</strong> mempersempit environment
+            set variabel mana yang boleh dibaca atau diubah, dalam bentuk{" "}
+            <Code>set/env</Code>, <Code>set/*</Code> atau <Code>*/env</Code>{" "}
+            (lihat <DocLink href="/id/docs/variabel#token">Variabel</DocLink>).
           </P>
         </Step>
         <Step title="Salin token aoox_… — hanya tampil sekali">

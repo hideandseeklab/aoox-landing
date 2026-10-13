@@ -62,13 +62,18 @@ const COMMANDS = [
   },
   {
     cmd: "aoox env list | pull | push | set | unset | history | diff | promote",
-    what: "Lists, downloads, uploads, compares or changes the variables of a project environment (see Environment variables).",
-    flags: "--project, --url/-u, --token/-t (all); --env/-e, --reveal, --json (list); --env, --file, --force, --format (pull); --env, --file, --yes (push); --env, --secret/--no-secret (set); --env (unset); --env, --limit, --json (history); --json (diff); --all, --yes (promote)",
+    what: "Lists, downloads, uploads, compares or changes the environments of variable sets (see Variables).",
+    flags: "--set/-s, --env/-e, --app, --stack, --url/-u, --token/-t; --reveal, --json (list); --file, --force, --format (pull); --file, --yes (push); --secret/--no-secret (set); --limit, --json (history); --from, --to (diff, promote); --all, --yes (promote)",
+  },
+  {
+    cmd: "aoox env links | link | unlink",
+    what: "Shows or changes the ordered set environments an application (or --stack) uses.",
+    flags: "--app, --stack; --set/-s, --env/-e, --position (link, unlink)",
   },
   {
     cmd: "aoox run -- <command>",
-    what: "Runs a command with the variables of an environment, without writing them to disk.",
-    flags: "--env/-e, --project, --file, --url/-u, --token/-t",
+    what: "Runs a command with the variables the linked application gets at deploy time (or one set environment), without writing them to disk.",
+    flags: "--set/-s, --env/-e, --app, --stack, --file, --url/-u, --token/-t",
   },
   {
     cmd: "aoox domain set",
@@ -113,7 +118,7 @@ const COMMANDS = [
 ]
 
 const NEXT = [
-  { title: "Environment variables", description: "Project environments, protection and references.", href: "/docs/environment#environments" },
+  { title: "Variables", description: "Variable sets, protection, linking and references.", href: "/docs/variables" },
   { title: "Users & roles", description: "Creating an API token and its scope.", href: "/docs/users-roles#account" },
   { title: "Installation", description: "The manual steps aoox install automates.", href: "/docs/installation" },
   { title: "Registry", description: "Where images from aoox deploy are stored.", href: "/docs/registry" },
@@ -374,48 +379,99 @@ Deployed: localhost:5000/shop/shop:a1b2c3d`}</Pre>
         (409) — wait for it to finish first.
       </Callout>
 
-      <H2 id="env">Environment variables (aoox env, aoox run)</H2>
+      <H2 id="env">Variables (aoox env, aoox run)</H2>
       <P>
-        <Code>aoox env</Code> reads and changes the variables of a{" "}
-        <DocLink href="/docs/environment#environments">project environment</DocLink>{" "}
-        (the same ones as the project&apos;s Environments tab), and{" "}
-        <Code>aoox run</Code> starts a command with them without writing a
-        file. The project is the one of the application linked with{" "}
-        <Code>aoox link</Code>, or <Code>--project &lt;id or name&gt;</Code>;
-        the environment is <Code>--env</Code> (default{" "}
-        <Code>development</Code>).
+        <Code>aoox env</Code> reads and changes the environments of{" "}
+        <DocLink href="/docs/variables">variable sets</DocLink> (the same ones
+        as <strong>Variables</strong> in the dashboard) and manages which of
+        them the linked application uses. <Code>aoox run</Code> starts a
+        command with the variables the application gets at deploy time,
+        without writing a file.
       </P>
+      <Ul>
+        <li>
+          A set environment is chosen with <Code>--set &lt;slug&gt;</Code> (short{" "}
+          <Code>-s</Code>) and <Code>--env &lt;name&gt;</Code> (<Code>-e</Code>).
+        </li>
+        <li>
+          <strong>Defaults</strong>: <Code>--set</Code> is the only set the
+          application linked with <Code>aoox link</Code> uses (or the only set
+          you can see); <Code>--env</Code> is the only environment of that set
+          it links. With several candidates the command stops and lists them —
+          it never guesses. There is no default environment name.
+        </li>
+        <li>
+          <Code>--app &lt;id&gt;</Code> uses another application, and{" "}
+          <Code>--stack &lt;id&gt;</Code> a compose stack, instead of the linked
+          application.
+        </li>
+      </Ul>
       <Pre title="A typical session">{`$ aoox env list
-Project: shop
-NAME                    VARIABLES  USED BY
-development             3          -
-staging                 0          -
-production (protected)  7          shop
+backend  (Backend) · shared with shop, blog · your role: developer
+  development             3 variables
+  staging                 0 variables
+  production (protected)  7 variables  used by 2
 
-$ aoox env set API_URL=https://api.example.com GREETING="hello world"
-development: added API_URL, GREETING (5 variables now)
+$ aoox env set API_URL=https://api.example.com GREETING="hello world" -s backend -e development
+backend/development: added API_URL, GREETING (5 variables now)
 
-$ aoox env list --env development            # names only, values masked
+$ aoox env list --set backend --env development            # names only, values masked
 API_URL=••••••••
-$ aoox env list --env development --reveal   # values (audited)
-$ aoox env pull                              # writes ./.env (mode 0600)
-$ aoox env unset OLD_KEY
-$ aoox run -- npm run dev                    # starts it with the variables`}</Pre>
+$ aoox env list --set backend --env development --reveal   # values (audited)
+$ aoox env pull --set backend --env development            # writes ./.env (mode 0600)
+$ aoox env unset OLD_KEY --set backend --env development
+$ aoox run -- npm run dev                                  # what the linked app gets`}</Pre>
       <Table
         head={["Command", "Does"]}
         rows={[
-          [<Code key="l">aoox env list [--env name] [--reveal] [--json]</Code>, "Without --env: the project's environments (protection, variable count, what uses them). With --env: that environment's variable names; --reveal shows the values through the audited reveal action."],
-          [<Code key="p">aoox env pull [--env name] [--file .env] [--format dotenv|json|shell] [--force]</Code>, <>Writes the variables to a file with mode <Code>0600</Code> (owner only, where the OS supports it). It never overwrites an existing file unless <Code>--force</Code>, and warns once when the file is not covered by <Code>.gitignore</Code> (it never edits <Code>.gitignore</Code> itself).</>],
-          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--env name] [--secret | --no-secret]</Code>, <>Adds or changes variables. Comments and the order of the existing lines are kept; a new variable goes at the end. <Code>--secret</Code> marks the variables as secret, <Code>--no-secret</Code> as explicitly not secret; without either, the flags stay as they are, except that a <em>new</em> variable whose name looks secret (password, secret, token, key, private, credential) is marked secret automatically (see <DocLink href="/docs/environment#secret-flags">Secret variables</DocLink>). The default <Code>--env</Code> is <Code>development</Code>; changing the protected <Code>production</Code> needs a project admin, and anyone else gets 403.</>],
-          [<Code key="u">aoox env unset KEY [KEY2 …] [--env name]</Code>, "Removes variables; comments and the other lines stay."],
-          [<Code key="pu">aoox env push --file .env [--env name] [--yes]</Code>, "Replaces the whole environment with a local file, after showing which variables are added, changed and removed and asking for confirmation."],
-          [<Code key="h">aoox env history [--env name] [--limit 20] [--json]</Code>, "The version history of an environment, newest first: when, who, and the variable names added (+), changed (~) or removed (-). Never values."],
-          [<Code key="d">aoox env diff &lt;from&gt; &lt;to&gt; [--project name] [--json]</Code>, "Compares two environments by variable name: only on one side, different values, same. Prints names only."],
-          [<Code key="pr">aoox env promote &lt;from&gt; &lt;to&gt; [KEY …] [--all] [--yes] [--project name]</Code>, "Copies the named variables (or all of them) and their secret flag from one environment into another, after showing what changes and asking for confirmation."],
-          [<Code key="r">aoox run [--env name] [--file .env.local] -- command [args…]</Code>, "Fetches the variables and starts the command with them on top of your current environment (the panel's value wins on a clash; a local file, if given, wins over both). Nothing is written to disk. Output goes straight to your terminal, the command's exit code is the exit code of aoox run, and Ctrl+C or SIGTERM is passed to it."],
+          [<Code key="l">aoox env list [--set slug] [--env name] [--reveal] [--json]</Code>, "Without flags: every set you can see, your role, its sharing and each environment's variable count (also as aoox env sets). With --set: one set. With --env: that environment's variable names; --reveal shows the values through the audited reveal action."],
+          [<Code key="p">aoox env pull [--set slug] [--env name] [--file .env] [--format dotenv|json|shell] [--force]</Code>, <>Writes the variables to a file with mode <Code>0600</Code> (owner only, where the OS supports it). It never overwrites an existing file unless <Code>--force</Code>, and warns once when the file is not covered by <Code>.gitignore</Code> (it never edits <Code>.gitignore</Code> itself).</>],
+          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--set slug] [--env name] [--secret | --no-secret]</Code>, <>Adds or changes variables. Comments and the order of the existing lines are kept; a new variable goes at the end. <Code>--secret</Code> marks the variables as secret, <Code>--no-secret</Code> as explicitly not secret; without either, the flags stay as they are (see <DocLink href="/docs/variables#secret-flags">Secret variables</DocLink>). A value with <Code>{"${{project.KEY}}"}</Code> is refused: write <Code>{"${{vars.KEY}}"}</Code>.</>],
+          [<Code key="u">aoox env unset KEY [KEY2 …] [--set slug] [--env name]</Code>, "Removes variables; comments and the other lines stay."],
+          [<Code key="pu">aoox env push --file .env [--set slug] [--env name] [--yes]</Code>, "Replaces the whole environment with a local file, after showing which variables are added, changed and removed and asking for confirmation."],
+          [<Code key="h">aoox env history [--set slug] [--env name] [--limit 20] [--json]</Code>, "The version history of an environment, newest first: when, who, and the variable names added (+), changed (~) or removed (-). Never values."],
+          [<Code key="d">aoox env diff --from name --to name [--set slug] [--json]</Code>, "Compares two environments of one set by variable name: only on one side, different values, same. Prints names only."],
+          [<Code key="pr">aoox env promote --from name --to name [KEY …] [--all] [--yes] [--set slug]</Code>, "Copies the named variables (or all of them) and their secret flag from one environment of the set into another, after showing what changes and asking for confirmation."],
+          [<Code key="ls">aoox env links [--app id | --stack id] [--json]</Code>, "The set environments the application (or stack) uses, in merge order (1 = first, overridden by later ones), with the variables a later link or the own env overrides."],
+          [<Code key="ln">aoox env link --set slug --env name [--position n] [--app id | --stack id]</Code>, "Links a set environment. It goes at the end (so it wins over the others) unless --position (1-based) is given; an environment that is already linked is moved there. Takes effect on the next deploy."],
+          [<Code key="ul">aoox env unlink (--set slug --env name | --position n) [--app id | --stack id]</Code>, "Removes a link. Takes effect on the next deploy."],
+          [<Code key="r">aoox run [--set slug --env name] [--file .env.local] [--app id | --stack id] -- command [args…]</Code>, "Starts the command with the variables on top of your current environment (see below). Nothing is written to disk. Output goes straight to your terminal, the command's exit code is the exit code of aoox run, and Ctrl+C or SIGTERM is passed to it."],
         ]}
       />
-      <H3>Pull formats, push and run --file</H3>
+      <H3>What aoox run passes to the command</H3>
+      <Ul>
+        <li>
+          <strong>By default</strong> it does what the panel does when it
+          creates the container, as far as a terminal can: it reads every set
+          environment the application links, in order (a later one wins on the
+          same key), then puts the application&apos;s own env on top. Every read
+          is audited. If any of them cannot be read (a protected environment, a
+          viewer, a token scope), nothing is started.
+        </li>
+        <li>
+          <Code>{"${{vars.KEY}}"}</Code> is replaced by the merged set value of{" "}
+          <Code>KEY</Code>, one level deep like the panel.
+        </li>
+        <li>
+          <Code>{"${{database.…}}"}</Code> and <Code>{"${{secret.…}}"}</Code>{" "}
+          references, and a <Code>{"${{vars.KEY}}"}</Code> that no linked set
+          defines, are <strong>left as written</strong>, with one warning naming
+          those variables: only the panel resolves them at deploy time. Secrets
+          synced from Infisical are not included (a warning says so).
+        </li>
+        <li>
+          <Code>--set</Code>/<Code>--env</Code> instead use exactly one set
+          environment: no links and no own env.
+        </li>
+        <li>
+          <Code>--file .env.local</Code> goes on top of all of that: the order,
+          lowest to highest, is your current environment, then aoox, then the
+          file. The file is only read, and its references are not resolved.
+        </li>
+      </Ul>
+      <Pre title="Which layers were used (printed to standard error)">{`$ aoox run -- node server.js
+Application "shop-web": shared/production < backend/production < own env`}</Pre>
+      <H3>Pull formats and push</H3>
       <Pre title="Formats and standard output">{`$ aoox env pull --env staging                        # ./.env, the stored text with its comments
 $ aoox env pull --format json                        # ./.env.json  {"KEY":"value"}
 $ aoox env pull --format shell                       # ./.env.sh    export KEY='value'
@@ -438,19 +494,19 @@ $ eval "$(aoox env pull --format shell --file -)"    # load into the current she
           mode <Code>0600</Code> where the OS supports it.
         </li>
       </Ul>
-      <Pre title="Upload a file and look at the result">{`$ aoox env push --file .env.staging --env staging
-Project: shop · environment: staging
+      <Pre title="Upload a file and look at the result">{`$ aoox env push --file .env.staging --set backend --env staging
+Environment: backend/staging
   + added (1): NEW_FLAG
   ~ changed (1): API_URL
   - removed (1): OLD_KEY
   = unchanged: 6
 Variables that are not in the file are removed: this replaces the whole environment.
-? Replace "staging" with the contents of .env.staging? (y/N)`}</Pre>
+? Replace "backend/staging" with the contents of .env.staging? (y/N)`}</Pre>
       <Ul>
         <li>
           The file is checked before anything is sent. Refused: invalid names,
-          an <Code>export </Code> prefix, trailing whitespace and duplicate
-          names. Quoted values (<Code>KEY=&quot;value&quot;</Code>) are
+          an <Code>export </Code> prefix, trailing whitespace, duplicate names
+          and <Code>{"${{project.…}}"}</Code>. Quoted values (<Code>KEY=&quot;value&quot;</Code>) are
           accepted with a warning, because the panel stores the quotes as part
           of the value. Windows line endings and a leading BOM are normalised.
         </li>
@@ -462,16 +518,8 @@ Variables that are not in the file are removed: this replaces the whole environm
           between, nothing is written (409), as with <Code>set</Code>.
         </li>
         <li>
-          <Code>aoox run --file .env.local -- npm run dev</Code>: the order,
-          lowest to highest, is your current environment, then the aoox
-          environment, then the local file. The most specific source wins, like
-          a <Code>.env.local</Code> over shared config. The file is only read,
-          and <Code>{"${{…}}"}</Code> references inside it are not resolved
-          (only the panel does that).
-        </li>
-        <li>
           Every change is recorded as a version (see{" "}
-          <DocLink href="/docs/environment#history">history and restore</DocLink>);
+          <DocLink href="/docs/variables#history">history and restore</DocLink>);
           restoring an old version is done in the dashboard.
         </li>
       </Ul>
@@ -502,10 +550,10 @@ Variables that are not in the file are removed: this replaces the whole environm
           whitespace (the panel trims the end of each line).
         </li>
         <li>
-          <Code>{"${{project.KEY}}"}</Code> and{" "}
+          <Code>{"${{vars.KEY}}"}</Code> and{" "}
           <Code>{"${{database.<slug>.url}}"}</Code> references are stored and
-          pulled as written. Only the panel resolves them, when the container
-          is created, so <Code>aoox run</Code> passes them as text.
+          pulled as written; the panel resolves them when the container is
+          created.
         </li>
         <li>
           Compose stacks read the resolved text through Docker Compose&apos;s own{" "}
@@ -515,43 +563,54 @@ Variables that are not in the file are removed: this replaces the whole environm
       </Ul>
       <H3>Editing at the same time</H3>
       <P>
-        <Code>set</Code> and <Code>unset</Code> read the environment, change
-        the text and save it back together with the version they read. If
-        someone else saved in between (the dashboard, another terminal), the
-        panel answers <Code>409</Code> and the CLI says that nothing was
-        written — run the command again to apply your change on top of the
-        latest version. The dashboard&apos;s editor does the same.
+        <Code>set</Code>, <Code>unset</Code> and <Code>push</Code> read the
+        environment, change the text and save it back together with the version
+        they read. If someone else saved in between (the dashboard, another
+        terminal), the panel answers <Code>409</Code> and the CLI says that
+        nothing was written — run the command again to apply your change on top
+        of the latest version. The dashboard&apos;s editor does the same.
       </P>
       <H3>Who can do what</H3>
       <Table
-        head={["Role", "development / staging / custom", "production (protected)"]}
+        head={["Role", "Unprotected environments", "Protected environments (e.g. production)"]}
         rows={[
-          [<strong key="a">Project admin</strong>, "list, pull, set, unset, run", "list, pull, set, unset, run"],
-          [<strong key="d">Developer</strong>, "list, pull, set, unset, run", <>Only the variable names. Anything else prints <Code>❌ &quot;production&quot; is protected; only project admins can read it.</Code></>],
+          [<strong key="i">Instance owner / admin</strong>, "Everything", "Everything"],
+          [<strong key="d">Project admin, developer</strong>, "list, pull, set, unset, push, promote, run", <>Only the variable names. Anything else prints <Code>❌ &quot;backend/production&quot; is protected; only instance owners and admins can read it.</Code></>],
           [<strong key="v">Viewer</strong>, "Variable names only", "Variable names only"],
         ]}
       />
       <Ul>
         <li>
-          <strong>In CI</strong> create an API token as a project admin (for{" "}
-          <Code>production</Code>) or as a developer (other environments) and
-          export <Code>AOOX_TOKEN</Code>/<Code>AOOX_URL</Code>. The token can be
-          limited to certain <strong>environments</strong> by name (Settings
-          <PathArrow />API token<PathArrow />Limit to environments), e.g. only{" "}
-          <Code>development</Code>: other environments then answer 403.
+          <strong>Links</strong>: <Code>env link</Code>/<Code>unlink</Code> need
+          the developer role in the application&apos;s project; adding or removing
+          a link to a protected environment needs the project admin role. The
+          set must be shared with the project.
+        </li>
+        <li>
+          <strong>In CI</strong> create an API token and export{" "}
+          <Code>AOOX_TOKEN</Code>/<Code>AOOX_URL</Code>. The token can be
+          limited to some set environments (Settings<PathArrow />API token
+          <PathArrow />the variables limit), e.g.{" "}
+          <Code>backend/staging</Code>, <Code>backend/*</Code> or{" "}
+          <Code>*/development</Code>: other environments then answer 403. See{" "}
+          <DocLink href="/docs/variables#tokens">API token scopes</DocLink>.
         </li>
         <li>
           A <strong>read-only</strong> token can still run{" "}
           <Code>aoox env pull</Code>, <Code>aoox env list --reveal</Code> and{" "}
           <Code>aoox run</Code> (reading changes nothing and is audited), but{" "}
-          <Code>set</Code>, <Code>unset</Code>, <Code>push</Code> and{" "}
-          <Code>promote</Code> are refused. Viewers can never
-          read values, with or without a token.
+          <Code>set</Code>, <Code>unset</Code>, <Code>push</Code>,{" "}
+          <Code>promote</Code>, <Code>link</Code> and <Code>unlink</Code> are
+          refused. Viewers can never read values, with or without a token.
         </li>
         <li>
           Every read of values is recorded in the audit log without the values.
           Reading is a request to the API, so an environment is never cached on
           disk by the CLI.
+        </li>
+        <li>
+          Creating, sharing and deleting sets and environments is done in the
+          dashboard by an instance owner or admin.
         </li>
       </Ul>
 

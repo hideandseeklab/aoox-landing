@@ -138,7 +138,11 @@ export default function Page() {
         rows={[
           [
             <strong key="p">Project</strong>,
-            "A container for related applications, compose stacks, and databases. Has environments (development, staging, production).",
+            "A container for related applications, compose stacks, and databases.",
+          ],
+          [
+            <strong key="v">Variable set</strong>,
+            "Shared variables with their own environments (development, staging, production), shared with projects and linked to applications and stacks in order.",
           ],
           [
             <strong key="a">Application</strong>,

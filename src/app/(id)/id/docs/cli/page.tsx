@@ -87,13 +87,18 @@ const COMMANDS = [
   },
   {
     cmd: "aoox env list | pull | push | set | unset | history | diff | promote",
-    what: "Menampilkan, mengunduh, mengunggah, membandingkan atau mengubah variabel sebuah environment project (lihat Variabel environment).",
-    flags: "--project, --url/-u, --token/-t (all); --env/-e, --reveal, --json (list); --env, --file, --force, --format (pull); --env, --file, --yes (push); --env, --secret/--no-secret (set); --env (unset); --env, --limit, --json (history); --json (diff); --all, --yes (promote)",
+    what: "Menampilkan, mengunduh, mengunggah, membandingkan atau mengubah environment set variabel (lihat Variabel).",
+    flags: "--set/-s, --env/-e, --app, --stack, --url/-u, --token/-t; --reveal, --json (list); --file, --force, --format (pull); --file, --yes (push); --secret/--no-secret (set); --limit, --json (history); --from, --to (diff, promote); --all, --yes (promote)",
+  },
+  {
+    cmd: "aoox env links | link | unlink",
+    what: "Menampilkan atau mengubah urutan environment set yang dipakai aplikasi (atau --stack).",
+    flags: "--app, --stack; --set/-s, --env/-e, --position (link, unlink)",
   },
   {
     cmd: "aoox run -- <perintah>",
-    what: "Menjalankan perintah dengan variabel sebuah environment, tanpa menulisnya ke disk.",
-    flags: "--env/-e, --project, --file, --url/-u, --token/-t",
+    what: "Menjalankan perintah dengan variabel yang didapat aplikasi tertaut saat deploy (atau satu environment set), tanpa menulisnya ke disk.",
+    flags: "--set/-s, --env/-e, --app, --stack, --file, --url/-u, --token/-t",
   },
   {
     cmd: "aoox registry push",
@@ -113,7 +118,7 @@ const COMMANDS = [
 ]
 
 const NEXT = [
-  { title: "Variabel environment", description: "Environment project, perlindungan dan referensi.", href: "/id/docs/environment#environments" },
+  { title: "Variabel", description: "Set variabel, perlindungan, penautan dan referensi.", href: "/id/docs/variabel" },
   { title: "Pengguna & peran", description: "Membuat API token dan scope-nya.", href: "/id/docs/pengguna-peran#akun" },
   { title: "Instalasi", description: "Langkah manual yang di-otomatisasi aoox install.", href: "/id/docs/instalasi" },
   { title: "Registry", description: "Tempat image dari aoox deploy disimpan.", href: "/id/docs/registry" },
@@ -368,47 +373,102 @@ Deployed: localhost:5000/toko/shop:a1b2c3d`}</Pre>
         tunggu selesai dulu.
       </Callout>
 
-      <H2 id="env">Variabel environment (aoox env, aoox run)</H2>
+      <H2 id="env">Variabel (aoox env, aoox run)</H2>
       <P>
-        <Code>aoox env</Code> membaca dan mengubah variabel sebuah{" "}
-        <DocLink href="/id/docs/environment#environments">environment project</DocLink>{" "}
-        (yang sama dengan tab Environments di project), dan{" "}
-        <Code>aoox run</Code> menjalankan sebuah perintah dengan variabel itu
-        tanpa menulis file. Project-nya adalah milik aplikasi yang ditautkan
-        dengan <Code>aoox link</Code>, atau <Code>--project &lt;id atau nama&gt;</Code>;
-        environment-nya <Code>--env</Code> (default <Code>development</Code>).
+        <Code>aoox env</Code> membaca dan mengubah environment dari{" "}
+        <DocLink href="/id/docs/variabel">set variabel</DocLink> (yang sama
+        dengan menu <strong>Variabel</strong> di dashboard) dan mengatur
+        environment mana yang dipakai aplikasi tertaut. <Code>aoox run</Code>{" "}
+        menjalankan perintah dengan variabel yang didapat aplikasi saat deploy,
+        tanpa menulis file.
       </P>
+      <Ul>
+        <li>
+          Environment set dipilih dengan <Code>--set &lt;slug&gt;</Code> (singkat{" "}
+          <Code>-s</Code>) dan <Code>--env &lt;nama&gt;</Code> (<Code>-e</Code>).
+        </li>
+        <li>
+          <strong>Bawaan</strong>: <Code>--set</Code> adalah satu-satunya set
+          yang dipakai aplikasi yang ditautkan dengan <Code>aoox link</Code>{" "}
+          (atau satu-satunya set yang bisa kamu lihat); <Code>--env</Code>{" "}
+          adalah satu-satunya environment set itu yang ditautkan. Bila ada
+          beberapa kandidat, perintah berhenti dan menampilkan daftarnya — tidak
+          pernah menebak. Tidak ada nama environment bawaan.
+        </li>
+        <li>
+          <Code>--app &lt;id&gt;</Code> memakai aplikasi lain, dan{" "}
+          <Code>--stack &lt;id&gt;</Code> sebuah stack compose, sebagai ganti
+          aplikasi tertaut.
+        </li>
+      </Ul>
       <Pre title="Contoh sesi">{`$ aoox env list
-Project: shop
-NAME                    VARIABLES  USED BY
-development             3          -
-staging                 0          -
-production (protected)  7          shop
+backend  (Backend) · shared with shop, blog · your role: developer
+  development             3 variables
+  staging                 0 variables
+  production (protected)  7 variables  used by 2
 
-$ aoox env set API_URL=https://api.example.com GREETING="hello world"
-development: added API_URL, GREETING (5 variables now)
+$ aoox env set API_URL=https://api.example.com GREETING="hello world" -s backend -e development
+backend/development: added API_URL, GREETING (5 variables now)
 
-$ aoox env list --env development            # hanya nama, nilai disamarkan
+$ aoox env list --set backend --env development            # hanya nama, nilai disamarkan
 API_URL=••••••••
-$ aoox env list --env development --reveal   # nilai (diaudit)
-$ aoox env pull                              # menulis ./.env (mode 0600)
-$ aoox env unset OLD_KEY
-$ aoox run -- npm run dev                    # menjalankannya dengan variabel itu`}</Pre>
+$ aoox env list --set backend --env development --reveal   # nilai (diaudit)
+$ aoox env pull --set backend --env development            # menulis ./.env (mode 0600)
+$ aoox env unset OLD_KEY --set backend --env development
+$ aoox run -- npm run dev                                  # yang didapat aplikasi tertaut`}</Pre>
       <Table
         head={["Perintah", "Fungsi"]}
         rows={[
-          [<Code key="l">aoox env list [--env nama] [--reveal] [--json]</Code>, "Tanpa --env: daftar environment project (perlindungan, jumlah variabel, pemakainya). Dengan --env: nama variabel environment itu; --reveal menampilkan nilainya lewat aksi reveal yang diaudit."],
-          [<Code key="p">aoox env pull [--env nama] [--file .env] [--format dotenv|json|shell] [--force]</Code>, <>Menulis variabel ke file dengan mode <Code>0600</Code> (hanya pemilik, bila OS mendukung). Tidak pernah menimpa file yang sudah ada kecuali <Code>--force</Code>, dan memperingatkan sekali bila file itu tidak tercakup <Code>.gitignore</Code> (<Code>.gitignore</Code> tidak pernah diubah otomatis).</>],
-          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--env nama] [--secret | --no-secret]</Code>, <>Menambah atau mengubah variabel. Komentar dan urutan baris yang ada dipertahankan; variabel baru ditaruh di akhir. <Code>--secret</Code> menandai variabel sebagai rahasia, <Code>--no-secret</Code> sebagai secara eksplisit bukan rahasia; tanpa keduanya, tandanya dibiarkan, kecuali variabel <em>baru</em> yang namanya tampak rahasia (password, secret, token, key, private, credential) otomatis ditandai rahasia (lihat <DocLink href="/id/docs/environment#flag-rahasia">Variabel rahasia</DocLink>). <Code>--env</Code> bawaannya <Code>development</Code>; mengubah <Code>production</Code> yang dilindungi membutuhkan admin project, yang lain mendapat 403.</>],
-          [<Code key="u">aoox env unset KEY [KEY2 …] [--env nama]</Code>, "Menghapus variabel; komentar dan baris lain tetap."],
-          [<Code key="pu">aoox env push --file .env [--env nama] [--yes]</Code>, "Mengganti seluruh environment dengan file lokal, setelah menampilkan variabel yang ditambah, diubah dan dihapus lalu meminta konfirmasi."],
-          [<Code key="h">aoox env history [--env nama] [--limit 20] [--json]</Code>, "Riwayat versi sebuah environment, terbaru dulu: kapan, siapa, dan nama variabel yang ditambah (+), diubah (~) atau dihapus (-). Tidak pernah menampilkan nilai."],
-          [<Code key="d">aoox env diff &lt;dari&gt; &lt;ke&gt; [--project nama] [--json]</Code>, "Membandingkan dua environment menurut nama variabel: hanya di satu sisi, nilai berbeda, sama. Hanya mencetak nama."],
-          [<Code key="pr">aoox env promote &lt;dari&gt; &lt;ke&gt; [KEY …] [--all] [--yes] [--project nama]</Code>, "Menyalin variabel yang disebut (atau semuanya) beserta tanda rahasianya dari satu environment ke environment lain, setelah menampilkan perubahannya dan meminta konfirmasi."],
-          [<Code key="r">aoox run [--env nama] [--file .env.local] -- perintah [argumen…]</Code>, "Mengambil variabel dan menjalankan perintah dengan variabel itu di atas environment-mu saat ini (nilai dari panel menang bila bentrok; file lokal, bila diberikan, menang atas keduanya). Tidak ada yang ditulis ke disk. Output langsung ke terminalmu, exit code perintah menjadi exit code aoox run, dan Ctrl+C atau SIGTERM diteruskan."],
+          [<Code key="l">aoox env list [--set slug] [--env nama] [--reveal] [--json]</Code>, "Tanpa flag: semua set yang bisa kamu lihat, peranmu, pembagiannya, dan jumlah variabel tiap environment (juga sebagai aoox env sets). Dengan --set: satu set. Dengan --env: nama variabel environment itu; --reveal menampilkan nilainya lewat aksi reveal yang diaudit."],
+          [<Code key="p">aoox env pull [--set slug] [--env nama] [--file .env] [--format dotenv|json|shell] [--force]</Code>, <>Menulis variabel ke file dengan mode <Code>0600</Code> (hanya pemilik, bila OS mendukung). Tidak pernah menimpa file yang sudah ada kecuali dengan <Code>--force</Code>, dan memperingatkan sekali bila file tidak tercakup <Code>.gitignore</Code> (tidak pernah mengubah <Code>.gitignore</Code> sendiri).</>],
+          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--set slug] [--env nama] [--secret | --no-secret]</Code>, <>Menambah atau mengubah variabel. Komentar dan urutan baris yang ada dipertahankan; variabel baru ditaruh di akhir. <Code>--secret</Code> menandai variabel sebagai rahasia, <Code>--no-secret</Code> sebagai jelas bukan rahasia; tanpa keduanya, tandanya tetap (lihat <DocLink href="/id/docs/variabel#flag-rahasia">Variabel rahasia</DocLink>). Nilai dengan <Code>{"${{project.KEY}}"}</Code> ditolak: tulis <Code>{"${{vars.KEY}}"}</Code>.</>],
+          [<Code key="u">aoox env unset KEY [KEY2 …] [--set slug] [--env nama]</Code>, "Menghapus variabel; komentar dan baris lain tetap."],
+          [<Code key="pu">aoox env push --file .env [--set slug] [--env nama] [--yes]</Code>, "Mengganti seluruh environment dengan file lokal, setelah menampilkan variabel yang ditambah, diubah dan dihapus lalu meminta konfirmasi."],
+          [<Code key="h">aoox env history [--set slug] [--env nama] [--limit 20] [--json]</Code>, "Riwayat versi sebuah environment, terbaru dulu: kapan, siapa, dan nama variabel yang ditambah (+), diubah (~) atau dihapus (-). Tidak pernah nilai."],
+          [<Code key="d">aoox env diff --from nama --to nama [--set slug] [--json]</Code>, "Membandingkan dua environment dalam satu set menurut nama variabel: hanya di satu sisi, nilai berbeda, sama. Hanya mencetak nama."],
+          [<Code key="pr">aoox env promote --from nama --to nama [KEY …] [--all] [--yes] [--set slug]</Code>, "Menyalin variabel yang disebut (atau semuanya) beserta tanda rahasianya dari satu environment set ke environment lain, setelah menampilkan perubahannya dan meminta konfirmasi."],
+          [<Code key="ls">aoox env links [--app id | --stack id] [--json]</Code>, "Environment set yang dipakai aplikasi (atau stack), sesuai urutan penggabungan (1 = pertama, ditimpa yang berikutnya), beserta variabel yang ditimpa tautan berikutnya atau env sendiri."],
+          [<Code key="ln">aoox env link --set slug --env nama [--position n] [--app id | --stack id]</Code>, "Menautkan environment set. Ditaruh di akhir (jadi menang atas yang lain) kecuali --position (mulai dari 1) diberikan; environment yang sudah tertaut dipindah ke posisi itu. Berlaku pada deploy berikutnya."],
+          [<Code key="ul">aoox env unlink (--set slug --env nama | --position n) [--app id | --stack id]</Code>, "Melepas tautan. Berlaku pada deploy berikutnya."],
+          [<Code key="r">aoox run [--set slug --env nama] [--file .env.local] [--app id | --stack id] -- perintah [argumen…]</Code>, "Menjalankan perintah dengan variabel di atas environment-mu saat ini (lihat di bawah). Tidak ada yang ditulis ke disk. Output langsung ke terminalmu, exit code perintah menjadi exit code aoox run, dan Ctrl+C atau SIGTERM diteruskan ke perintah."],
         ]}
       />
-      <H3>Format pull, push, dan run --file</H3>
+      <H3>Apa yang diteruskan aoox run ke perintah</H3>
+      <Ul>
+        <li>
+          <strong>Secara bawaan</strong> ia meniru yang dilakukan panel saat
+          membuat container, sejauh yang bisa dilakukan dari terminal: membaca
+          setiap environment set yang ditautkan aplikasi, berurutan (yang
+          belakangan menang pada key yang sama), lalu menaruh env milik aplikasi
+          di atasnya. Setiap pembacaan diaudit. Bila salah satunya tidak bisa
+          dibaca (environment terlindungi, viewer, scope token), tidak ada yang
+          dijalankan.
+        </li>
+        <li>
+          <Code>{"${{vars.KEY}}"}</Code> diganti dengan nilai gabungan{" "}
+          <Code>KEY</Code> dari set, satu tingkat seperti di panel.
+        </li>
+        <li>
+          Referensi <Code>{"${{database.…}}"}</Code> dan{" "}
+          <Code>{"${{secret.…}}"}</Code>, serta <Code>{"${{vars.KEY}}"}</Code>{" "}
+          yang tidak didefinisikan set tertaut mana pun, <strong>dibiarkan apa
+          adanya</strong>, dengan satu peringatan yang menyebut variabelnya:
+          hanya panel yang meresolusinya saat deploy. Secret yang disinkronkan
+          dari Infisical tidak ikut (ada peringatannya).
+        </li>
+        <li>
+          <Code>--set</Code>/<Code>--env</Code> memakai tepat satu environment
+          set saja: tanpa tautan dan tanpa env sendiri.
+        </li>
+        <li>
+          <Code>--file .env.local</Code> berada di atas semua itu: urutannya,
+          dari terendah ke tertinggi, environment-mu saat ini, lalu aoox, lalu
+          file. File hanya dibaca, dan referensi di dalamnya tidak diresolusi.
+        </li>
+      </Ul>
+      <Pre title="Lapisan yang dipakai (dicetak ke standard error)">{`$ aoox run -- node server.js
+Application "shop-web": shared/production < backend/production < own env`}</Pre>
+      <H3>Format pull dan push</H3>
       <Pre title="Format dan standard output">{`$ aoox env pull --env staging                        # ./.env, teks tersimpan beserta komentarnya
 $ aoox env pull --format json                        # ./.env.json  {"KEY":"value"}
 $ aoox env pull --format shell                       # ./.env.sh    export KEY='value'
@@ -433,19 +493,19 @@ $ eval "$(aoox env pull --format shell --file -)"    # muat ke shell saat ini`}<
           mendukung.
         </li>
       </Ul>
-      <Pre title="Unggah file dan lihat hasilnya">{`$ aoox env push --file .env.staging --env staging
-Project: shop · environment: staging
+      <Pre title="Unggah file dan lihat hasilnya">{`$ aoox env push --file .env.staging --set backend --env staging
+Environment: backend/staging
   + added (1): NEW_FLAG
   ~ changed (1): API_URL
   - removed (1): OLD_KEY
   = unchanged: 6
 Variables that are not in the file are removed: this replaces the whole environment.
-? Replace "staging" with the contents of .env.staging? (y/N)`}</Pre>
+? Replace "backend/staging" with the contents of .env.staging? (y/N)`}</Pre>
       <Ul>
         <li>
           File diperiksa sebelum apa pun dikirim. Ditolak: nama tidak valid,
-          awalan <Code>export </Code>, spasi di ujung baris, dan nama ganda.
-          Nilai ber-kutip (<Code>KEY=&quot;value&quot;</Code>) diterima dengan
+          awalan <Code>export </Code>, spasi di ujung baris, nama ganda, dan{" "}
+          <Code>{"${{project.…}}"}</Code>. Nilai ber-kutip (<Code>KEY=&quot;value&quot;</Code>) diterima dengan
           peringatan, karena panel menyimpan kutipnya sebagai bagian dari
           nilai. Akhir baris Windows dan BOM di awal dinormalkan.
         </li>
@@ -458,16 +518,8 @@ Variables that are not in the file are removed: this replaces the whole environm
           <Code>set</Code>.
         </li>
         <li>
-          <Code>aoox run --file .env.local -- npm run dev</Code>: urutannya,
-          dari terendah ke tertinggi, adalah environment-mu saat ini, lalu
-          environment aoox, lalu file lokal. Sumber yang paling spesifik
-          menang, seperti <Code>.env.local</Code> di atas konfigurasi bersama.
-          File hanya dibaca, dan referensi <Code>{"${{…}}"}</Code> di dalamnya
-          tidak di-resolve (hanya panel yang melakukannya).
-        </li>
-        <li>
           Setiap perubahan tercatat sebagai versi (lihat{" "}
-          <DocLink href="/id/docs/environment#riwayat">riwayat dan restore</DocLink>);
+          <DocLink href="/id/docs/variabel#riwayat">riwayat dan restore</DocLink>);
           memulihkan versi lama dilakukan di dashboard.
         </li>
       </Ul>
@@ -499,10 +551,9 @@ Variables that are not in the file are removed: this replaces the whole environm
           memangkas ujung tiap baris).
         </li>
         <li>
-          Referensi <Code>{"${{project.KEY}}"}</Code> dan{" "}
-          <Code>{"${{database.<slug>.url}}"}</Code> disimpan dan di-pull
-          apa adanya. Hanya panel yang meresolusinya, saat container dibuat,
-          jadi <Code>aoox run</Code> meneruskannya sebagai teks.
+          Referensi <Code>{"${{vars.KEY}}"}</Code> dan{" "}
+          <Code>{"${{database.<slug>.url}}"}</Code> disimpan dan di-pull apa
+          adanya; panel meresolusinya saat container dibuat.
         </li>
         <li>
           Stack compose membaca teks hasil resolusi lewat parser{" "}
@@ -513,42 +564,54 @@ Variables that are not in the file are removed: this replaces the whole environm
       </Ul>
       <H3>Mengedit bersamaan</H3>
       <P>
-        <Code>set</Code> dan <Code>unset</Code> membaca environment, mengubah
-        teksnya, lalu menyimpannya kembali bersama versi yang dibaca. Bila orang
-        lain menyimpan di sela itu (dashboard, terminal lain), panel menjawab{" "}
-        <Code>409</Code> dan CLI mengatakan tidak ada yang ditulis — jalankan
-        perintahnya lagi agar perubahanmu diterapkan di atas versi terbaru.
-        Editor di dashboard bekerja dengan cara yang sama.
+        <Code>set</Code>, <Code>unset</Code> dan <Code>push</Code> membaca
+        environment, mengubah teksnya, lalu menyimpannya kembali bersama versi
+        yang dibaca. Bila orang lain menyimpan di sela itu (dashboard, terminal
+        lain), panel menjawab <Code>409</Code> dan CLI mengatakan tidak ada yang
+        ditulis — jalankan perintahnya lagi agar perubahanmu diterapkan di atas
+        versi terbaru. Editor di dashboard bekerja dengan cara yang sama.
       </P>
       <H3>Siapa boleh apa</H3>
       <Table
-        head={["Peran", "development / staging / custom", "production (dilindungi)"]}
+        head={["Peran", "Environment biasa", "Environment terlindungi (mis. production)"]}
         rows={[
-          [<strong key="a">Admin project</strong>, "list, pull, set, unset, run", "list, pull, set, unset, run"],
-          [<strong key="d">Developer</strong>, "list, pull, set, unset, run", <>Hanya nama variabel. Selebihnya menampilkan <Code>❌ &quot;production&quot; is protected; only project admins can read it.</Code></>],
+          [<strong key="i">Owner / admin instance</strong>, "Semuanya", "Semuanya"],
+          [<strong key="d">Admin project, developer</strong>, "list, pull, set, unset, push, promote, run", <>Hanya nama variabel. Selebihnya menampilkan <Code>❌ &quot;backend/production&quot; is protected; only instance owners and admins can read it.</Code></>],
           [<strong key="v">Viewer</strong>, "Hanya nama variabel", "Hanya nama variabel"],
         ]}
       />
       <Ul>
         <li>
-          <strong>Di CI</strong> buat API token dari akun admin project (untuk{" "}
-          <Code>production</Code>) atau developer (environment lain), lalu
-          ekspor <Code>AOOX_TOKEN</Code>/<Code>AOOX_URL</Code>. Token bisa
-          dibatasi ke <strong>environment</strong> tertentu menurut nama
-          (Pengaturan<PathArrow />API token<PathArrow />Batasi ke environment),
-          mis. hanya <Code>development</Code>: environment lain ditolak dengan 403.
+          <strong>Tautan</strong>: <Code>env link</Code>/<Code>unlink</Code>{" "}
+          butuh peran developer di project aplikasi itu; menambah atau melepas
+          tautan ke environment terlindungi butuh peran admin project. Set harus
+          dibagikan ke project itu.
+        </li>
+        <li>
+          <strong>Di CI</strong> buat API token lalu ekspor{" "}
+          <Code>AOOX_TOKEN</Code>/<Code>AOOX_URL</Code>. Token bisa dibatasi ke
+          sebagian environment set (Pengaturan<PathArrow />API token
+          <PathArrow />batas variabel), mis.{" "}
+          <Code>backend/staging</Code>, <Code>backend/*</Code> atau{" "}
+          <Code>*/development</Code>: environment lain ditolak dengan 403. Lihat{" "}
+          <DocLink href="/id/docs/variabel#token">Scope API token</DocLink>.
         </li>
         <li>
           Token <strong>baca saja</strong> tetap bisa menjalankan{" "}
           <Code>aoox env pull</Code>, <Code>aoox env list --reveal</Code> dan{" "}
           <Code>aoox run</Code> (membaca tidak mengubah apa pun dan diaudit),
-          tetapi <Code>set</Code>, <Code>unset</Code>, <Code>push</Code> dan{" "}
-          <Code>promote</Code> ditolak. Viewer tidak
-          pernah bisa membaca nilai, dengan atau tanpa token.
+          tetapi <Code>set</Code>, <Code>unset</Code>, <Code>push</Code>,{" "}
+          <Code>promote</Code>, <Code>link</Code> dan <Code>unlink</Code>{" "}
+          ditolak. Viewer tidak pernah bisa membaca nilai, dengan atau tanpa
+          token.
         </li>
         <li>
           Setiap pembacaan nilai tercatat di audit log tanpa nilainya. CLI tidak
           pernah menyimpan environment di disk.
+        </li>
+        <li>
+          Membuat, membagikan, dan menghapus set serta environment dilakukan di
+          dashboard oleh owner atau admin instance.
         </li>
       </Ul>
 

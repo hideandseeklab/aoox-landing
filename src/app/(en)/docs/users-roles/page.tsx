@@ -317,13 +317,17 @@ export default function Page() {
             1 year, or never.
           </P>
         </Step>
-        <Step title="Set permissions (optional): Read-only and Restrict to projects">
+        <Step title="Set permissions (optional): Read-only, Restrict to projects, variables">
           <P>
             <strong>Read-only</strong> rejects every state-changing request —
             same as the viewer role, including websocket log tickets.{" "}
             <strong>Restrict to projects</strong> picks one or more projects;
             the token then gets 404 outside them and is rejected on every
-            instance Settings route (server, registry, proxy).
+            instance Settings route (server, registry, proxy).{" "}
+            The <strong>variables limit</strong> narrows which
+            variable set environments it may read or change, as{" "}
+            <Code>set/env</Code>, <Code>set/*</Code> or <Code>*/env</Code> (see{" "}
+            <DocLink href="/docs/variables#tokens">Variables</DocLink>).
           </P>
         </Step>
         <Step title="Copy the aoox_… token — shown only once">

@@ -44,7 +44,7 @@ export const DOCS_NAV: DocGroup[] = [
       {
         href: "/id/docs/project",
         title: "Project",
-        description: "Wadah aplikasi, database, dan environment (development, staging, production).",
+        description: "Wadah aplikasi, database, dan stack compose.",
       },
       {
         href: "/id/docs/aplikasi",
@@ -64,7 +64,12 @@ export const DOCS_NAV: DocGroup[] = [
       {
         href: "/id/docs/environment",
         title: "Environment variables",
-        description: "Env project vs aplikasi dan referensi ke database.",
+        description: "Env aplikasi, sumber secret, dan referensi ke database.",
+      },
+      {
+        href: "/id/docs/variabel",
+        title: "Variabel",
+        description: "Set variabel bersama: environment, berbagi, urutan tautan, ${{vars.KEY}}.",
       },
       {
         href: "/id/docs/mount",
@@ -228,7 +233,7 @@ export const DOCS_NAV_EN: DocGroup[] = [
       {
         href: "/docs/project",
         title: "Project",
-        description: "The container for apps, databases, and environments.",
+        description: "The container for apps, databases, and compose stacks.",
       },
       {
         href: "/docs/applications",
@@ -248,7 +253,12 @@ export const DOCS_NAV_EN: DocGroup[] = [
       {
         href: "/docs/environment",
         title: "Environment variables",
-        description: "Project vs. application env, and database references.",
+        description: "Application env, secret source, and database references.",
+      },
+      {
+        href: "/docs/variables",
+        title: "Variables",
+        description: "Shared variable sets: environments, sharing, linking order, ${{vars.KEY}}.",
       },
       {
         href: "/docs/mount",
