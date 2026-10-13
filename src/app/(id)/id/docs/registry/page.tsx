@@ -221,9 +221,9 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         ]}
       />
       <Steps>
-        <Step title={<>Settings<PathArrow />Disk Docker</>}>
+        <Step title={<>Docker<PathArrow />strip disk dan Detail</>}>
           <P>
-            Kartu menampilkan pemakaian image, container, volume, build cache,
+            Strip di atas halaman Docker (host dipilih) menampilkan total pemakaian dan yang bisa dibebaskan; Detail menampilkan pemakaian image, container, volume, build cache,
             berapa yang bisa direklamasi, jumlah deployment yang bisa dipangkas,
             dan laporan cleanup terakhir.
           </P>
@@ -268,7 +268,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         rows={[
           ["Deploy gagal: No self-hosted registry", "Aktifkan registry lokal dulu."],
           ["Push manual: http: server gave HTTP response to HTTPS client", <><Code>REGISTRY_PUBLIC_HOST</Code> bukan localhost tanpa TLS. Tambahkan ke <Code>insecure-registries</Code> atau pasang reverse proxy TLS.</>],
-          ["Disk tetap penuh setelah hapus tag", <>Jalankan Garbage collect, atau Bersihkan sekarang di Settings<PathArrow />Disk Docker.</>],
+          ["Disk tetap penuh setelah hapus tag", <>Jalankan Garbage collect, atau Bersihkan sekarang di strip disk di atas halaman Docker.</>],
           ["Repository “0 tag” tidak hilang walau sudah Garbage collect", "Garbage collect tidak pernah menghapus repository itu sendiri, hanya blob yang tidak terpakai. Pakai tombol Hapus image di header repository tersebut."],
           ["Rollback gagal: image not found", "Tag sudah dipangkas oleh retensi atau dihapus manual. Deploy ulang commit tersebut."],
           ["Kartu Registry: Docker tidak terjangkau", <><Code>DOCKER_GID</Code> salah atau socket tidak di-mount — lihat <DocLink href="/id/docs/troubleshooting">Troubleshooting</DocLink>.</>],

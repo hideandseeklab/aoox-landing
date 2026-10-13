@@ -195,7 +195,7 @@ const DATABASE: Row[] = [
   [
     <>Backup 20 byte / gagal</>,
     "Kredensial/DB belum siap, atau disk penuh.",
-    "Baca pesan error di baris backup; cek Disk Docker.",
+    "Baca pesan error di baris backup; cek strip disk di atas halaman Docker.",
   ],
   [
     <>Tes tujuan S3: <em>NoSuchBucket</em> / gagal ke MinIO lokal</>,
@@ -286,7 +286,7 @@ const LAINNYA: Row[] = [
   [
     <>Disk penuh (atau notifikasi disk hampir penuh)</>,
     "Image deployment lama, dangling image, build cache, backup lokal.",
-    <>Settings<PathArrow />Disk Docker<PathArrow /><strong>Bersihkan sekarang</strong>; turunkan Riwayat deployment & jumlah simpan backup; GC registry.</>,
+    <>Docker (strip disk di atas)<PathArrow /><strong>Bersihkan sekarang</strong>; turunkan Riwayat deployment & jumlah simpan backup; GC registry.</>,
   ],
   [
     <>Stack compose: service tidak melihat env</>,

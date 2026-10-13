@@ -195,7 +195,7 @@ const DATABASE: Row[] = [
   [
     <>Backup is 20 bytes / fails</>,
     "Credentials/DB weren't ready yet, or the disk is full.",
-    "Read the error message on the backup row; check Docker disk."],
+    "Read the error message on the backup row; check the disk strip at the top of the Docker page."],
   [
     <>Testing an S3 destination: <em>NoSuchBucket</em> / fails against local MinIO</>,
     "The bucket doesn't exist, the region is wrong, or the endpoint uses localhost from inside the container.",
@@ -285,7 +285,7 @@ const OTHER: Row[] = [
   [
     <>Disk full (or a low-disk notification)</>,
     "Old deployment images, dangling images, build cache, local backups.",
-    <>Settings<PathArrow />Docker disk<PathArrow /><strong>Clean up now</strong>; lower deployment history & backup retention counts; run registry GC.</>,
+    <>Docker (disk strip at the top)<PathArrow /><strong>Clean now</strong>; lower deployment history & backup retention counts; run registry GC.</>,
   ],
   [
     <>Compose stack: a service can&apos;t see the env</>,

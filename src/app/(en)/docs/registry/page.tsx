@@ -228,14 +228,14 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         ]}
       />
       <Steps>
-        <Step title={<>Settings<PathArrow />Docker disk</>}>
+        <Step title={<>Docker<PathArrow />disk strip and Details</>}>
           <P>
-            The card shows image, container, volume, and build cache usage,
+            The strip at the top of the Docker page (host selected) shows total usage and what can be freed; Details shows image, container, volume, and build cache usage,
             how much can be reclaimed, how many deployments can be pruned,
             and the most recent cleanup report.
           </P>
         </Step>
-        <Step title="Clean up now (owner)">
+        <Step title="Clean now (owner)">
           <P>
             Runs the same cycle on demand. The report: deployments pruned,
             images deleted, bytes reclaimed, registry GC status, and any
@@ -277,7 +277,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         rows={[
           ["Deploy fails: No self-hosted registry", "Provision the local registry first."],
           ["Manual push: http: server gave HTTP response to HTTPS client", <><Code>REGISTRY_PUBLIC_HOST</Code> isn&apos;t localhost, without TLS. Add it to <Code>insecure-registries</Code>, or set up a TLS reverse proxy.</>],
-          ["Disk still full after deleting tags", <>Run Garbage collect, or Clean up now in Settings<PathArrow />Docker disk.</>],
+          ["Disk still full after deleting tags", <>Run Garbage collect, or Clean now in the disk strip at the top of the Docker page.</>],
           ["A “0 tags” repository won’t disappear even after Garbage collect", "Garbage collect never deletes the repository itself, only unused blobs. Use the Delete image button on that repository's header row."],
           ["Rollback fails: image not found", "The tag was already pruned by retention or deleted manually. Redeploy that commit."],
           ["Registry card: Docker unreachable", <><Code>DOCKER_GID</Code> is wrong or the socket isn&apos;t mounted — see <DocLink href="/docs/troubleshooting">Troubleshooting</DocLink>.</>],

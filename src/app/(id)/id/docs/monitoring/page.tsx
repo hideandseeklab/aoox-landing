@@ -36,7 +36,7 @@ const SOURCES = [
   { s: "Dashboard", d: "CPU/RAM/Storage host live + kartu Host & Disk Docker (owner/admin)" },
   { s: <>Aplikasi<PathArrow />Deploy</>, d: "KPI CPU / memori / jaringan + sparkline" },
   { s: "Database", d: "KPI yang sama di atas panel" },
-  { s: <>Settings<PathArrow />Disk Docker</>, d: "rincian image/volume/container/cache + cleanup" },
+  { s: <>Docker<PathArrow />strip disk</>, d: "rincian image/volume/container/cache + cleanup (Detail)" },
 ]
 
 const NEXT = [
@@ -362,8 +362,8 @@ Memori 512 → limit keras 512 MiB, tanpa swap (MemorySwap = Memory)`}</Pre>
         masih di atas ambang.
       </P>
       <P>
-        Tindak lanjutnya biasanya <strong>Bersihkan sekarang</strong> di kartu
-        Disk Docker, menurunkan retensi deployment, atau memangkas backup lama —
+        Tindak lanjutnya biasanya <strong>Bersihkan sekarang</strong> di strip disk
+        di atas halaman Docker, menurunkan retensi deployment, atau memangkas backup lama —
         lihat <DocLink href="/id/docs/registry#pemeliharaan">Registry</DocLink>.
       </P>
 

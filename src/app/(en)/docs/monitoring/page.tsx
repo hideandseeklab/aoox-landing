@@ -36,7 +36,7 @@ const SOURCES = [
   { s: "Dashboard", d: "Live host CPU/RAM/Storage + Host & Docker disk cards (owner/admin)" },
   { s: <>Application<PathArrow />Deploy</>, d: "CPU / memory / network KPIs + sparkline" },
   { s: "Database", d: "The same KPIs above the panel" },
-  { s: <>Settings<PathArrow />Docker disk</>, d: "Image/volume/container/cache breakdown + cleanup" },
+  { s: <>Docker<PathArrow />disk strip</>, d: "Image/volume/container/cache breakdown + cleanup (Details)" },
 ]
 
 const NEXT = [
@@ -373,8 +373,8 @@ Memory 512 → hard limit of 512 MiB, no swap (MemorySwap = Memory)`}</Pre>
         stays above the threshold.
       </P>
       <P>
-        The usual follow-up is <strong>Clean up now</strong> on the Docker
-        disk card, lowering deployment retention, or pruning old backups —
+        The usual follow-up is <strong>Clean now</strong> in the disk strip at
+        the top of the Docker page, lowering deployment retention, or pruning old backups —
         see <DocLink href="/docs/registry#maintenance">Registry</DocLink>.
       </P>
 
