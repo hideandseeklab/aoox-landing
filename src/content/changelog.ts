@@ -30,6 +30,67 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.0-alpha.10",
+    date: "2026-10-13",
+    channel: "alpha",
+    groups: [
+      {
+        kind: "added",
+        items: [
+          {
+            id: "**Variables (variable set)**: kumpulan variabel tingkat platform dengan environment sendiri (`development`, `staging`, `production`), dibagikan ke semua project atau ke project tertentu. Setiap set punya riwayat, restore, bandingkan, promosi, dan tanda Rahasia per variabel, plus halaman **Variables** baru di panel.",
+            en: "**Variables (variable sets)**: platform-level sets of variables with their own environments (`development`, `staging`, `production`), shared with all projects or selected ones. Every set keeps history, restore, compare, promote and per-variable secret flags, and has a new **Variables** page in the dashboard.",
+          },
+          {
+            id: "**Tautkan beberapa set ke satu aplikasi atau stack, berurutan**: set yang lebih akhir menimpa yang lebih awal, env milik aplikasi selalu menang, dan panel menandai nama variabel yang tertimpa. Berlaku pada deploy berikutnya.",
+            en: "**Link several sets to one application or stack, in order**: a later set overrides an earlier one, the application's own env always wins, and the dashboard marks the variable names that are overridden. Takes effect on the next deploy.",
+          },
+          {
+            id: "**`${{vars.KEY}}`** mengambil nilai gabungan dari set yang ditautkan (menggantikan `${{project.KEY}}`).",
+            en: "**`${{vars.KEY}}`** resolves from the merged linked sets (it replaces `${{project.KEY}}`).",
+          },
+          {
+            id: "**Scope token API per environment set**: `set/env`, `set/*` atau `*/env`, misalnya token CI yang hanya boleh membaca `staging`.",
+            en: "**API token scopes per set environment**: `set/env`, `set/*` or `*/env`, for example a CI token that may only read `staging`.",
+          },
+          {
+            id: "**`aoox env links`, `env link` dan `env unlink`** mengatur daftar set yang dipakai sebuah aplikasi atau stack dari terminal.",
+            en: "**`aoox env links`, `env link` and `env unlink`** manage the sets an application or stack uses from the terminal.",
+          },
+          {
+            id: "**Dialog Create token** untuk token API, dengan satu baris petunjuk per bidang dan konfirmasi saat mencabut token.",
+            en: "**A Create token dialog** for API tokens, with a one-line hint per field and a confirmation when revoking.",
+          },
+        ],
+      },
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Perubahan yang merusak: environment project digantikan variable set.** Upgrade mengubah environment yang berisi variabel menjadi satu set per project dan menjaga tautan, riwayat, dan flag rahasia; `${{project.KEY}}` ditulis ulang menjadi `${{vars.KEY}}`; scope token `environments` menjadi `variableScopes`. Backup dulu, perbarui API, dashboard, dan CLI bersamaan, lalu periksa tautan.",
+            en: "**Breaking: project environments are replaced by variable sets.** The upgrade turns environments that have variables into one set per project and keeps links, history and secret flags; `${{project.KEY}}` is rewritten to `${{vars.KEY}}`; the token `environments` scope becomes `variableScopes`. Back up first, update the API, dashboard and CLI together, then review the links.",
+          },
+          {
+            id: "**Environment terlindungi hanya untuk owner dan admin instance** (sebelumnya admin project juga bisa).",
+            en: "**Protected environments are for instance owners and admins only** (a project admin could before).",
+          },
+          {
+            id: "**`aoox env` dan `aoox run` bekerja pada set**: pilih dengan `--set` dan `--env`; `aoox run` memakai set yang ditautkan berurutan lalu env aplikasi, seperti saat deploy. Perbarui CLI bersama panel.",
+            en: "**`aoox env` and `aoox run` work on sets**: choose with `--set` and `--env`; `aoox run` uses the linked sets in order and then the application's own env, as at deploy time. Update the CLI together with the panel.",
+          },
+          {
+            id: "**Disk Docker pindah ke halaman Docker** sebagai strip ringkas dengan Details dan Clean now; halaman Infrastructure terpisah dihapus.",
+            en: "**Docker disk moved into the Docker page** as a compact strip with Details and Clean now; the separate Infrastructure page is gone.",
+          },
+          {
+            id: "**Halaman backup instance, kartu update, dan kartu panel domain** dirapikan, dan ikon stepper deploy kini sejajar.",
+            en: "**The instance backup page, update card and panel domain card** were tidied up, and the deploy stepper icons now line up.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.0-alpha.9",
     date: "2026-10-13",
     channel: "alpha",

@@ -73,7 +73,7 @@ const COMMANDS = [
   {
     cmd: "aoox run -- <command>",
     what: "Runs a command with the variables the linked application gets at deploy time (or one set environment), without writing them to disk.",
-    flags: "--set/-s, --env/-e, --app, --stack, --file, --url/-u, --token/-t",
+    flags: "--set/-s, --env/-e, --app, --stack, --file, --quiet/-q, --url/-u, --token/-t",
   },
   {
     cmd: "aoox domain set",
@@ -435,7 +435,7 @@ $ aoox run -- npm run dev                                  # what the linked app
           [<Code key="ls">aoox env links [--app id | --stack id] [--json]</Code>, "The set environments the application (or stack) uses, in merge order (1 = first, overridden by later ones), with the variables a later link or the own env overrides."],
           [<Code key="ln">aoox env link --set slug --env name [--position n] [--app id | --stack id]</Code>, "Links a set environment. It goes at the end (so it wins over the others) unless --position (1-based) is given; an environment that is already linked is moved there. Takes effect on the next deploy."],
           [<Code key="ul">aoox env unlink (--set slug --env name | --position n) [--app id | --stack id]</Code>, "Removes a link. Takes effect on the next deploy."],
-          [<Code key="r">aoox run [--set slug --env name] [--file .env.local] [--app id | --stack id] -- command [args…]</Code>, "Starts the command with the variables on top of your current environment (see below). Nothing is written to disk. Output goes straight to your terminal, the command's exit code is the exit code of aoox run, and Ctrl+C or SIGTERM is passed to it."],
+          [<Code key="r">aoox run [--set slug --env name] [--file .env.local] [--quiet] [--app id | --stack id] -- command [args…]</Code>, "Starts the command with the variables on top of your current environment (see below). Nothing is written to disk. Output goes straight to your terminal, the command's exit code is the exit code of aoox run, and Ctrl+C or SIGTERM is passed to it."],
         ]}
       />
       <H3>What aoox run passes to the command</H3>
@@ -469,8 +469,16 @@ $ aoox run -- npm run dev                                  # what the linked app
           file. The file is only read, and its references are not resolved.
         </li>
       </Ul>
-      <Pre title="Which layers were used (printed to standard error)">{`$ aoox run -- node server.js
-Application "shop-web": shared/production < backend/production < own env`}</Pre>
+      <Pre title="What was injected and from which layers (printed to standard error)">{`$ aoox run -- node server.js
+aoox  Injecting 9 variables into your process · Application "shop-web": shared/production < backend/production < own env`}</Pre>
+      <P>
+        The count is what aoox adds or overrides, including <Code>--file</Code>;
+        variables inherited from your shell are not counted. The line is
+        coloured only on a terminal: <Code>NO_COLOR</Code> turns colour off,{" "}
+        <Code>FORCE_COLOR</Code> forces it, and pipes and CI logs stay plain.{" "}
+        <Code>--quiet</Code> (<Code>-q</Code>) hides the line, but warnings about
+        references aoox cannot resolve are always printed.
+      </P>
       <H3>Pull formats and push</H3>
       <Pre title="Formats and standard output">{`$ aoox env pull --env staging                        # ./.env, the stored text with its comments
 $ aoox env pull --format json                        # ./.env.json  {"KEY":"value"}

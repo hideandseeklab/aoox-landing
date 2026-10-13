@@ -8,6 +8,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.10] - 2026-10-13
+
 ### Added
 
 - **Docs: Variables (English and Indonesian)**: a new page `/docs/variables` (`/id/docs/variabel`) for variable sets: concepts and slugs, sharing with all or selected projects, who may reveal and edit (protected environments are instance owner/admin only), linking to applications and stacks and the merge order, `${{vars.KEY}}` (one level), history and restore, compare and promote, secret flags, API token `variableScopes` (`set/env`, `set/*`, `*/env`), export/import, and the upgrade note for 0.1.0-alpha.9 environments. Added to the docs sidebar, the core concepts table and the sitemap.
@@ -395,7 +397,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.9...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.10...HEAD
+[0.1.0-alpha.10]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.9...v0.1.0-alpha.10
 [0.1.0-alpha.9]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.8...v0.1.0-alpha.9
 [0.1.0-alpha.8]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.7...v0.1.0-alpha.8
 [0.1.0-alpha.7]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.6...v0.1.0-alpha.7

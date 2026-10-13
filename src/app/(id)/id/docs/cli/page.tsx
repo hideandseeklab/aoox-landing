@@ -98,7 +98,7 @@ const COMMANDS = [
   {
     cmd: "aoox run -- <perintah>",
     what: "Menjalankan perintah dengan variabel yang didapat aplikasi tertaut saat deploy (atau satu environment set), tanpa menulisnya ke disk.",
-    flags: "--set/-s, --env/-e, --app, --stack, --file, --url/-u, --token/-t",
+    flags: "--set/-s, --env/-e, --app, --stack, --file, --quiet/-q, --url/-u, --token/-t",
   },
   {
     cmd: "aoox registry push",
@@ -430,7 +430,7 @@ $ aoox run -- npm run dev                                  # yang didapat aplika
           [<Code key="ls">aoox env links [--app id | --stack id] [--json]</Code>, "Environment set yang dipakai aplikasi (atau stack), sesuai urutan penggabungan (1 = pertama, ditimpa yang berikutnya), beserta variabel yang ditimpa tautan berikutnya atau env sendiri."],
           [<Code key="ln">aoox env link --set slug --env nama [--position n] [--app id | --stack id]</Code>, "Menautkan environment set. Ditaruh di akhir (jadi menang atas yang lain) kecuali --position (mulai dari 1) diberikan; environment yang sudah tertaut dipindah ke posisi itu. Berlaku pada deploy berikutnya."],
           [<Code key="ul">aoox env unlink (--set slug --env nama | --position n) [--app id | --stack id]</Code>, "Melepas tautan. Berlaku pada deploy berikutnya."],
-          [<Code key="r">aoox run [--set slug --env nama] [--file .env.local] [--app id | --stack id] -- perintah [argumen…]</Code>, "Menjalankan perintah dengan variabel di atas environment-mu saat ini (lihat di bawah). Tidak ada yang ditulis ke disk. Output langsung ke terminalmu, exit code perintah menjadi exit code aoox run, dan Ctrl+C atau SIGTERM diteruskan ke perintah."],
+          [<Code key="r">aoox run [--set slug --env nama] [--file .env.local] [--quiet] [--app id | --stack id] -- perintah [argumen…]</Code>, "Menjalankan perintah dengan variabel di atas environment-mu saat ini (lihat di bawah). Tidak ada yang ditulis ke disk. Output langsung ke terminalmu, exit code perintah menjadi exit code aoox run, dan Ctrl+C atau SIGTERM diteruskan ke perintah."],
         ]}
       />
       <H3>Apa yang diteruskan aoox run ke perintah</H3>
@@ -466,8 +466,17 @@ $ aoox run -- npm run dev                                  # yang didapat aplika
           file. File hanya dibaca, dan referensi di dalamnya tidak diresolusi.
         </li>
       </Ul>
-      <Pre title="Lapisan yang dipakai (dicetak ke standard error)">{`$ aoox run -- node server.js
-Application "shop-web": shared/production < backend/production < own env`}</Pre>
+      <Pre title="Yang disuntikkan dan dari lapisan mana (dicetak ke standard error)">{`$ aoox run -- node server.js
+aoox  Injecting 9 variables into your process · Application "shop-web": shared/production < backend/production < own env`}</Pre>
+      <P>
+        Jumlahnya adalah yang ditambah atau ditimpa aoox, termasuk{" "}
+        <Code>--file</Code>; variabel bawaan shell-mu tidak dihitung. Baris ini
+        berwarna hanya di terminal: <Code>NO_COLOR</Code> mematikan warna,{" "}
+        <Code>FORCE_COLOR</Code> memaksanya, dan pipe serta log CI tetap polos.{" "}
+        <Code>--quiet</Code> (<Code>-q</Code>) menyembunyikan baris itu, tetapi
+        peringatan tentang referensi yang tidak bisa diresolusi aoox selalu
+        dicetak.
+      </P>
       <H3>Format pull dan push</H3>
       <Pre title="Format dan standard output">{`$ aoox env pull --env staging                        # ./.env, teks tersimpan beserta komentarnya
 $ aoox env pull --format json                        # ./.env.json  {"KEY":"value"}
