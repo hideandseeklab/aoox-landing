@@ -14,6 +14,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 - **Docs: variable notes (English and Indonesian)**: a Notes section on the Variables page (`#notes`, `#catatan`): the `#` lines directly above a variable are its note (a blank line breaks the link), notes are visible without revealing values so they must not hold secrets, and they travel with history, promote, `aoox env pull`/`push` and export. The CLI page's `aoox env set` row links to it.
 - **Docs: leftover containers and domain conflicts (English and Indonesian)**: the Monitoring page's Docker section explains the leftover containers list in the disk Details dialog (what is listed, what never is, the per-row remove and the switch, volumes and remote servers not covered), and the Proxy & domain page describes the warning shown when another container already routes a domain.
 
+### Changed
+
+- **Docs: New database form (English and Indonesian)**: the Database page's create step now says the engine is picked from cards, lists **Plain** as the first PostgreSQL variant, and says a blank version uses the default of the chosen engine and variant (shown under the field).
+
 ### Fixed
 
 - **Docs: deleting a project (English and Indonesian)**: the Project page no longer says containers are left running. It now describes that everything in the project is removed, the **Also delete data** option (what is kept or deleted for database, application, compose and stack volumes), the retry behaviour when Docker cannot be reached, and that deleting an application also removes its blue/green container.

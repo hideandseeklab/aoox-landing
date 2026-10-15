@@ -175,8 +175,8 @@ export default function Page() {
             head={["Field", "Keterangan"]}
             rows={[
               ["Nama", <>Jadi slug unik (global, bukan per project). Container <Code>{"aoox-db-<slug>"}</Code>, volume <Code>{"aoox_db_<slug>"}</Code>.</>],
-              ["Engine", "postgres / mysql / mariadb / redis / valkey / mongodb. Untuk postgres, pilih juga Varian (opsional): pgvector / PostGIS / TimescaleDB."],
-              ["Versi (tag image)", <>Tag Docker Hub. Kosong = default di tabel atas. Contoh: <Code>17</Code>, <Code>8.4</Code>, <Code>7.2</Code>.</>],
+              ["Engine", "Pilih salah satu kartu: PostgreSQL / MySQL / MariaDB / Redis / Valkey / MongoDB. Untuk PostgreSQL, pilih juga Varian (opsional): Polos / pgvector / PostGIS / TimescaleDB."],
+              ["Versi (tag image)", <>Tag Docker Hub. Kosong = default untuk engine dan varian yang dipilih (tampil di bawah kolom dan di tabel atas). Contoh: <Code>17</Code>, <Code>8.4</Code>, <Code>7.2</Code>.</>],
               [
                 "Port host",
                 "Opsional. Isi hanya kalau perlu koneksi dari luar Docker (laptop, server remote). Aplikasi di host aoox tidak membutuhkannya.",

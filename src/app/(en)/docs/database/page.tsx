@@ -180,8 +180,8 @@ export default function Page() {
             head={["Field", "Notes"]}
             rows={[
               ["Name", <>Becomes a unique slug (global, not per project). Container <Code>{"aoox-db-<slug>"}</Code>, volume <Code>{"aoox_db_<slug>"}</Code>.</>],
-              ["Engine", "postgres / mysql / mariadb / redis / valkey / mongodb. For postgres, also pick a Variant (optional): pgvector / PostGIS / TimescaleDB."],
-              ["Version (image tag)", <>A Docker Hub tag. Blank = the default in the table above. Examples: <Code>17</Code>, <Code>8.4</Code>, <Code>7.2</Code>.</>],
+              ["Engine", "Pick one of the cards: PostgreSQL / MySQL / MariaDB / Redis / Valkey / MongoDB. For PostgreSQL, also pick a Variant (optional): Plain / pgvector / PostGIS / TimescaleDB."],
+              ["Version (image tag)", <>A Docker Hub tag. Blank = the default for the chosen engine and variant (shown under the field and in the table above). Examples: <Code>17</Code>, <Code>8.4</Code>, <Code>7.2</Code>.</>],
               [
                 "Host port",
                 "Optional. Fill it in only if you need a connection from outside Docker (a laptop, a remote server). Applications on the aoox host don't need it.",
