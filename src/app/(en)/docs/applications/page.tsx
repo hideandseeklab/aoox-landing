@@ -120,7 +120,7 @@ export default function Page() {
           <Table
             head={["Field", "Description"]}
             rows={[
-              ["Name", "Becomes a unique slug (app_name); container name = aoox-app-<slug>."],
+              ["Name", "Becomes a unique slug (app_name); container name = aoox-app-<slug>, shown (with a copy button) in the application header; other apps on the same server reach it at http://aoox-app-<slug>:<container port>."],
               [
                 "Git repository",
                 <>

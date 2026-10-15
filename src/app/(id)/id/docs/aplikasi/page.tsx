@@ -117,7 +117,7 @@ export default function Page() {
           <Table
             head={["Field", "Keterangan"]}
             rows={[
-              ["Nama", "Jadi slug unik (app_name); nama container = aoox-app-<slug>."],
+              ["Nama", "Jadi slug unik (app_name); nama container = aoox-app-<slug>, ditampilkan (dengan tombol salin) di header aplikasi; aplikasi lain di server yang sama mengaksesnya lewat http://aoox-app-<slug>:<port container>."],
               [
                 "Git repository",
                 <>
