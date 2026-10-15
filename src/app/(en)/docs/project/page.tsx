@@ -265,29 +265,38 @@ export default function Page() {
       </Ul>
 
       <H2 id="delete">Deleting a project</H2>
-      <Callout kind="warn" title="Read before deleting">
-        Deleting a project removes the <strong>records</strong> of its
-        applications, compose stacks, databases, and backups in aoox
-        (cascade) — but their <strong>Docker containers and volumes are not
-        stopped or removed</strong>. They become orphaned: still running,
-        still using disk, with no way to manage them from the dashboard.
+      <P>
+        Deleting a project removes everything in it: its applications, compose
+        stacks, and databases are stopped and their containers removed (so
+        their domains stop working), and then their records, backups history,
+        and the project itself are deleted. The delete dialog has an{" "}
+        <strong>Also delete data</strong> checkbox, unchecked by default.
+      </P>
+      <Table
+        head={["Data", "Checkbox unchecked (default)", "Checkbox checked"]}
+        rows={[
+          ["Database volumes", "Kept. Listed as orphaned on the Docker page (Details), where the cleanup can remove them later.", "Deleted."],
+          ["Application volume mounts", "Kept, listed as orphaned too.", "Deleted."],
+          ["Volumes a compose file declares itself", "Kept, but not listed as orphaned. Remove them from the terminal with docker volume rm.", "Deleted."],
+          ["Compose mounts you added in aoox", "Kept, listed as orphaned.", "Deleted."],
+        ]}
+      />
+      <Callout kind="warn" title="This cannot be undone">
+        Applications, databases, and stacks are removed for good. Download any
+        backups you still need first: the backup records go with the project
+        (backup files on S3 stay where they are).
       </Callout>
-      <Steps>
-        <Step title="Remove its contents from the dashboard first">
-          <P>
-            Applications (delete), compose stacks (Delete = <Code>down --volumes</Code>),
-            databases (delete + purge the volume if it&apos;s really not needed).
-            Download any backups you still need.
-          </P>
-        </Step>
-        <Step title="Then delete the project">
-          <P>The project&apos;s Settings tab<PathArrow />delete. Already-downloaded backups are unaffected.</P>
-        </Step>
-      </Steps>
-      <P>If it&apos;s already too late, clean up orphans from the terminal:</P>
-      <Pre>{`docker ps -a --filter label=com.docker.compose.project=aoox
-docker rm -f aoox-app-<slug> aoox-db-<slug>
-docker volume rm aoox_app_<slug>_<name> aoox_db_<slug>`}</Pre>
+      <P>
+        If aoox cannot reach the Docker daemon (or a remote server) while
+        removing something, the delete stops with an error that names it. The
+        project and whatever was not removed yet stay, so you can fix the
+        connection and delete again. Only project admins can delete a project.
+      </P>
+      <P>
+        Deleting a single application also removes its blue/green candidate
+        container, and is refused (the application is kept) when its Docker
+        daemon cannot be reached, instead of leaving the container running.
+      </P>
 
       <H2 id="pitfalls">Common pitfalls</H2>
       <Table

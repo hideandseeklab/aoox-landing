@@ -415,13 +415,18 @@ API_URL=••••••••
 $ aoox env list --set backend --env development --reveal   # nilai (diaudit)
 $ aoox env pull --set backend --env development            # menulis ./.env (mode 0600)
 $ aoox env unset OLD_KEY --set backend --env development
-$ aoox run -- npm run dev                                  # yang didapat aplikasi tertaut`}</Pre>
+$ aoox run -- npm run dev                                  # variabel aplikasi yang di-deploy (kemungkinan production)`}</Pre>
+      <Callout kind="warn" title="Untuk kerja lokal, sertakan --set dan --env">
+        Tanpa keduanya <Code>aoox run</Code> mereplikasi aplikasi tertaut
+        seperti yang di-deploy, biasanya production. Lihat{" "}
+        <DocLink href="/id/docs/cli#local-development">Pengembangan lokal</DocLink>.
+      </Callout>
       <Table
         head={["Perintah", "Fungsi"]}
         rows={[
           [<Code key="l">aoox env list [--set slug] [--env nama] [--reveal] [--json]</Code>, "Tanpa flag: semua set yang bisa kamu lihat, peranmu, pembagiannya, dan jumlah variabel tiap environment (juga sebagai aoox env sets). Dengan --set: satu set. Dengan --env: nama variabel environment itu; --reveal menampilkan nilainya lewat aksi reveal yang diaudit."],
           [<Code key="p">aoox env pull [--set slug] [--env nama] [--file .env] [--format dotenv|json|shell] [--force]</Code>, <>Menulis variabel ke file dengan mode <Code>0600</Code> (hanya pemilik, bila OS mendukung). Tidak pernah menimpa file yang sudah ada kecuali dengan <Code>--force</Code>, dan memperingatkan sekali bila file tidak tercakup <Code>.gitignore</Code> (tidak pernah mengubah <Code>.gitignore</Code> sendiri).</>],
-          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--set slug] [--env nama] [--secret | --no-secret]</Code>, <>Menambah atau mengubah variabel. Komentar dan urutan baris yang ada dipertahankan; variabel baru ditaruh di akhir. <Code>--secret</Code> menandai variabel sebagai rahasia, <Code>--no-secret</Code> sebagai jelas bukan rahasia; tanpa keduanya, tandanya tetap (lihat <DocLink href="/id/docs/variabel#flag-rahasia">Variabel rahasia</DocLink>). Nilai dengan <Code>{"${{project.KEY}}"}</Code> ditolak: tulis <Code>{"${{vars.KEY}}"}</Code>.</>],
+          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--set slug] [--env nama] [--secret | --no-secret]</Code>, <>Menambah atau mengubah variabel. Komentar (termasuk <DocLink href="/id/docs/variabel#catatan">catatan</DocLink>) dan urutan baris yang ada dipertahankan; variabel baru ditaruh di akhir. <Code>--secret</Code> menandai variabel sebagai rahasia, <Code>--no-secret</Code> sebagai jelas bukan rahasia; tanpa keduanya, tandanya tetap (lihat <DocLink href="/id/docs/variabel#flag-rahasia">Variabel rahasia</DocLink>). Nilai dengan <Code>{"${{project.KEY}}"}</Code> ditolak: tulis <Code>{"${{vars.KEY}}"}</Code>.</>],
           [<Code key="u">aoox env unset KEY [KEY2 …] [--set slug] [--env nama]</Code>, "Menghapus variabel; komentar dan baris lain tetap."],
           [<Code key="pu">aoox env push --file .env [--set slug] [--env nama] [--yes]</Code>, "Mengganti seluruh environment dengan file lokal, setelah menampilkan variabel yang ditambah, diubah dan dihapus lalu meminta konfirmasi."],
           [<Code key="h">aoox env history [--set slug] [--env nama] [--limit 20] [--json]</Code>, "Riwayat versi sebuah environment, terbaru dulu: kapan, siapa, dan nama variabel yang ditambah (+), diubah (~) atau dihapus (-). Tidak pernah nilai."],
@@ -621,6 +626,110 @@ Variables that are not in the file are removed: this replaces the whole environm
         <li>
           Membuat, membagikan, dan menghapus set serta environment dilakukan di
           dashboard oleh owner atau admin instance.
+        </li>
+      </Ul>
+
+      <H2 id="local-development">Pengembangan lokal</H2>
+      <P>
+        Jalankan aplikasi di laptop dengan variabel satu environment set,
+        tanpa file <Code>.env</Code> dan tanpa menautkan folder. Cukup sudah
+        masuk (login).
+      </P>
+      <Steps>
+        <Step title="Pasang CLI, buat token sempit, lalu masuk">
+          <Pre>{`$ npm i -g @hideandseeklab/aoox
+$ aoox login`}</Pre>
+          <P>
+            Di panel, <strong>Pengaturan<PathArrow />API token<PathArrow />Buat
+            token</strong>: aktifkan <strong>Read-only</strong> dan isi{" "}
+            <strong>Batasi ke variabel</strong> dengan environment yang Anda
+            pakai, mis. <Code>backend/development</Code>. Dengan begitu token di
+            laptop tidak bisa menyentuh production. Lihat{" "}
+            <DocLink href="/id/docs/variabel#token">cakupan API token</DocLink>.
+          </P>
+        </Step>
+        <Step title="Taruh perintahnya di package.json">
+          <Pre title="package.json">{`"scripts": {
+  "start:dev": "aoox run --set backend --env development -- nest start --watch"
+}`}</Pre>
+          <P>
+            Pindahan dari Infisical? <Code>infisical run --env=dev -- …</Code>{" "}
+            menjadi <Code>aoox run --set &lt;slug&gt; --env development -- …</Code>.
+          </P>
+        </Step>
+        <Step title="Selalu sertakan --set dan --env di lokal">
+          <Callout kind="warn" title="Tanpa keduanya, Anda mendapat variabel aplikasi yang sudah di-deploy">
+            <Code>aoox run -- …</Code> tanpa <Code>--set</Code>/<Code>--env</Code>{" "}
+            butuh aplikasi tertaut dan menyuntikkan apa yang didapat
+            kontainernya saat deploy: environment set yang tertaut ke aplikasi
+            plus env miliknya sendiri. Itu biasanya{" "}
+            <strong>production</strong>, dan mengubah tautan aplikasi di panel
+            akan diam-diam mengubah apa yang didapat laptop Anda. Dengan{" "}
+            <Code>--set</Code>/<Code>--env</Code> hanya satu environment yang
+            disuntikkan: tanpa tautan, tanpa env aplikasi.
+          </Callout>
+        </Step>
+        <Step title="Yang Anda lihat">
+          <Pre>{`$ aoox run --set backend --env development -- nest start --watch
+aoox  Injecting 5 variables from backend/development (no links, no own env)`}</Pre>
+          <Ul>
+            <li>
+              Baris itu keluar di standard error dan berwarna hanya di
+              terminal (polos saat di-pipe atau dengan <Code>NO_COLOR</Code>).{" "}
+              <Code>--quiet</Code> (<Code>-q</Code>) menyembunyikannya, tetapi
+              tidak pernah peringatan.
+            </li>
+            <li>
+              <strong>Gagal dengan aman</strong>: kalau pembacaan ditolak (token
+              salah, tidak punya akses, environment terproteksi, cakupan token),
+              perintah tidak dijalankan sama sekali.
+            </li>
+            <li>
+              Variabel hanya ada di proses anak; tidak ada yang ditulis ke
+              disk.
+            </li>
+          </Ul>
+        </Step>
+        <Step title="Alat yang hanya membaca file">
+          <Pre>{`$ aoox env pull --set backend --env development --file .env`}</Pre>
+          <P>
+            File ditulis dengan mode <Code>0600</Code> dan tidak ditimpa tanpa{" "}
+            <Code>--force</Code>. Pastikan <Code>.env</Code> ada di{" "}
+            <Code>.gitignore</Code>; aoox memperingatkan bila belum.
+          </P>
+        </Step>
+        <Step title="Perlukah aoox link?">
+          <P>
+            Tidak untuk variabel lokal: <Code>--set</Code>/<Code>--env</Code>{" "}
+            hanya butuh Anda sudah login. Anda memerlukannya untuk{" "}
+            <Code>aoox deploy</Code>, untuk <Code>aoox run</Code> tanpa flag,
+            dan untuk mengatur tautan lewat{" "}
+            <Code>aoox env links/link/unlink</Code>. Perintah itu menulis{" "}
+            <Code>.aoox.json</Code> (alamat panel, id dan nama project serta
+            aplikasi, tanpa rahasia), aman untuk di-commit.
+          </P>
+        </Step>
+        <Step title="CI">
+          <P>
+            Lewati <Code>aoox login</Code> dan isi <Code>AOOX_URL</Code> serta{" "}
+            <Code>AOOX_TOKEN</Code> (variabel CI yang di-mask) dari token
+            read-only yang dibatasi ke environment yang dibutuhkan job.
+          </P>
+          <Pre>{`$ AOOX_URL=https://panel.example.com aoox run --set backend --env development -- npm test`}</Pre>
+        </Step>
+      </Steps>
+      <H3>Batasan</H3>
+      <Ul>
+        <li>
+          Referensi <Code>{"${{database.…}}"}</Code> dan{" "}
+          <Code>{"${{secret.…}}"}</Code> tetap apa adanya, dengan peringatan:
+          hanya panel yang menyelesaikannya saat deploy. Arahkan variabel itu
+          ke database lokal lewat variabel khusus lokal atau <Code>--file</Code>.
+        </li>
+        <li>Secret yang disinkronkan dari Infisical tidak ikut.</li>
+        <li>
+          Bila <Code>--set</Code>/<Code>--env</Code> dihilangkan dan kandidatnya
+          banyak, perintah berhenti dan mendaftarkannya; tidak pernah menebak.
         </li>
       </Ul>
 

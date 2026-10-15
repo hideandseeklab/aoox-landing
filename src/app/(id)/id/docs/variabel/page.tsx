@@ -260,6 +260,45 @@ API_URL=https://api.example.com/v1`}</Pre>
         </li>
       </Ul>
 
+      <H2 id="catatan">Catatan</H2>
+      <P>
+        Catatan sebuah variabel adalah blok baris <Code>#</Code> tepat di
+        atasnya. Baris kosong di antaranya memutus kaitan itu, jadi judul bagian
+        yang diikuti baris kosong tetap menjadi komentar biasa.
+      </P>
+      <Pre title="development">{`# Payments
+
+# Base URL of the payments API, including the /v1 prefix.
+PAYMENTS_URL=https://pay.example.com/v1
+# Must equal WEBHOOK_SECRET in the payments service.
+WEBHOOK_SECRET=…`}</Pre>
+      <Ul>
+        <li>
+          Di sini <Code>PAYMENTS_URL</Code> dan <Code>WEBHOOK_SECRET</Code>{" "}
+          punya catatan; <Code># Payments</Code> adalah komentar yang berdiri
+          sendiri.
+        </li>
+        <li>
+          Di halaman set, ikon catatan muncul di samping variabel yang punya
+          catatan; arahkan kursor, klik, atau ketuk untuk membacanya. Di{" "}
+          <strong>Tampilkan dan ubah</strong>, tampilan Baris menampilkan catatan
+          di bawah variabelnya dan bisa menambah atau mengubahnya; tampilan Teks
+          menampilkan baris <Code>#</Code>-nya.
+        </li>
+        <li>
+          <strong>Catatan terlihat tanpa membuka nilai</strong>, oleh semua yang
+          bisa melihat set itu, termasuk viewer. Jangan menaruh rahasia di
+          dalamnya.
+        </li>
+        <li>
+          Catatan adalah bagian dari teks, jadi ikut terbawa: riwayat dan
+          restore, <Code>aoox env pull</Code> / <Code>push</Code>, serta ekspor
+          dan impor. <strong>Promosi</strong> membawa catatan variabel yang baru
+          bagi target; variabel yang sudah ada di target tetap memakai
+          catatannya sendiri. Catatan dipotong di 1000 karakter.
+        </li>
+      </Ul>
+
       <H2 id="flag-rahasia">Variabel rahasia</H2>
       <Table
         head={["Tanda", "Apa yang terjadi pada nilai di log"]}
@@ -280,6 +319,27 @@ API_URL=https://api.example.com/v1`}</Pre>
           Tanda disimpan di samping nama, bukan di dalam teks, jadi file hasil
           pull dan <Code>.aoox.env</Code> compose tidak berubah. Penyamaran
           berlaku di log deployment, output job, dan notifikasi error.
+        </li>
+        <li>
+          <strong>Yang tidak dilakukan tanda ini</strong>: semua nilai
+          disimpan terenkripsi, rahasia atau bukan. Tanda tidak menentukan siapa
+          yang boleh melihat nilai: di dashboard nilai tetap tersembunyi sampai
+          Anda memilih membuka dan mengubahnya (tercatat di audit), dan akses
+          mengikuti peran serta environment terproteksi. Kontainer selalu
+          menerima nilai aslinya. Tanda hanya mengatur penyamaran dengan{" "}
+          <Code>***</Code> di log.
+        </li>
+        <li>
+          <strong>Salah deteksi yang diketahui</strong>: aturan nama otomatis
+          juga cocok dengan nama seperti <Code>MONKEY</Code> atau{" "}
+          <Code>KEYBOARD</Code> karena memuat &quot;key&quot;. Matikan sakelarnya
+          untuk nama seperti itu.
+        </li>
+        <li>
+          <strong>Tips</strong>: aktifkan untuk password, token, API key, dan
+          connection string; matikan untuk nilai biasa seperti{" "}
+          <Code>NODE_ENV</Code>, <Code>PORT</Code>, dan <Code>LOG_LEVEL</Code>{" "}
+          agar tetap terbaca di log.
         </li>
       </Ul>
 
@@ -322,7 +382,8 @@ $ aoox env links                                  # yang dipakai aplikasi tertau
 $ aoox env link --set shared --env production --position 1
 $ aoox run -- npm run dev                         # environment tertaut + env sendiri`}</Pre>
       <P>
-        Rinciannya di <DocLink href="/id/docs/cli#env">CLI: aoox env dan aoox run</DocLink>.
+        Rinciannya di <DocLink href="/id/docs/cli#env">CLI: aoox env dan aoox run</DocLink>. Untuk menjalankan aplikasi di lokal dengan satu environment, lihat{" "}
+        <DocLink href="/id/docs/cli#local-development">Pengembangan lokal</DocLink>.
       </P>
 
       <H2 id="ekspor-impor">Ekspor dan impor</H2>

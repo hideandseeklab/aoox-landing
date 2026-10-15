@@ -8,6 +8,16 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Added
+
+- **Docs: Local development (English and Indonesian)**: a new section on the CLI page (`#local-development`) for running an app on a laptop with `aoox run --set <slug> --env <name>` without `aoox link`: a narrow read-only token, the `package.json` script, why to always pass `--set`/`--env`, fail-closed behaviour, `aoox env pull`, when `aoox link` is needed, CI, and limits. The `aoox run` example in the env section now says it reproduces the deployed app. The Variables page's Secret variables section also says what the flag does not do (values are always encrypted; it only controls log masking), the `MONKEY`/`KEYBOARD` false positive, and when to turn it on or off.
+- **Docs: variable notes (English and Indonesian)**: a Notes section on the Variables page (`#notes`, `#catatan`): the `#` lines directly above a variable are its note (a blank line breaks the link), notes are visible without revealing values so they must not hold secrets, and they travel with history, promote, `aoox env pull`/`push` and export. The CLI page's `aoox env set` row links to it.
+- **Docs: leftover containers and domain conflicts (English and Indonesian)**: the Monitoring page's Docker section explains the leftover containers list in the disk Details dialog (what is listed, what never is, the per-row remove and the switch, volumes and remote servers not covered), and the Proxy & domain page describes the warning shown when another container already routes a domain.
+
+### Fixed
+
+- **Docs: deleting a project (English and Indonesian)**: the Project page no longer says containers are left running. It now describes that everything in the project is removed, the **Also delete data** option (what is kept or deleted for database, application, compose and stack volumes), the retry behaviour when Docker cannot be reached, and that deleting an application also removes its blue/green container.
+
 ## [0.1.0-alpha.10] - 2026-10-13
 
 ### Added

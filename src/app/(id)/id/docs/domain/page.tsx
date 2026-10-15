@@ -168,6 +168,18 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
         </Step>
       </Steps>
 
+      <H3>Bila domain sudah dipakai container lain</H3>
+      <P>
+        Jika container lain di daemon yang sama sudah merutekan host itu
+        (biasanya sisa project yang dihapus di versi lama, atau stack lain),
+        dua router menjawab untuk host tersebut dan request terbagi di
+        antaranya. Tab Domain menampilkan peringatan pada domain itu dengan
+        nama container-nya, dan menambah domain mengembalikan informasi yang
+        sama. Tidak ada yang diblokir. Bila container itu sisa, peringatan
+        menunjuk ke halaman Docker (Detail), tempat owner bisa menghapusnya.
+        Log deployment juga mencatatnya.
+      </P>
+
       <H2 id="https">Bagaimana HTTPS bekerja</H2>
       <div className="overflow-x-auto border border-border rounded-lg">
         <table className="w-full text-xs">

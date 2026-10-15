@@ -259,29 +259,39 @@ export default function Page() {
       </Ul>
 
       <H2 id="hapus">Menghapus project</H2>
-      <Callout kind="warn" title="Baca sebelum menghapus">
-        Menghapus project menghapus <strong>catatan</strong> aplikasi, stack
-        compose, database, dan backup-nya di aoox (cascade) — tetapi{" "}
-        <strong>container dan volume Docker-nya tidak dihentikan/dihapus</strong>.
-        Mereka jadi yatim: tetap berjalan, memakai disk, tanpa bisa dikelola
-        dari dashboard.
+      <P>
+        Menghapus project menghapus semua isinya: aplikasi, stack compose, dan
+        database dihentikan dan container-nya dihapus (sehingga domainnya
+        berhenti berfungsi), lalu catatan, riwayat backup, dan project-nya
+        sendiri dihapus. Dialog hapus punya kotak centang{" "}
+        <strong>Hapus juga datanya</strong>, tidak dicentang secara bawaan.
+      </P>
+      <Table
+        head={["Data", "Tidak dicentang (bawaan)", "Dicentang"]}
+        rows={[
+          ["Volume database", "Dibiarkan. Muncul sebagai yatim di halaman Docker (Detail), tempat pembersihan bisa menghapusnya nanti.", "Dihapus."],
+          ["Mount volume aplikasi", "Dibiarkan, juga muncul sebagai yatim.", "Dihapus."],
+          ["Volume yang dideklarasikan sendiri oleh file compose", "Dibiarkan, tetapi tidak ditampilkan sebagai yatim. Hapus dari terminal dengan docker volume rm.", "Dihapus."],
+          ["Mount compose yang Anda tambah di aoox", "Dibiarkan, muncul sebagai yatim.", "Dihapus."],
+        ]}
+      />
+      <Callout kind="warn" title="Tidak bisa dibatalkan">
+        Aplikasi, database, dan stack dihapus permanen. Unduh dulu backup yang
+        masih diperlukan: catatan backup ikut terhapus bersama project (file
+        backup di S3 tetap ada).
       </Callout>
-      <Steps>
-        <Step title="Hapus isinya dulu dari dashboard">
-          <P>
-            Aplikasi (hapus), stack compose (Hapus = <Code>down --volumes</Code>),
-            database (hapus + purge volume bila memang tidak dibutuhkan). Unduh
-            backup yang masih diperlukan.
-          </P>
-        </Step>
-        <Step title="Baru hapus project">
-          <P>Tab Pengaturan project<PathArrow />hapus. Backup yang sudah diunduh tidak terpengaruh.</P>
-        </Step>
-      </Steps>
-      <P>Bila terlanjur, bersihkan yatim dari terminal:</P>
-      <Pre>{`docker ps -a --filter label=com.docker.compose.project=aoox
-docker rm -f aoox-app-<slug> aoox-db-<slug>
-docker volume rm aoox_app_<slug>_<nama> aoox_db_<slug>`}</Pre>
+      <P>
+        Jika aoox tidak bisa menjangkau daemon Docker (atau server remote) saat
+        menghapus sesuatu, penghapusan berhenti dengan galat yang menyebut
+        namanya. Project dan yang belum terhapus tetap ada, jadi Anda bisa
+        memperbaiki koneksi lalu menghapus lagi. Hanya admin project yang bisa
+        menghapus project.
+      </P>
+      <P>
+        Menghapus satu aplikasi juga menghapus container kandidat blue/green-nya,
+        dan ditolak (aplikasi tetap ada) bila daemon Docker-nya tidak terjangkau,
+        bukan membiarkan container tetap berjalan.
+      </P>
 
       <H2 id="jebakan">Jebakan umum</H2>
       <Table

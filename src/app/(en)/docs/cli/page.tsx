@@ -420,13 +420,18 @@ API_URL=••••••••
 $ aoox env list --set backend --env development --reveal   # values (audited)
 $ aoox env pull --set backend --env development            # writes ./.env (mode 0600)
 $ aoox env unset OLD_KEY --set backend --env development
-$ aoox run -- npm run dev                                  # what the linked app gets`}</Pre>
+$ aoox run -- npm run dev                                  # the deployed app's variables (likely production)`}</Pre>
+      <Callout kind="warn" title="For local work, pass --set and --env">
+        Without them <Code>aoox run</Code> reproduces the linked application as
+        deployed, usually production. See{" "}
+        <DocLink href="/docs/cli#local-development">Local development</DocLink>.
+      </Callout>
       <Table
         head={["Command", "Does"]}
         rows={[
           [<Code key="l">aoox env list [--set slug] [--env name] [--reveal] [--json]</Code>, "Without flags: every set you can see, your role, its sharing and each environment's variable count (also as aoox env sets). With --set: one set. With --env: that environment's variable names; --reveal shows the values through the audited reveal action."],
           [<Code key="p">aoox env pull [--set slug] [--env name] [--file .env] [--format dotenv|json|shell] [--force]</Code>, <>Writes the variables to a file with mode <Code>0600</Code> (owner only, where the OS supports it). It never overwrites an existing file unless <Code>--force</Code>, and warns once when the file is not covered by <Code>.gitignore</Code> (it never edits <Code>.gitignore</Code> itself).</>],
-          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--set slug] [--env name] [--secret | --no-secret]</Code>, <>Adds or changes variables. Comments and the order of the existing lines are kept; a new variable goes at the end. <Code>--secret</Code> marks the variables as secret, <Code>--no-secret</Code> as explicitly not secret; without either, the flags stay as they are (see <DocLink href="/docs/variables#secret-flags">Secret variables</DocLink>). A value with <Code>{"${{project.KEY}}"}</Code> is refused: write <Code>{"${{vars.KEY}}"}</Code>.</>],
+          [<Code key="s">aoox env set KEY=VALUE [KEY2=VALUE2 …] [--set slug] [--env name] [--secret | --no-secret]</Code>, <>Adds or changes variables. Comments (including <DocLink href="/docs/variables#notes">notes</DocLink>) and the order of the existing lines are kept; a new variable goes at the end. <Code>--secret</Code> marks the variables as secret, <Code>--no-secret</Code> as explicitly not secret; without either, the flags stay as they are (see <DocLink href="/docs/variables#secret-flags">Secret variables</DocLink>). A value with <Code>{"${{project.KEY}}"}</Code> is refused: write <Code>{"${{vars.KEY}}"}</Code>.</>],
           [<Code key="u">aoox env unset KEY [KEY2 …] [--set slug] [--env name]</Code>, "Removes variables; comments and the other lines stay."],
           [<Code key="pu">aoox env push --file .env [--set slug] [--env name] [--yes]</Code>, "Replaces the whole environment with a local file, after showing which variables are added, changed and removed and asking for confirmation."],
           [<Code key="h">aoox env history [--set slug] [--env name] [--limit 20] [--json]</Code>, "The version history of an environment, newest first: when, who, and the variable names added (+), changed (~) or removed (-). Never values."],
@@ -619,6 +624,109 @@ Variables that are not in the file are removed: this replaces the whole environm
         <li>
           Creating, sharing and deleting sets and environments is done in the
           dashboard by an instance owner or admin.
+        </li>
+      </Ul>
+
+      <H2 id="local-development">Local development</H2>
+      <P>
+        Run your app on your laptop with the variables of one set environment,
+        without a <Code>.env</Code> file and without linking the folder. You
+        only need to be signed in.
+      </P>
+      <Steps>
+        <Step title="Install the CLI, create a narrow token, sign in">
+          <Pre>{`$ npm i -g @hideandseeklab/aoox
+$ aoox login`}</Pre>
+          <P>
+            In the panel, <strong>Settings<PathArrow />API token<PathArrow />Create
+            token</strong>: turn <strong>Read-only</strong> on and set{" "}
+            <strong>Limit to variables</strong> to the environment you develop
+            against, e.g. <Code>backend/development</Code>. A laptop token then
+            cannot touch production. See{" "}
+            <DocLink href="/docs/variables#tokens">API token scopes</DocLink>.
+          </P>
+        </Step>
+        <Step title="Put the command in package.json">
+          <Pre title="package.json">{`"scripts": {
+  "start:dev": "aoox run --set backend --env development -- nest start --watch"
+}`}</Pre>
+          <P>
+            Coming from Infisical? <Code>infisical run --env=dev -- …</Code>{" "}
+            becomes <Code>aoox run --set &lt;slug&gt; --env development -- …</Code>.
+          </P>
+        </Step>
+        <Step title="Always pass --set and --env locally">
+          <Callout kind="warn" title="Without them you get the deployed app's variables">
+            <Code>aoox run -- …</Code> with no <Code>--set</Code>/<Code>--env</Code>{" "}
+            needs a linked application and injects what its container gets at
+            deploy: the application&apos;s linked set environments plus its own
+            env. That is usually <strong>production</strong>, and changing the
+            application&apos;s links in the panel would silently change what your
+            laptop gets. With <Code>--set</Code>/<Code>--env</Code> exactly one
+            environment is injected: no links, no own env.
+          </Callout>
+        </Step>
+        <Step title="What you see">
+          <Pre>{`$ aoox run --set backend --env development -- nest start --watch
+aoox  Injecting 5 variables from backend/development (no links, no own env)`}</Pre>
+          <Ul>
+            <li>
+              The line goes to standard error and is coloured only on a
+              terminal (plain when piped or with <Code>NO_COLOR</Code>).{" "}
+              <Code>--quiet</Code> (<Code>-q</Code>) hides it, never the
+              warnings.
+            </li>
+            <li>
+              <strong>Fail closed</strong>: if the read is refused (bad token,
+              no access, a protected environment, a token scope), the command is
+              not started at all.
+            </li>
+            <li>
+              Variables live in the child process only; nothing is written to
+              disk.
+            </li>
+          </Ul>
+        </Step>
+        <Step title="Tools that only read a file">
+          <Pre>{`$ aoox env pull --set backend --env development --file .env`}</Pre>
+          <P>
+            The file is written with mode <Code>0600</Code> and never
+            overwritten without <Code>--force</Code>. Make sure{" "}
+            <Code>.env</Code> is in <Code>.gitignore</Code>; aoox warns when it
+            is not.
+          </P>
+        </Step>
+        <Step title="Do you need aoox link?">
+          <P>
+            Not for local variables: <Code>--set</Code>/<Code>--env</Code> only
+            need you to be signed in. You do need it for{" "}
+            <Code>aoox deploy</Code>, for <Code>aoox run</Code> without flags,
+            and for managing links with <Code>aoox env links/link/unlink</Code>.
+            It writes <Code>.aoox.json</Code> (panel address, project and
+            application ids and names, no secrets), which is safe to commit.
+          </P>
+        </Step>
+        <Step title="CI">
+          <P>
+            Skip <Code>aoox login</Code> and set <Code>AOOX_URL</Code> and{" "}
+            <Code>AOOX_TOKEN</Code> (a masked CI variable) from a read-only
+            token limited to the environment the job needs.
+          </P>
+          <Pre>{`$ AOOX_URL=https://panel.example.com aoox run --set backend --env development -- npm test`}</Pre>
+        </Step>
+      </Steps>
+      <H3>Limits</H3>
+      <Ul>
+        <li>
+          <Code>{"${{database.…}}"}</Code> and <Code>{"${{secret.…}}"}</Code>{" "}
+          references stay as written, with a warning: only the panel resolves
+          them at deploy time. Point those variables at a local database in a
+          local-only variable or <Code>--file</Code>.
+        </li>
+        <li>Secrets synced from Infisical are not included.</li>
+        <li>
+          If <Code>--set</Code>/<Code>--env</Code> are omitted and several
+          candidates exist, the command stops and lists them; it never guesses.
         </li>
       </Ul>
 

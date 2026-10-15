@@ -145,6 +145,21 @@ export default function Page() {
           with size, users and a marker for aoox&apos;s orphaned volumes.
         </li>
       </Ul>
+      <P>
+        <strong>Leftover containers.</strong> Projects and applications
+        deleted on older versions of aoox left their containers running, with
+        their Traefik labels, so a leftover could still answer on its old
+        domain. The disk strip&apos;s <strong>Details</strong> dialog lists
+        them (name, kind, state) when there are any, for containers on the
+        aoox host whose project, application, database or stack no longer
+        exists. The owner can remove one with its trash button, or tick{" "}
+        <strong>Also remove leftover containers</strong> before{" "}
+        <strong>Clean now</strong> (off by default, also in the nightly
+        cleanup). The panel itself, the proxy, registry, build and job helpers
+        and anything aoox cannot tie to a deleted resource are never listed.
+        Volumes are not removed by this; use the orphan-volume option for
+        them. Remote servers are not covered.
+      </P>
 
       <H2 id="container">Per-container metrics</H2>
       <P>

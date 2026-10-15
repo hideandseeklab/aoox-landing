@@ -259,6 +259,44 @@ API_URL=https://api.example.com/v1`}</Pre>
         </li>
       </Ul>
 
+      <H2 id="notes">Notes</H2>
+      <P>
+        A variable&apos;s note is the block of <Code>#</Code> lines directly
+        above it. A blank line in between breaks the link, so a section header
+        followed by a blank line stays an ordinary comment.
+      </P>
+      <Pre title="development">{`# Payments
+
+# Base URL of the payments API, including the /v1 prefix.
+PAYMENTS_URL=https://pay.example.com/v1
+# Must equal WEBHOOK_SECRET in the payments service.
+WEBHOOK_SECRET=…`}</Pre>
+      <Ul>
+        <li>
+          Here <Code>PAYMENTS_URL</Code> and <Code>WEBHOOK_SECRET</Code> have a
+          note; <Code># Payments</Code> is a standalone comment.
+        </li>
+        <li>
+          On the set page a note icon appears next to each variable that has
+          one; hover, click or tap it to read the note. In{" "}
+          <strong>Reveal and edit</strong>, Rows view shows the note under the
+          variable and lets you add or change it; Text view shows the{" "}
+          <Code>#</Code> lines.
+        </li>
+        <li>
+          <strong>Notes are visible without revealing values</strong>, to
+          everyone who can see the set, viewers included. Do not put secrets in
+          them.
+        </li>
+        <li>
+          Notes are part of the text, so they travel with it: history and
+          restore, <Code>aoox env pull</Code> / <Code>push</Code>, and export
+          and import. <strong>Promote</strong> brings the note of a variable that
+          is new to the target; a variable the target already has keeps its own
+          note. A note is cut at 1000 characters.
+        </li>
+      </Ul>
+
       <H2 id="secret-flags">Secret variables</H2>
       <Table
         head={["Flag", "What happens to the value in logs"]}
@@ -279,6 +317,25 @@ API_URL=https://api.example.com/v1`}</Pre>
           Flags are stored next to the names, not in the text, so pulled files
           and the compose <Code>.aoox.env</Code> are unchanged. Masking applies
           to deployment logs, job output and error notifications.
+        </li>
+        <li>
+          <strong>What the flag does not do</strong>: every value is stored
+          encrypted, secret or not. The flag does not decide who may see a
+          value: in the dashboard it stays hidden until{" "}
+          <strong>Reveal and edit</strong> (audited), and access follows roles
+          and protected environments. The container always receives the real
+          value. The flag only controls masking with <Code>***</Code> in logs.
+        </li>
+        <li>
+          <strong>Known false positive</strong>: the automatic name rule also
+          matches names such as <Code>MONKEY</Code> or <Code>KEYBOARD</Code>,
+          because they contain &quot;key&quot;. Turn the switch off for those.
+        </li>
+        <li>
+          <strong>Tip</strong>: turn it on for passwords, tokens, API keys and
+          connection strings; turn it off for plain values like{" "}
+          <Code>NODE_ENV</Code>, <Code>PORT</Code> and <Code>LOG_LEVEL</Code>{" "}
+          so they stay readable in logs.
         </li>
       </Ul>
 
@@ -321,7 +378,8 @@ $ aoox env links                                  # what the linked app uses, in
 $ aoox env link --set shared --env production --position 1
 $ aoox run -- npm run dev                         # linked environments + own env`}</Pre>
       <P>
-        Details in <DocLink href="/docs/cli#env">CLI: aoox env and aoox run</DocLink>.
+        Details in <DocLink href="/docs/cli#env">CLI: aoox env and aoox run</DocLink>. To run your app locally with one environment, see{" "}
+        <DocLink href="/docs/cli#local-development">Local development</DocLink>.
       </P>
 
       <H2 id="export-import">Export and import</H2>

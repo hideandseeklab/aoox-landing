@@ -171,6 +171,18 @@ app.example.com.   CNAME  server.example.com.`}</Pre>
         </Step>
       </Steps>
 
+      <H3>When another container already uses the domain</H3>
+      <P>
+        If a container on the same daemon already routes the host (typically
+        a leftover of a project deleted on an older version, or another
+        stack), two routers answer for it and requests are split between
+        them. The Domain tab shows a warning on that domain naming the
+        container, and adding the domain returns the same information. Nothing
+        is blocked. When the container is a leftover, the warning points to
+        the Docker page (Details), where the owner can remove it. The
+        deployment log also notes it.
+      </P>
+
       <H2 id="https">How HTTPS works</H2>
       <div className="overflow-x-auto border border-border rounded-lg">
         <table className="w-full text-xs">

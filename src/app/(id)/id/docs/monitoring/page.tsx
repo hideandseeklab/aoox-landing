@@ -120,6 +120,21 @@ export default function Page() {
       </Ul>
       <H3>Halaman Docker</H3>
       <P>
+        <strong>Container sisa.</strong> Project dan aplikasi yang dihapus di
+        versi aoox lama meninggalkan container yang masih berjalan lengkap
+        dengan label Traefik-nya, sehingga sisa itu bisa tetap melayani
+        domain lamanya. Dialog <strong>Detail</strong> pada strip disk
+        menampilkannya (nama, jenis, status) bila ada: container di host aoox
+        yang project, aplikasi, database, atau stack-nya sudah tidak ada.
+        Owner bisa menghapus satu per satu lewat tombol tempat sampah, atau
+        mencentang <strong>Sekalian hapus container sisa</strong> sebelum{" "}
+        <strong>Bersihkan sekarang</strong> (mati secara default, juga di
+        pembersihan malam). Panel aoox sendiri, proxy, registry, helper build
+        dan job, serta apa pun yang tidak bisa dikaitkan ke resource yang
+        sudah dihapus tidak pernah ditampilkan. Volume tidak ikut dihapus;
+        pakai opsi volume yatim. Server remote tidak tercakup.
+      </P>
+      <P>
         <strong>Infrastruktur<PathArrow />Docker</strong> (owner/admin) menampilkan
         container, image, volume, dan network di host atau di server remote
         (pilih server di atas tab; item Docker ada di grup Platform pada sidebar). Container, image, volume, dan network
