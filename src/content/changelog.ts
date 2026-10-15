@@ -30,6 +30,60 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.0-alpha.11",
+    date: "2026-10-15",
+    channel: "alpha",
+    groups: [
+      {
+        kind: "added",
+        items: [
+          {
+            id: "**Catatan per variabel**: baris `#` tepat di atas sebuah variabel menjadi catatannya. Panel menampilkan ikon catatan di daftar yang masih tersamar tanpa membuka nilainya, dan catatan ikut riwayat, promosi, `aoox env pull`/`push`, dan ekspor. Jangan simpan rahasia di catatan: semua orang yang bisa melihat set ini bisa membacanya.",
+            en: "**Notes on variables**: the `#` lines directly above a variable become its note. The dashboard shows a note icon in the masked list without revealing values, and notes travel with history, promote, `aoox env pull`/`push` and export. Do not put secrets in notes: everyone who can see the set can read them.",
+          },
+          {
+            id: "**Daftar container sisa di halaman Docker**: container dari project atau aplikasi yang dihapus di versi lama (dan masih menjawab di domainnya) kini terlihat di Details disk dan bisa dihapus satu per satu atau sekaligus. Volume tidak disentuh.",
+            en: "**Leftover containers on the Docker page**: containers left over from projects or applications deleted on older versions (and still answering on their domains) now show in the disk Details and can be removed one by one or together. Volumes are not touched.",
+          },
+          {
+            id: "**Peringatan saat domain masih dipakai container lain**: tab Domain menyebut container yang juga mengarah ke host itu, supaya permintaan yang terbagi dua tidak membingungkan.",
+            en: "**A warning when another container already serves a domain**: the Domain tab names the container that also routes the host, so requests split between two containers are no longer a mystery.",
+          },
+        ],
+      },
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Halaman database baru memilih engine dari kartu** (PostgreSQL, MySQL, MariaDB, Redis, Valkey, MongoDB), dengan varian PostgreSQL berupa chip dan tag image yang dipakai terlihat di bawah kolom Version. Ringkasan database juga disusun ulang: metrik, koneksi, Admin UI, batas dan alert, lalu zona berbahaya.",
+            en: "**The New database page picks the engine from cards** (PostgreSQL, MySQL, MariaDB, Redis, Valkey, MongoDB), with the PostgreSQL variant as chips and the image tag in use shown under the Version field. The database overview is reordered too: metrics, connection, Admin UI, limits and alerts, then the danger zone.",
+          },
+          {
+            id: "**Header aplikasi dan database lebih jelas**: setiap fakta berlabel (`Image`, `Container`, `Port`), nama container bisa disalin, dan image tanpa tag ditampilkan sebagai `:latest`.",
+            en: "**Clearer application and database headers**: every fact is labelled (`Image`, `Container`, `Port`), the container name can be copied, and an image without a tag is shown as `:latest`.",
+          },
+          {
+            id: "**Favicon bulat aoox.dev** kini dipakai juga oleh dashboard dan API.",
+            en: "**The round aoox.dev favicon** is now used by the dashboard and the API too.",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "**Menghapus project kini menghentikan isinya**: sebelumnya hanya catatannya yang dihapus sehingga container tetap berjalan dan domain masih menjawab. Sekarang aplikasi, database, dan stack dihapus lebih dulu; opsi **Also delete data** juga menghapus volume (bawaannya volume disimpan dan muncul sebagai yatim di Docker). Menghapus aplikasi juga membersihkan container blue/green-nya.",
+            en: "**Deleting a project now takes down what runs in it**: before, only the records were deleted, so containers kept running and domains still answered. Applications, databases and stacks are now removed first; the **Also delete data** option deletes volumes too (by default volumes are kept and show up as orphaned on the Docker page). Deleting an application also cleans up its blue/green container.",
+          },
+          {
+            id: "**Editor variabel tidak lagi menghapus komentar** saat disimpan dari tampilan Rows: catatan, komentar judul bagian, dan pengelompokan baris kosong tetap utuh.",
+            en: "**The variable editor no longer deletes comments** when saving from Rows view: notes, section-header comments and blank-line grouping are kept.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.0-alpha.10",
     date: "2026-10-13",
     channel: "alpha",

@@ -8,6 +8,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.11] - 2026-10-15
+
 ### Added
 
 - **Docs: Local development (English and Indonesian)**: a new section on the CLI page (`#local-development`) for running an app on a laptop with `aoox run --set <slug> --env <name>` without `aoox link`: a narrow read-only token, the `package.json` script, why to always pass `--set`/`--env`, fail-closed behaviour, `aoox env pull`, when `aoox link` is needed, CI, and limits. The `aoox run` example in the env section now says it reproduces the deployed app. The Variables page's Secret variables section also says what the flag does not do (values are always encrypted; it only controls log masking), the `MONKEY`/`KEYBOARD` false positive, and when to turn it on or off.
@@ -411,7 +413,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.10...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.11...HEAD
+[0.1.0-alpha.11]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.10...v0.1.0-alpha.11
 [0.1.0-alpha.10]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.9...v0.1.0-alpha.10
 [0.1.0-alpha.9]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.8...v0.1.0-alpha.9
 [0.1.0-alpha.8]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.7...v0.1.0-alpha.8
