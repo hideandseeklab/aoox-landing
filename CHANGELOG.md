@@ -10,6 +10,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ### Changed
 
+- **Docs: image name and version from the project (English and Indonesian)**: the CLI page explains that `aoox registry build` / `push` without `name:version` take the name and version from `package.json`, `pyproject.toml`, `Cargo.toml`, `composer.json`, `pubspec.yaml`, a single `*.csproj`, `pom.xml`, a `VERSION` file or the git tag (in that order, the folder name as a last resort for the name), and ask `(Y/n/e)` before building unless `--yes` is passed.
 - **Docs: removing the panel domain and the Compose version guard (English and Indonesian)**: the panel domain page has a new section (`#remove`, `#hapus-domain`) on **Remove domain** / `aoox domain clear` (what is reset, that the proxy and application domains stay, `INSTALL_DIR` and Docker requirements); the CLI page lists `aoox domain clear` and says `aoox reinstall` stops when the restrict-ports override needs a newer Docker Compose (2.24.4).
 - **Docs: only allow access through the domain (English and Indonesian)**: the panel domain page has a new section for the opt-in switch (`--domain-only` in the CLI) that closes ports 3000/3001 to the outside, with the lock-out warning and the SSH recovery steps; Troubleshooting has a matching row; the CLI page lists the flag.
 - **Docs: client IP behind a proxy (English and Indonesian)**: Troubleshooting has a new row for rate limits and the audit log seeing the proxy's address, explaining `TRUST_PROXY` and its trade-off.

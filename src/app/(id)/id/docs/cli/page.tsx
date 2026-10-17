@@ -88,7 +88,7 @@ const COMMANDS = [
   {
     cmd: "aoox registry build",
     what: "Build ./Dockerfile menjadi image lokal bernama registry; menolak versi yang sudah ada di sana. Dengan --push, image langsung dikirim juga.",
-    flags: "--push, --registry, --dockerfile/-f, --context, --force",
+    flags: "--push, --yes/-y, --registry, --dockerfile/-f, --context, --force",
   },
   {
     cmd: "aoox env list | pull | push | set | unset | history | diff | promote",
@@ -108,7 +108,7 @@ const COMMANDS = [
   {
     cmd: "aoox registry push",
     what: "Push image lokal yang sudah ada ke registry; menolak versi yang sudah ada di sana.",
-    flags: "--registry, --force",
+    flags: "--yes/-y, --registry, --force",
   },
   {
     cmd: "aoox reinstall",
@@ -764,8 +764,55 @@ Use it in the dashboard: New application → Ready-made image`}</Pre>
         <Code>&lt;host registry&gt;/&lt;nama&gt;:&lt;versi&gt;</Code>.{" "}
         <Code>push</Code> hanya mendorong image yang sudah ada secara lokal dan
         menerima nama pendek maupun lengkap. Untuk build dan push sekaligus,
-        pakai <Code>aoox registry build myapp:1.0.0 --push</Code>. Versi wajib
-        diisi, huruf kecil.
+        pakai <Code>aoox registry build myapp:1.0.0 --push</Code>. Nama harus
+        huruf kecil.
+      </P>
+      <P>
+        Tidak perlu mengetik semuanya. Kalau versinya dihilangkan (
+        <Code>aoox registry build myapp</Code>) atau seluruh argumennya (
+        <Code>aoox registry build</Code>), CLI membacanya dari proyek: konteks
+        build untuk <Code>build</Code>, folder saat ini untuk{" "}
+        <Code>push</Code>. <Code>nama:versi</Code> yang diketik selalu menang.
+        File pertama yang ditemukan, dengan urutan ini, memberi tiap nilai:
+      </P>
+      <Table
+        head={["Urutan", "Sumber", "Nama", "Versi"]}
+        rows={[
+          ["1", <Code key="1">package.json</Code>, <>name (scope dibuang: <Code>@acme/web</Code> jadi <Code>web</Code>)</>, "version"],
+          ["2", <Code key="2">pyproject.toml</Code>, <>name di <Code>[project]</Code> atau <Code>[tool.poetry]</Code></>, "version (dilewati bila dynamic)"],
+          ["3", <Code key="3">Cargo.toml</Code>, <>name di <Code>[package]</Code></>, <>version di <Code>[package]</Code> (bukan versi workspace)</>],
+          ["4", <Code key="4">composer.json</Code>, <>name (<Code>vendor/pkg</Code> jadi <Code>pkg</Code>)</>, "version, bila ada"],
+          ["5", <Code key="5">pubspec.yaml</Code>, "name", "version"],
+          ["6", <Code key="6">*.csproj</Code>, <>AssemblyName, atau nama file</>, <>Version, atau VersionPrefix-VersionSuffix (hanya satu file)</>],
+          ["7", <Code key="7">pom.xml</Code>, "artifactId proyek", "version proyek (bukan milik parent)"],
+          ["8", <Code key="8">VERSION</Code>, "—", "baris pertama yang tidak kosong"],
+          ["9", "tag git", "—", <>tag tempat HEAD berada, tanpa awalan <Code>v</Code></>],
+          ["10", "nama folder", "nama folder, huruf kecil", "—"],
+        ]}
+      />
+      <P>
+        Nilai dari file yang tidak bisa dipakai (variabel <Code>$(…)</Code>{" "}
+        atau <Code>${"{…}"}</Code>, versi dynamic) dilewati dan sumber
+        berikutnya dicoba. Nama diubah ke huruf kecil; tanda <Code>+</Code>{" "}
+        pada versi (metadata build, tidak boleh ada di tag) menjadi{" "}
+        <Code>_</Code>. Kalau HEAD sudah melewati tag git terakhir, tidak ada
+        yang ditebak: beri tag rilisnya, ketik <Code>nama:versi</Code>, atau
+        tambahkan <Code>--force</Code> untuk memakai bentuk{" "}
+        <Code>git describe</Code> seperti <Code>1.4.2-3-gabc1234</Code>.
+      </P>
+      <Pre>{`$ aoox registry build
+==> Image web:1.4.2 (name and version from package.json)
+? Build web:1.4.2? (Y/n/e)`}</Pre>
+      <P>
+        Karena nama atau versi turunan bisa saja keliru, CLI bertanya dulu
+        sebelum melakukan apa pun: <Code>Y</Code> lanjut, <Code>n</Code>{" "}
+        berhenti, <Code>e</Code> untuk mengetik <Code>nama:versi</Code> lain.{" "}
+        <Code>--yes</Code> (<Code>-y</Code>) melewati pertanyaan. Tanpa
+        terminal, atau saat <Code>CI</Code> terisi, CLI menolak dan meminta{" "}
+        <Code>nama:versi</Code> atau <Code>--yes</Code>. <Code>nama:versi</Code>{" "}
+        yang diketik lengkap tidak pernah ditanyakan. Kalau lupa menaikkan
+        versi, pengecekan &quot;already exists&quot; di bawah tetap melindungi
+        registry dan menunjukkan di mana mengubahnya.
       </P>
       <Table
         head={["Yang muncul", "Artinya"]}
@@ -780,7 +827,7 @@ Use it in the dashboard: New application → Ready-made image`}</Pre>
           ],
           [
             <Code key="3">error  A version is required: &quot;myapp&quot; has none.</Code>,
-            <>Tulis <Code>nama:versi</Code>, mis. <Code>aoox registry build myapp:1.0.0</Code>.</>,
+            <>Versi tidak diketik dan tidak ditemukan di proyek. Tulis <Code>nama:versi</Code>, mis. <Code>aoox registry build myapp:1.0.0</Code>, atau isi versi di salah satu file pada daftar di atas.</>,
           ],
           [
             <>Registry-nya <Code>localhost:5000</Code></>,

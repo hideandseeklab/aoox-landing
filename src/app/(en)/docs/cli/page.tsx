@@ -103,12 +103,12 @@ const COMMANDS = [
   {
     cmd: "aoox registry build",
     what: "Builds ./Dockerfile into a local image named for the registry; refuses a version that already exists there. With --push it also pushes it.",
-    flags: "--push, --registry, --dockerfile/-f, --context, --force",
+    flags: "--push, --yes/-y, --registry, --dockerfile/-f, --context, --force",
   },
   {
     cmd: "aoox registry push",
     what: "Pushes an existing local image to the registry; refuses a version that already exists there.",
-    flags: "--registry, --force",
+    flags: "--yes/-y, --registry, --force",
   },
   {
     cmd: "aoox reinstall",
@@ -762,8 +762,55 @@ Use it in the dashboard: New application → Ready-made image`}</Pre>
         image <Code>&lt;registry host&gt;/&lt;name&gt;:&lt;version&gt;</Code>.{" "}
         <Code>push</Code> only pushes an image that already exists locally and
         accepts the short name or the full one. To do both in one step, use{" "}
-        <Code>aoox registry build myapp:1.0.0 --push</Code>. A version is
-        required, in lowercase.
+        <Code>aoox registry build myapp:1.0.0 --push</Code>. Names are
+        lowercase.
+      </P>
+      <P>
+        You do not have to type everything. Leave out the version (
+        <Code>aoox registry build myapp</Code>) or the whole argument (
+        <Code>aoox registry build</Code>) and the CLI reads it from the
+        project: the build context for <Code>build</Code>, the current folder
+        for <Code>push</Code>. A typed <Code>name:version</Code> always wins.
+        The first file found, in this order, supplies each value:
+      </P>
+      <Table
+        head={["Order", "Source", "Name", "Version"]}
+        rows={[
+          ["1", <Code key="1">package.json</Code>, <>name (scope removed: <Code>@acme/web</Code> becomes <Code>web</Code>)</>, "version"],
+          ["2", <Code key="2">pyproject.toml</Code>, <><Code>[project]</Code> or <Code>[tool.poetry]</Code> name</>, "version (skipped when dynamic)"],
+          ["3", <Code key="3">Cargo.toml</Code>, <><Code>[package]</Code> name</>, <><Code>[package]</Code> version (not a workspace one)</>],
+          ["4", <Code key="4">composer.json</Code>, <>name (<Code>vendor/pkg</Code> becomes <Code>pkg</Code>)</>, "version, if present"],
+          ["5", <Code key="5">pubspec.yaml</Code>, "name", "version"],
+          ["6", <Code key="6">*.csproj</Code>, <>AssemblyName, else the file name</>, <>Version, or VersionPrefix-VersionSuffix (one file only)</>],
+          ["7", <Code key="7">pom.xml</Code>, "artifactId of the project", "version of the project (not the parent&apos;s)"],
+          ["8", <Code key="8">VERSION</Code>, "—", "first non-empty line"],
+          ["9", "git tag", "—", <>the tag HEAD is on, without a leading <Code>v</Code></>],
+          ["10", "folder name", "the folder, lowercased", "—"],
+        ]}
+      />
+      <P>
+        Values from a file that are unusable (a <Code>$(…)</Code> or{" "}
+        <Code>${"{…}"}</Code> variable, a dynamic version) are skipped and the
+        next source is tried. Names are lowercased; a <Code>+</Code> in a
+        version (build metadata, which tags cannot hold) becomes{" "}
+        <Code>_</Code>. If HEAD is past the last git tag, nothing is guessed:
+        tag the release, type <Code>name:version</Code>, or add{" "}
+        <Code>--force</Code> to use the <Code>git describe</Code> form such as{" "}
+        <Code>1.4.2-3-gabc1234</Code>.
+      </P>
+      <Pre>{`$ aoox registry build
+==> Image web:1.4.2 (name and version from package.json)
+? Build web:1.4.2? (Y/n/e)`}</Pre>
+      <P>
+        Because a derived name or version can be wrong, the CLI asks before it
+        does anything: <Code>Y</Code> continues, <Code>n</Code> stops, and{" "}
+        <Code>e</Code> lets you type another <Code>name:version</Code>.{" "}
+        <Code>--yes</Code> (<Code>-y</Code>) skips the question. Without a
+        terminal, or when <Code>CI</Code> is set, it refuses and asks for{" "}
+        <Code>name:version</Code> or <Code>--yes</Code>. A fully typed{" "}
+        <Code>name:version</Code> never asks. If you forget to bump the
+        version, the &quot;already exists&quot; check below still protects the
+        registry, and says where to change it.
       </P>
       <Table
         head={["You see", "Meaning"]}
@@ -778,7 +825,7 @@ Use it in the dashboard: New application → Ready-made image`}</Pre>
           ],
           [
             <Code key="3">error  A version is required: &quot;myapp&quot; has none.</Code>,
-            <>Write <Code>name:version</Code>, e.g. <Code>aoox registry build myapp:1.0.0</Code>.</>,
+            <>No version was typed and none was found in the project. Write <Code>name:version</Code>, e.g. <Code>aoox registry build myapp:1.0.0</Code>, or add a version to a file from the list above.</>,
           ],
           [
             <>The registry is <Code>localhost:5000</Code></>,
