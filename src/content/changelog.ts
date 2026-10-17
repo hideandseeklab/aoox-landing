@@ -30,6 +30,56 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.0-alpha.12",
+    date: "2026-10-17",
+    channel: "alpha",
+    groups: [
+      {
+        kind: "added",
+        items: [
+          {
+            id: "**Hapus domain panel dan akses hanya lewat domain**: tombol **Remove domain** (atau `aoox domain clear`) mengembalikan dashboard ke `IP:3000`, dan sakelar opsional \"Only allow access through the domain\" (`aoox domain set --domain-only`) menutup port 3000/3001 dari luar. Ada peringatan terkunci dan langkah pemulihan lewat SSH.",
+            en: "**Remove the panel domain and domain-only access**: **Remove domain** (or `aoox domain clear`) takes the dashboard back to `IP:3000`, and the optional \"Only allow access through the domain\" switch (`aoox domain set --domain-only`) closes ports 3000/3001 to the outside. A lock-out warning and SSH recovery steps are included.",
+          },
+          {
+            id: "**`aoox registry build` dan `push` tanpa mengetik `name:version`**: nama dan versi diambil dari `package.json`, `pyproject.toml`, `Cargo.toml`, file `VERSION`, tag git, dan seterusnya, lalu ditanyakan `(Y/n/e)` sebelum dijalankan kecuali memakai `--yes`.",
+            en: "**`aoox registry build` and `push` without typing `name:version`**: the name and version are read from `package.json`, `pyproject.toml`, `Cargo.toml`, a `VERSION` file, the git tag and so on, and confirmed with `(Y/n/e)` before running unless `--yes` is passed.",
+          },
+        ],
+      },
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Batas laju kini per pengguna, dan API melihat IP klien asli** di belakang Traefik (`TRUST_PROXY`, bawaannya hanya mempercayai hop jaringan privat). Orang di balik NAT yang sama tidak lagi berbagi satu kuota, dan satu penyerang tidak bisa mengunci semua orang saat sign-in.",
+            en: "**Rate limits are now per user, and the API sees the real client IP** behind Traefik (`TRUST_PROXY`, which by default trusts private-network hops only). People behind the same NAT no longer share one quota, and one attacker can no longer lock everyone out of sign-in.",
+          },
+          {
+            id: "**Tampilan nilai variabel disusun ulang**: tiap baris punya tombol mata dan salin, **Reveal all**, **Edit**, dan nilai tersembunyi lagi otomatis setelah 60 detik. Halaman Integrations, Registry, dan Reverse proxy juga memakai keadaan kosong bergambar dan tata letak yang lebih rapi.",
+            en: "**Variable values are laid out anew**: each row has an eye and a copy button, plus **Reveal all**, **Edit**, and values hide again automatically after 60 seconds. The Integrations, Registry and Reverse proxy pages also get illustrated empty states and a tidier layout.",
+          },
+          {
+            id: "**Output CLI berwarna** di terminal; peringatan kini tampil sebagai `warn  teks`, dan Ctrl+C di prompt keluar dengan kode 130.",
+            en: "**Coloured CLI output** in a terminal; warnings now print as `warn  text`, and Ctrl+C at a prompt exits with code 130.",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "**Registry lokal tidak lagi tampak aktif** hanya karena ada container sisa `aoox-registry`; halaman menjelaskannya dan menawarkan **Replace it**. Mengaktifkan registry di atas container yang ada kini dijawab 409.",
+            en: "**The local registry no longer looks enabled** just because a leftover `aoox-registry` container exists; the page explains it and offers **Replace it**. Enabling the registry over an existing container now answers 409.",
+          },
+          {
+            id: "**CLI bekerja di balik pemindai HTTPS antivirus dan proxy perusahaan** dengan memercayai penyimpanan sertifikat sistem operasi (Node 22.19+ / 24.5+); verifikasi sertifikat tidak pernah dimatikan. `aoox reinstall` berhenti jika Docker Compose terlalu lama untuk override akses-hanya-lewat-domain.",
+            en: "**The CLI works behind antivirus HTTPS scanning and corporate proxies** by trusting the operating system certificate store (Node 22.19+ / 24.5+); certificate verification is never disabled. `aoox reinstall` stops when Docker Compose is too old for the domain-only override.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.0-alpha.11",
     date: "2026-10-15",
     channel: "alpha",

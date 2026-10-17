@@ -8,6 +8,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.12] - 2026-10-17
+
 ### Changed
 
 - **Docs: image name and version from the project (English and Indonesian)**: the CLI page explains that `aoox registry build` / `push` without `name:version` take the name and version from `package.json`, `pyproject.toml`, `Cargo.toml`, `composer.json`, `pubspec.yaml`, a single `*.csproj`, `pom.xml`, a `VERSION` file or the git tag (in that order, the folder name as a last resort for the name), and ask `(Y/n/e)` before building unless `--yes` is passed.
@@ -424,7 +426,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.11...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.12...HEAD
+[0.1.0-alpha.12]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.11...v0.1.0-alpha.12
 [0.1.0-alpha.11]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.10...v0.1.0-alpha.11
 [0.1.0-alpha.10]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.9...v0.1.0-alpha.10
 [0.1.0-alpha.9]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.8...v0.1.0-alpha.9
