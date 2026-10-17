@@ -157,7 +157,9 @@ export default function Page() {
         </Step>
         <Step title="Turn on the schedule">
           <P>
-            Toggle <strong>active</strong> on the job row. The schedule is
+            Jobs with a cron have a <strong>Schedule on</strong> switch on the
+            row; turn it off to pause the automatic schedule (Run still works
+            manually). Jobs without a cron show no switch. The schedule is
             registered immediately, no API restart needed; the timezone follows
             the API container (UTC in the distribution image).
           </P>

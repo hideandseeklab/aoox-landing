@@ -39,7 +39,7 @@ const BEFORE_AFTER = [
   { k: "API", before: "http://203.0.113.10:3001", after: "https://api.panel.example.com" },
   { k: "Session cookie", before: "no Secure flag", after: "Secure (follows WEB_ORIGIN https)" },
   { k: "Git webhook", before: "IP:3001 must be public", after: "a clean API URL" },
-  { k: "Port 3000/3001", before: "the only way in", after: "still open (IP access)" },
+  { k: "Port 3000/3001", before: "the only way in", after: "still open (IP access), or closed with the option below" },
 ]
 
 const NEXT = [
@@ -159,6 +159,56 @@ api.panel.example.com.   A   203.0.113.10`}</Pre>
         <Code>-f docker-compose.override.yml</Code> too, or the domain you set
         will disappear.
       </Callout>
+
+      <H2 id="domain-only">Only allow access through the domain (optional)</H2>
+      <P>
+        Ports <Code>3000</Code> and <Code>3001</Code> are published on every
+        interface by default, so the dashboard also answers on{" "}
+        <Code>IP:3000</Code>. A client can reach the web port directly with its
+        own <Code>X-Forwarded-For</Code> header, which sidesteps the per-IP
+        sign-in limit. Turn on <strong>Only allow access through the
+        domain</strong> in Settings<PathArrow />Domain panel (or run{" "}
+        <Code>aoox domain set --web … --api … --domain-only</Code>) and both
+        ports listen on <Code>127.0.0.1</Code> only, so everything outside goes
+        through Traefik. It is off by default, and it needs both the dashboard
+        and the API domain: the CLI, webhooks and the terminal/log sockets use
+        the API domain once port 3001 is closed.
+      </P>
+      <Callout kind="warn" title="You can lock yourself out">
+        Turn it on only after <Code>https://panel.example.com</Code> opens. If
+        DNS, the firewall or the certificate is broken afterwards, the panel
+        cannot be reached at all and <Code>IP:3000</Code> no longer works. Recover
+        over SSH: in the install folder delete the two <Code>ports:</Code> lines
+        in <Code>docker-compose.override.yml</Code>, then run{" "}
+        <Code>docker compose -f docker-compose.dist.yml -f docker-compose.override.yml --env-file .env.dist up -d</Code>.
+        The override uses the Compose <Code>!override</Code> tag, which needs
+        Docker Compose 2.24.4 or newer for commands you run by hand (the panel
+        itself applies it with its own, newer Compose). Turning the option off
+        in the dashboard writes the file back without those lines. For the
+        same reason <Code>aoox reinstall</Code> stops before changing anything
+        when that file uses the tag and the host&apos;s Compose is older than
+        2.24.4: upgrade the Compose plugin, or turn the option off in the
+        dashboard first.
+      </Callout>
+
+      <H2 id="remove">Removing the domain</H2>
+      <P>
+        To go back to plain IP access, use <strong>Remove domain</strong> in
+        Settings<PathArrow />Domain panel (owner, with a confirmation) or run{" "}
+        <Code>aoox domain clear</Code> (<Code>--yes</Code> skips the prompt).
+        The panel clears the saved domains, turns off{" "}
+        <em>Only allow access through the domain</em>, deletes{" "}
+        <Code>docker-compose.override.yml</Code>, puts <Code>WEB_ORIGIN</Code>{" "}
+        and <Code>PUBLIC_API_URL</Code> back to{" "}
+        <Code>http://&lt;PUBLIC_IP&gt;:3000</Code> / <Code>:3001</Code> in{" "}
+        <Code>.env.dist</Code>, and recreates the <Code>web</Code> and{" "}
+        <Code>api</Code> containers without the override. After the restart
+        (a few seconds) the old domain no longer works: reopen the dashboard at{" "}
+        <Code>http://&lt;server IP&gt;:3000</Code> and sign in again. The
+        reverse proxy, the domains of your applications and the ACME email are
+        left alone. Like saving a domain, it needs <Code>INSTALL_DIR</Code>{" "}
+        (400 without it) and a running Docker daemon (502 otherwise).
+      </P>
 
       <H2 id="steps">Manual, over SSH</H2>
       <P>

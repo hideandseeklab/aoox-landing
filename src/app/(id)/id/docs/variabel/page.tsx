@@ -76,9 +76,16 @@ export default function Page() {
       />
       <P>
         Buka <strong>Variabel</strong> di sidebar untuk melihat set yang bisa
-        kamu pakai. Tiap environment punya tab; nilainya tetap disamarkan sampai
-        kamu menekan tombol untuk membuka dan mengedit, dan tindakan itu
-        tercatat di audit log.
+        kamu pakai. Tiap environment punya tab berisi nama variabel dan nilai
+        yang disamarkan. Tombol <strong>mata</strong> di sebuah baris
+        menampilkan nilainya, tombol <strong>salin</strong> menyalinnya tanpa
+        menampilkannya, <strong>Tampilkan semua</strong> menampilkan semua nilai
+        (yang ditandai rahasia tetap tersamar sampai tombol matanya ditekan),
+        dan <strong>Ubah</strong> membuka editor. Nilai yang tampil
+        disembunyikan lagi setelah 60 detik dan dibuang dari halaman, begitu
+        juga saat kamu pindah tab atau meninggalkan halaman. Pengambilan nilai
+        tercatat di audit log: satu catatan mencakup seluruh environment selama
+        60 detik itu, pengambilan berikutnya menjadi catatan baru.
       </P>
 
       <H2 id="berbagi">Berbagi</H2>
@@ -281,7 +288,7 @@ WEBHOOK_SECRET=…`}</Pre>
         <li>
           Di halaman set, ikon catatan muncul di samping variabel yang punya
           catatan; arahkan kursor, klik, atau ketuk untuk membacanya. Di{" "}
-          <strong>Tampilkan dan ubah</strong>, tampilan Baris menampilkan catatan
+          <strong>Ubah</strong>, tampilan Baris menampilkan catatan
           di bawah variabelnya dan bisa menambah atau mengubahnya; tampilan Teks
           menampilkan baris <Code>#</Code>-nya.
         </li>
@@ -324,7 +331,7 @@ WEBHOOK_SECRET=…`}</Pre>
           <strong>Yang tidak dilakukan tanda ini</strong>: semua nilai
           disimpan terenkripsi, rahasia atau bukan. Tanda tidak menentukan siapa
           yang boleh melihat nilai: di dashboard nilai tetap tersembunyi sampai
-          Anda memilih membuka dan mengubahnya (tercatat di audit), dan akses
+          Anda menampilkan atau menyalinnya (tercatat di audit), dan akses
           mengikuti peran serta environment terproteksi. Kontainer selalu
           menerima nilai aslinya. Tanda hanya mengatur penyamaran dengan{" "}
           <Code>***</Code> di log.

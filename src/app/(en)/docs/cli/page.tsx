@@ -78,7 +78,12 @@ const COMMANDS = [
   {
     cmd: "aoox domain set",
     what: "Sets a custom domain for the panel itself (dashboard + API) without SSH.",
-    flags: "--web, --api, --acme-email",
+    flags: "--web, --api, --acme-email, --[no-]domain-only",
+  },
+  {
+    cmd: "aoox domain clear",
+    what: "Removes the panel's custom domain and goes back to IP access (IP:3000), after a confirmation.",
+    flags: "--yes/-y",
   },
   {
     cmd: "aoox registry domain",
@@ -588,7 +593,7 @@ Variables that are not in the file are removed: this replaces the whole environm
         head={["Role", "Unprotected environments", "Protected environments (e.g. production)"]}
         rows={[
           [<strong key="i">Instance owner / admin</strong>, "Everything", "Everything"],
-          [<strong key="d">Project admin, developer</strong>, "list, pull, set, unset, push, promote, run", <>Only the variable names. Anything else prints <Code>❌ &quot;backend/production&quot; is protected; only instance owners and admins can read it.</Code></>],
+          [<strong key="d">Project admin, developer</strong>, "list, pull, set, unset, push, promote, run", <>Only the variable names. Anything else prints <Code>error  &quot;backend/production&quot; is protected; only instance owners and admins can read it.</Code></>],
           [<strong key="v">Viewer</strong>, "Variable names only", "Variable names only"],
         ]}
       />
@@ -764,15 +769,15 @@ Use it in the dashboard: New application → Ready-made image`}</Pre>
         head={["You see", "Meaning"]}
         rows={[
           [
-            <Code key="1">❌ myapp:1.0.0 already exists in registry.example.com.</Code>,
+            <Code key="1">error  myapp:1.0.0 already exists in registry.example.com.</Code>,
             <>That version is already in the registry (checked before building, and before pushing). Pick a new version — the hint suggests the next one — or add <Code>--force</Code> to overwrite it. <Code>latest</Code> can always be overwritten.</>,
           ],
           [
-            <Code key="2">❌ No local image myapp:1.0.0.</Code>,
+            <Code key="2">error  No local image myapp:1.0.0.</Code>,
             <><Code>push</Code> never builds. Run <Code>aoox registry build myapp:1.0.0</Code> first.</>,
           ],
           [
-            <Code key="3">❌ A version is required: &quot;myapp&quot; has none.</Code>,
+            <Code key="3">error  A version is required: &quot;myapp&quot; has none.</Code>,
             <>Write <Code>name:version</Code>, e.g. <Code>aoox registry build myapp:1.0.0</Code>.</>,
           ],
           [
@@ -793,6 +798,13 @@ Use it in the dashboard: New application → Ready-made image`}</Pre>
   --acme-email you@example.com
 Domain saved: panel.example.com (dashboard), api.panel.example.com (API).
 The panel will restart for a few seconds to apply it — the connection to this API will drop briefly.`}</Pre>
+      <P>
+        To undo it, <Code>aoox domain clear</Code> removes the domain and goes
+        back to <Code>http://&lt;server IP&gt;:3000</Code> (it asks first;{" "}
+        <Code>--yes</Code> skips the prompt). The proxy and your applications&apos;
+        domains are not touched. See{" "}
+        <DocLink href="/docs/panel-domain#remove">Removing the domain</DocLink>.
+      </P>
       <Callout>
         Needs <Code>INSTALL_DIR</Code> already set in the panel&apos;s{" "}
         <Code>.env.dist</Code> (the absolute path of the folder containing{" "}
@@ -896,7 +908,12 @@ $ sudo aoox reinstall`}</Pre>
       />
       <P>
         Safe to run repeatedly: when nothing needs changing, no file is written
-        and no backup is made — the containers are still refreshed. Options:{" "}
+        and no backup is made — the containers are still refreshed. If{" "}
+        <Code>docker-compose.override.yml</Code> uses the <Code>!override</Code>{" "}
+        tag (the option <em>Only allow access through the domain</em>) and the
+        host&apos;s Docker Compose is older than 2.24.4, the command stops
+        before changing anything: upgrade the Compose plugin or turn that
+        option off in the dashboard first. Options:{" "}
         <Code>--dir</Code> (default <Code>/opt/aoox</Code>), <Code>--yes</Code>{" "}
         (no prompt), <Code>--no-pull</Code>,{" "}
         <Code>--terminal-ssh-user &lt;user&gt;</Code> (fills in or overrides that
@@ -990,6 +1007,37 @@ $ sudo aoox reinstall`}</Pre>
         separate token per pipeline so it can be revoked without affecting
         the others.
       </Callout>
+
+      <H2 id="antivirus">Behind an antivirus or corporate proxy</H2>
+      <P>
+        Antivirus HTTPS scanning (AVG, Avast, Kaspersky, ESET, Bitdefender) and
+        corporate proxies (Zscaler, Netskope, Fortinet, Palo Alto) re-sign HTTPS
+        traffic with their own root certificate. It is installed in your
+        operating system&apos;s certificate store, but Node only knows its own
+        bundled list, so the CLI used to fail with a certificate error even
+        though the panel&apos;s certificate is fine.
+      </P>
+      <P>
+        On <strong>Node 22.19+ or 24.5+</strong> the CLI now trusts the system
+        store in addition to Node&apos;s list, so it works without any setup.
+        Certificate verification is never turned off. On older Node versions
+        nothing changes and the error names the issuer it saw (for example{" "}
+        <Code>AVG Web/Mail Shield Root</Code>).
+      </P>
+      <Ul>
+        <li>
+          Opt out of the system store with <Code>AOOX_SYSTEM_CA=0</Code>.
+        </li>
+        <li>
+          <Code>NODE_EXTRA_CA_CERTS=/path/to/root.pem</Code> still works if you
+          would rather trust one specific root.
+        </li>
+        <li>
+          Older Node: set <Code>NODE_OPTIONS=--use-system-ca</Code> (Node 22.15+
+          / 23.10+), upgrade Node, or add the panel&apos;s domain to the
+          antivirus HTTPS-scanning exclusions.
+        </li>
+      </Ul>
 
       <H2 id="pitfalls">Common pitfalls</H2>
       <Table

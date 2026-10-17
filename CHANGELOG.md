@@ -8,6 +8,16 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Changed
+
+- **Docs: removing the panel domain and the Compose version guard (English and Indonesian)**: the panel domain page has a new section (`#remove`, `#hapus-domain`) on **Remove domain** / `aoox domain clear` (what is reset, that the proxy and application domains stay, `INSTALL_DIR` and Docker requirements); the CLI page lists `aoox domain clear` and says `aoox reinstall` stops when the restrict-ports override needs a newer Docker Compose (2.24.4).
+- **Docs: only allow access through the domain (English and Indonesian)**: the panel domain page has a new section for the opt-in switch (`--domain-only` in the CLI) that closes ports 3000/3001 to the outside, with the lock-out warning and the SSH recovery steps; Troubleshooting has a matching row; the CLI page lists the flag.
+- **Docs: client IP behind a proxy (English and Indonesian)**: Troubleshooting has a new row for rate limits and the audit log seeing the proxy's address, explaining `TRUST_PROXY` and its trade-off.
+- **Docs: CLI behind an antivirus or corporate proxy (English and Indonesian)**: a new section on the CLI page (`#antivirus`) explaining that the CLI now trusts the operating system certificate store on Node 22.19+ / 24.5+, the `AOOX_SYSTEM_CA=0` opt-out, `NODE_EXTRA_CA_CERTS`, `NODE_OPTIONS=--use-system-ca` for older Node, and that verification is never disabled.
+- **Docs: CLI error examples (English and Indonesian)**: the CLI page shows error lines starting with the red `error` label instead of the old ❌ emoji.
+- **Docs: job schedule switch (English and Indonesian)**: the Jobs page now calls the table switch **Schedule on**, says it only turns the automatic schedule off (Run still works), and that manual jobs show a dash instead.
+- **Docs: revealing variables (English and Indonesian)**: the Variables page describes the per-row eye and copy buttons, **Reveal all** (secret-flagged values stay masked until their own eye button), **Edit** instead of "Reveal and edit", the 60-second auto-hide, and that one audit entry covers the environment for that window. The notes and secret-flag sections now say **Edit** and "reveal or copy".
+
 ## [0.1.0-alpha.11] - 2026-10-15
 
 ### Added

@@ -59,6 +59,11 @@ const INSTALLATION: Row[] = [
     <>Match them exactly, then <Code>up -d</Code> again. See <DocLink href="/docs/panel-domain">Domain for the panel</DocLink>.</>,
   ],
   [
+    <>Rate limits (sign-in) or the audit log treat every user as one address, or show a proxy IP instead of the client&apos;s</>,
+    <>The API only trusts <Code>X-Forwarded-For</Code> from hops on private networks (Traefik, the web container). A proxy on a public address, or a chain of several proxies, is not trusted by default.</>,
+    <>Set <Code>TRUST_PROXY</Code> in <Code>.env.dist</Code>: a hop count (<Code>2</Code>), or a comma list of the proxy IPs/CIDRs. <Code>true</Code> trusts every hop, so a client can fake its IP if the API port is reachable directly; <Code>false</Code> ignores the header. Then <Code>up -d</Code> again.</>,
+  ],
+  [
     <>Registry/Proxy card: <em>Docker unreachable</em> / permission denied on the socket</>,
     <><Code>DOCKER_GID</Code> is wrong or the socket isn&apos;t mounted.</>,
     <><Code>stat -c %g /var/run/docker.sock</Code> <PathArrow />set <Code>DOCKER_GID</Code> <PathArrow />recreate the API.</>,
@@ -148,6 +153,11 @@ const DOMAIN: Row[] = [
     <>Panel domain saved, DNS & <Code>ufw</Code> are fine, browser still says <em>unable to connect</em></>,
     <>The proxy wasn&apos;t running at the time (now started automatically when the domain is saved), or ports 80/443 are blocked by your <strong>VPS provider&apos;s firewall/security group</strong> — <Code>ufw inactive</Code> ≠ ports open to the public.</>,
     <><Code>docker ps --filter name=aoox-proxy</Code> should show <Code>Up</Code>; open 80/443 in your VPS provider&apos;s panel. See <DocLink href="/docs/panel-domain#pitfalls">Domain for the panel<PathArrow />Common pitfalls</DocLink>.</>,
+  ],
+  [
+    <>Panel unreachable after turning on <em>Only allow access through the domain</em>; <Code>IP:3000</Code> no longer answers</>,
+    <>The option publishes ports 3000/3001 on <Code>127.0.0.1</Code> only, so the domain is now the only way in, and it is broken (DNS, firewall/security group, certificate).</>,
+    <>Over SSH, in the install folder: delete the two <Code>ports:</Code> lines in <Code>docker-compose.override.yml</Code>, then <Code>docker compose -f docker-compose.dist.yml -f docker-compose.override.yml --env-file .env.dist up -d</Code>. See <DocLink href="/docs/panel-domain#domain-only">Domain for the panel<PathArrow />Only allow access through the domain</DocLink>.</>,
   ],
   [
     <>404 page not found from Traefik</>,

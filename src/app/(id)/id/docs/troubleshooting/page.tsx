@@ -59,6 +59,11 @@ const INSTALASI: Row[] = [
     <>Samakan persis, lalu <Code>up -d</Code> ulang. Lihat <DocLink href="/id/docs/domain-panel">Domain untuk panel</DocLink>.</>,
   ],
   [
+    <>Rate limit (sign-in) atau audit log menganggap semua pengguna satu alamat, atau mencatat IP proxy, bukan IP klien</>,
+    <>API hanya memercayai <Code>X-Forwarded-For</Code> dari hop di jaringan privat (Traefik, container web). Proxy dengan alamat publik, atau rantai beberapa proxy, tidak dipercaya secara default.</>,
+    <>Isi <Code>TRUST_PROXY</Code> di <Code>.env.dist</Code>: jumlah hop (<Code>2</Code>), atau daftar IP/CIDR proxy dipisah koma. <Code>true</Code> memercayai semua hop, sehingga klien bisa memalsukan IP-nya bila port API terjangkau langsung; <Code>false</Code> mengabaikan header. Lalu <Code>up -d</Code> ulang.</>,
+  ],
+  [
     <>Kartu Registry/Proxy: <em>Docker tidak terjangkau</em> / permission denied di socket</>,
     <><Code>DOCKER_GID</Code> salah atau socket tidak di-mount.</>,
     <><Code>stat -c %g /var/run/docker.sock</Code> <PathArrow />set <Code>DOCKER_GID</Code> <PathArrow />recreate API.</>,
@@ -148,6 +153,11 @@ const DOMAIN: Row[] = [
     <>Domain panel disimpan, DNS & <Code>ufw</Code> sudah OK, browser tetap <em>unable to connect</em></>,
     <>Proxy belum jalan saat itu (kini otomatis dinyalakan saat simpan domain), atau port 80/443 diblokir <strong>firewall/security group provider VPS</strong> — <Code>ufw inactive</Code> ≠ port terbuka ke publik.</>,
     <><Code>docker ps --filter name=aoox-proxy</Code> harus <Code>Up</Code>; buka 80/443 di panel provider VPS. Lihat <DocLink href="/id/docs/domain-panel#jebakan">Domain untuk panel<PathArrow />Jebakan umum</DocLink>.</>,
+  ],
+  [
+    <>Panel tidak bisa dibuka setelah mengaktifkan <em>Hanya izinkan akses lewat domain</em>; <Code>IP:3000</Code> tidak lagi menjawab</>,
+    <>Opsi itu hanya membuka port 3000/3001 di <Code>127.0.0.1</Code>, jadi domain kini satu-satunya jalan masuk, dan domainnya bermasalah (DNS, firewall/security group, sertifikat).</>,
+    <>Lewat SSH, di folder instalasi: hapus dua baris <Code>ports:</Code> di <Code>docker-compose.override.yml</Code>, lalu <Code>docker compose -f docker-compose.dist.yml -f docker-compose.override.yml --env-file .env.dist up -d</Code>. Lihat <DocLink href="/id/docs/domain-panel#hanya-domain">Domain panel<PathArrow />Hanya izinkan akses lewat domain</DocLink>.</>,
   ],
   [
     <>404 page not found dari Traefik</>,

@@ -157,9 +157,11 @@ export default function Page() {
         </Step>
         <Step title="Aktifkan jadwal">
           <P>
-            Toggle <strong>aktif</strong> di baris job. Jadwal didaftarkan
-            langsung tanpa restart API; zona waktu mengikuti container API
-            (UTC di image distribusi).
+            Job yang punya cron memiliki switch <strong>Jadwal aktif</strong> di
+            barisnya; matikan untuk menjeda jadwal otomatis (Run tetap bisa
+            dipakai manual). Job tanpa cron tidak punya switch. Jadwal
+            didaftarkan langsung tanpa restart API; zona waktu mengikuti
+            container API (UTC di image distribusi).
           </P>
         </Step>
       </Steps>

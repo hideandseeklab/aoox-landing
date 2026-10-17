@@ -63,7 +63,12 @@ const COMMANDS = [
   {
     cmd: "aoox domain set",
     what: "Set domain kustom untuk panel itu sendiri (dashboard + API) tanpa SSH.",
-    flags: "--web, --api, --acme-email",
+    flags: "--web, --api, --acme-email, --[no-]domain-only",
+  },
+  {
+    cmd: "aoox domain clear",
+    what: "Menghapus domain kustom panel dan kembali ke akses lewat IP (IP:3000), setelah konfirmasi.",
+    flags: "--yes/-y",
   },
   {
     cmd: "aoox registry domain",
@@ -590,7 +595,7 @@ Variables that are not in the file are removed: this replaces the whole environm
         head={["Peran", "Environment biasa", "Environment terlindungi (mis. production)"]}
         rows={[
           [<strong key="i">Owner / admin instance</strong>, "Semuanya", "Semuanya"],
-          [<strong key="d">Admin project, developer</strong>, "list, pull, set, unset, push, promote, run", <>Hanya nama variabel. Selebihnya menampilkan <Code>❌ &quot;backend/production&quot; is protected; only instance owners and admins can read it.</Code></>],
+          [<strong key="d">Admin project, developer</strong>, "list, pull, set, unset, push, promote, run", <>Hanya nama variabel. Selebihnya menampilkan <Code>error  &quot;backend/production&quot; is protected; only instance owners and admins can read it.</Code></>],
           [<strong key="v">Viewer</strong>, "Hanya nama variabel", "Hanya nama variabel"],
         ]}
       />
@@ -766,15 +771,15 @@ Use it in the dashboard: New application → Ready-made image`}</Pre>
         head={["Yang muncul", "Artinya"]}
         rows={[
           [
-            <Code key="1">❌ myapp:1.0.0 already exists in registry.example.com.</Code>,
+            <Code key="1">error  myapp:1.0.0 already exists in registry.example.com.</Code>,
             <>Versi itu sudah ada di registry (dicek sebelum build dan sebelum push). Pilih versi baru — petunjuknya menyarankan yang berikutnya — atau tambahkan <Code>--force</Code> untuk menimpa. <Code>latest</Code> selalu boleh ditimpa.</>,
           ],
           [
-            <Code key="2">❌ No local image myapp:1.0.0.</Code>,
+            <Code key="2">error  No local image myapp:1.0.0.</Code>,
             <><Code>push</Code> tidak pernah build. Jalankan <Code>aoox registry build myapp:1.0.0</Code> dulu.</>,
           ],
           [
-            <Code key="3">❌ A version is required: &quot;myapp&quot; has none.</Code>,
+            <Code key="3">error  A version is required: &quot;myapp&quot; has none.</Code>,
             <>Tulis <Code>nama:versi</Code>, mis. <Code>aoox registry build myapp:1.0.0</Code>.</>,
           ],
           [
@@ -795,6 +800,13 @@ Use it in the dashboard: New application → Ready-made image`}</Pre>
   --acme-email kamu@example.com
 Domain saved: panel.example.com (dashboard), api.panel.example.com (API).
 The panel will restart for a few seconds to apply it — the connection to this API will drop briefly.`}</Pre>
+      <P>
+        Untuk membatalkannya, <Code>aoox domain clear</Code> menghapus domain
+        dan kembali ke <Code>http://&lt;IP server&gt;:3000</Code> (bertanya
+        dulu; <Code>--yes</Code> melewati pertanyaan). Proxy dan domain
+        aplikasi tidak disentuh. Lihat{" "}
+        <DocLink href="/id/docs/domain-panel#hapus-domain">Menghapus domain</DocLink>.
+      </P>
       <Callout>
         Panel harus sudah punya <Code>INSTALL_DIR</Code> terisi di{" "}
         <Code>.env.dist</Code> (path absolut folder <Code>docker-compose.dist.yml</Code>{" "}
@@ -897,7 +909,11 @@ $ sudo aoox reinstall`}</Pre>
       <P>
         Aman dijalankan berulang: bila tidak ada yang perlu diubah, tidak ada
         file yang ditulis dan tidak ada backup — container tetap disegarkan.
-        Opsi: <Code>--dir</Code> (default <Code>/opt/aoox</Code>),{" "}
+        Bila <Code>docker-compose.override.yml</Code> memakai tag{" "}
+        <Code>!override</Code> (opsi <em>Hanya izinkan akses lewat domain</em>)
+        dan Docker Compose di host lebih lama dari 2.24.4, perintah berhenti
+        sebelum mengubah apa pun: upgrade plugin Compose atau matikan opsi itu
+        di dashboard dulu. Opsi: <Code>--dir</Code> (default <Code>/opt/aoox</Code>),{" "}
         <Code>--yes</Code> (tanpa konfirmasi), <Code>--no-pull</Code>,{" "}
         <Code>--terminal-ssh-user &lt;user&gt;</Code> (mengisi atau menimpa nilai
         itu), dan <Code>--dry-run</Code> (hanya cetak rencana).
@@ -988,6 +1004,38 @@ $ sudo aoox reinstall`}</Pre>
         Simpan token sebagai variabel CI yang <em>masked</em>, dan buat token
         terpisah per pipeline agar bisa dicabut tanpa mengganggu yang lain.
       </Callout>
+
+      <H2 id="antivirus">Di balik antivirus atau proxy perusahaan</H2>
+      <P>
+        Pemindaian HTTPS oleh antivirus (AVG, Avast, Kaspersky, ESET,
+        Bitdefender) dan proxy perusahaan (Zscaler, Netskope, Fortinet, Palo
+        Alto) menandatangani ulang lalu lintas HTTPS dengan sertifikat root
+        mereka sendiri. Sertifikat itu terpasang di penyimpanan sertifikat
+        sistem operasi Anda, tetapi Node hanya mengenal daftar bawaannya, jadi
+        CLI dulu gagal dengan galat sertifikat padahal sertifikat panel
+        sebenarnya baik-baik saja.
+      </P>
+      <P>
+        Pada <strong>Node 22.19+ atau 24.5+</strong> CLI kini juga memercayai
+        penyimpanan sistem selain daftar Node, sehingga langsung berfungsi tanpa
+        pengaturan. Verifikasi sertifikat tidak pernah dimatikan. Pada Node yang
+        lebih lama tidak ada yang berubah, dan pesan galat menyebut penerbit
+        yang terlihat (misalnya <Code>AVG Web/Mail Shield Root</Code>).
+      </P>
+      <Ul>
+        <li>
+          Nonaktifkan penyimpanan sistem dengan <Code>AOOX_SYSTEM_CA=0</Code>.
+        </li>
+        <li>
+          <Code>NODE_EXTRA_CA_CERTS=/path/ke/root.pem</Code> tetap berfungsi
+          bila Anda ingin memercayai satu root tertentu.
+        </li>
+        <li>
+          Node lama: setel <Code>NODE_OPTIONS=--use-system-ca</Code> (Node
+          22.15+ / 23.10+), perbarui Node, atau tambahkan domain panel ke
+          pengecualian pemindaian HTTPS antivirus.
+        </li>
+      </Ul>
 
       <H2 id="jebakan">Jebakan umum</H2>
       <Table

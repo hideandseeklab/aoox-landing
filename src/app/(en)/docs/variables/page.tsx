@@ -77,8 +77,15 @@ export default function Page() {
       />
       <P>
         Open <strong>Variables</strong> in the sidebar to see the sets you can
-        use. Each environment has a tab; values stay masked until you press{" "}
-        <strong>Reveal and edit</strong>, which is recorded in the audit log.
+        use. Each environment has a tab with the variable names and masked
+        values. The <strong>eye</strong> button on a row shows that value, the{" "}
+        <strong>copy</strong> button copies it without showing it,{" "}
+        <strong>Reveal all</strong> shows every value (secret-flagged ones stay
+        masked until you press their eye button) and <strong>Edit</strong> opens
+        the editor. Shown values hide again after 60 seconds and are dropped
+        from the page, also when you switch tabs or leave. Fetching the values
+        is recorded in the audit log: one entry covers the whole environment for
+        those 60 seconds, a later reveal is a new entry.
       </P>
 
       <H2 id="sharing">Sharing</H2>
@@ -279,7 +286,7 @@ WEBHOOK_SECRET=…`}</Pre>
         <li>
           On the set page a note icon appears next to each variable that has
           one; hover, click or tap it to read the note. In{" "}
-          <strong>Reveal and edit</strong>, Rows view shows the note under the
+          <strong>Edit</strong>, Rows view shows the note under the
           variable and lets you add or change it; Text view shows the{" "}
           <Code>#</Code> lines.
         </li>
@@ -321,9 +328,8 @@ WEBHOOK_SECRET=…`}</Pre>
         <li>
           <strong>What the flag does not do</strong>: every value is stored
           encrypted, secret or not. The flag does not decide who may see a
-          value: in the dashboard it stays hidden until{" "}
-          <strong>Reveal and edit</strong> (audited), and access follows roles
-          and protected environments. The container always receives the real
+          value: in the dashboard it stays hidden until you reveal or copy it
+          (audited), and access follows roles and protected environments. The container always receives the real
           value. The flag only controls masking with <Code>***</Code> in logs.
         </li>
         <li>

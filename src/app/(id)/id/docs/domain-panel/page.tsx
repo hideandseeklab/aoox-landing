@@ -39,7 +39,7 @@ const BEFORE_AFTER = [
   { k: "API", before: "http://203.0.113.10:3001", after: "https://api.panel.example.com" },
   { k: "Cookie sesi", before: "tanpa Secure", after: "Secure (mengikuti WEB_ORIGIN https)" },
   { k: "Webhook Git", before: "IP:3001 harus publik", after: "URL API yang rapi" },
-  { k: "Port 3000/3001", before: "satu-satunya jalan", after: "tetap terbuka (akses via IP)" },
+  { k: "Port 3000/3001", before: "satu-satunya jalan", after: "tetap terbuka (akses via IP), atau ditutup lewat opsi di bawah" },
 ]
 
 const NEXT = [
@@ -154,6 +154,58 @@ api.panel.example.com.   A   203.0.113.10`}</Pre>
         <Code>-f docker-compose.override.yml</Code> juga, atau domain yang
         sudah diset akan hilang.
       </Callout>
+
+      <H2 id="hanya-domain">Hanya izinkan akses lewat domain (opsional)</H2>
+      <P>
+        Port <Code>3000</Code> dan <Code>3001</Code> secara default terbuka di
+        semua interface, jadi dashboard juga menjawab di{" "}
+        <Code>IP:3000</Code>. Klien bisa memanggil port web langsung dengan
+        header <Code>X-Forwarded-For</Code> buatannya sendiri, yang melewati
+        batas percobaan login per IP. Aktifkan{" "}
+        <strong>Hanya izinkan akses lewat domain</strong> di
+        Settings<PathArrow />Domain panel (atau jalankan{" "}
+        <Code>aoox domain set --web … --api … --domain-only</Code>) dan kedua
+        port hanya mendengarkan di <Code>127.0.0.1</Code>, sehingga semua akses
+        dari luar lewat Traefik. Default-nya mati, dan butuh domain dashboard
+        sekaligus domain API: CLI, webhook, dan socket terminal/log memakai
+        domain API begitu port 3001 ditutup.
+      </P>
+      <Callout kind="warn" title="Kamu bisa mengunci diri sendiri">
+        Aktifkan hanya setelah <Code>https://panel.example.com</Code> terbuka.
+        Kalau DNS, firewall, atau sertifikat rusak sesudahnya, panel tidak bisa
+        dijangkau sama sekali dan <Code>IP:3000</Code> tidak lagi berfungsi.
+        Pulihkan lewat SSH: di folder instalasi hapus dua baris{" "}
+        <Code>ports:</Code> di <Code>docker-compose.override.yml</Code>, lalu
+        jalankan{" "}
+        <Code>docker compose -f docker-compose.dist.yml -f docker-compose.override.yml --env-file .env.dist up -d</Code>.
+        Override memakai tag Compose <Code>!override</Code>, yang butuh Docker
+        Compose 2.24.4 atau lebih baru untuk perintah yang kamu jalankan manual
+        (panel sendiri menerapkannya dengan Compose-nya yang lebih baru).
+        Mematikan opsi ini di dashboard menulis ulang file tanpa baris itu.
+        Karena itu pula <Code>aoox reinstall</Code> berhenti sebelum mengubah
+        apa pun bila file itu memakai tag tersebut dan Compose di host lebih
+        lama dari 2.24.4: upgrade plugin Compose, atau matikan opsinya di
+        dashboard dulu.
+      </Callout>
+
+      <H2 id="hapus-domain">Menghapus domain</H2>
+      <P>
+        Untuk kembali ke akses lewat IP biasa, pakai <strong>Hapus domain</strong>{" "}
+        di Settings<PathArrow />Domain panel (owner, dengan konfirmasi) atau
+        jalankan <Code>aoox domain clear</Code> (<Code>--yes</Code> melewati
+        pertanyaan). Panel menghapus domain yang tersimpan, mematikan{" "}
+        <em>Hanya izinkan akses lewat domain</em>, menghapus{" "}
+        <Code>docker-compose.override.yml</Code>, mengembalikan{" "}
+        <Code>WEB_ORIGIN</Code> dan <Code>PUBLIC_API_URL</Code> ke{" "}
+        <Code>http://&lt;PUBLIC_IP&gt;:3000</Code> / <Code>:3001</Code> di{" "}
+        <Code>.env.dist</Code>, lalu membuat ulang container <Code>web</Code>{" "}
+        dan <Code>api</Code> tanpa override. Setelah restart (beberapa detik)
+        domain lama tidak lagi berfungsi: buka dashboard lagi di{" "}
+        <Code>http://&lt;IP server&gt;:3000</Code> dan masuk ulang. Reverse
+        proxy, domain aplikasi, dan email ACME tidak diubah. Seperti saat
+        menyimpan domain, ini butuh <Code>INSTALL_DIR</Code> (400 bila kosong)
+        dan Docker daemon yang berjalan (502 bila tidak).
+      </P>
 
       <H2 id="langkah">Manual lewat SSH</H2>
       <P>
