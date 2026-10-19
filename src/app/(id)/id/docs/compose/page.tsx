@@ -205,6 +205,10 @@ networks:
             <>
               Baris <Code>ports:</Code> di file override — stack bisa dibuka
               lewat <Code>{"http://<ip-server>:<port host>"}</Code> tanpa domain.
+              Tiap port punya pilihan <strong>Mendengarkan di</strong>:{" "}
+              <em>Publik</em> (default) atau <em>Hanya server ini</em>, yang
+              menulis <Code>127.0.0.1:&lt;port host&gt;:&lt;port&gt;</Code>.
+              Port yang dipublikasikan Docker tidak disaring ufw.
             </>,
           ],
         ]}

@@ -126,7 +126,8 @@ export default function Page() {
           <strong>Provider firewall / security group.</strong> If your provider
           has one, allow inbound <Code>22</Code> (SSH), <Code>80</Code> and{" "}
           <Code>443</Code> (HTTPS and certificates), plus <Code>3000</Code> and{" "}
-          <Code>3001</Code> until the domain works. Do <strong>not</strong>{" "}
+          <Code>3001</Code> until the domain works (80/443 only answer once the first panel domain is
+          saved, step 10). Do <strong>not</strong>{" "}
           open <Code>5000</Code> (the local registry, step 11) unless you use
           Swarm nodes.
         </li>
@@ -139,6 +140,14 @@ export default function Page() {
         or a key you chose when creating the server.
       </P>
       <Pre title="Windows (PowerShell), macOS, Linux">{`ssh root@SERVER_IP`}</Pre>
+      <Callout title="Ubuntu cloud images: the user is ubuntu, not root">
+        Many Ubuntu cloud images (AWS, Oracle, Tencent and others) disable root
+        login and give you a sudo user called <Code>ubuntu</Code>. Then connect
+        with <Code>ssh ubuntu@SERVER_IP</Code> and put <Code>sudo</Code> in
+        front of the commands below that are written without it (steps 3 and 4).
+        You can skip creating a new user in step 4 and use <Code>ubuntu</Code>{" "}
+        as <Code>your-user</Code>.
+      </Callout>
       <P>
         Windows 10/11 include the OpenSSH client, so the same command works in
         PowerShell. The first time, SSH shows the server&apos;s fingerprint and
@@ -251,7 +260,10 @@ EOF`}</Pre>
         logs and host cron jobs only. aoox&apos;s own schedules (job, backup,
         the nightly cleanup) run inside the API container, which uses UTC
         unless you set <Code>TZ</Code>. To run them in your zone, add it to{" "}
-        <Code>.env.dist</Code> and recreate the API container:
+        <Code>.env.dist</Code> and recreate the API container.{" "}
+        <strong>Do this after step 8 (the install):</strong>{" "}
+        <Code>/opt/aoox</Code> does not exist before it, so the command below
+        fails if you run it now.
       </P>
       <Pre>{`echo 'TZ=Asia/Jakarta' | sudo tee -a /opt/aoox/.env.dist
 cd /opt/aoox && sudo docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
@@ -264,6 +276,13 @@ cd /opt/aoox && sudo docker compose -f docker-compose.dist.yml --env-file .env.d
       </P>
       <H3>Swap (recommended below 4 GB RAM)</H3>
       <P>A swap file lets a build survive a short memory spike instead of being killed.</P>
+      <P>
+        Check first: many images already come with swap. If either command below
+        shows a swap line with a size, <strong>skip this section</strong> (adding
+        a second swap file would only waste disk).
+      </P>
+      <Pre>{`swapon --show
+free -h`}</Pre>
       <Pre>{`sudo fallocate -l 2G /swapfile
 sudo chmod 600 /swapfile
 sudo mkswap /swapfile
@@ -290,10 +309,18 @@ sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 sudo ufw allow 3000/tcp
 sudo ufw allow 3001/tcp
-sudo ufw enable
+sudo ufw --force enable
 sudo ufw status verbose`}</Pre>
       <P>
-        Ports 3000/3001 are only needed until the domain works (step 9).
+        <Code>--force</Code> matters when you paste the whole block: a plain{" "}
+        <Code>ufw enable</Code> stops and asks{" "}
+        <Code>Command may disrupt existing ssh connections. Proceed with
+        operation (y|n)?</Code>, and the rest of the pasted lines are then read
+        as the answer, so ufw is left disabled. The SSH rule was added first,
+        so enabling it will not cut your session.
+      </P>
+      <P>
+        Ports 3000/3001 are only needed until the domain works (step 10).
         Keep the <Code>22</Code> rule open to any source: the web terminal
         connects from the API container to the host&apos;s SSH port, so a rule
         limited to your own IP would block it.
@@ -312,8 +339,15 @@ sudo ufw status verbose`}</Pre>
         <DocLink href="/docs/panel-domain#domain-only">Only allow access through the domain</DocLink>{" "}
         switch, which makes ports 3000/3001 listen on <Code>127.0.0.1</Code>{" "}
         only. ufw is still worth having for everything that is not published
-        by Docker (SSH and other host services). Not verified on a real VPS in
-        this guide; the behaviour follows Docker&apos;s documentation.
+        by Docker (SSH and other host services). This was checked on a real
+        Ubuntu 24.04 VPS: a port denied by ufw was still reachable from
+        outside. aoox helps in two places: a database or database admin app you
+        publish is bound to <Code>127.0.0.1</Code> by default, and every other
+        host port (applications, stacks) has a <strong>Listens on</strong>{" "}
+        choice, <em>Public</em> or <em>This server only (127.0.0.1)</em>. The{" "}
+        <strong>Open ports</strong> tab on the Docker page (owner and admin)
+        lists every published port with its owner and whether it is open to
+        the internet.
       </Callout>
 
       <H2 id="cli">6. Install the aoox CLI (Node.js not required)</H2>
@@ -427,6 +461,12 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
       <Pre>{`aoox is installed in /opt/aoox.
 Open: http://SERVER_IP:3000
 Create the first owner account at /setup.`}</Pre>
+      <Callout title="Ports 80 and 443 are closed right after the install">
+        This is expected, not a provider block: the reverse proxy that listens
+        on 80/443 does not exist yet. It is started when you save the first
+        panel domain (step 10) or provision it yourself. Until then only{" "}
+        <Code>3000</Code> and <Code>3001</Code> answer.
+      </Callout>
       <Callout kind="warn" title="Check the printed address">
         If the server could not detect its public IP, the line says{" "}
         <Code>http://localhost:3000</Code>, and <Code>WEB_ORIGIN</Code> in{" "}
@@ -441,11 +481,15 @@ Create the first owner account at /setup.`}</Pre>
       <Pre>{`cd /opt/aoox
 sudo docker compose -f docker-compose.dist.yml --env-file .env.dist ps
 sudo docker compose -f docker-compose.dist.yml --env-file .env.dist logs -f api`}</Pre>
-      <Callout kind="warn" title="Do not re-run with --force on a working install">
+      <Callout title="Running the install again">
         <Code>sudo aoox install</Code> refuses to run again in a folder that
-        already has an install. <Code>--force</Code> writes brand-new secrets,
-        which makes the existing database unreadable. To repair or refresh an
-        install use <Code>sudo aoox reinstall</Code> (step 11).
+        already has an install. <Code>--force</Code> reinstalls over it: it
+        first copies <Code>.env.dist</Code> and the compose files to{" "}
+        <Code>/opt/aoox/backups/&lt;timestamp&gt;/</Code> and then keeps your
+        existing secrets, so the data stays readable. Only{" "}
+        <Code>--force --new-secrets --wipe-data</Code> starts from scratch, and
+        it deletes the panel database. To repair or refresh an install use{" "}
+        <Code>sudo aoox reinstall</Code> (step 11).
       </Callout>
       <Callout title="One command instead of the CLI">
         Prefer a single line? <Code>curl -fsSL https://aoox.dev/install.sh | sudo sh</Code>{" "}
@@ -593,6 +637,10 @@ sudo ufw delete allow 3001/tcp`}</Pre>
           [
             <>The browser cannot open <Code>IP:3000</Code></>,
             <>The provider firewall / security group (ufw does not matter for Docker-published ports). On the server: <Code>sudo docker compose … ps</Code>.</>,
+          ],
+          [
+            <><Code>IP:80</Code> / <Code>IP:443</Code> do not answer after the install</>,
+            <>Expected until the first panel domain is saved (step 10): the reverse proxy is not running yet.</>,
           ],
           [
             "The proxy cannot bind 80/443",

@@ -126,7 +126,8 @@ export default function Page() {
           <strong>Firewall / security group dari provider.</strong> Kalau
           providermu punya, buka masuk <Code>22</Code> (SSH), <Code>80</Code>{" "}
           dan <Code>443</Code> (HTTPS dan sertifikat), plus <Code>3000</Code>{" "}
-          dan <Code>3001</Code> sampai domain berfungsi. Jangan{" "}
+          dan <Code>3001</Code> sampai domain berfungsi (80/443 baru menjawab setelah domain panel pertama
+          disimpan, langkah 10). Jangan{" "}
           buka <Code>5000</Code> (registry lokal, langkah 11) kecuali kamu
           memakai node Swarm.
         </li>
@@ -139,6 +140,15 @@ export default function Page() {
         kamu pilih saat membuat server.
       </P>
       <Pre title="Windows (PowerShell), macOS, Linux">{`ssh root@SERVER_IP`}</Pre>
+      <Callout title="Image cloud Ubuntu: usernya ubuntu, bukan root">
+        Banyak image cloud Ubuntu (AWS, Oracle, Tencent, dan lain-lain)
+        menonaktifkan login root dan memberi user sudo bernama{" "}
+        <Code>ubuntu</Code>. Kalau begitu sambungkan dengan{" "}
+        <Code>ssh ubuntu@SERVER_IP</Code> dan tambahkan <Code>sudo</Code> di
+        depan perintah di bawah yang ditulis tanpa itu (langkah 3 dan 4). Kamu
+        boleh melewati pembuatan user baru di langkah 4 dan memakai{" "}
+        <Code>ubuntu</Code> sebagai <Code>your-user</Code>.
+      </Callout>
       <P>
         Windows 10/11 sudah menyertakan klien OpenSSH, jadi perintah yang sama
         jalan di PowerShell. Pertama kali, SSH menampilkan fingerprint server dan
@@ -252,7 +262,10 @@ EOF`}</Pre>
         cron di host. Jadwal aoox sendiri (job, backup, pembersihan malam)
         berjalan di dalam container API yang memakai UTC kecuali kamu mengisi{" "}
         <Code>TZ</Code>. Supaya berjalan di zonamu, tambahkan ke{" "}
-        <Code>.env.dist</Code> lalu buat ulang container API:
+        <Code>.env.dist</Code> lalu buat ulang container API.{" "}
+        <strong>Lakukan ini setelah langkah 8 (instalasi):</strong>{" "}
+        <Code>/opt/aoox</Code> belum ada sebelumnya, jadi perintah di bawah
+        gagal kalau dijalankan sekarang.
       </P>
       <Pre>{`echo 'TZ=Asia/Jakarta' | sudo tee -a /opt/aoox/.env.dist
 cd /opt/aoox && sudo docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
@@ -265,6 +278,13 @@ cd /opt/aoox && sudo docker compose -f docker-compose.dist.yml --env-file .env.d
       </P>
       <H3>Swap (disarankan di bawah 4 GB RAM)</H3>
       <P>Swap file membuat build bertahan saat memori melonjak sebentar, bukannya dimatikan.</P>
+      <P>
+        Cek dulu: banyak image sudah membawa swap. Kalau salah satu perintah di
+        bawah menampilkan baris swap berukuran, <strong>lewati bagian
+        ini</strong> (menambah swap file kedua hanya membuang disk).
+      </P>
+      <Pre>{`swapon --show
+free -h`}</Pre>
       <Pre>{`sudo fallocate -l 2G /swapfile
 sudo chmod 600 /swapfile
 sudo mkswap /swapfile
@@ -291,8 +311,16 @@ sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 sudo ufw allow 3000/tcp
 sudo ufw allow 3001/tcp
-sudo ufw enable
+sudo ufw --force enable
 sudo ufw status verbose`}</Pre>
+      <P>
+        <Code>--force</Code> penting kalau seluruh blok ditempel sekaligus:{" "}
+        <Code>ufw enable</Code> biasa berhenti dan bertanya{" "}
+        <Code>Command may disrupt existing ssh connections. Proceed with
+        operation (y|n)?</Code>, lalu baris yang tersisa terbaca sebagai
+        jawabannya, sehingga ufw tetap mati. Aturan SSH sudah ditambahkan lebih
+        dulu, jadi mengaktifkannya tidak memutus sesimu.
+      </P>
       <P>
         Port 3000/3001 hanya dibutuhkan sampai domain berfungsi (langkah 10).
         Biarkan aturan <Code>22</Code> terbuka untuk semua sumber: web terminal
@@ -314,8 +342,15 @@ sudo ufw status verbose`}</Pre>
         <DocLink href="/id/docs/domain-panel#hanya-domain">Hanya izinkan akses lewat domain</DocLink>,
         yang membuat port 3000/3001 hanya mendengarkan di <Code>127.0.0.1</Code>.
         ufw tetap berguna untuk semua yang tidak dipublikasikan Docker (SSH dan
-        layanan host lain). Belum diuji di VPS sungguhan dalam panduan ini;
-        perilakunya mengikuti dokumentasi Docker.
+        layanan host lain). Ini sudah diuji di VPS Ubuntu 24.04 sungguhan: port
+        yang ditolak ufw tetap bisa dijangkau dari luar. aoox membantu di dua
+        tempat: database atau aplikasi admin database yang kamu publikasikan
+        diikat ke <Code>127.0.0.1</Code> secara default, dan setiap host port
+        lain (aplikasi, stack) punya pilihan <strong>Mendengarkan di</strong>,{" "}
+        <em>Publik</em> atau <em>Hanya server ini (127.0.0.1)</em>. Tab{" "}
+        <strong>Port terbuka</strong> di halaman Docker (owner dan admin)
+        menampilkan semua port yang dipublikasikan beserta pemiliknya dan
+        apakah terbuka ke internet.
       </Callout>
 
       <H2 id="cli">6. Pasang CLI aoox (tanpa Node.js)</H2>
@@ -431,6 +466,12 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
       <Pre>{`aoox is installed in /opt/aoox.
 Open: http://SERVER_IP:3000
 Create the first owner account at /setup.`}</Pre>
+      <Callout title="Port 80 dan 443 tertutup tepat setelah instalasi">
+        Ini wajar, bukan blokir provider: reverse proxy yang mendengarkan di
+        80/443 belum ada. Ia dijalankan saat kamu menyimpan domain panel pertama
+        (langkah 10) atau kamu mengaktifkannya sendiri. Sampai saat itu hanya{" "}
+        <Code>3000</Code> dan <Code>3001</Code> yang menjawab.
+      </Callout>
       <Callout kind="warn" title="Periksa alamat yang dicetak">
         Kalau server gagal mendeteksi IP publiknya, barisnya berbunyi{" "}
         <Code>http://localhost:3000</Code>, dan <Code>WEB_ORIGIN</Code> di{" "}
@@ -444,10 +485,14 @@ Create the first owner account at /setup.`}</Pre>
       <Pre>{`cd /opt/aoox
 sudo docker compose -f docker-compose.dist.yml --env-file .env.dist ps
 sudo docker compose -f docker-compose.dist.yml --env-file .env.dist logs -f api`}</Pre>
-      <Callout kind="warn" title="Jangan jalankan ulang dengan --force di instalasi yang sudah jalan">
+      <Callout title="Menjalankan instalasi lagi">
         <Code>sudo aoox install</Code> menolak jalan lagi di folder yang sudah
-        berisi instalasi. <Code>--force</Code> menulis secret baru, yang membuat
-        database yang ada tidak terbaca. Untuk memperbaiki atau menyegarkan
+        berisi instalasi. <Code>--force</Code> memasang ulang di atasnya: lebih
+        dulu menyalin <Code>.env.dist</Code> dan file compose ke{" "}
+        <Code>/opt/aoox/backups/&lt;timestamp&gt;/</Code> lalu mempertahankan
+        secret yang ada, sehingga data tetap terbaca. Hanya{" "}
+        <Code>--force --new-secrets --wipe-data</Code> yang mulai dari nol, dan
+        itu menghapus database panel. Untuk memperbaiki atau menyegarkan
         instalasi pakai <Code>sudo aoox reinstall</Code> (langkah 11).
       </Callout>
       <Callout title="Satu perintah tanpa CLI">
@@ -598,6 +643,10 @@ sudo ufw delete allow 3001/tcp`}</Pre>
           [
             <>Browser tidak bisa membuka <Code>IP:3000</Code></>,
             <>Firewall / security group provider (ufw tidak berpengaruh untuk port yang dipublikasikan Docker). Di server: <Code>sudo docker compose … ps</Code>.</>,
+          ],
+          [
+            <><Code>IP:80</Code> / <Code>IP:443</Code> tidak menjawab setelah instalasi</>,
+            <>Wajar sampai domain panel pertama disimpan (langkah 10): reverse proxy belum berjalan.</>,
           ],
           [
             "Proxy tidak bisa bind 80/443",

@@ -46,7 +46,7 @@ const INSTALLATION: Row[] = [
   [
     <>Fixes/new features don&apos;t show up after a panel update (e.g. the webhook <Code>PUBLIC_API_URL</Code> is still <Code>localhost</Code>)</>,
     <><Code>aoox update panel</Code> and the &ldquo;Apply update&rdquo; button only run <Code>pull</Code> + <Code>up -d</Code>: the compose file and new variables in <Code>.env.dist</Code> are not updated.</>,
-    <>Run <DocLink href="/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (<Code>--dry-run</Code> first to see what changes). Without the CLI: edit <Code>.env.dist</Code> / use the Environment page, or adjust the compose file manually per the release notes — see <DocLink href="/docs/installation#update">Upgrading</DocLink>. Don&apos;t use <Code>aoox install --force</Code> (new secrets cut off the old data).</>,
+    <>Run <DocLink href="/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (<Code>--dry-run</Code> first to see what changes). Without the CLI: edit <Code>.env.dist</Code> / use the Environment page, or adjust the compose file manually per the release notes — see <DocLink href="/docs/installation#update">Upgrading</DocLink>. <Code>aoox install --force</Code> also keeps your secrets and backs up the old files first; only <Code>--force --new-secrets --wipe-data</Code> deletes the data.</>,
   ],
   [
     <>The web app loads, but sign-in / the API fails (network error)</>,
@@ -258,6 +258,11 @@ const SERVER: Row[] = [
     <>Remote deploy succeeds but isn&apos;t reachable</>,
     "The host port is empty, or the server's firewall is blocking the port.",
     "Fill in a host port; open the port in ufw/a security group. Domains don't work the same on a remote server.",
+  ],
+  [
+    <>A port is reachable from the internet although ufw denies it</>,
+    "Docker publishes ports through its own firewall rules, which ufw does not filter.",
+    <>Close it in the provider firewall, or set the port&apos;s <strong>Listens on</strong> to <em>This server only</em>. The <strong>Open ports</strong> tab on the Docker page lists every published port and whether it is open.</>,
   ],
 ]
 

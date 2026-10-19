@@ -353,9 +353,10 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         <DocLink href="/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink>{" "}
         — it rewrites the compose file from the newest copy, merges{" "}
         <Code>.env.dist</Code> (secrets are never regenerated), then pulls and
-        recreates without touching volumes. Don&apos;t use{" "}
-        <Code>aoox install --force</Code> for this (new secrets cut off the old
-        data). The manual way: edit{" "}
+        recreates without touching volumes. Prefer{" "}
+        <Code>reinstall</Code> over <Code>aoox install --new-secrets</Code>{" "}
+        (which only exists together with <Code>--wipe-data</Code> and deletes
+        the old data). The manual way: edit{" "}
         <Code>docker-compose.dist.yml</Code> in <Code>INSTALL_DIR</Code>{" "}
         (default <Code>/opt/aoox</Code>) per the release notes, then:
       </P>

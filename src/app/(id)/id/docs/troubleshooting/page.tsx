@@ -46,7 +46,7 @@ const INSTALASI: Row[] = [
   [
     <>Perbaikan/fitur baru tidak muncul setelah update panel (mis. <Code>PUBLIC_API_URL</Code> di webhook masih <Code>localhost</Code>)</>,
     <><Code>aoox update panel</Code> dan tombol &ldquo;Terapkan update&rdquo; hanya <Code>pull</Code> + <Code>up -d</Code>: file compose dan variabel baru di <Code>.env.dist</Code> tidak diperbarui.</>,
-    <>Jalankan <DocLink href="/id/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (<Code>--dry-run</Code> dulu untuk melihat perubahannya). Alternatif tanpa CLI: edit <Code>.env.dist</Code> / halaman Environment, atau sesuaikan compose manual sesuai catatan rilis — lihat <DocLink href="/id/docs/instalasi#update">Memperbarui versi</DocLink>. Jangan pakai <Code>aoox install --force</Code> (secret baru memutus akses ke data lama).</>,
+    <>Jalankan <DocLink href="/id/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (<Code>--dry-run</Code> dulu untuk melihat perubahannya). Alternatif tanpa CLI: edit <Code>.env.dist</Code> / halaman Environment, atau sesuaikan compose manual sesuai catatan rilis — lihat <DocLink href="/id/docs/instalasi#update">Memperbarui versi</DocLink>. <Code>aoox install --force</Code> juga mempertahankan secret dan mencadangkan file lama lebih dulu; hanya <Code>--force --new-secrets --wipe-data</Code> yang menghapus data.</>,
   ],
   [
     <>Web terbuka, tapi sign-in / API gagal (network error)</>,
@@ -259,6 +259,11 @@ const SERVER: Row[] = [
     <>Deploy remote sukses tapi tidak bisa diakses</>,
     "Port host kosong atau firewall server menutup port.",
     "Isi Port host; buka port di ufw/security group. Domain tidak berlaku di server remote.",
+  ],
+  [
+    <>Port bisa dijangkau dari internet padahal ufw menolaknya</>,
+    "Docker mempublikasikan port lewat aturan firewall sendiri yang tidak disaring ufw.",
+    <>Tutup di firewall provider, atau ubah <strong>Mendengarkan di</strong> port itu menjadi <em>Hanya server ini</em>. Tab <strong>Port terbuka</strong> di halaman Docker menampilkan semua port yang dipublikasikan dan apakah terbuka.</>,
   ],
 ]
 

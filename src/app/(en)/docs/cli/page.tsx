@@ -38,7 +38,7 @@ const COMMANDS = [
   {
     cmd: "aoox install",
     what: "Installs aoox (postgres + api + web) on a fresh VPS via Docker Compose.",
-    flags: "--web-domain, --api-domain, --acme-email, --admin-email/-name/-password, --dir, --force, --yes/-y",
+    flags: "--web-domain, --api-domain, --acme-email, --admin-email/-name/-password, --dir, --force, --new-secrets, --wipe-data, --confirm-wipe, --yes/-y",
   },
   {
     cmd: "aoox login",
@@ -246,6 +246,24 @@ Create the first owner account at /setup.`}</Pre>
           The default install folder is <Code>/opt/aoox</Code> (change it
           with <Code>--dir</Code>); an existing install in that folder is
           rejected unless <Code>--force</Code> is given.
+        </li>
+        <li>
+          <Code>--force</Code> on an existing install backs up{" "}
+          <Code>.env.dist</Code> and the compose files to{" "}
+          <Code>&lt;dir&gt;/backups/&lt;timestamp&gt;/</Code> and{" "}
+          <strong>reuses the existing secrets</strong> and every existing value
+          (only flags you pass replace values), so the data survives.
+        </li>
+        <li>
+          Starting completely over needs all three of{" "}
+          <Code>--force --new-secrets --wipe-data</Code>: it runs{" "}
+          <Code>docker compose down -v</Code> for the existing stack (the
+          database volume is deleted), generates new secrets, and requires you
+          to type the install folder to confirm — <Code>--yes</Code> alone is not
+          enough; non-interactively pass <Code>--confirm-wipe=/opt/aoox</Code>.
+          <Code>--new-secrets</Code> or <Code>--wipe-data</Code> on their own are
+          refused: new secrets cannot unlock the old database volume, which is
+          what used to break the install.
         </li>
         <li>
           Secrets (<Code>JWT_SECRET</Code>, <Code>ENCRYPTION_KEY</Code>,
@@ -974,11 +992,15 @@ $ sudo aoox reinstall`}</Pre>
         <Code>--terminal-ssh-user &lt;user&gt;</Code> (fills in or overrides that
         value), and <Code>--dry-run</Code> (print the plan only).
       </P>
-      <Callout kind="warn" title="Don&apos;t use aoox install --force to repair">
-        <Code>aoox install --force</Code> writes a fresh <Code>.env.dist</Code>{" "}
-        with new random secrets: the old database becomes unreachable and every
-        stored credential can no longer be decrypted. For an install that is
-        already running, always use <Code>aoox reinstall</Code>.
+      <Callout kind="warn" title="To repair a running install, use aoox reinstall">
+        <Code>aoox install --force</Code> is for reinstalling over an existing
+        folder: it backs up <Code>.env.dist</Code> and the compose files to{" "}
+        <Code>&lt;dir&gt;/backups/&lt;timestamp&gt;/</Code> first and then{" "}
+        <strong>keeps your secrets and existing values</strong>, so the data
+        stays readable. For a running install that only needs a refresh,{" "}
+        <Code>aoox reinstall</Code> is still the right command. Starting from
+        scratch needs <Code>--force --new-secrets --wipe-data</Code>, which
+        deletes all panel data (see Installing aoox via aoox install).
       </Callout>
       <P>
         Without the CLI: edit <Code>.env.dist</Code> directly (e.g. add{" "}
@@ -1140,7 +1162,7 @@ $ sudo aoox reinstall`}</Pre>
           ],
           [
             <>aoox install: An installation already exists in …</>,
-            <>The <Code>--dir</Code> folder (default <Code>/opt/aoox</Code>) is already populated. To repair that install, use <Code>aoox reinstall</Code>. <Code>--force</Code> is only for a from-scratch reinstall (it generates new secrets — the old data becomes unreadable), or use a different <Code>--dir</Code>.</>,
+            <>The <Code>--dir</Code> folder (default <Code>/opt/aoox</Code>) is already populated. To repair that install, use <Code>aoox reinstall</Code>. <Code>--force</Code> reinstalls over it keeping your data and secrets (the previous files are backed up to <Code>&lt;dir&gt;/backups/</Code>), or use a different <Code>--dir</Code>. A from-scratch install that deletes all data needs <Code>--force --new-secrets --wipe-data</Code>.</>,
           ],
         ]}
       />

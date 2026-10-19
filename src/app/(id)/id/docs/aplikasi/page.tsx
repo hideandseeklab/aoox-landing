@@ -140,6 +140,10 @@ export default function Page() {
                 "Opsional. Isi kalau mau akses lewat IP:port tanpa domain. Kosongkan bila memakai domain — blue/green butuh port host kosong.",
               ],
               [
+                "Mendengarkan di",
+                <>Hanya bila ada port host. <strong>Publik</strong> (default aplikasi) mempublikasikannya di semua interface; <strong>Hanya server ini (127.0.0.1)</strong> membuatnya hanya bisa dijangkau dari server itu sendiri atau lewat SSH tunnel. Port yang dipublikasikan Docker melewati ufw, jadi untuk yang publik pakai firewall provider (lihat <DocLink href="/id/docs/vps-baru#dasar">Mulai dari VPS baru</DocLink>). Mengubahnya membuat ulang aplikasi yang berjalan, seperti port host baru. Tidak tersedia untuk service Swarm.</>,
+              ],
+              [
                 "Health check path",
                 <>
                   Opsional tapi disarankan, mis. <Code>/health</Code>. Menentukan

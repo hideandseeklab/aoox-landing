@@ -15,6 +15,9 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ### Changed
 
+- **Docs: fresh VPS guide fixes (English and Indonesian)**, from a real run on Ubuntu 24.04: `sudo ufw --force enable` (a plain `ufw enable` asks y/n and aborts when the block is pasted, with the reason), check `swapon --show` / `free -h` before adding swap, the `TZ` step now says to do it after the install (`/opt/aoox` does not exist before), a callout that ports 80/443 stay closed until the first panel domain is saved (expected, not a provider block) plus a troubleshooting row, a note that Ubuntu cloud images use the `ubuntu` user instead of root, the ufw-versus-Docker warning now states it was verified on a real VPS, and the new "Listens on" option and the Open ports tab are mentioned.
+- **Docs: `aoox install --force` (English and Indonesian)**: the CLI, Installation, Troubleshooting and fresh VPS pages describe the new behaviour (previous files are backed up, existing secrets are kept; `--force --new-secrets --wipe-data` with a typed or `--confirm-wipe=<dir>` confirmation starts from scratch and deletes the panel data).
+- **Docs: bind address per host port (English and Indonesian)**: the application, database, database admin app, stack and troubleshooting pages explain "Listens on" (public or this server only), the new defaults, the SSH tunnel and that Docker-published ports bypass ufw.
 - **`install-cli.sh` explains the non-root install**: when it installs to `~/.local/bin` (no root, no passwordless sudo) it now ends with a note that `sudo aoox install` will not find the binary (sudo's `secure_path` skips that folder) and the two fixes: re-run with `sudo sh`, or `sudo ~/.local/bin/aoox install`.
 
 ## [0.1.0-alpha.12] - 2026-10-17

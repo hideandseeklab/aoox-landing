@@ -181,6 +181,10 @@ export default function Page() {
                 "Port host",
                 "Opsional. Isi hanya kalau perlu koneksi dari luar Docker (laptop, server remote). Aplikasi di host aoox tidak membutuhkannya.",
               ],
+              [
+                "Mendengarkan di",
+                <>Default <strong>Hanya server ini (127.0.0.1)</strong>: database tidak bisa dijangkau dari internet dan kamu terhubung lewat SSH tunnel (<Code>ssh -L 5432:127.0.0.1:5432 user@server</Code>). Pilih <strong>Publik</strong> hanya bila harus bisa dijangkau dari mesin lain, dan tutup untuk yang lain di firewall provider: port yang dipublikasikan Docker tidak disaring ufw. Dipilih saat membuat dan tidak bisa diubah nanti (buat ulang database).</>,
+              ],
               ["Batas CPU / memori", "Opsional; bisa diubah nanti."],
             ]}
           />
@@ -231,7 +235,7 @@ export default function Page() {
           [
             <strong key="e">Koneksi eksternal</strong>,
             <><Code>{"<ip-server>:<port host>"}</Code> (hanya bila port host diisi)</>,
-            "Laptop, client GUI, aplikasi di server remote. Amankan dengan firewall.",
+            "Laptop, client GUI, aplikasi di server remote. Dengan \"Hanya server ini\" alamatnya 127.0.0.1 dan hanya server itu sendiri (atau SSH tunnel) yang bisa memakainya; dengan \"Publik\", amankan lewat firewall provider.",
           ],
         ]}
       />

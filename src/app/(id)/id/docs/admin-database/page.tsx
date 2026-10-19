@@ -110,7 +110,10 @@ export default function Page() {
             <li>
               <strong>IP &amp; port</strong> — dipublikasikan di port host
               server ini, tanpa domain. Port harus belum dipakai aplikasi,
-              database, stack, atau container lain.
+              database, stack, atau container lain. Defaultnya mendengarkan di{" "}
+              <Code>127.0.0.1</Code> (buka lewat SSH tunnel); pilih <em>Publik</em>{" "}
+              di dialog hanya bila kamu menerima login admin bisa dijangkau dari
+              internet.
             </li>
           </Ul>
           <P>Minimal salah satu harus diisi; domain dan IP &amp; port juga boleh dipakai sekaligus, sama seperti pada aplikasi.</P>

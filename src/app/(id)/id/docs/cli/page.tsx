@@ -38,7 +38,7 @@ const COMMANDS = [
   {
     cmd: "aoox install",
     what: "Memasang aoox (postgres + api + web) di VPS baru lewat Docker Compose.",
-    flags: "--web-domain, --api-domain, --acme-email, --admin-email/-name/-password, --dir, --force, --yes/-y",
+    flags: "--web-domain, --api-domain, --acme-email, --admin-email/-name/-password, --dir, --force, --new-secrets, --wipe-data, --confirm-wipe, --yes/-y",
   },
   {
     cmd: "aoox login",
@@ -239,6 +239,25 @@ Create the first owner account at /setup.`}</Pre>
           Folder instalasi default <Code>/opt/aoox</Code> (ubah dengan{" "}
           <Code>--dir</Code>); instalasi yang sudah ada di folder itu ditolak
           kecuali diberi <Code>--force</Code>.
+        </li>
+        <li>
+          <Code>--force</Code> pada instalasi yang sudah ada mencadangkan{" "}
+          <Code>.env.dist</Code> dan file compose ke{" "}
+          <Code>&lt;dir&gt;/backups/&lt;timestamp&gt;/</Code> lalu{" "}
+          <strong>memakai ulang secret yang ada</strong> beserta semua nilai
+          yang sudah ada (hanya flag yang Anda berikan yang mengganti nilai),
+          sehingga data tetap aman.
+        </li>
+        <li>
+          Memulai benar-benar dari nol butuh ketiganya:{" "}
+          <Code>--force --new-secrets --wipe-data</Code>. Perintah ini menjalankan{" "}
+          <Code>docker compose down -v</Code> untuk stack yang ada (volume
+          database dihapus), membuat secret baru, dan meminta Anda mengetik
+          folder instalasi sebagai konfirmasi — <Code>--yes</Code> saja tidak
+          cukup; untuk mode non-interaktif pakai{" "}
+          <Code>--confirm-wipe=/opt/aoox</Code>. <Code>--new-secrets</Code> atau{" "}
+          <Code>--wipe-data</Code> sendirian ditolak: secret baru tidak bisa
+          membuka volume database lama, dan itulah yang dulu merusak instalasi.
         </li>
         <li>
           Secret (<Code>JWT_SECRET</Code>, <Code>ENCRYPTION_KEY</Code>,
@@ -970,11 +989,17 @@ $ sudo aoox reinstall`}</Pre>
         <Code>--terminal-ssh-user &lt;user&gt;</Code> (mengisi atau menimpa nilai
         itu), dan <Code>--dry-run</Code> (hanya cetak rencana).
       </P>
-      <Callout kind="warn" title="Jangan pakai aoox install --force untuk memperbaiki">
-        <Code>aoox install --force</Code> menulis <Code>.env.dist</Code> baru
-        dengan secret acak baru: database lama tidak bisa diakses lagi dan semua
-        kredensial tersimpan tidak bisa didekripsi. Untuk instalasi yang sudah
-        berjalan, selalu pakai <Code>aoox reinstall</Code>.
+      <Callout kind="warn" title="Untuk memperbaiki instalasi yang berjalan, pakai aoox reinstall">
+        <Code>aoox install --force</Code> dipakai untuk memasang ulang di atas
+        folder yang sudah ada: perintah ini lebih dulu mencadangkan{" "}
+        <Code>.env.dist</Code> dan file compose ke{" "}
+        <Code>&lt;dir&gt;/backups/&lt;timestamp&gt;/</Code>, lalu{" "}
+        <strong>mempertahankan secret dan nilai yang sudah ada</strong>, jadi
+        data tetap terbaca. Untuk instalasi berjalan yang hanya perlu
+        disegarkan, <Code>aoox reinstall</Code> tetap perintah yang tepat. Mulai
+        dari nol butuh <Code>--force --new-secrets --wipe-data</Code>, yang
+        menghapus seluruh data panel (lihat bagian memasang aoox lewat aoox
+        install).
       </Callout>
       <P>
         Tanpa CLI: edit <Code>.env.dist</Code> langsung (mis. tambah{" "}
@@ -1135,7 +1160,7 @@ $ sudo aoox reinstall`}</Pre>
           ],
           [
             <>aoox install: An installation already exists in …</>,
-            <>Folder <Code>--dir</Code> (default <Code>/opt/aoox</Code>) sudah terisi. Untuk memperbaiki instalasi itu, pakai <Code>aoox reinstall</Code>. <Code>--force</Code> hanya untuk instalasi ulang dari nol (membuat secret baru — data lama tidak terbaca), atau pakai <Code>--dir</Code> lain.</>,
+            <>Folder <Code>--dir</Code> (default <Code>/opt/aoox</Code>) sudah terisi. Untuk memperbaiki instalasi itu, pakai <Code>aoox reinstall</Code>. <Code>--force</Code> memasang ulang di atasnya sambil mempertahankan data dan secret (file sebelumnya dicadangkan ke <Code>&lt;dir&gt;/backups/</Code>), atau pakai <Code>--dir</Code> lain. Instalasi dari nol yang menghapus semua data butuh <Code>--force --new-secrets --wipe-data</Code>.</>,
           ],
         ]}
       />

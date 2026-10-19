@@ -186,6 +186,10 @@ export default function Page() {
                 "Host port",
                 "Optional. Fill it in only if you need a connection from outside Docker (a laptop, a remote server). Applications on the aoox host don't need it.",
               ],
+              [
+                "Listens on",
+                <>Defaults to <strong>This server only (127.0.0.1)</strong>: the database is then not reachable from the internet and you connect through an SSH tunnel (<Code>ssh -L 5432:127.0.0.1:5432 user@server</Code>). Choose <strong>Public</strong> only when it must be reachable from other machines, and close it in the provider firewall for everyone else: Docker-published ports are not filtered by ufw. It is chosen at creation and cannot be changed later (recreate the database).</>,
+              ],
               ["CPU / memory limit", "Optional; can be changed later."],
             ]}
           />
@@ -238,7 +242,7 @@ export default function Page() {
           [
             <strong key="e">External connection</strong>,
             <><Code>{"<server-ip>:<host port>"}</Code> (only if a host port is set)</>,
-            "Laptops, GUI clients, applications on a remote server. Secure it with a firewall.",
+            "Laptops, GUI clients, applications on a remote server. With \"This server only\" the address is 127.0.0.1 and only the server itself (or an SSH tunnel) can use it; with \"Public\", secure it with the provider firewall.",
           ],
         ]}
       />

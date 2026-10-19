@@ -209,7 +209,10 @@ networks:
             <>
               A <Code>ports:</Code> line in the override file — the stack can
               then be opened at <Code>{"http://<server-ip>:<host port>"}</Code>{" "}
-              without a domain.
+              without a domain. Each port has a <strong>Listens on</strong>{" "}
+              choice: <em>Public</em> (default) or <em>This server only</em>, which
+              writes <Code>127.0.0.1:&lt;host port&gt;:&lt;port&gt;</Code>.
+              Docker-published ports are not filtered by ufw.
             </>,
           ],
         ]}

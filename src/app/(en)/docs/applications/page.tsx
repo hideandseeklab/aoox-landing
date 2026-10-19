@@ -144,6 +144,10 @@ export default function Page() {
                 "Optional. Fill it in for IP:port access without a domain. Leave it empty when using a domain — blue/green requires an empty host port.",
               ],
               [
+                "Listens on",
+                <>Only with a host port. <strong>Public</strong> (default for applications) publishes it on every interface; <strong>This server only (127.0.0.1)</strong> makes it reachable from the server itself or an SSH tunnel. Docker-published ports bypass ufw, so use the provider firewall for public ones (see <DocLink href="/docs/fresh-vps#basics">Start from a fresh VPS</DocLink>). Changing it recreates a running application like a new host port does. Not available for Swarm services.</>,
+              ],
+              [
                 "Health check path",
                 <>
                   Optional but recommended, e.g. <Code>/health</Code>.

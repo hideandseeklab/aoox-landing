@@ -111,7 +111,10 @@ export default function Page() {
             <li>
               <strong>IP &amp; port</strong> — published on a host port of this
               server, with no domain. The port must not be in use by an
-              application, database, stack, or any other container.
+              application, database, stack, or any other container. It listens on{" "}
+              <Code>127.0.0.1</Code> by default (open it through an SSH tunnel);
+              pick <em>Public</em> in the dialog only if you accept the admin
+              login being reachable from the internet.
             </li>
           </Ul>
           <P>At least one of the two is required; you can also use both a domain and an IP &amp; port at once, as with applications.</P>

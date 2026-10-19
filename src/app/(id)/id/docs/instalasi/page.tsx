@@ -350,9 +350,10 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         <DocLink href="/id/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink>{" "}
         — menulis ulang compose dari salinan terbaru, menggabungkan{" "}
         <Code>.env.dist</Code> (secret tidak pernah dibuat ulang), lalu pull +
-        recreate tanpa menyentuh volume. Jangan pakai{" "}
-        <Code>aoox install --force</Code> untuk ini (secret baru memutus akses
-        ke data lama). Cara manual: edit <Code>docker-compose.dist.yml</Code> di <Code>INSTALL_DIR</Code>{" "}
+        recreate tanpa menyentuh volume. Pilih{" "}
+        <Code>reinstall</Code>, bukan <Code>aoox install --new-secrets</Code>{" "}
+        (yang hanya ada bersama <Code>--wipe-data</Code> dan menghapus data
+        lama). Cara manual: edit <Code>docker-compose.dist.yml</Code> di <Code>INSTALL_DIR</Code>{" "}
         (default <Code>/opt/aoox</Code>) sesuai catatan rilis, lalu:
       </P>
       <Pre>{`docker compose -f docker-compose.dist.yml -f docker-compose.override.yml --env-file .env.dist up -d`}</Pre>
