@@ -166,7 +166,7 @@ export default function Page() {
           ],
           [
             <strong key="pv">viewer</strong>,
-            "Baca saja: status, log, metrik, daftar backup. Semua request yang mengubah ditolak, termasuk lewat API token. Password database, baris data database (dan key Redis/Valkey), dump SQL, ekspor CSV, dan unduhan backup juga ditolak: viewer bisa melihat bahwa database ada beserta strukturnya, tetapi tidak bisa membaca atau membawa keluar datanya.",
+            "Baca saja: status, log, metrik, daftar backup. Semua request yang mengubah ditolak, termasuk lewat API token. Password database, baris data database (dan key Redis/Valkey), dump SQL, ekspor CSV, dan unduhan backup juga ditolak: viewer bisa melihat bahwa database ada beserta strukturnya, tetapi tidak bisa membaca atau membawa keluar datanya. Hal yang sama berlaku untuk variabel environment dan build args aplikasi dan stack (dikosongkan untuk viewer) serta ekspor project yang memuatnya.",
           ],
         ]}
       />

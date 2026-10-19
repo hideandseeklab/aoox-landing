@@ -50,7 +50,7 @@ const POSTGRES_VARIANTS = [
 ]
 
 const LIFECYCLE = [
-  { s: "creating", d: "pull image, buat volume & container" },
+  { s: "creating", d: "pull image, buat volume & container, lalu tunggu sampai engine menerima login (maksimal 2 menit; mengubah mount, batas resource, atau backup dijawab \"masih memulai\" selama itu)" },
   { s: "running", d: "siap dipakai; kredensial tersedia" },
   { s: "stopped", d: "container berhenti, data tetap" },
   { s: "error", d: "provisioning gagal — lihat pesan" },
@@ -276,7 +276,7 @@ export default function Page() {
           ["Batas sumber daya", "Kartu Batas sumber daya", "Berlaku langsung; mencabut batas = container dibuat ulang (restart singkat)."],
           ["Ganti versi (tag)", "—", "Belum ada dari UI. Buat database baru, restore backup ke sana."],
           ["Konfigurasi engine", "Tab Mount", "File mount ke path config; container di-provision ulang."],
-          ["Hapus", "Panel database", "Dengan atau tanpa menghapus volume. Daftar backup ikut terhapus. Dengan volume (Hapus dengan data) berkas backup di server beserta salinan S3-nya ikut terhapus; tanpa itu berkasnya dibiarkan di volume backup dan tidak lagi tampil."],
+          ["Hapus", "Panel database", "Dengan atau tanpa menghapus volume. Daftar backup ikut terhapus. Dengan volume (Hapus dengan data) volume dari mount-nya (termasuk berkas konfigurasi yang tersimpan) dan berkas backup di server beserta salinan S3-nya ikut terhapus; tanpa itu berkasnya dibiarkan di volume backup dan tidak lagi tampil."],
         ]}
       />
 

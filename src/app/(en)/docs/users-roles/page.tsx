@@ -168,7 +168,7 @@ export default function Page() {
           ],
           [
             <strong key="pv">viewer</strong>,
-            "Read only: status, logs, metrics, backup list. Every state-changing request is rejected, including via API token. Database passwords, database rows (and Redis/Valkey keys), SQL dumps, CSV exports and backup downloads are refused too: a viewer can see that a database exists and its structure, but cannot read or take away its data.",
+            "Read only: status, logs, metrics, backup list. Every state-changing request is rejected, including via API token. Database passwords, database rows (and Redis/Valkey keys), SQL dumps, CSV exports and backup downloads are refused too: a viewer can see that a database exists and its structure, but cannot read or take away its data. The same goes for the environment variables and build args of applications and stacks (they are left out for viewers) and for the project export, which contains them.",
           ],
         ]}
       />

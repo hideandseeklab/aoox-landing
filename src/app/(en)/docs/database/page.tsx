@@ -50,7 +50,7 @@ const POSTGRES_VARIANTS = [
 ]
 
 const LIFECYCLE = [
-  { s: "creating", d: "pull the image, create the volume & container" },
+  { s: "creating", d: "pull the image, create the volume & container, wait until the engine accepts a login (up to 2 minutes; changing mounts, limits or backups answers \"still starting\" meanwhile)" },
   { s: "running", d: "ready to use; credentials available" },
   { s: "stopped", d: "container stopped, data kept" },
   { s: "error", d: "provisioning failed — check the message" },
@@ -284,7 +284,7 @@ export default function Page() {
           ["Resource limits", "Resource limits card", "Applies immediately; removing a limit recreates the container (a brief restart)."],
           ["Change version (tag)", "—", "Not available from the UI yet. Create a new database and restore a backup into it."],
           ["Engine configuration", "Mount tab", "Mount a file at a config path; the container is re-provisioned."],
-          ["Delete", "Database panel", "With or without deleting the volume. The backup list is deleted too. With the volume (Delete with data) the backup files on the server and their S3 copies are deleted as well; without it they are kept in the backups volume, no longer listed."],
+          ["Delete", "Database panel", "With or without deleting the volume. The backup list is deleted too. With the volume (Delete with data) the volumes of its mounts (including stored config files) and the backup files on the server and their S3 copies are deleted as well; without it they are kept in the backups volume, no longer listed."],
         ]}
       />
 
