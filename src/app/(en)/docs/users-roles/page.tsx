@@ -168,7 +168,7 @@ export default function Page() {
           ],
           [
             <strong key="pv">viewer</strong>,
-            "Read only: status, logs, metrics, backup list. Every state-changing request is rejected, including via API token.",
+            "Read only: status, logs, metrics, backup list. Every state-changing request is rejected, including via API token. SQL dumps, CSV exports and backup downloads are refused too: a viewer cannot take project data away.",
           ],
         ]}
       />

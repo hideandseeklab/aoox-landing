@@ -44,6 +44,11 @@ type Row = [gejala: React.ReactNode, penyebab: React.ReactNode, solusi: React.Re
 
 const INSTALASI: Row[] = [
   [
+    <><Code>aoox install</Code> berhenti dengan &ldquo;Docker already has data volumes from an earlier aoox installation&rdquo;</>,
+    <>Folder instalasi kosong (atau sudah dihapus) tetapi volume <Code>aoox_postgres_data</Code> masih ada. Instalasi baru akan membuat <Code>POSTGRES_PASSWORD</Code> baru yang tidak bisa membuka database lama, jadi installer menolak sebelum mengubah apa pun.</>,
+    <>Pertahankan data: kembalikan <Code>.env.dist</Code> yang lama (<Code>/opt/aoox/backups/&lt;timestamp&gt;/</Code> kalau installer pernah menyimpannya) lalu jalankan <DocLink href="/id/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink>. Mulai bersih: <Code>sudo aoox install --force --new-secrets --wipe-data</Code> (menghapus volume itu dan container stack-nya; Anda diminta mengetik folder, atau beri <Code>--confirm-wipe=&lt;dir&gt;</Code>).</>,
+  ],
+  [
     <>Perbaikan/fitur baru tidak muncul setelah update panel (mis. <Code>PUBLIC_API_URL</Code> di webhook masih <Code>localhost</Code>)</>,
     <><Code>aoox update panel</Code> dan tombol &ldquo;Terapkan update&rdquo; hanya <Code>pull</Code> + <Code>up -d</Code>: file compose dan variabel baru di <Code>.env.dist</Code> tidak diperbarui.</>,
     <>Jalankan <DocLink href="/id/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (<Code>--dry-run</Code> dulu untuk melihat perubahannya). Alternatif tanpa CLI: edit <Code>.env.dist</Code> / halaman Environment, atau sesuaikan compose manual sesuai catatan rilis — lihat <DocLink href="/id/docs/instalasi#update">Memperbarui versi</DocLink>. <Code>aoox install --force</Code> juga mempertahankan secret dan mencadangkan file lama lebih dulu; hanya <Code>--force --new-secrets --wipe-data</Code> yang menghapus data.</>,

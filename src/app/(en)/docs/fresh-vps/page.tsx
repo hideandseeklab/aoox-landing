@@ -491,6 +491,16 @@ sudo docker compose -f docker-compose.dist.yml --env-file .env.dist logs -f api`
         it deletes the panel database. To repair or refresh an install use{" "}
         <Code>sudo aoox reinstall</Code> (step 11).
       </Callout>
+      <Callout kind="warn" title="Install refuses: leftover database volume">
+        If you deleted <Code>/opt/aoox</Code> but Docker still has the old{" "}
+        <Code>aoox_postgres_data</Code> volume, the installer stops before
+        writing anything: a new random database password cannot open the old
+        data. Either put the old <Code>.env.dist</Code> back (for example from{" "}
+        <Code>/opt/aoox/backups/&lt;timestamp&gt;/</Code>) and run{" "}
+        <Code>sudo aoox reinstall</Code> to keep the data, or run{" "}
+        <Code>sudo aoox install --force --new-secrets --wipe-data</Code> to
+        delete that data and start clean.
+      </Callout>
       <Callout title="One command instead of the CLI">
         Prefer a single line? <Code>curl -fsSL https://aoox.dev/install.sh | sudo sh</Code>{" "}
         does the same job with environment variables instead of prompts and

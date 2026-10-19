@@ -179,7 +179,7 @@ export default function Page() {
         rows={[
           [<strong key="a">admin</strong>, "Everything a developer can, plus manage members and delete the project."],
           [<strong key="d">developer</strong>, "Applications, databases, stacks, domains, mounts, jobs, backups."],
-          [<strong key="v">viewer</strong>, "Read only — status, logs, metrics, backup list."],
+          [<strong key="v">viewer</strong>, "Read only — status, logs, metrics, backup list (no export or backup download)."],
         ]}
       />
       <Ul>

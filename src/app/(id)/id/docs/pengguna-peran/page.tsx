@@ -166,7 +166,7 @@ export default function Page() {
           ],
           [
             <strong key="pv">viewer</strong>,
-            "Baca saja: status, log, metrik, daftar backup. Semua request yang mengubah ditolak, termasuk lewat API token.",
+            "Baca saja: status, log, metrik, daftar backup. Semua request yang mengubah ditolak, termasuk lewat API token. Dump SQL, ekspor CSV, dan unduhan backup juga ditolak: viewer tidak bisa membawa data project keluar.",
           ],
         ]}
       />

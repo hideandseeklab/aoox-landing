@@ -19,6 +19,9 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 - **Docs: `aoox install --force` (English and Indonesian)**: the CLI, Installation, Troubleshooting and fresh VPS pages describe the new behaviour (previous files are backed up, existing secrets are kept; `--force --new-secrets --wipe-data` with a typed or `--confirm-wipe=<dir>` confirmation starts from scratch and deletes the panel data).
 - **Docs: bind address per host port (English and Indonesian)**: the application, database, database admin app, stack and troubleshooting pages explain "Listens on" (public or this server only), the new defaults, the SSH tunnel and that Docker-published ports bypass ufw.
 - **`install-cli.sh` explains the non-root install**: when it installs to `~/.local/bin` (no root, no passwordless sudo) it now ends with a note that `sudo aoox install` will not find the binary (sudo's `secure_path` skips that folder) and the two fixes: re-run with `sudo sh`, or `sudo ~/.local/bin/aoox install`.
+- **Docs: leftover database volume on install (English and Indonesian)**: the fresh VPS page and Troubleshooting explain why `aoox install` refuses when `aoox_postgres_data` already exists and the two ways out (restore `.env.dist` and `aoox reinstall`, or `--force --new-secrets --wipe-data`).
+- **Docs: viewers cannot export or download (English and Indonesian)**: the Users and roles and Project pages say that SQL dumps, CSV exports and backup downloads are refused for project viewers.
+- **Docs: `aoox update` vs `aoox update panel`**: the CLI page no longer says `aoox update` runs `pull` + `up -d` for the panel (English and Indonesian).
 
 ## [0.1.0-alpha.12] - 2026-10-17
 

@@ -175,7 +175,7 @@ export default function Page() {
         rows={[
           [<strong key="a">admin</strong>, "Semua yang bisa developer + kelola anggota dan hapus project."],
           [<strong key="d">developer</strong>, "Aplikasi, database, stack, domain, mount, jobs, backup."],
-          [<strong key="v">viewer</strong>, "Baca saja — status, log, metrik, daftar backup."],
+          [<strong key="v">viewer</strong>, "Baca saja — status, log, metrik, daftar backup (tanpa ekspor atau unduh backup)."],
         ]}
       />
       <Ul>

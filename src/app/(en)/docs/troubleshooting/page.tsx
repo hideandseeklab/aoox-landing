@@ -44,6 +44,11 @@ type Row = [symptom: React.ReactNode, cause: React.ReactNode, fix: React.ReactNo
 
 const INSTALLATION: Row[] = [
   [
+    <><Code>aoox install</Code> stops with &ldquo;Docker already has data volumes from an earlier aoox installation&rdquo;</>,
+    <>The install folder is empty (or was deleted) but the <Code>aoox_postgres_data</Code> volume is still there. A fresh install would generate a new <Code>POSTGRES_PASSWORD</Code> that cannot open the old database, so the installer refuses before changing anything.</>,
+    <>Keep the data: put the old <Code>.env.dist</Code> back (<Code>/opt/aoox/backups/&lt;timestamp&gt;/</Code> if the installer saved one) and run <DocLink href="/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink>. Start clean: <Code>sudo aoox install --force --new-secrets --wipe-data</Code> (deletes that volume and the stack&apos;s containers; it asks you to type the folder, or pass <Code>--confirm-wipe=&lt;dir&gt;</Code>).</>,
+  ],
+  [
     <>Fixes/new features don&apos;t show up after a panel update (e.g. the webhook <Code>PUBLIC_API_URL</Code> is still <Code>localhost</Code>)</>,
     <><Code>aoox update panel</Code> and the &ldquo;Apply update&rdquo; button only run <Code>pull</Code> + <Code>up -d</Code>: the compose file and new variables in <Code>.env.dist</Code> are not updated.</>,
     <>Run <DocLink href="/docs/cli#reinstall"><Code>sudo aoox reinstall</Code></DocLink> (<Code>--dry-run</Code> first to see what changes). Without the CLI: edit <Code>.env.dist</Code> / use the Environment page, or adjust the compose file manually per the release notes — see <DocLink href="/docs/installation#update">Upgrading</DocLink>. <Code>aoox install --force</Code> also keeps your secrets and backs up the old files first; only <Code>--force --new-secrets --wipe-data</Code> deletes the data.</>,

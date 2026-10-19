@@ -947,7 +947,7 @@ Update applied — the panel will restart for a few seconds to apply it.`}</Pre>
 
       <H2 id="reinstall">Repairing an install (aoox reinstall)</H2>
       <P>
-        <Code>aoox update</Code> only runs <Code>pull</Code> + <Code>up -d</Code>:
+        <Code>aoox update panel</Code> only runs <Code>pull</Code> + <Code>up -d</Code>:
         it doesn&apos;t rewrite <Code>docker-compose.dist.yml</Code> and doesn&apos;t
         add new variables to <Code>.env.dist</Code>. An existing install
         therefore misses fixes that need a compose or env change (a real

@@ -945,7 +945,7 @@ Update applied — the panel will restart for a few seconds to apply it.`}</Pre>
 
       <H2 id="reinstall">Memperbaiki instalasi (aoox reinstall)</H2>
       <P>
-        <Code>aoox update</Code> hanya <Code>pull</Code> + <Code>up -d</Code>: ia
+        <Code>aoox update panel</Code> hanya <Code>pull</Code> + <Code>up -d</Code>: ia
         tidak menulis ulang <Code>docker-compose.dist.yml</Code> dan tidak
         menambah variabel baru ke <Code>.env.dist</Code>. Instalasi lama karena
         itu tidak menerima perbaikan yang butuh perubahan compose atau env

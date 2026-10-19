@@ -495,6 +495,16 @@ sudo docker compose -f docker-compose.dist.yml --env-file .env.dist logs -f api`
         itu menghapus database panel. Untuk memperbaiki atau menyegarkan
         instalasi pakai <Code>sudo aoox reinstall</Code> (langkah 11).
       </Callout>
+      <Callout kind="warn" title="Install menolak: ada volume database sisa">
+        Kalau <Code>/opt/aoox</Code> sudah dihapus tetapi Docker masih punya
+        volume lama <Code>aoox_postgres_data</Code>, installer berhenti sebelum
+        menulis apa pun: password database acak yang baru tidak bisa membuka
+        data lama itu. Kembalikan <Code>.env.dist</Code> yang lama (misalnya dari{" "}
+        <Code>/opt/aoox/backups/&lt;timestamp&gt;/</Code>) lalu jalankan{" "}
+        <Code>sudo aoox reinstall</Code> untuk mempertahankan data, atau jalankan{" "}
+        <Code>sudo aoox install --force --new-secrets --wipe-data</Code> untuk
+        menghapus data itu dan mulai bersih.
+      </Callout>
       <Callout title="Satu perintah tanpa CLI">
         Lebih suka satu baris? <Code>curl -fsSL https://aoox.dev/install.sh | sudo sh</Code>{" "}
         melakukan hal yang sama dengan environment variable sebagai ganti
