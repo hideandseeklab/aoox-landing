@@ -151,7 +151,7 @@ export default function Page() {
           </Ul>
         </Step>
         <Step title="Save">
-          <P>The schedule is re-registered immediately, no API restart needed. Cron runs in UTC.</P>
+          <P>The schedule is re-registered immediately, no API restart needed. Cron runs in the API&apos;s time zone: UTC unless <Code>TZ</Code> is set in <Code>.env.dist</Code>; the form shows the zone in use.</P>
         </Step>
       </Steps>
 

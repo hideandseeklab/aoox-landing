@@ -91,6 +91,11 @@ const COMMANDS = [
     flags: "--set, --clear",
   },
   {
+    cmd: "aoox registry password",
+    what: "Shows the self-hosted registry's address, username and password (owner/admin), or resets the password (owner) without touching any image.",
+    flags: "--show, --reset, --yes/-y",
+  },
+  {
     cmd: "aoox update",
     what: "Updates the aoox CLI itself from npm (replaces the old panel update — see aoox update panel).",
     flags: "--check",
@@ -169,7 +174,10 @@ aoox --version`}</Pre>
       <P>
         Installs to <Code>/usr/local/lib/aoox</Code> +{" "}
         <Code>/usr/local/bin/aoox</Code> (root/sudo), or{" "}
-        <Code>~/.local/lib/aoox</Code> without that access. Running the same
+        <Code>~/.local/lib/aoox</Code> without that access (then the script
+        prints a note: <Code>sudo aoox install</Code> will not find a binary in{" "}
+        <Code>~/.local/bin</Code>, so re-run it with <Code>sudo sh</Code> or call{" "}
+        <Code>sudo ~/.local/bin/aoox install</Code>). Running the same
         command again upgrades in place. Supports Linux (glibc —{" "}
         <strong>not</strong> Alpine/musl) and macOS, x64 and arm64.
       </P>

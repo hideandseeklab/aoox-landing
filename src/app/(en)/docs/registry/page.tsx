@@ -103,13 +103,16 @@ export default function Page() {
             re-provisioning.
           </P>
         </Step>
-        <Step title="Save the credentials shown once">
+        <Step title="Save the credentials">
           <P>
             The <Code>aoox</Code> username and a random password are shown
-            only once — click <strong>I&apos;ve saved it</strong> after writing
-            it down. Deploying from the dashboard does{" "}
-            <strong>not</strong> need it; these credentials are for pushing
-            manually from another machine.
+            when the registry is enabled — click{" "}
+            <strong>I&apos;ve saved it</strong> after writing it down.
+            Deploying from the dashboard does <strong>not</strong> need it;
+            these credentials are for pushing manually from another machine.
+            If you lose it, owners and admins can{" "}
+            <DocLink href="/docs/registry#password">show it again</DocLink>,
+            and owners can reset it without losing any image.
           </P>
         </Step>
       </Steps>
@@ -120,6 +123,16 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         head={["Env (.env.dist)", "Default", "Notes"]}
         rows={[
           [<Code key="1">REGISTRY_PORT</Code>, "5000", "The registry's host port."],
+          [
+            <Code key="3">REGISTRY_PUBLISH_ADDRESS</Code>,
+            <>empty (<Code>127.0.0.1</Code>)</>,
+            <>
+              Which network interface the host port listens on. The default
+              keeps the registry reachable <strong>from this server only</strong>;
+              set <Code>0.0.0.0</Code> to let other machines push by IP (see
+              below).
+            </>,
+          ],
           [
             <Code key="2">REGISTRY_PUBLIC_HOST</Code>,
             "localhost",
@@ -134,6 +147,47 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
           ],
         ]}
       />
+
+      <span id="reach" />
+      <H3>Who can reach port 5000</H3>
+      <P>
+        From the release after 0.1.0-alpha.12 the registry&apos;s host port is bound to{" "}
+        <Code>127.0.0.1</Code> by default, so only this server can push to{" "}
+        <Code>localhost:5000</Code> (deploys, the host&apos;s own{" "}
+        <Code>docker push</Code>, and the panel itself are unaffected: the API
+        reaches the registry over the internal <Code>aoox</Code> network).
+        Before, the port listened on every interface, which exposed a
+        password-protected registry to the internet over plain HTTP. The card
+        says <em>this server only</em> next to the address while that is the
+        case. To push from another machine, pick one:
+      </P>
+      <Ul>
+        <li>
+          <strong>Give it a custom domain</strong> (recommended, below):
+          HTTPS through the proxy, nothing else to open.
+        </li>
+        <li>
+          <strong>Expose the port by IP:</strong> set{" "}
+          <Code>REGISTRY_PUBLISH_ADDRESS=0.0.0.0</Code> in <Code>.env.dist</Code>,
+          restart the stack (<Code>docker compose ... up -d</Code>), then
+          recreate the registry container (re-enable it, or apply/remove a
+          custom domain). The card then shows the address other machines use
+          (<Code>REGISTRY_PUBLIC_HOST</Code> or this server&apos;s public IP).
+          It is plain HTTP, so those machines need the address in{" "}
+          <Code>insecure-registries</Code>, and password protection is all that
+          stands between the registry and the internet — prefer the domain.
+        </li>
+      </Ul>
+      <Callout kind="warn" title="Upgrading an existing install">
+        The binding only changes when the registry container is{" "}
+        <strong>recreated</strong>. After updating aoox, an existing registry
+        keeps listening on every interface until you re-enable it or apply or
+        remove its custom domain. Until then the card shows the address as
+        reachable from other machines. Re-creating keeps the data and
+        credentials. If you push to <Code>IP:5000</Code> from a laptop or CI,
+        that stops working afterwards unless you expose the port as above or
+        switch to a domain.
+      </Callout>
 
       <H3>Custom domain</H3>
       <P>
@@ -157,11 +211,33 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
       <Pre>{`aoox registry domain --set registry.example.com`}</Pre>
       <P>
         Once the domain is active, <Code>docker login registry.example.com</Code>{" "}
-        (no port — standard HTTPS). The host port stays open for IP:port
-        access as before. Remove it with{" "}
+        (no port — standard HTTPS). The host port stays bound as configured
+        above (loopback by default). Remove the domain with{" "}
         <Code>aoox registry domain --clear</Code> or the{" "}
         <strong>Remove domain</strong> button in the dashboard.
       </P>
+
+      <span id="password" />
+      <H3>Show or reset the password</H3>
+      <Ul>
+        <li>
+          <strong>Show password</strong> (eye icon on the Local registry card,
+          owners and admins) reads the stored password again; it hides itself
+          after a minute and each reveal is recorded in the audit log.
+        </li>
+        <li>
+          <strong>Reset password</strong> (owner) generates a new password,
+          rewrites the registry&apos;s login file and restarts the container
+          briefly. <strong>Images are not touched.</strong> Every client and CI
+          job that used the old password has to run{" "}
+          <Code>docker login</Code> again. If anything fails midway, the old
+          password stays in force.
+        </li>
+        <li>
+          From the CLI: <Code>aoox registry password --show</Code> or{" "}
+          <Code>aoox registry password --reset --yes</Code>.
+        </li>
+      </Ul>
 
       <H3>Browsing & cleaning up contents</H3>
       <Ul>
@@ -206,7 +282,8 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
       <H2 id="maintenance">Disk maintenance</H2>
       <P>
         So old images don&apos;t fill up the disk, aoox has automatic cleanup
-        that runs every night at <Code>04:30</Code> (UTC) and can also be
+        that runs every night at <Code>04:30</Code> (server time zone, UTC unless you
+        set <Code>TZ</Code>) and can also be
         triggered manually.
       </P>
       <Table
@@ -276,6 +353,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         head={["Symptom", "Cause & fix"]}
         rows={[
           ["Deploy fails: No self-hosted registry", "Provision the local registry first."],
+          ["docker push to IP:5000: connection refused", <>The registry port listens on <Code>127.0.0.1</Code> by default. Use a <DocLink href="/docs/registry#reach">custom domain</DocLink>, or set <Code>REGISTRY_PUBLISH_ADDRESS=0.0.0.0</Code> and recreate the registry container.</>],
           ["Manual push: http: server gave HTTP response to HTTPS client", <><Code>REGISTRY_PUBLIC_HOST</Code> isn&apos;t localhost, without TLS. Add it to <Code>insecure-registries</Code>, or set up a TLS reverse proxy.</>],
           ["Disk still full after deleting tags", <>Run Garbage collect, or Clean now in the disk strip at the top of the Docker page.</>],
           ["A “0 tags” repository won’t disappear even after Garbage collect", "Garbage collect never deletes the repository itself, only unused blobs. Use the Delete image button on that repository's header row."],

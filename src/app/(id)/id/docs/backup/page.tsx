@@ -148,7 +148,7 @@ export default function Page() {
           </Ul>
         </Step>
         <Step title="Simpan">
-          <P>Jadwal langsung didaftarkan ulang tanpa restart API. Zona waktu cron = UTC.</P>
+          <P>Jadwal langsung didaftarkan ulang tanpa restart API. Cron memakai zona waktu API: UTC kecuali <Code>TZ</Code> diisi di <Code>.env.dist</Code>; form menampilkan zona yang dipakai.</P>
         </Step>
       </Steps>
 

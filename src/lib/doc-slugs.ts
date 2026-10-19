@@ -21,6 +21,7 @@ export const DOC_SLUGS: readonly { id: string; en: string }[] = [
   { id: "domain", en: "domain" },
   { id: "domain-panel", en: "panel-domain" },
   { id: "environment", en: "environment" },
+  { id: "vps-baru", en: "fresh-vps" },
   { id: "instalasi", en: "installation" },
   { id: "jobs", en: "jobs" },
   { id: "konfigurasi-proxy", en: "proxy-configuration" },

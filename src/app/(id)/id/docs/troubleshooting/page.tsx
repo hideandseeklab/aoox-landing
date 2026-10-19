@@ -285,8 +285,8 @@ const LAINNYA: Row[] = [
   ],
   [
     <>Job jalan pada jam yang salah</>,
-    "Zona waktu API = UTC.",
-    "Geser jam di cron (WIB = UTC+7).",
+    "Zona waktu API = UTC kecuali TZ diisi.",
+    <>Isi <Code>TZ=Asia/Jakarta</Code> (zonamu) di <Code>.env.dist</Code> lalu buat ulang container api, atau geser jam di cron (WIB = UTC+7).</>,
   ],
   [
     <>Job: <em>container not running</em></>,

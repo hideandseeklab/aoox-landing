@@ -22,6 +22,11 @@ export const DOCS_NAV: DocGroup[] = [
         description: "Apa itu aoox dan bagaimana dokumentasi ini disusun.",
       },
       {
+        href: "/id/docs/vps-baru",
+        title: "Mulai dari VPS baru",
+        description: "Panduan lengkap dari VPS kosong sampai panel aktif di domain sendiri.",
+      },
+      {
         href: "/id/docs/instalasi",
         title: "Instalasi",
         description: "Menjalankan aoox di server sendiri dengan Docker Compose.",
@@ -209,6 +214,11 @@ export const DOCS_NAV_EN: DocGroup[] = [
         href: "/docs",
         title: "Overview",
         description: "What aoox is and how these docs are organized.",
+      },
+      {
+        href: "/docs/fresh-vps",
+        title: "Start from a fresh VPS",
+        description: "A complete walkthrough from a brand-new VPS to the panel on your own domain.",
       },
       {
         href: "/docs/installation",

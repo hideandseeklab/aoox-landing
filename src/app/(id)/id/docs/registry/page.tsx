@@ -100,12 +100,15 @@ export default function Page() {
             bisa diganti setelahnya tanpa hapus lalu aktifkan ulang.
           </P>
         </Step>
-        <Step title="Simpan kredensial yang ditampilkan sekali">
+        <Step title="Simpan kredensialnya">
           <P>
-            Username <Code>aoox</Code> dan password acak hanya tampil
-            sekali — klik <strong>Sudah saya simpan</strong> setelah mencatatnya.
-            Deploy dari dashboard <strong>tidak</strong> membutuhkannya; kredensial
-            ini untuk push manual dari mesin lain.
+            Username <Code>aoox</Code> dan password acak ditampilkan saat
+            registry diaktifkan — klik <strong>Sudah saya simpan</strong>{" "}
+            setelah mencatatnya. Deploy dari dashboard <strong>tidak</strong>{" "}
+            membutuhkannya; kredensial ini untuk push manual dari mesin lain.
+            Kalau terlupa, owner dan admin bisa{" "}
+            <DocLink href="/id/docs/registry#password">menampilkannya lagi</DocLink>,
+            dan owner bisa meresetnya tanpa kehilangan image.
           </P>
         </Step>
       </Steps>
@@ -116,6 +119,16 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
         head={["Env (.env.dist)", "Default", "Keterangan"]}
         rows={[
           [<Code key="1">REGISTRY_PORT</Code>, "5000", "Port host registry."],
+          [
+            <Code key="3">REGISTRY_PUBLISH_ADDRESS</Code>,
+            <>kosong (<Code>127.0.0.1</Code>)</>,
+            <>
+              Antarmuka jaringan yang didengarkan port host. Default-nya
+              membuat registry hanya bisa dijangkau <strong>dari server ini</strong>;
+              isi <Code>0.0.0.0</Code> agar mesin lain bisa push lewat IP
+              (lihat di bawah).
+            </>,
+          ],
           [
             <Code key="2">REGISTRY_PUBLIC_HOST</Code>,
             "localhost",
@@ -129,6 +142,46 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
           ],
         ]}
       />
+
+      <span id="jangkauan" />
+      <H3>Siapa yang bisa menjangkau port 5000</H3>
+      <P>
+        Mulai rilis setelah 0.1.0-alpha.12 port host registry di-bind ke{" "}
+        <Code>127.0.0.1</Code> secara default, jadi hanya server ini yang bisa
+        push ke <Code>localhost:5000</Code> (deploy, <Code>docker push</Code>{" "}
+        dari host sendiri, dan panel tidak terpengaruh: API menjangkau registry
+        lewat jaringan internal <Code>aoox</Code>). Sebelumnya port itu
+        mendengarkan di semua antarmuka, sehingga registry berpassword
+        terbuka ke internet lewat HTTP biasa. Kartu menampilkan{" "}
+        <em>hanya server ini</em> di samping alamat selama itu berlaku. Untuk
+        push dari mesin lain, pilih salah satu:
+      </P>
+      <Ul>
+        <li>
+          <strong>Beri domain kustom</strong> (disarankan, di bawah): HTTPS
+          lewat proxy, tidak ada port lain yang perlu dibuka.
+        </li>
+        <li>
+          <strong>Buka port lewat IP:</strong> isi{" "}
+          <Code>REGISTRY_PUBLISH_ADDRESS=0.0.0.0</Code> di <Code>.env.dist</Code>,
+          restart stack (<Code>docker compose ... up -d</Code>), lalu buat ulang
+          container registry (aktifkan ulang, atau terapkan/hapus domain
+          kustom). Kartu lalu menampilkan alamat yang dipakai mesin lain
+          (<Code>REGISTRY_PUBLIC_HOST</Code> atau IP publik server ini). Ini
+          HTTP biasa, jadi mesin-mesin itu perlu mencantumkan alamatnya di{" "}
+          <Code>insecure-registries</Code>, dan password adalah satu-satunya
+          penghalang antara registry dan internet — lebih baik pakai domain.
+        </li>
+      </Ul>
+      <Callout kind="warn" title="Memperbarui instalasi yang sudah ada">
+        Binding hanya berubah saat container registry <strong>dibuat ulang</strong>.
+        Setelah memperbarui aoox, registry yang sudah ada tetap mendengarkan di
+        semua antarmuka sampai kamu mengaktifkannya ulang atau menerapkan/menghapus
+        domain kustomnya. Selama itu kartu menampilkan alamat yang bisa dijangkau
+        mesin lain. Membuat ulang tidak menghapus data dan kredensial. Kalau kamu
+        push ke <Code>IP:5000</Code> dari laptop atau CI, itu berhenti bekerja
+        setelahnya kecuali port dibuka seperti di atas atau beralih ke domain.
+      </Callout>
 
       <H3>Domain kustom</H3>
       <P>
@@ -150,11 +203,33 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
       <Pre>{`aoox registry domain --set registry.example.com`}</Pre>
       <P>
         Setelah domain aktif, <Code>docker login registry.example.com</Code>{" "}
-        (tanpa port — HTTPS standar). Port host tetap terbuka untuk akses via
-        IP:port seperti sebelumnya. Hapus dengan{" "}
+        (tanpa port — HTTPS standar). Port host tetap di-bind sesuai pengaturan di
+        atas (loopback secara default). Hapus domain dengan{" "}
         <Code>aoox registry domain --clear</Code> atau tombol{" "}
         <strong>Hapus domain</strong> di dashboard.
       </P>
+
+      <span id="password" />
+      <H3>Menampilkan atau mereset password</H3>
+      <Ul>
+        <li>
+          <strong>Tampilkan password</strong> (ikon mata di kartu Registry
+          lokal, owner dan admin) membaca lagi password yang tersimpan; tersembunyi
+          sendiri setelah semenit dan setiap penampilan tercatat di audit log.
+        </li>
+        <li>
+          <strong>Reset password</strong> (owner) membuat password baru, menulis
+          ulang file login registry, dan me-restart container sebentar.{" "}
+          <strong>Image tidak disentuh.</strong> Setiap klien dan job CI yang
+          memakai password lama harus menjalankan <Code>docker login</Code>{" "}
+          lagi. Kalau ada yang gagal di tengah jalan, password lama tetap
+          berlaku.
+        </li>
+        <li>
+          Lewat CLI: <Code>aoox registry password --show</Code> atau{" "}
+          <Code>aoox registry password --reset --yes</Code>.
+        </li>
+      </Ul>
 
       <H3>Melihat & membersihkan isi</H3>
       <Ul>
@@ -201,7 +276,8 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
       <P>
         Supaya disk tidak penuh oleh image lama, aoox punya cleanup
         otomatis yang berjalan tiap malam
-        pukul <Code>04:30</Code> (UTC) dan bisa dipicu manual.
+        pukul <Code>04:30</Code> (zona waktu server, UTC kecuali kamu mengisi{" "}
+        <Code>TZ</Code>) dan bisa dipicu manual.
       </P>
       <Table
         head={["Yang dibersihkan", "Aturan"]}

@@ -161,7 +161,8 @@ export default function Page() {
             barisnya; matikan untuk menjeda jadwal otomatis (Run tetap bisa
             dipakai manual). Job tanpa cron tidak punya switch. Jadwal
             didaftarkan langsung tanpa restart API; zona waktu mengikuti
-            container API (UTC di image distribusi).
+            container API (UTC kecuali <Code>TZ</Code> diisi di{" "}
+            <Code>.env.dist</Code>; form menampilkan zona yang dipakai).
           </P>
         </Step>
       </Steps>
@@ -248,7 +249,7 @@ export default function Page() {
         rows={[
           ["Run gagal: container not running", "Target Di container tapi aplikasi stopped. Pakai Container terpisah atau start aplikasinya."],
           ["command not found", "Image tidak punya binary itu (mis. curl di alpine minimal). Pakai wget, atau tambahkan ke Dockerfile."],
-          ["Jadwal tidak jalan pada jam yang diharapkan", "Zona waktu API = UTC. Geser jam di cron (WIB = UTC+7)."],
+          ["Jadwal tidak jalan pada jam yang diharapkan", <>API berjalan dalam UTC kecuali <Code>TZ</Code> diisi di <Code>.env.dist</Code> (mis. <Code>TZ=Asia/Jakarta</Code>, lalu buat ulang container api). Form menampilkan zona yang dipakai; atau geser jam di cron (WIB = UTC+7).</>],
           ["Job tetap failed padahal perintah sukses", <>Exit code terakhir ≠ 0 — mis. <Code>grep</Code> tanpa hasil. Akhiri dengan <Code>|| true</Code> bila memang tidak masalah.</>],
         ]}
       />

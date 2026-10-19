@@ -76,6 +76,12 @@ export default function Page() {
         ))}
       </dl>
 
+      <Callout>
+        <strong>Brand-new server?</strong> Start with the{" "}
+        <DocLink href="/docs/fresh-vps">fresh VPS guide</DocLink>: SSH, a sudo
+        user, firewall, then this install, all the way to a domain with HTTPS.
+      </Callout>
+
       <H2 id="one-command">Fastest path: one command</H2>
       <P>
         For a fresh Linux VPS with nothing installed yet — installs Docker

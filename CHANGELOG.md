@@ -8,6 +8,15 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Added
+
+- **Docs: start from a fresh VPS (English and Indonesian)**: a new walkthrough page (`/docs/fresh-vps`, `/id/docs/vps-baru`) from a brand-new VPS to the panel on a domain: choosing a VPS (amd64 and arm64 from the release after 0.1.0-alpha.12; the published alpha.12 images are amd64 only), first SSH login, updates, a sudo user with SSH key login, timezone, swap, ufw (and why Docker-published ports bypass it), installing the CLI and `aoox install`, the first owner account, the panel domain with HTTPS, closing ports 3000/3001, and what to do afterwards. The Installation page links to it.
+- **Docs: registry address, password and time zone (English and Indonesian)**: the Registry page explains the new loopback-only port 5000 binding (`REGISTRY_PUBLISH_ADDRESS`, the custom-domain alternative, the upgrade note that the binding changes only when the registry container is recreated), how to show and reset the registry password, and a Troubleshooting row for `docker push` to `IP:5000` being refused. The CLI page lists `aoox registry password`. The fresh VPS guide, Jobs, Backup and Troubleshooting pages describe the `TZ` option for schedules.
+
+### Changed
+
+- **`install-cli.sh` explains the non-root install**: when it installs to `~/.local/bin` (no root, no passwordless sudo) it now ends with a note that `sudo aoox install` will not find the binary (sudo's `secure_path` skips that folder) and the two fixes: re-run with `sudo sh`, or `sudo ~/.local/bin/aoox install`.
+
 ## [0.1.0-alpha.12] - 2026-10-17
 
 ### Changed

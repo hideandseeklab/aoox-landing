@@ -75,6 +75,12 @@ export default function Page() {
         ))}
       </dl>
 
+      <Callout>
+        <strong>Server baru?</strong> Mulai dari{" "}
+        <DocLink href="/id/docs/vps-baru">panduan VPS baru</DocLink>: SSH, user
+        sudo, firewall, lalu instalasi ini, sampai domain dengan HTTPS.
+      </Callout>
+
       <H2 id="satu-perintah">Cara tercepat: satu perintah</H2>
       <P>
         Untuk VPS Linux baru yang masih kosong — memasang Docker (bila belum

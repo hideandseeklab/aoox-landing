@@ -161,7 +161,8 @@ export default function Page() {
             row; turn it off to pause the automatic schedule (Run still works
             manually). Jobs without a cron show no switch. The schedule is
             registered immediately, no API restart needed; the timezone follows
-            the API container (UTC in the distribution image).
+            the API container (UTC unless <Code>TZ</Code> is set in{" "}
+            <Code>.env.dist</Code>; the form shows the zone in use).
           </P>
         </Step>
       </Steps>
@@ -249,7 +250,7 @@ export default function Page() {
         rows={[
           ["Run fails: container not running", "Target is In the container but the application is stopped. Use Separate container, or start the application."],
           ["command not found", "The image doesn't have that binary (e.g. curl on minimal alpine). Use wget, or add it to the Dockerfile."],
-          ["Schedule doesn't run at the expected time", "The API's timezone is UTC. Offset the hour in the cron expression accordingly."],
+          ["Schedule doesn't run at the expected time", <>The API runs in UTC unless <Code>TZ</Code> is set in <Code>.env.dist</Code> (e.g. <Code>TZ=Asia/Jakarta</Code>, then recreate the api container). The form shows the zone in use; otherwise offset the hour.</>],
           ["Job stays failed even though the command succeeded", <>The last exit code was ≠ 0 — e.g. <Code>grep</Code> with no matches. End with <Code>|| true</Code> if that&apos;s actually fine.</>],
         ]}
       />

@@ -284,8 +284,8 @@ const OTHER: Row[] = [
   ],
   [
     <>A job runs at the wrong time</>,
-    "The API's timezone is UTC.",
-    "Adjust the cron's hour accordingly.",
+    "The API's timezone is UTC unless TZ is set.",
+    <>Set <Code>TZ=Asia/Jakarta</Code> (your zone) in <Code>.env.dist</Code> and recreate the api container, or adjust the cron&apos;s hour.</>,
   ],
   [
     <>Job: <em>container not running</em></>,

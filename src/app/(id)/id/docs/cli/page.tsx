@@ -76,6 +76,11 @@ const COMMANDS = [
     flags: "--set, --clear",
   },
   {
+    cmd: "aoox registry password",
+    what: "Menampilkan alamat, username, dan password registry self-hosted (owner/admin), atau mereset password (owner) tanpa menyentuh image.",
+    flags: "--show, --reset, --yes/-y",
+  },
+  {
     cmd: "aoox update",
     what: "Memperbarui CLI aoox itu sendiri dari npm (menggantikan update panel yang lama — lihat aoox update panel).",
     flags: "--check",

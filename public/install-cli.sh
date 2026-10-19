@@ -215,3 +215,15 @@ else
 fi
 printf '\naoox %s installed. Run: %s/aoox --help\n' "$VERSION" "$BIN_DIR"
 printf 'Uninstall: %s\n' "$uninstall_hint"
+
+# `aoox install` (the panel) must run as root, but sudo resets PATH to its own
+# secure_path, which does not include ~/.local/bin: right after a per-user
+# install, `sudo aoox install` fails with "command not found". Say so now.
+if [ "$BIN_DIR" = "$USER_BIN_DIR" ] && [ "$(id -u)" != "0" ]; then
+  printf '\nNote: aoox was installed for your user only, at %s/aoox.\n' "$BIN_DIR"
+  printf 'sudo does not search %s, so `sudo aoox install` will fail with "command not found".\n' "$BIN_DIR"
+  printf 'Pick one:\n'
+  printf '  1) install system-wide:  curl -fsSL https://aoox.dev/install-cli.sh | sudo sh\n'
+  printf '  2) keep this install and give sudo the full path:  sudo %s/aoox install\n' "$BIN_DIR"
+  printf '     (or: sudo "$(command -v aoox)" install)\n'
+fi
