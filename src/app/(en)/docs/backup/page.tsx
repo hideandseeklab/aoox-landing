@@ -197,6 +197,14 @@ export default function Page() {
           daemon.
         </li>
         <li>Backing up while the app is writing can capture a half-written file — schedule it during quiet hours.</li>
+        <li>
+          Deleting a database (<strong>Delete with data</strong>) or a project
+          (<strong>Also delete data</strong>) also deletes its database and
+          volume backup files on the server and their S3 copies. Without that
+          option the files are kept as a safety net, but they stay in the{" "}
+          <Code>aoox_backups</Code> volume and are no longer listed in the
+          dashboard; remove them by hand when you no longer need them.
+        </li>
       </Ul>
 
       <H2 id="instance">Instance backup (the panel itself)</H2>

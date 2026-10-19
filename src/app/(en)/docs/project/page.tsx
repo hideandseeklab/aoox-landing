@@ -179,7 +179,7 @@ export default function Page() {
         rows={[
           [<strong key="a">admin</strong>, "Everything a developer can, plus manage members and delete the project."],
           [<strong key="d">developer</strong>, "Applications, databases, stacks, domains, mounts, jobs, backups."],
-          [<strong key="v">viewer</strong>, "Read only — status, logs, metrics, backup list (no export or backup download)."],
+          [<strong key="v">viewer</strong>, "Read only — status, logs, metrics, backup list. No database passwords, no database rows, no export or backup download."],
         ]}
       />
       <Ul>
@@ -279,12 +279,17 @@ export default function Page() {
           ["Application volume mounts", "Kept, listed as orphaned too.", "Deleted."],
           ["Volumes a compose file declares itself", "Kept, but not listed as orphaned. Remove them from the terminal with docker volume rm.", "Deleted."],
           ["Compose mounts you added in aoox", "Kept, listed as orphaned.", "Deleted."],
+          ["Backups of its databases and application volumes", <>Kept: the files stay in the <Code>aoox_backups</Code> volume on the server (and any S3 copies stay on the destination). They are no longer listed in the dashboard.</>, "Deleted: the local files and their S3 copies."],
         ]}
       />
       <Callout kind="warn" title="This cannot be undone">
         Applications, databases, and stacks are removed for good. Download any
-        backups you still need first: the backup records go with the project
-        (backup files on S3 stay where they are).
+        backups you still need first: the backup records go with the project,
+        and with <strong>Also delete data</strong> the backup files and their S3
+        copies go too. Without it the files are kept, but nothing in the
+        dashboard lists them any more; remove them by hand when you no longer
+        need them (for example{" "}
+        <Code>docker run --rm -v aoox_backups:/backups busybox:stable rm -rf /backups/&lt;folder&gt;</Code>).
       </Callout>
       <P>
         If aoox cannot reach the Docker daemon (or a remote server) while

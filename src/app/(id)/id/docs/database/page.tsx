@@ -242,6 +242,9 @@ export default function Page() {
       <P>
         Tab <strong>Ringkasan</strong> menampilkan keduanya beserta kredensial
         (disamarkan, bisa disalin) dan <Code>DATABASE_URL</Code> siap tempel.
+        Viewer project melihat host, port, database, dan user tetapi tidak
+        pernah password maupun URL-nya, dan tab Data menampilkan nama tabel dan
+        kolom tanpa barisnya (Redis dan Valkey: tidak ada, key adalah data).
       </P>
 
       <H2 id="database-tambahan">Database tambahan di server yang sama</H2>
@@ -273,7 +276,7 @@ export default function Page() {
           ["Batas sumber daya", "Kartu Batas sumber daya", "Berlaku langsung; mencabut batas = container dibuat ulang (restart singkat)."],
           ["Ganti versi (tag)", "—", "Belum ada dari UI. Buat database baru, restore backup ke sana."],
           ["Konfigurasi engine", "Tab Mount", "File mount ke path config; container di-provision ulang."],
-          ["Hapus", "Panel database", "Dengan atau tanpa menghapus volume. Daftar backup ikut terhapus (cascade); file di S3 juga."],
+          ["Hapus", "Panel database", "Dengan atau tanpa menghapus volume. Daftar backup ikut terhapus. Dengan volume (Hapus dengan data) berkas backup di server beserta salinan S3-nya ikut terhapus; tanpa itu berkasnya dibiarkan di volume backup dan tidak lagi tampil."],
         ]}
       />
 

@@ -175,7 +175,7 @@ export default function Page() {
         rows={[
           [<strong key="a">admin</strong>, "Semua yang bisa developer + kelola anggota dan hapus project."],
           [<strong key="d">developer</strong>, "Aplikasi, database, stack, domain, mount, jobs, backup."],
-          [<strong key="v">viewer</strong>, "Baca saja — status, log, metrik, daftar backup (tanpa ekspor atau unduh backup)."],
+          [<strong key="v">viewer</strong>, "Baca saja — status, log, metrik, daftar backup. Tanpa password database, tanpa baris data database, tanpa ekspor atau unduh backup."],
         ]}
       />
       <Ul>
@@ -273,12 +273,17 @@ export default function Page() {
           ["Mount volume aplikasi", "Dibiarkan, juga muncul sebagai yatim.", "Dihapus."],
           ["Volume yang dideklarasikan sendiri oleh file compose", "Dibiarkan, tetapi tidak ditampilkan sebagai yatim. Hapus dari terminal dengan docker volume rm.", "Dihapus."],
           ["Mount compose yang Anda tambah di aoox", "Dibiarkan, muncul sebagai yatim.", "Dihapus."],
+          ["Backup database dan volume aplikasinya", <>Dibiarkan: berkasnya tetap di volume <Code>aoox_backups</Code> di server (salinan S3 tetap di tujuan). Tidak lagi tampil di dashboard.</>, "Dihapus: berkas lokal beserta salinan S3-nya."],
         ]}
       />
       <Callout kind="warn" title="Tidak bisa dibatalkan">
         Aplikasi, database, dan stack dihapus permanen. Unduh dulu backup yang
-        masih diperlukan: catatan backup ikut terhapus bersama project (file
-        backup di S3 tetap ada).
+        masih diperlukan: catatan backup ikut terhapus bersama project, dan
+        dengan <strong>Hapus juga datanya</strong> berkas backup beserta salinan
+        S3-nya ikut terhapus. Tanpa itu berkasnya dibiarkan, tetapi tidak ada
+        lagi yang menampilkannya di dashboard; hapus manual bila sudah tidak
+        diperlukan (misalnya{" "}
+        <Code>docker run --rm -v aoox_backups:/backups busybox:stable rm -rf /backups/&lt;folder&gt;</Code>).
       </Callout>
       <P>
         Jika aoox tidak bisa menjangkau daemon Docker (atau server remote) saat

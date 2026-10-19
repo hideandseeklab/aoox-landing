@@ -249,6 +249,9 @@ export default function Page() {
       <P>
         The <strong>Overview</strong> tab shows both, along with credentials
         (masked, copyable) and a ready-to-paste <Code>DATABASE_URL</Code>.
+        Project viewers see the host, port, database, and user but never the
+        password or the URL, and the Data tab shows table and column names
+        without rows (Redis and Valkey: nothing, the keys are data).
       </P>
 
       <H2 id="extra-databases">Extra databases on the same server</H2>
@@ -281,7 +284,7 @@ export default function Page() {
           ["Resource limits", "Resource limits card", "Applies immediately; removing a limit recreates the container (a brief restart)."],
           ["Change version (tag)", "—", "Not available from the UI yet. Create a new database and restore a backup into it."],
           ["Engine configuration", "Mount tab", "Mount a file at a config path; the container is re-provisioned."],
-          ["Delete", "Database panel", "With or without deleting the volume. The backup list is deleted too (cascade); S3 files as well."],
+          ["Delete", "Database panel", "With or without deleting the volume. The backup list is deleted too. With the volume (Delete with data) the backup files on the server and their S3 copies are deleted as well; without it they are kept in the backups volume, no longer listed."],
         ]}
       />
 

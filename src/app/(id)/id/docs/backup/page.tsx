@@ -192,6 +192,14 @@ export default function Page() {
           unggah/unduh S3, dan restore dijalankan di daemon server itu.
         </li>
         <li>Backup saat aplikasi sedang menulis bisa menangkap file setengah jadi — jadwalkan di jam sepi.</li>
+        <li>
+          Menghapus database (<strong>Hapus dengan data</strong>) atau project
+          (<strong>Hapus juga datanya</strong>) juga menghapus berkas backup
+          database dan volumenya di server beserta salinan S3-nya. Tanpa opsi
+          itu berkasnya dibiarkan sebagai pengaman, tetapi tetap berada di
+          volume <Code>aoox_backups</Code> dan tidak lagi tampil di dashboard;
+          hapus manual bila sudah tidak diperlukan.
+        </li>
       </Ul>
 
       <H2 id="instance">Backup instance (panel sendiri)</H2>
