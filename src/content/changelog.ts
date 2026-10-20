@@ -30,6 +30,64 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.0-alpha.13",
+    date: "2026-10-20",
+    channel: "alpha",
+    groups: [
+      {
+        kind: "added",
+        items: [
+          {
+            id: "**Cek update image menyebut tag-nya dan mencari versi lebih baru**, dengan opsi **ikuti tag versi** otomatis (tidak pernah melewati versi mayor, dan untuk `0.x` tidak melewati minor). Deploy otomatis yang gagal mengembalikan tag sebelumnya.",
+            en: "**The image update check names the tag and finds newer versions**, with an optional **auto-follow of version tags** (never across a major version, and for `0.x` never a minor). A failed automatic deploy puts the previous tag back.",
+          },
+          {
+            id: "**Tab Logs untuk log container langsung**, tab **Open ports** di halaman Docker, dan pilihan **\"Listens on\"** (publik atau hanya `127.0.0.1`) di setiap port host. Database dan aplikasi admin database kini bawaannya hanya di server ini.",
+            en: "**A Logs tab for live container logs**, an **Open ports** tab on the Docker page, and a **\"Listens on\"** choice (public or `127.0.0.1` only) next to every host port. Databases and database admin apps now default to this server only.",
+          },
+          {
+            id: "**Tampilkan dan reset password registry lokal** (dashboard dan `aoox registry password --show` / `--reset`), plus **image arm64** untuk panel sehingga VPS ARM (Ampere, Graviton) bisa menjalankannya, dan `TZ` agar jadwal berjalan di zona waktu pilihanmu.",
+            en: "**Show and reset the local registry password** (dashboard and `aoox registry password --show` / `--reset`), plus **arm64 images** for the panel so ARM VPSes (Ampere, Graviton) can run it, and `TZ` so schedules run in the time zone you choose.",
+          },
+        ],
+      },
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Port registry lokal kini hanya di 127.0.0.1** secara default (sebelumnya terbuka di semua antarmuka), dan API menjangkaunya lewat jaringan `aoox`. Kartu registry menampilkan alamat dan keterjangkauannya.",
+            en: "**The local registry port is now bound to 127.0.0.1** by default (it used to listen on every interface), and the API reaches it over the `aoox` network. The registry card shows the address and who can reach it.",
+          },
+          {
+            id: "**aoox install --force tidak lagi merusak instalasi yang ada**: file lama dicadangkan lebih dulu dan rahasia dipertahankan. Instalasi benar-benar baru memerlukan `--force --new-secrets --wipe-data` dan konfirmasi ketik, serta menolak jika volume database sisa masih ada.",
+            en: "**aoox install --force no longer breaks an existing installation**: the previous files are backed up first and the secrets are kept. A truly fresh install needs `--force --new-secrets --wipe-data` and a typed confirmation, and refuses when a leftover database volume exists.",
+          },
+          {
+            id: "**Panduan baru \"VPS baru\"** di dokumentasi, dari VPS kosong sampai panel di domain, dengan arsitektur, firewall, dan pemulihan.",
+            en: "**A new \"Fresh VPS\" guide** in the docs, from an empty VPS to the panel on a domain, covering architecture, firewall and recovery.",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "**Viewer proyek tidak lagi membaca data sensitif**: password dan baris database, nilai env dan build arg, token webhook, isi file mount, serta ekspor dan unduhan backup kini ditolak. Menghapus dengan `purge` juga menghapus file backup, volume mount, dan image hasil build.",
+            en: "**Project viewers no longer read sensitive data**: database passwords and rows, env values and build args, webhook tokens, file mount contents, and backup exports and downloads are now refused. Deleting with `purge` also removes backup files, mount volumes and built images.",
+          },
+          {
+            id: "**Database lebih tangguh**: database baru `running` hanya setelah engine menjawab, PostgreSQL 18 bisa start, ada tombol **Retry provisioning** untuk database yang gagal, dan kegagalan tidak lagi bocor sebagai error 500 mentah.",
+            en: "**More robust databases**: a new database is `running` only once its engine answers, PostgreSQL 18 starts, a **Retry provisioning** button recovers a failed database, and failures no longer surface as a bare 500.",
+          },
+          {
+            id: "**Deploy yang gagal lebih jujur**: pesan health check menjelaskan penyebab sebenarnya, versi lama dipulihkan setelah penggantian yang gagal, dan aplikasi yang masih melayani tidak lagi ditandai `error`. Rahasia di log dan keluaran job disamarkan lebih menyeluruh.",
+            en: "**Failed deploys are more honest**: health check messages explain the real cause, the previous version is restored after a failed replace, and a still-serving app is no longer marked `error`. Secrets in logs and job output are masked more thoroughly.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.0-alpha.12",
     date: "2026-10-17",
     channel: "alpha",

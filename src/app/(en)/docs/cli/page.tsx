@@ -894,7 +894,7 @@ The panel will restart for a few seconds to apply it — the connection to this 
         <Code>aoox-web</Code> images on the server).
       </P>
       <Callout kind="warn" title="aoox update changed meaning">
-        Before this release <Code>aoox update</Code> checked the panel. The old
+        Before 0.1.0-alpha.8 <Code>aoox update</Code> checked the panel. The old
         behaviour is now <Code>aoox update panel</Code>; running{" "}
         <Code>aoox update --apply</Code> prints{" "}
         <Code>Panel updates moved to: aoox update panel --apply</Code> and exits

@@ -151,7 +151,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
       <span id="reach" />
       <H3>Who can reach port 5000</H3>
       <P>
-        From the release after 0.1.0-alpha.12 the registry&apos;s host port is bound to{" "}
+        From 0.1.0-alpha.13 the registry&apos;s host port is bound to{" "}
         <Code>127.0.0.1</Code> by default, so only this server can push to{" "}
         <Code>localhost:5000</Code> (deploys, the host&apos;s own{" "}
         <Code>docker push</Code>, and the panel itself are unaffected: the API

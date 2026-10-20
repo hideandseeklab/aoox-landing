@@ -146,7 +146,7 @@ docker push localhost:5000/tools/myimage:1.0`}</Pre>
       <span id="jangkauan" />
       <H3>Siapa yang bisa menjangkau port 5000</H3>
       <P>
-        Mulai rilis setelah 0.1.0-alpha.12 port host registry di-bind ke{" "}
+        Mulai 0.1.0-alpha.13 port host registry di-bind ke{" "}
         <Code>127.0.0.1</Code> secara default, jadi hanya server ini yang bisa
         push ke <Code>localhost:5000</Code> (deploy, <Code>docker push</Code>{" "}
         dari host sendiri, dan panel tidak terpengaruh: API menjangkau registry

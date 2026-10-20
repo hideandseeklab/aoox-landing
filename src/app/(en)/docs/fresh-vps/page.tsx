@@ -109,10 +109,10 @@ export default function Page() {
           <strong>Architecture: x86_64 (amd64) or arm64.</strong> The{" "}
           <Code>hideandseeklab/aoox-api</Code> and{" "}
           <Code>hideandseeklab/aoox-web</Code> images are published for both
-          from the release after 0.1.0-alpha.12. The currently published{" "}
-          <strong>0.1.0-alpha.12 images are amd64 only</strong>, so an ARM VPS
-          (Ampere, Graviton) has to wait for the next release; the aoox CLI
-          already has an arm64 build.
+          from 0.1.0-alpha.13 on.{" "}
+          <strong>0.1.0-alpha.12 and earlier images are amd64 only</strong>, so
+          an ARM VPS (Ampere, Graviton) needs 0.1.0-alpha.13 or later; the aoox
+          CLI already has an arm64 build.
         </li>
         <li>
           <strong>Operating system: a mainstream Linux with systemd, such as

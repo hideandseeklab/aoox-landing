@@ -893,7 +893,7 @@ The panel will restart for a few seconds to apply it — the connection to this 
         di server).
       </P>
       <Callout kind="warn" title="Arti aoox update berubah">
-        Sebelum rilis ini <Code>aoox update</Code> mengecek panel. Perilaku
+        Sebelum 0.1.0-alpha.8 <Code>aoox update</Code> mengecek panel. Perilaku
         lama sekarang jadi <Code>aoox update panel</Code>; menjalankan{" "}
         <Code>aoox update --apply</Code> mencetak{" "}
         <Code>Panel updates moved to: aoox update panel --apply</Code> dan

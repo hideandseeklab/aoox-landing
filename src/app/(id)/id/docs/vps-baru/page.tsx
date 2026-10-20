@@ -109,10 +109,10 @@ export default function Page() {
           <strong>Arsitektur: x86_64 (amd64) atau arm64.</strong> Image{" "}
           <Code>hideandseeklab/aoox-api</Code> dan{" "}
           <Code>hideandseeklab/aoox-web</Code> dipublikasikan untuk keduanya
-          mulai rilis setelah 0.1.0-alpha.12. Image{" "}
-          <strong>0.1.0-alpha.12 yang sekarang terbit hanya amd64</strong>, jadi
-          VPS ARM (Ampere, Graviton) perlu menunggu rilis berikutnya; CLI aoox
-          sendiri sudah punya build arm64.
+          mulai 0.1.0-alpha.13.{" "}
+          <strong>Image 0.1.0-alpha.12 dan sebelumnya hanya amd64</strong>, jadi
+          VPS ARM (Ampere, Graviton) membutuhkan 0.1.0-alpha.13 atau lebih
+          baru; CLI aoox sendiri sudah punya build arm64.
         </li>
         <li>
           <strong>Sistem operasi: Linux umum dengan systemd, misalnya Ubuntu

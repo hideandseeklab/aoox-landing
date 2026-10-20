@@ -8,6 +8,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.13] - 2026-10-20
+
 ### Added
 
 - **Docs: what a viewer cannot see (English and Indonesian)**: the Project page now also lists the webhook URL and secret and the contents of file mounts among the things a viewer does not get.
@@ -444,7 +446,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.12...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.13...HEAD
+[0.1.0-alpha.13]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.12...v0.1.0-alpha.13
 [0.1.0-alpha.12]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.11...v0.1.0-alpha.12
 [0.1.0-alpha.11]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.10...v0.1.0-alpha.11
 [0.1.0-alpha.10]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.9...v0.1.0-alpha.10
