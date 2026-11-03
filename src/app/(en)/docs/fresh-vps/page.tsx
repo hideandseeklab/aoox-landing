@@ -97,12 +97,15 @@ export default function Page() {
         These are conservative guidelines, not measured limits. The panel
         itself is three containers (PostgreSQL, the API and the web app); the
         reverse proxy and the local registry are added when you provision them;
-        and every build runs on the same machine. Builds and your own
+        and every build runs on the same machine. On a 1 vCPU / 2 GB VPS the
+        idle panel stack takes roughly 600-900 MB before any application, and
+        a build (for example <Code>next build</Code>, Nixpacks or Railpack)
+        needs 1-2 GB more and can touch swap even then. Builds and your own
         applications are what use the memory and disk: the Nixpacks helper
         image alone is roughly 350 MB, old images pile up, and a build that
-        runs out of memory simply fails. The Installation page says 1 vCPU / 1
-        GB is enough for aoox itself; budget more as soon as you build on the
-        server.
+        runs out of memory simply fails. 1 GB is only enough for a remote
+        server (no panel, just Docker, the proxy and your applications), with
+        swap.
       </P>
       <Ul>
         <li>

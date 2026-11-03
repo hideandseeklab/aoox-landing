@@ -7,13 +7,13 @@ import type { Lang } from "@/lib/lang"
 import { cn } from "@/lib/utils"
 
 const REQUIREMENTS_ID = [
-  { k: "VPS Linux + root", v: "1 vCPU / 1 GB cukup untuk mulai" },
+  { k: "VPS Linux + root", v: "minimal 2 GB RAM + swap, disarankan 4 GB" },
   { k: "Docker", v: "dipasang otomatis oleh installer bila belum ada" },
   { k: "Port 3000 & 3001", v: "dashboard & API; 80/443 bila pakai domain" },
 ]
 
 const REQUIREMENTS_EN = [
-  { k: "Linux VPS + root", v: "1 vCPU / 1 GB is enough to start" },
+  { k: "Linux VPS + root", v: "2 GB RAM + swap minimum, 4 GB recommended" },
   { k: "Docker", v: "installed automatically by the installer if missing" },
   { k: "Port 3000 & 3001", v: "dashboard & API; 80/443 if you use a domain" },
 ]

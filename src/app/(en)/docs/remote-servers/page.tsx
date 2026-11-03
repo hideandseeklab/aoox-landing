@@ -119,7 +119,7 @@ docker system dial-stdio --help     # must exist (Docker 20.10+)`}</Pre>
 
       <H2 id="steps">Adding a server</H2>
       <Steps>
-        <Step title={<>Settings<PathArrow />Remote servers<PathArrow />New remote server (owner/admin)</>}>
+        <Step title={<>Infrastructure<PathArrow />Remote servers<PathArrow />New remote server (owner/admin)</>}>
           <Table
             head={["Field", "Notes"]}
             rows={[

@@ -98,11 +98,14 @@ export default function Page() {
         Angka ini panduan yang konservatif, bukan batas yang diukur. Panel
         sendiri tiga container (PostgreSQL, API, dan aplikasi web); reverse
         proxy dan registry lokal ditambahkan saat kamu mengaktifkannya; dan
-        setiap build berjalan di mesin yang sama. Yang banyak memakai memori
-        dan disk adalah build dan aplikasimu: image helper Nixpacks saja sekitar
-        350 MB, image lama menumpuk, dan build yang kehabisan memori langsung
-        gagal. Halaman Instalasi menyebut 1 vCPU / 1 GB cukup untuk aoox
-        sendiri; sediakan lebih begitu kamu build di server itu.
+        setiap build berjalan di mesin yang sama. Di VPS 1 vCPU / 2 GB, stack
+        panel yang menganggur sudah memakai sekitar 600-900 MB sebelum ada
+        aplikasi, dan satu build (misalnya <Code>next build</Code>, Nixpacks,
+        atau Railpack) butuh 1-2 GB lagi dan bisa memakai swap walaupun begitu.
+        Yang banyak memakai memori dan disk adalah build dan aplikasimu: image
+        helper Nixpacks saja sekitar 350 MB, image lama menumpuk, dan build
+        yang kehabisan memori langsung gagal. RAM 1 GB hanya cukup untuk server
+        remote (tanpa panel, hanya Docker, proxy, dan aplikasimu), dengan swap.
       </P>
       <Ul>
         <li>

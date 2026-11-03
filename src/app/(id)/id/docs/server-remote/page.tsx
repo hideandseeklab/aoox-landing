@@ -117,7 +117,7 @@ docker system dial-stdio --help     # harus ada (Docker 20.10+)`}</Pre>
 
       <H2 id="langkah">Menambahkan server</H2>
       <Steps>
-        <Step title={<>Settings<PathArrow />Server remote<PathArrow />Server remote baru (owner/admin)</>}>
+        <Step title={<>Infrastruktur<PathArrow />Server remote<PathArrow />Server remote baru (owner/admin)</>}>
           <Table
             head={["Field", "Keterangan"]}
             rows={[

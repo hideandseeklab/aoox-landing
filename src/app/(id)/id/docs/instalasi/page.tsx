@@ -162,9 +162,17 @@ export default function Page() {
         </li>
       </Ul>
       <Callout title="Spesifikasi minimum">
-        1 vCPU / 1 GB RAM cukup untuk aoox sendiri. Kebutuhan sebenarnya
-        ditentukan aplikasi dan database yang kamu deploy; build Nixpacks
-        pertama butuh ± 1 GB ruang disk tambahan untuk base image.
+        Untuk server yang menjalankan panel: minimal 1 vCPU dan 2 GB RAM plus
+        swap, disarankan 4 GB atau lebih (lihat{" "}
+        <DocLink href="/id/docs/vps-baru#pilih">Memilih VPS</DocLink> dan{" "}
+        <DocLink href="/id/docs/vps-baru#dasar">menambah swap</DocLink>). Stack
+        panel yang menganggur (PostgreSQL, API, web, proxy, dan registry) sudah
+        memakai sekitar 600-900 MB sebelum ada aplikasi, dan build image di
+        server butuh 1-2 GB lagi. RAM 1 GB hanya cukup untuk server remote
+        (Infrastruktur<PathArrow />Server remote) yang menjalankan aplikasi tanpa
+        panel; tambahkan swap di sana juga. Kebutuhan sebenarnya ditentukan
+        aplikasi dan database yang kamu deploy; build Nixpacks pertama butuh
+        ± 1 GB ruang disk tambahan untuk base image.
       </Callout>
 
       <H2 id="langkah">Manual: langkah demi langkah</H2>

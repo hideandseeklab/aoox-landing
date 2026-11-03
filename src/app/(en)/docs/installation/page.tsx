@@ -164,9 +164,17 @@ export default function Page() {
         </li>
       </Ul>
       <Callout title="Minimum specs">
-        1 vCPU / 1 GB RAM is enough for aoox itself. Actual requirements
-        depend on the applications and databases you deploy; the first
-        Nixpacks build needs ± 1 GB of extra disk space for the base image.
+        For a server that runs the panel: 1 vCPU and 2 GB RAM plus swap at
+        the very least, 4 GB or more recommended (see{" "}
+        <DocLink href="/docs/fresh-vps#choose">Choosing a VPS</DocLink> and{" "}
+        <DocLink href="/docs/fresh-vps#basics">adding swap</DocLink>). The idle
+        panel stack (PostgreSQL, API, web, proxy and registry) already takes
+        roughly 600-900 MB before any application, and image builds on the
+        server need 1-2 GB more. 1 GB is only enough for a remote server
+        (Infrastructure<PathArrow />Remote servers) that runs applications without the
+        panel; add swap there too. Actual requirements depend on the
+        applications and databases you deploy; the first Nixpacks build needs
+        ± 1 GB of extra disk space for the base image.
       </Callout>
 
       <H2 id="steps">Manual: step by step</H2>
