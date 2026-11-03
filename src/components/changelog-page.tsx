@@ -17,9 +17,8 @@ const COPY = {
   id: {
     title: "Changelog",
     intro:
-      "Perubahan aoox per rilis — panel (API + dashboard), CLI, dan dokumentasi. Versi masih alpha: antarmuka dan perilaku bisa berubah antar rilis.",
+      "Perubahan aoox per rilis — panel (API + dashboard), CLI, dan dokumentasi. aoox kini beta: fitur utama sudah lengkap, tetapi perilaku masih bisa berubah antar rilis. Menemukan bug? Laporkan di GitHub.",
     latest: "Latest",
-    alpha: "alpha",
     release: "Rilis di GitHub",
     full: "CHANGELOG lengkap",
     locale: "id-ID",
@@ -27,9 +26,8 @@ const COPY = {
   en: {
     title: "Changelog",
     intro:
-      "What changed in aoox, release by release — the panel (API + dashboard), the CLI, and the docs. Versions are still alpha: interfaces and behavior may change between releases.",
+      "What changed in aoox, release by release — the panel (API + dashboard), the CLI, and the docs. aoox is in beta: the main features are in place, but behavior may still change between releases. Found a bug? Report it on GitHub.",
     latest: "Latest",
-    alpha: "alpha",
     release: "Release on GitHub",
     full: "Full CHANGELOG",
     locale: "en-US",
@@ -105,7 +103,7 @@ function ChangelogPage({ lang }: { lang: Lang }) {
                   </span>
                 ) : null}
                 <span className="border border-border px-1.5 py-0.5 font-mono text-[0.65rem] text-muted-foreground rounded-sm">
-                  {t.alpha}
+                  {release.channel}
                 </span>
                 <time
                   dateTime={release.date}

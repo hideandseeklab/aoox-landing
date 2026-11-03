@@ -901,10 +901,12 @@ The panel will restart for a few seconds to apply it — the connection to this 
       </Callout>
       <H3>CLI: aoox update</H3>
       <P>
-        Mencari versi terbaru di npm (tanpa login, tanpa panel). Instalasi
-        pre-release mengikuti yang terbaru antara tag <Code>latest</Code> dan{" "}
-        <Code>alpha</Code>; instalasi stabil tidak pernah pindah ke
-        pre-release. Kalau CLI dipasang lewat npm, ia menjalankan{" "}
+        Mencari versi terbaru di npm (tanpa login, tanpa panel). Semua dist-tag npm menjadi kandidat: instalasi pre-release ditawari
+        versi terbaru apa pun labelnya (alpha, lalu beta, lalu rc), sedangkan
+        instalasi stabil hanya melihat versi stabil dan tidak pernah pindah ke
+        pre-release. Selama belum ada versi stabil, pre-release terbit di tag{" "}
+        <Code>latest</Code>, sehingga <Code>npm i -g @hideandseeklab/aoox</Code>{" "}
+        memasang yang terbaru. Kalau CLI dipasang lewat npm, ia menjalankan{" "}
         <Code>npm i -g @hideandseeklab/aoox@&lt;versi&gt;</Code> untukmu; untuk
         tarball standalone atau source checkout ia mencetak perintah persisnya
         alih-alih menebak.

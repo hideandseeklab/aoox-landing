@@ -21,7 +21,7 @@ export interface Release {
   version: string
   /** ISO date (from the CHANGELOG.md header). */
   date: string
-  channel: "alpha"
+  channel: "alpha" | "beta"
   groups: { kind: ChangeKind; items: Highlight[] }[]
 }
 
@@ -29,6 +29,63 @@ export const GITHUB_ORG = "https://github.com/hideandseeklab"
 export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landing"] as const
 
 export const RELEASES: Release[] = [
+  {
+    version: "0.1.0-beta.0",
+    date: "2026-11-03",
+    channel: "beta",
+    groups: [
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Ini rilis beta pertama aoox.** Fitur utama sudah lengkap; perilaku masih bisa berubah antar rilis, jadi laporkan bug yang kamu temui.",
+            en: "**This is the first aoox beta.** The main features are in place; behavior may still change between releases, so please report the bugs you find.",
+          },
+          {
+            id: "**Badge \"update tersedia\" muncul lebih cepat**: versi terbit dicek tiap jam (bukan tiap 6 jam), dan owner yang membuka dashboard memicu pengecekan di latar belakang bila pengecekan terakhir lebih dari 30 menit lalu.",
+            en: "**The \"update available\" badge shows up sooner**: the published-version check now runs hourly instead of every 6 hours, and an owner loading the dashboard triggers a background check when the last one is older than 30 minutes.",
+          },
+          {
+            id: "`aoox update` **mempertimbangkan semua dist-tag npm**: instalasi pre-release ditawari versi terbaru apa pun labelnya (alpha ke beta ke rc), sedangkan instalasi stabil hanya melihat versi stabil. Selama belum ada versi stabil, semua pre-release terbit di tag `latest`.",
+            en: "`aoox update` **considers every npm dist-tag**: a pre-release install is offered the newest version whatever its label (alpha to beta to rc), while a stable install only sees stable versions. Until a stable version exists, every pre-release is published under `latest`.",
+          },
+          {
+            id: "**Langkah update panel lebih rapi**: tiga langkah (mengunduh, memulai ulang, kembali) kini baris terpisah dengan ikon status, keterangan satu baris, dan label Done / Running…, juga rapi di 375 px.",
+            en: "**Panel update steps are tidier**: the three steps (downloading, restarting, back) are now separate rows with a status circle, a one-line detail and a Done / Running… label, and wrap cleanly at 375 px.",
+          },
+          {
+            id: "**Dokumentasi**: catatan bahwa build Railpack pertama paling boros memori dan bisa dihentikan dengan kode 137 di server 2 GB, serta kebutuhan RAM yang kini konsisten di semua halaman (minimum 2 GB plus swap, disarankan 4 GB atau lebih).",
+            en: "**Docs**: a note that the first Railpack build is the most memory-hungry and can be killed with exit code 137 on a 2 GB server, and RAM requirements that now agree on every page (2 GB plus swap minimum, 4 GB or more recommended).",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "**Redeploy blue/green tidak lagi menjatuhkan request**: container lama dihentikan dengan rapi begitu yang baru sehat, router aplikasi punya middleware `retry`, dan proxy memakai dial timeout 1 detik. Terukur di VPS asli: 0 request gagal pada 8 kali redeploy di bawah probe 0,3 detik.",
+            en: "**Blue/green redeploys no longer drop requests**: the old container is stopped gracefully right after the new one is healthy, application routers carry a `retry` middleware, and the proxy uses a 1 s dial timeout. Measured on a real VPS: 0 failed requests over 8 redeploys under a 0.3 s probe loop.",
+          },
+          {
+            id: "**Stack compose baru** `running` **setelah container-nya sehat**, jadi tidak ada lagi 404 sekitar 20 detik setelah deploy; stack yang dihapus kini ikut menghapus volume mount-nya.",
+            en: "**A compose stack is** `running` **only once its containers are healthy**, so there is no more 404 for about 20 seconds after a deploy; deleting a stack now also removes its mount volumes.",
+          },
+          {
+            id: "**Mengubah middleware domain tidak lagi menghapus sertifikat yang diunggah**, dan memindahkan aplikasi ke server lain tidak lagi meninggalkan container lama yang masih melayani atau memutus HTTPS-nya.",
+            en: "**Changing a domain's middlewares no longer removes its uploaded certificate**, and moving an application to another server no longer leaves its old container serving or breaks its HTTPS.",
+          },
+          {
+            id: "**Restore instance tidak lagi gagal dengan error foreign key.**",
+            en: "**Instance restore no longer fails with a foreign key error.**",
+          },
+          {
+            id: "**Password registry tidak lagi dikembalikan saat provisioning atau reset**; dashboard dan `aoox registry password --reset` membacanya lewat rute reveal yang tercatat di audit log.",
+            en: "**Registry passwords are no longer returned by provisioning or reset**; the dashboard and `aoox registry password --reset` read it through the audited reveal route.",
+          },
+        ],
+      },
+    ],
+  },
   {
     version: "0.1.0-alpha.13",
     date: "2026-10-20",

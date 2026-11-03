@@ -902,10 +902,12 @@ The panel will restart for a few seconds to apply it — the connection to this 
       </Callout>
       <H3>The CLI: aoox update</H3>
       <P>
-        Looks up the newest version on npm (no login, no panel needed). A
-        pre-release install follows the newest of the <Code>latest</Code> and{" "}
-        <Code>alpha</Code> tags; a stable install never moves to a
-        pre-release. If the CLI was installed with npm it runs{" "}
+        Looks up the newest version on npm (no login, no panel needed). Every npm dist-tag is a candidate: a pre-release install is offered the
+        newest version whatever its label (alpha, then beta, then rc), while a
+        stable install only sees stable versions and never moves to a
+        pre-release. Until a stable version exists, pre-releases are published
+        under the <Code>latest</Code> tag, so a plain{" "}
+        <Code>npm i -g @hideandseeklab/aoox</Code> installs the newest one. If the CLI was installed with npm it runs{" "}
         <Code>npm i -g @hideandseeklab/aoox@&lt;version&gt;</Code> for you;
         for the standalone tarball or a source checkout it prints the exact
         command to run instead of guessing.
