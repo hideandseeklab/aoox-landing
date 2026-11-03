@@ -8,6 +8,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Changelog page showed raw backticks**: a highlight with a code span inside bold text (for example `**`aoox registry build` and `push`**`) rendered the backticks literally on `/changelog` and `/id/changelog` (24 highlights across both languages). The inline markup is now parsed by a small tokenizer (`src/lib/inline-markup.ts`) that supports code inside bold, several code spans in one bold run and code at the start of an item.
+
 ## [0.1.0-beta.0] - 2026-11-03
 
 ### Changed

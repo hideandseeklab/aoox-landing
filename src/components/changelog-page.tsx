@@ -1,5 +1,7 @@
 import * as React from "react"
 
+import { parseInline, type InlineNode } from "@/lib/inline-markup"
+
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import {
@@ -40,30 +42,29 @@ const KIND_STYLE: Record<ChangeKind, string> = {
   fixed: "border-border text-muted-foreground",
 }
 
-/** Highlights carry a tiny inline markup: `**bold**` and `` `code` `` only. */
+/** Highlights carry a tiny inline markup: bold and code spans (see lib/inline-markup). */
+function renderNodes(nodes: InlineNode[]): React.ReactNode {
+  return nodes.map((node, i) => {
+    if (node.type === "bold") {
+      return (
+        <strong key={i} className="font-semibold text-foreground">
+          {renderNodes(node.children)}
+        </strong>
+      )
+    }
+    if (node.type === "code") {
+      return (
+        <code key={i} className="rounded-sm border border-border bg-muted px-1 py-0.5 font-mono text-[0.85em] font-normal text-foreground">
+          {node.value}
+        </code>
+      )
+    }
+    return <React.Fragment key={i}>{node.value}</React.Fragment>
+  })
+}
+
 function Inline({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).filter(Boolean)
-  return (
-    <>
-      {parts.map((part, i) => {
-        if (part.startsWith("**")) {
-          return (
-            <strong key={i} className="font-semibold text-foreground">
-              {part.slice(2, -2)}
-            </strong>
-          )
-        }
-        if (part.startsWith("`")) {
-          return (
-            <code key={i} className="border border-border bg-muted px-1 py-0.5 font-mono text-[0.85em] text-foreground rounded-sm">
-              {part.slice(1, -1)}
-            </code>
-          )
-        }
-        return <React.Fragment key={i}>{part}</React.Fragment>
-      })}
-    </>
-  )
+  return <>{renderNodes(parseInline(text))}</>
 }
 
 function formatDate(iso: string, locale: string): string {
