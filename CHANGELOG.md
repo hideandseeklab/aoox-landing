@@ -8,10 +8,6 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
-### Fixed
-
-- **Changelog page showed raw backticks**: a highlight with a code span inside bold text (for example `**`aoox registry build` and `push`**`) rendered the backticks literally on `/changelog` and `/id/changelog` (24 highlights across both languages). The inline markup is now parsed by a small tokenizer (`src/lib/inline-markup.ts`) that supports code inside bold, several code spans in one bold run and code at the start of an item.
-
 ## [0.1.0-beta.0] - 2026-11-03
 
 ### Changed
@@ -20,6 +16,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 - **Docs: RAM requirements made consistent**: the Installation page, the fresh VPS guide and the homepage now agree on 2 GB RAM plus swap as the minimum and 4 GB or more as recommended for a server that runs the panel (measured idle stack 600-900 MB before any application; builds need 1-2 GB more), and say that 1 GB is only enough for a remote server without the panel (English and Indonesian).
 - **Product changelog and channel badge**: the changelog pages show each release's own channel (alpha or beta) instead of a fixed "alpha", and the intro describes the beta state (English and Indonesian); the homepage badge shows `v0.1.0-beta.0`.
 - **Docs: `aoox update` and npm dist-tags (English and Indonesian)**: the CLI page says every dist-tag is a candidate (a pre-release install is offered the newest version whatever its label, a stable install only stable ones) and that pre-releases are published under `latest` until a stable version exists.
+
+### Fixed
+
+- **Changelog page showed raw backticks**: a highlight with a code span inside bold text (for example `**`aoox registry build` and `push`**`) rendered the backticks literally on `/changelog` and `/id/changelog` (24 highlights across both languages). The inline markup is now parsed by a small tokenizer (`src/lib/inline-markup.ts`) that supports code inside bold, several code spans in one bold run and code at the start of an item.
 
 ## [0.1.0-alpha.13] - 2026-10-20
 
