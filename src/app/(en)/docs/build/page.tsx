@@ -226,6 +226,14 @@ NIXPACKS_START_CMD=node server.js`}</Pre>
         there&apos;s no per-remote-server BuildKit yet. Applications with a{" "}
         <strong>remote server</strong> must use Dockerfile or Nixpacks.
       </Callout>
+      <Callout title="Memory on small servers">
+        Railpack runs BuildKit, and the first (cold) build is the most
+        memory-hungry. On a 2 GB server it can be killed for lack of memory
+        (exit code 137). Use a server with 4 GB, or make sure{" "}
+        <DocLink href="/docs/fresh-vps#basics">swap is enabled</DocLink> and
+        retry: later builds reuse the BuildKit cache and need far less. You can
+        also build with a Dockerfile instead.
+      </Callout>
       <Ul>
         <li>
           Images produced by Railpack listen on <Code>$PORT</Code> (Railway&apos;s

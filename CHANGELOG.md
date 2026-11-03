@@ -8,6 +8,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+- **Docs: Railpack memory note**: the Build page (English and Indonesian) warns that the first Railpack build is the most memory-hungry and can be killed with exit code 137 on a 2 GB server; use 4 GB or enable swap and retry (later builds reuse the BuildKit cache), or build with a Dockerfile.
 - **Docs: RAM requirements made consistent**: the Installation page, the fresh VPS guide and the homepage now agree on 2 GB RAM plus swap as the minimum and 4 GB or more as recommended for a server that runs the panel (measured idle stack 600-900 MB before any application; builds need 1-2 GB more), and say that 1 GB is only enough for a remote server without the panel (English and Indonesian).
 
 ## [0.1.0-alpha.13] - 2026-10-20

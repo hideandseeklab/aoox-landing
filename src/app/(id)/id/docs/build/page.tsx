@@ -227,6 +227,14 @@ NIXPACKS_START_CMD=node server.js`}</Pre>
         sendiri — belum ada BuildKit per server remote. Aplikasi dengan{" "}
         <strong>server remote</strong> harus memakai Dockerfile atau Nixpacks.
       </Callout>
+      <Callout title="Memori di server kecil">
+        Railpack menjalankan BuildKit, dan build pertama (cold) adalah yang
+        paling banyak memakai memori. Di server 2 GB build bisa dimatikan
+        karena kehabisan memori (exit code 137). Pakai server 4 GB, atau pastikan{" "}
+        <DocLink href="/id/docs/vps-baru#dasar">swap aktif</DocLink> lalu coba
+        lagi: build berikutnya memakai ulang cache BuildKit dan butuh jauh lebih
+        sedikit. Anda juga bisa build dengan Dockerfile.
+      </Callout>
       <Ul>
         <li>
           Image hasil Railpack mendengarkan di <Code>$PORT</Code> (konvensi
