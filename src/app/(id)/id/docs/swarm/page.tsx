@@ -166,6 +166,39 @@ export default function Page() {
         </Step>
       </Steps>
 
+      <H2 id="vpn">Node lewat VPN (WireGuard)</H2>
+      <P>
+        Node di jaringan berbeda bisa digabung lewat terowongan VPN sehingga
+        port swarm tidak terbuka ke internet. Atur ini saat init swarm:
+      </P>
+      <Ul>
+        <li>
+          <strong>Advertise address</strong> = IP tunnel manager (mis.{" "}
+          <Code>10.99.0.1</Code>). Port kontrol <Code>2377</Code> lalu hanya
+          mendengarkan di alamat itu; <strong>Listen address</strong>{" "}
+          menimpanya. Tanpa alamat apa pun, port tetap terbuka di semua
+          interface.
+        </li>
+        <li>
+          <strong>MTU overlay</strong> = MTU tunnel, <Code>1420</Code> untuk
+          WireGuard default. Docker mengurangi 50 untuk header VXLAN, jadi
+          container mendapat <Code>1370</Code>. Tanpa ini overlay mengira
+          jaringannya 1500 (container 1450), dan paket yang lebih besar
+          terbuang di dalam tunnel.
+        </li>
+        <li>
+          Port <Code>2377/tcp</Code>, <Code>7946</Code>, dan{" "}
+          <Code>4789/udp</Code> cukup terjangkau lewat tunnel. Di worker,
+          join dengan{" "}
+          <Code>--advertise-addr &lt;ip-tunnel&gt; --listen-addr &lt;ip-tunnel&gt;:2377</Code>.
+        </li>
+      </Ul>
+      <P>
+        MTU ditetapkan saat jaringan overlay dibuat: untuk mengubahnya di
+        swarm yang sudah ada, kembalikan aplikasi ke mode container, keluar
+        dari swarm, lalu inisialisasi ulang.
+      </P>
+
       <H2 id="node">Mengelola node</H2>
       <Table
         head={["Aksi", "Efek"]}
@@ -234,7 +267,7 @@ export default function Page() {
           ["Log", "Semua task, dari node mana pun."],
           ["Metrik", <>Dijumlahkan dari task yang berjalan <strong>di host</strong> — Engine API tidak bisa membaca task di node lain.</>],
           ["Job & terminal exec", "Hanya task lokal."],
-          ["Notifikasi", <>Watcher memberi tahu bila service bertahan di bawah jumlah replika (task yang tidak pernah start).</>],
+          ["Notifikasi", <>Watcher memberi tahu bila service bertahan di bawah jumlah replika (task yang tidak pernah start), dan watcher lain melaporkan task yang crash di node lain dalam sekitar 30 detik.</>],
           ["Domain", "Traefik swarm provider merutekan ke service, bukan ke container."],
         ]}
       />
@@ -246,6 +279,23 @@ export default function Page() {
         <strong>Settings<PathArrow />Docker Swarm<PathArrow />keluar</strong> (owner). Node lain
         perlu menjalankan <Code>docker swarm leave</Code> sendiri.
       </Callout>
+      <Callout kind="warn" title="Restart Docker setelah keluar">
+        Keluar dari swarm memicu bug Docker (<a
+          href="https://github.com/moby/moby/issues/45144"
+          target="_blank"
+          rel="noreferrer"
+          className="text-foreground underline underline-offset-4"
+        >
+          moby/moby#45144
+        </a>
+        , masih terbuka): DNS internalnya berhenti me-resolve nama container di
+        jaringan bridge untuk container yang sudah berjalan. Panel tetap
+        berfungsi sampai container api-nya dibuat ulang atau di-restart
+        (misalnya oleh update berikutnya), lalu tidak bisa menjangkau{" "}
+        <Code>postgres</Code> dan mati. Begitu keluar, jalankan ini di server;
+        semua container aoox menyala lagi sendiri:
+      </Callout>
+      <Pre>{`sudo systemctl restart docker`}</Pre>
 
       <H2 id="jebakan">Jebakan umum</H2>
       <Table

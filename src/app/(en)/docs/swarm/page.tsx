@@ -167,6 +167,39 @@ export default function Page() {
         </Step>
       </Steps>
 
+      <H2 id="vpn">Nodes over a VPN (WireGuard)</H2>
+      <P>
+        Nodes on different networks can be joined through a VPN tunnel so
+        the swarm ports never face the internet. Set these when you init the
+        swarm:
+      </P>
+      <Ul>
+        <li>
+          <strong>Advertise address</strong> = the manager&apos;s tunnel IP
+          (e.g. <Code>10.99.0.1</Code>). The control port <Code>2377</Code>{" "}
+          then listens on that address only; <strong>Listen address</strong>{" "}
+          overrides it. Without any address it stays on every interface.
+        </li>
+        <li>
+          <strong>Overlay MTU</strong> = the tunnel MTU, <Code>1420</Code>{" "}
+          for WireGuard&apos;s default. Docker takes 50 off for the VXLAN
+          header, so containers get <Code>1370</Code>. Without it the overlay
+          assumes a 1500 network (containers get 1450), and larger packets
+          are dropped inside the tunnel.
+        </li>
+        <li>
+          Ports <Code>2377/tcp</Code>, <Code>7946</Code> and{" "}
+          <Code>4789/udp</Code> only need to be reachable over the tunnel. On
+          the worker, join with{" "}
+          <Code>--advertise-addr &lt;tunnel-ip&gt; --listen-addr &lt;tunnel-ip&gt;:2377</Code>.
+        </li>
+      </Ul>
+      <P>
+        The MTU is fixed when the overlay network is created: to change it on
+        an existing swarm, switch the applications back to container mode,
+        leave the swarm and initialise it again.
+      </P>
+
       <H2 id="node">Managing nodes</H2>
       <Table
         head={["Action", "Effect"]}
@@ -237,7 +270,7 @@ export default function Page() {
           ["Logs", "All tasks, from any node."],
           ["Metrics", <>Summed from tasks running <strong>on the host</strong> — the Engine API can&apos;t read tasks on other nodes.</>],
           ["Job & terminal exec", "Local tasks only."],
-          ["Notifications", <>A watcher alerts when a service stays below its replica count (tasks that never start).</>],
+          ["Notifications", <>A watcher alerts when a service stays below its replica count (tasks that never start), and another reports tasks that crash on other nodes within about 30 seconds.</>],
           ["Domain", "Traefik's swarm provider routes to the service, not to a container."],
         ]}
       />
@@ -249,6 +282,23 @@ export default function Page() {
         <strong>Settings<PathArrow />Docker Swarm<PathArrow />leave</strong> (owner). Other nodes
         need to run <Code>docker swarm leave</Code> themselves.
       </Callout>
+      <Callout kind="warn" title="Restart Docker after leaving">
+        Leaving a swarm triggers a Docker bug (<a
+          href="https://github.com/moby/moby/issues/45144"
+          target="_blank"
+          rel="noreferrer"
+          className="text-foreground underline underline-offset-4"
+        >
+          moby/moby#45144
+        </a>
+        , still open): the embedded DNS stops resolving container names on
+        bridge networks for containers that are already running. The panel
+        keeps working until its api container is recreated or restarted (for
+        example by the next update), then it cannot reach <Code>postgres</Code>{" "}
+        and goes down. Right after leaving, run this on the server; every aoox
+        container starts again by itself:
+      </Callout>
+      <Pre>{`sudo systemctl restart docker`}</Pre>
 
       <H2 id="pitfalls">Common pitfalls</H2>
       <Table
