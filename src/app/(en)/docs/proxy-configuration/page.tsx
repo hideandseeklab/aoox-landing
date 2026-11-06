@@ -148,9 +148,46 @@ export default function Page() {
         if the files on the volume were changed outside aoox.
       </P>
 
+      <H2 id="read-timeout">Read timeout and large uploads</H2>
+      <P>
+        aoox puts <strong>no limit on request body size</strong> in Traefik (no
+        buffering middleware), so a 55 MB upload is not refused for its size.
+        What can cut it off is Traefik&apos;s entrypoint{" "}
+        <Code>readTimeout</Code>: the longest a client may take to send a whole
+        request, body included. Traefik&apos;s default is <strong>60 seconds</strong>;
+        a slow connection that needs longer is disconnected before the
+        application sees the full body.
+      </P>
+      <Ul>
+        <li>
+          Set <strong>Proxy read timeout</strong> under Infrastructure
+          <PathArrow />Environment (owner), or <Code>PROXY_READ_TIMEOUT</Code>{" "}
+          in <Code>.env.dist</Code>: whole seconds (<Code>300</Code>) or a
+          duration (<Code>300s</Code>, <Code>5m</Code>), from 1 to 86400. Empty
+          means Traefik&apos;s default; an invalid value is ignored with a warning in the API log.
+        </li>
+        <li>
+          It is <strong>static</strong> proxy configuration, so it only takes
+          effect when the proxy is installed again: use{" "}
+          <strong>Reinstall proxy</strong> on the Reverse proxy page (a few
+          seconds without service; certificates and routes are kept). The page
+          shows the value the running proxy uses and warns when it differs from
+          the setting.
+        </li>
+        <li>
+          The setting belongs to the panel and is applied to <strong>every proxy
+          aoox installs</strong>, including the ones on remote servers (reinstall those from Remote servers).
+        </li>
+        <li>
+          Something in front of Traefik has its own limits. For example a
+          Cloudflare-proxied (orange cloud) domain caps the request body by plan
+          and gives up on a response after about 100 seconds, whatever you set here.
+        </li>
+      </Ul>
+
       <H2 id="limits">Limits</H2>
       <Ul>
-        <li><strong>Dynamic</strong> configuration only. Static Traefik options (entrypoints, log level, trusted IPs) cannot be changed here.</li>
+        <li><strong>Dynamic</strong> configuration only. Static Traefik options (entrypoints, log level, trusted IPs) cannot be changed here, except the read timeout described above.</li>
         <li>aoox only catches errors Traefik logs. A wrong value that is not reported (for example an invalid service URL) gets through, so test the result after saving.</li>
         <li>A valid configuration can still change routing for every domain on that proxy (your routers can collide with application routes). That is why only the owner can write.</li>
         <li>Remote servers: written the same way, but not tested on a real server yet; make sure the files you need exist on the destination server&apos;s proxy before moving an application.</li>

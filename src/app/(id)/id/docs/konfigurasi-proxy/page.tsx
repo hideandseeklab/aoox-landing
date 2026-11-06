@@ -147,9 +147,45 @@ export default function Page() {
         volume berubah di luar aoox.
       </P>
 
+      <H2 id="read-timeout">Batas waktu baca dan unggahan besar</H2>
+      <P>
+        aoox <strong>tidak membatasi ukuran body request</strong> di Traefik
+        (tanpa middleware buffering), jadi unggahan 55 MB tidak ditolak karena
+        ukurannya. Yang bisa memutusnya adalah <Code>readTimeout</Code> pada
+        entrypoint Traefik: waktu terlama yang boleh dipakai klien untuk
+        mengirim satu request utuh, termasuk body. Bawaan Traefik{" "}
+        <strong>60 detik</strong>; koneksi lambat yang butuh lebih lama diputus
+        sebelum aplikasi menerima body selengkapnya.
+      </P>
+      <Ul>
+        <li>
+          Atur <strong>Batas waktu baca proxy</strong> di Infrastruktur
+          <PathArrow />Environment (owner), atau <Code>PROXY_READ_TIMEOUT</Code>{" "}
+          di <Code>.env.dist</Code>: detik utuh (<Code>300</Code>) atau durasi
+          (<Code>300s</Code>, <Code>5m</Code>), 1 sampai 86400. Kosong berarti
+          bawaan Traefik; nilai yang tidak valid diabaikan dengan peringatan di log API.
+        </li>
+        <li>
+          Ini konfigurasi <strong>statis</strong> proxy, jadi baru berlaku
+          setelah proxy dipasang ulang: pakai <strong>Pasang ulang proxy</strong>{" "}
+          di halaman Reverse proxy (beberapa detik tanpa layanan; sertifikat dan
+          rute tetap). Halaman itu menampilkan nilai yang dipakai proxy yang
+          berjalan dan memperingatkan bila berbeda dari pengaturan.
+        </li>
+        <li>
+          Pengaturan ini milik panel dan diterapkan ke <strong>setiap proxy yang
+          dipasang aoox</strong>, termasuk di server remote (pasang ulang dari Server remote).
+        </li>
+        <li>
+          Sesuatu di depan Traefik punya batas sendiri. Misalnya domain lewat
+          proxy Cloudflare (awan oranye) membatasi ukuran body menurut paket dan
+          menyerah menunggu respons sekitar 100 detik, berapa pun nilai di sini.
+        </li>
+      </Ul>
+
       <H2 id="batas">Batas</H2>
       <Ul>
-        <li>Hanya konfigurasi <strong>dinamis</strong>. Opsi statis Traefik (entrypoint, level log, IP tepercaya) tidak bisa diubah dari sini.</li>
+        <li>Hanya konfigurasi <strong>dinamis</strong>. Opsi statis Traefik (entrypoint, level log, IP tepercaya) tidak bisa diubah dari sini, kecuali batas waktu baca di atas.</li>
         <li>aoox hanya menangkap galat yang dicatat Traefik. Nilai yang keliru tetapi tidak dilaporkan (mis. URL service yang tidak valid) lolos, jadi uji hasilnya setelah menyimpan.</li>
         <li>Konfigurasi yang valid tetap bisa mengubah perutean semua domain di proxy itu (router buatanmu bisa bertabrakan dengan rute aplikasi). Karena itu hanya owner yang boleh menulis.</li>
         <li>Server remote: ditulis lewat jalur yang sama, tetapi belum diuji pada server sungguhan; pastikan berkas yang dibutuhkan ada di proxy server tujuan sebelum memindahkan aplikasi.</li>

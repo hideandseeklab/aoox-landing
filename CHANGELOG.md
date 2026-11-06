@@ -10,6 +10,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ### Added
 
+- **Docs: Traefik read timeout and large uploads (English and Indonesian)**: the Proxy configuration page has a "Read timeout and large uploads" section (aoox sets no body-size limit, Traefik's 60 s default `readTimeout`, the `PROXY_READ_TIMEOUT` / Environment field, reinstalling the proxy to apply it, every proxy aoox installs, and the limits of a Cloudflare-proxied domain in front).
 - **Docs: restart Docker after leaving a swarm (English and Indonesian)**: the Swarm page's "Leaving swarm" section has a warning about the Docker DNS bug (moby/moby#45144): the symptom, the `sudo systemctl restart docker` command and the upstream issue link.
 - **Docs: Swarm nodes over a VPN (English and Indonesian)**: the Swarm page has a "Nodes over a VPN (WireGuard)" section (advertise address = tunnel IP, control port listening on it, overlay MTU = the tunnel MTU, ports only reachable over the tunnel, how to change the MTU) and mentions the crashed-task notification for other nodes.
 
