@@ -38,7 +38,7 @@ const CATALOG = [
   { id: "ghost", ver: "5", purpose: "Publishing platform", fills: "Public URL", service: "ghost :2368" },
   { id: "n8n", ver: "1.x", purpose: "Workflow automation", fills: "Public host; protocol & timezone have defaults", service: "n8n :5678" },
   { id: "uptime-kuma", ver: "1", purpose: "Uptime monitoring", fills: "—", service: "uptime-kuma :3001" },
-  { id: "minio", ver: "latest", purpose: "S3 object storage — can serve as a backup destination", fills: "Root user has a default", service: "Console :9001 · S3 API :9000" },
+  { id: "rustfs", ver: "1.0", purpose: "S3 object storage (Apache-2.0) — can serve as a backup destination", fills: "— (access and secret keys are generated); for a backup destination give it a domain on any service", service: "Console :9001 · S3 API :9000" },
   { id: "gitea", ver: "1.24", purpose: "Lightweight Git hosting", fills: "Public URL", service: "gitea :3000" },
   { id: "vaultwarden", ver: "1.37", purpose: "Password manager (Bitwarden compatible)", fills: "Public URL (HTTPS)", service: "vaultwarden :80" },
   { id: "umami", ver: "2.20", purpose: "Privacy-friendly web analytics + PostgreSQL", fills: "—", service: "umami :3000" },
@@ -54,7 +54,7 @@ const CATALOG = [
 const NEXT = [
   { title: "Compose stacks", description: "Operations, env, and limits that also apply to templates.", href: "/docs/compose" },
   { title: "Proxy & domain", description: "Traefik + DNS for the hostname you fill in.", href: "/docs/domain" },
-  { title: "Backup & restore", description: "Use MinIO from a template as an S3 destination.", href: "/docs/backup#s3" },
+  { title: "Backup & restore", description: "Use RustFS from a template as an S3 destination.", href: "/docs/backup#s3" },
   { title: "Project", description: "Where a template stack lives.", href: "/docs/project" },
 ]
 
@@ -147,7 +147,7 @@ export default function Page() {
               ["Project & Name", "The name becomes the stack's slug; the compose project = aoox-<slug>."],
               [
                 "Hostname per service + HTTPS",
-                "One row per exposable service (e.g. MinIO has two: Console and API). Leave blank if you don't want a domain.",
+                "One row per exposable service (e.g. RustFS has two: Console and API). Leave blank if you don't want a domain.",
               ],
               [
                 "Host port per service",
@@ -187,7 +187,7 @@ export default function Page() {
         <Step title="Verify">
           <P>
             Open the hostname you set up. For the initial admin credentials
-            (e.g. the MinIO root password, DB password), check the stack&apos;s env
+            (e.g. the RustFS access and secret keys, DB password), check the stack&apos;s env
             under the <strong>Settings</strong> tab — generated values are
             stored there.
           </P>
@@ -238,7 +238,7 @@ Variables   : DB_PASSWORD (blank → generated)
           ["400: required variable is empty", "The public URL/host/domain or the admin email (Directus) hasn't been filled in."],
           ["Admin links point to localhost / http", "The public URL doesn't match the domain, or n8n's protocol is still http. Fix the stack env, redeploy."],
           ["Deploy stays in deploying", "The first image pull. Wait, and check the Last action log for progress."],
-          ["MinIO can't be used as a backup destination", <>Set up a domain/hostname for the <em>S3 API</em> service (port 9000), or use the internal endpoint <Code>http://&lt;container&gt;:9000</Code> — the stack must be on the <Code>aoox</Code> network.</>],
+          ["RustFS can't be used as a backup destination", <>Give the stack a domain on any service (the console is fine) so it joins the <Code>aoox</Code> network, then use <Code>http://&lt;container name&gt;:9000</Code> as the endpoint (path-style on, bucket created first). A port bound to <Code>127.0.0.1</Code> is not reachable from containers; a public host port works but exposes S3 to the internet.</>],
         ]}
       />
 

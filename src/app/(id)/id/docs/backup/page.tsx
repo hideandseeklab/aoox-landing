@@ -52,7 +52,7 @@ const NEXT = [
   { title: "Managed database", description: "Database yang di-backup.", href: "/id/docs/database" },
   { title: "Mount", description: "Volume aplikasi yang bisa di-backup.", href: "/id/docs/mount" },
   { title: "Notifikasi", description: "Kabar saat backup gagal.", href: "/id/docs/notifikasi" },
-  { title: "Template", description: "MinIO dari katalog sebagai tujuan S3 lokal.", href: "/id/docs/template" },
+  { title: "Template", description: "RustFS dari katalog sebagai tujuan S3 lokal.", href: "/id/docs/template" },
 ]
 
 export default function Page() {
@@ -252,7 +252,7 @@ export default function Page() {
             head={["Field", "Keterangan"]}
             rows={[
               ["Nama", "Label."],
-              ["Endpoint", <>Kosong = AWS S3. Isi untuk MinIO, Wasabi, R2, dsb. — mis. <Code>https://minio.example.com</Code>, atau <Code>http://aoox-minio-…:9000</Code> untuk MinIO yang berjalan di aoox (satu network).</>],
+              ["Endpoint", <>Kosong = AWS S3. Isi untuk MinIO, Wasabi, R2, dsb. — mis. <Code>https://minio.example.com</Code>, atau <Code>http://&lt;container stack&gt;:9000</Code> untuk server S3 seperti RustFS yang berjalan di aoox (lihat kotak di bawah).</>],
               ["Region", <>Wajib untuk AWS (<Code>us-east-1</Code>); provider lain biasanya bebas.</>],
               ["Bucket", "Harus sudah ada — aoox tidak membuatnya."],
               ["Prefix", <>Opsional, mis. <Code>aoox/prod</Code>.</>],
@@ -275,6 +275,19 @@ export default function Page() {
           </P>
         </Step>
       </Steps>
+      <Callout title="Memakai RustFS (atau stack lain) sebagai tujuan">
+        Unggahan berjalan di container helper pada network <Code>aoox</Code>,
+        jadi server S3 harus terjangkau dari sana. Stack compose baru masuk
+        ke network itu bila minimal satu service-nya punya domain: beri stack
+        RustFS sebuah domain pada service apa pun (konsol pilihan yang baik),
+        lalu pakai <Code>{"http://<nama container>:9000"}</Code> sebagai
+        endpoint (nama ada di halaman stack,{" "}
+        <Code>{"aoox-<slug stack>-rustfs-1"}</Code>), path-style aktif, dan
+        bucket dibuat dulu. Jangan mengandalkan port host yang terikat ke{" "}
+        <Code>127.0.0.1</Code>: container tidak bisa menjangkaunya. Port host
+        publik bisa lewat <Code>{"http://<IP server>:9000"}</Code>, tetapi
+        membuka S3 ke internet.
+      </Callout>
       <Callout>
         Gagal unggah membuat backup berstatus <Code>failed</Code> dan memicu
         notifikasi — file lokal tetap ada untuk diunduh. Tujuan dipasang
@@ -300,7 +313,7 @@ export default function Page() {
         rows={[
           ["Backup 20 byte / kosong", "Sudah ditangani (status dump dipropagasi). Bila terjadi, cek pesan error backup — biasanya kredensial atau database belum siap."],
           ["Tes tujuan S3 gagal: NoSuchBucket", "Bucket belum dibuat, atau region salah (AWS)."],
-          ["Tes gagal ke MinIO lokal", "Endpoint memakai localhost dari dalam container. Pakai nama container + port 9000, atau domain publiknya."],
+          ["Tes gagal ke server S3 lokal (RustFS, MinIO)", "Endpoint memakai localhost dari dalam container, atau stack tidak punya domain sehingga tidak ada di network aoox. Beri stack domain pada service apa pun, lalu pakai nama container + port 9000, atau domain publiknya."],
           ["Restore Redis: data tidak berubah", "Backup Redis 7 dipasang sebagai base AOF; pastikan container benar-benar di-start ulang (status running kembali) dan tidak ada tulisan baru sebelum restore selesai."],
           ["Volume backup penuh", "Turunkan jumlah simpan, hapus backup manual lama, atau pindahkan ke S3 dan hapus lokal."],
         ]}

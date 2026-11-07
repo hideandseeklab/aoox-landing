@@ -52,7 +52,7 @@ const NEXT = [
   { title: "Managed database", description: "The database being backed up.", href: "/docs/database" },
   { title: "Mounts", description: "Application volumes that can be backed up.", href: "/docs/mount" },
   { title: "Notifications", description: "Get notified when a backup fails.", href: "/docs/notifications" },
-  { title: "Templates", description: "MinIO from the catalog as a local S3 destination.", href: "/docs/template" },
+  { title: "Templates", description: "RustFS from the catalog as a local S3 destination.", href: "/docs/template" },
 ]
 
 export default function Page() {
@@ -259,7 +259,7 @@ export default function Page() {
             head={["Field", "Detail"]}
             rows={[
               ["Name", "A label."],
-              ["Endpoint", <>Empty = AWS S3. Fill in for MinIO, Wasabi, R2, etc. — e.g. <Code>https://minio.example.com</Code>, or <Code>http://aoox-minio-…:9000</Code> for a MinIO running inside aoox (same network).</>],
+              ["Endpoint", <>Empty = AWS S3. Fill in for MinIO, Wasabi, R2, etc. — e.g. <Code>https://minio.example.com</Code>, or <Code>http://&lt;stack container&gt;:9000</Code> for an S3 server such as RustFS running inside aoox (see the callout below).</>],
               ["Region", <>Required for AWS (<Code>us-east-1</Code>); other providers usually don&apos;t care.</>],
               ["Bucket", "Must already exist — aoox doesn't create it."],
               ["Prefix", <>Optional, e.g. <Code>aoox/prod</Code>.</>],
@@ -283,6 +283,20 @@ export default function Page() {
           </P>
         </Step>
       </Steps>
+      <Callout title="Using RustFS (or any stack) as the destination">
+        The upload runs in a helper container on the <Code>aoox</Code>{" "}
+        network, so the S3 server must be reachable from there. A compose
+        stack only joins that network when at least one of its services has
+        a domain: give the RustFS stack a domain on any service (the console
+        is a good choice), then use{" "}
+        <Code>{"http://<container name>:9000"}</Code> as the endpoint (the
+        name is on the stack page, <Code>{"aoox-<stack slug>-rustfs-1"}</Code>),
+        with path-style on and the bucket created first. Don&apos;t rely on a
+        host port bound to <Code>127.0.0.1</Code>: containers can&apos;t reach
+        it. A public host port works through{" "}
+        <Code>{"http://<server IP>:9000"}</Code>, but it exposes S3 to the
+        internet.
+      </Callout>
       <Callout>
         A failed upload leaves the backup as <Code>failed</Code> and triggers
         a notification — the local file is still there to download. The
@@ -308,7 +322,7 @@ export default function Page() {
         rows={[
           ["A 20-byte / empty backup", "Already handled (the dump's exit status is propagated). If it happens, check the backup's error message — usually credentials or a database that wasn't ready."],
           ["S3 destination test fails: NoSuchBucket", "The bucket hasn't been created, or the region is wrong (AWS)."],
-          ["Test fails against a local MinIO", "The endpoint is using localhost from inside the container. Use the container name + port 9000, or its public domain."],
+          ["Test fails against a local S3 server (RustFS, MinIO)", "The endpoint is using localhost from inside the container, or the stack has no domain so it isn't on the aoox network. Give the stack a domain on any service, then use the container name + port 9000, or its public domain."],
           ["Redis restore: data doesn't change", "A Redis 7 backup is mounted as the base AOF; make sure the container was actually restarted (status back to running) and nothing wrote to it before the restore finished."],
           ["Backup volume is full", "Lower the keep count, delete old manual backups, or move to S3 and delete locally."],
         ]}

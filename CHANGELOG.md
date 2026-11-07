@@ -14,6 +14,11 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 - **Docs: restart Docker after leaving a swarm (English and Indonesian)**: the Swarm page's "Leaving swarm" section has a warning about the Docker DNS bug (moby/moby#45144): the symptom, the `sudo systemctl restart docker` command and the upstream issue link.
 - **Docs: Swarm nodes over a VPN (English and Indonesian)**: the Swarm page has a "Nodes over a VPN (WireGuard)" section (advertise address = tunnel IP, control port listening on it, overlay MTU = the tunnel MTU, ports only reachable over the tunnel, how to change the MTU) and mentions the crashed-task notification for other nodes.
 
+### Changed
+
+- **Docs: MinIO template replaced by RustFS (English and Indonesian)**: the Templates, Backup and Troubleshooting pages list RustFS (`minio/minio` is no longer pullable from Docker Hub); an existing MinIO server is still a valid S3 endpoint. The Backup page has a callout on using RustFS as the destination (give the stack a domain so it joins the aoox network, endpoint `http://<container name>:9000`, no loopback port, public port exposes S3); the Templates and Troubleshooting entries match.
+- **Docs: Nixpacks cache wording (English and Indonesian)**: the Build page and FAQ say nixpacks has no cache mounts but still reuses unchanged Docker layers.
+
 ## [0.1.0-beta.0] - 2026-11-03
 
 ### Changed

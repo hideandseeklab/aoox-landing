@@ -116,9 +116,9 @@ export default function Page() {
         head={["", "Dockerfile", "Nixpacks", "Railpack", "Static site"]}
         rows={[
           ["Setup", "Write your own Dockerfile", "Zero config", "Zero config", "Build command + output folder"],
-          ["Rebuilds", "Docker layer cache", "Always from scratch (--no-cache)", "BuildKit cache between deploys", "Always from scratch"],
+          ["Rebuilds", "Docker layer cache", "Layer cache only (no cache mounts, --no-cache)", "BuildKit cache between deploys", "Layer cache only"],
           ["First build", "Depends on the base image", "Slow: base ± 350 MB + nix-env", "284 seconds (helper + BuildKit, once)", "Fast: node alpine + nginx alpine"],
-          ["Later builds", "Fast if layers are unchanged", "Still slow, re-downloads dependencies", "±8 seconds — dependencies from cache", "Always from scratch"],
+          ["Later builds", "Fast if layers are unchanged", "Fast if layers are unchanged; slow when dependency files change", "±8 seconds — dependencies from cache", "Fast if layers are unchanged"],
           ["Image control", "Full", "Limited to nixpacks options", "Limited to railpack options", "None — nginx :80"],
           ["Remote server", "Yes", "Yes", "No — host only", "Yes"],
           ["Best for", "Production, lean images", "Prototypes, repos without a Dockerfile", "Repeated deploys without a Dockerfile", "SPAs, landing pages, docs sites"],
@@ -181,9 +181,11 @@ CMD ["node", "server.js"]`}</Pre>
             version.
           </li>
           <li>
-            <strong>No dependency cache between builds</strong> —{" "}
+            <strong>No dependency cache mounts</strong> —{" "}
             <Code>--no-cache</Code> is required because nixpacks&apos; cache mounts need
-            BuildKit. Every deploy re-downloads dependencies.
+            BuildKit. The Docker layer cache still applies: a redeploy with an unchanged
+            source reuses every layer (seconds), while a change to dependency files
+            rebuilds from that layer and downloads dependencies again.
           </li>
           <li>
             The source tree is held in the API&apos;s memory during the build (without{" "}
@@ -305,8 +307,8 @@ EXPOSE 80`}</Pre>
         </li>
         <li>
           The build runs through the same helper as Nixpacks (clone in a
-          container, tar context) — private repos are safe, but there&apos;s no cache
-          between builds.
+          container, tar context) — private repos are safe, but there are no dependency
+          cache mounts (unchanged layers are still reused).
         </li>
         <li>
           Runtime env is useless for static files, and <strong>Build args aren&apos;t

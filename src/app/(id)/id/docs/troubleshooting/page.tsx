@@ -213,9 +213,9 @@ const DATABASE: Row[] = [
     "Baca pesan error di baris backup; cek strip disk di atas halaman Docker.",
   ],
   [
-    <>Tes tujuan S3: <em>NoSuchBucket</em> / gagal ke MinIO lokal</>,
+    <>Tes tujuan S3: <em>NoSuchBucket</em> / gagal ke server S3 lokal</>,
     "Bucket belum ada, region salah, atau endpoint memakai localhost dari container.",
-    <>Buat bucket; pakai nama container MinIO + :9000 sebagai endpoint.</>,
+    <>Buat bucket; pakai nama container S3 (mis. RustFS) + :9000 sebagai endpoint.</>,
   ],
   [
     <>Data browser: 400 hanya satu statement</>,
@@ -438,7 +438,7 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
           ["5000", "Registry lokal", <Code key="3">REGISTRY_PORT</Code>],
           ["80 / 443", "Reverse proxy (ACME butuh 80)", <><Code>PROXY_HTTP_PORT</Code> / <Code>PROXY_HTTPS_PORT</Code></>],
           ["22", "SSH ke host (terminal)", <Code key="5">TERMINAL_SSH_PORT</Code>],
-          ["9000 / 9001", "MinIO dari template (API / Console)", "—"],
+          ["9000 / 9001", "RustFS dari template (API S3 / Console)", "—"],
         ]}
       />
 

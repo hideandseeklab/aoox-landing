@@ -114,9 +114,9 @@ export default function Page() {
         head={["", "Dockerfile", "Nixpacks", "Railpack", "Situs statis"]}
         rows={[
           ["Setup", "Tulis Dockerfile sendiri", "Nol konfigurasi", "Nol konfigurasi", "Perintah build + folder output"],
-          ["Build ulang", "Cache layer Docker", "Selalu dari awal (--no-cache)", "Cache BuildKit antar deploy", "Selalu dari awal"],
+          ["Build ulang", "Cache layer Docker", "Hanya cache layer (tanpa cache mount, --no-cache)", "Cache BuildKit antar deploy", "Hanya cache layer"],
           ["Build pertama", "Tergantung base image", "Lambat: base ± 350 MB + nix-env", "284 detik (helper + BuildKit sekali)", "Cepat: node alpine + nginx alpine"],
-          ["Build berikutnya", "Cepat bila layer tak berubah", "Tetap lambat, unduh ulang dependensi", "±8 detik — dependensi dari cache", "Selalu dari awal"],
+          ["Build berikutnya", "Cepat bila layer tak berubah", "Cepat bila layer tak berubah; lambat bila file dependensi berubah", "±8 detik — dependensi dari cache", "Cepat bila layer tak berubah"],
           ["Kontrol image", "Penuh", "Terbatas ke opsi nixpacks", "Terbatas ke opsi railpack", "Tidak ada — nginx :80"],
           ["Server remote", "Ya", "Ya", "Tidak — host saja", "Ya"],
           ["Cocok untuk", "Produksi, image ramping", "Prototipe, repo tanpa Dockerfile", "Deploy berulang tanpa Dockerfile", "SPA, landing page, dokumentasi"],
@@ -181,9 +181,12 @@ CMD ["node", "server.js"]`}</Pre>
             aoox.
           </li>
           <li>
-            <strong>Tidak ada cache dependensi antar build</strong> —{" "}
+            <strong>Tidak ada cache mount dependensi</strong> —{" "}
             <Code>--no-cache</Code> wajib karena cache mount nixpacks butuh
-            BuildKit. Setiap deploy mengunduh ulang dependensi.
+            BuildKit. Cache layer Docker tetap berlaku: deploy ulang dengan
+            source yang sama memakai ulang semua layer (hitungan detik),
+            sedangkan perubahan file dependensi membangun ulang dari layer itu
+            dan mengunduh dependensi lagi.
           </li>
           <li>
             Source tree ditahan di memori API selama build (tanpa{" "}
@@ -306,8 +309,8 @@ EXPOSE 80`}</Pre>
         </li>
         <li>
           Build berjalan lewat helper yang sama dengan Nixpacks (clone di
-          container, konteks tar) — repo privat aman, tapi tanpa cache antar
-          build.
+          container, konteks tar) — repo privat aman, tapi tanpa cache mount
+          dependensi (layer yang tidak berubah tetap dipakai ulang).
         </li>
         <li>
           Env runtime tidak berguna untuk file statis, dan <strong>Build args

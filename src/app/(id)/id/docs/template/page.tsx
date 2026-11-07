@@ -38,7 +38,7 @@ const CATALOG = [
   { id: "ghost", ver: "5", untuk: "Platform publishing", isi: "URL publik", service: "ghost :2368" },
   { id: "n8n", ver: "1.x", untuk: "Automasi workflow", isi: "Host publik; protokol & zona waktu punya default", service: "n8n :5678" },
   { id: "uptime-kuma", ver: "1", untuk: "Monitoring uptime", isi: "—", service: "uptime-kuma :3001" },
-  { id: "minio", ver: "latest", untuk: "Object storage S3 — bisa jadi tujuan backup", isi: "Root user punya default", service: "Console :9001 · API S3 :9000" },
+  { id: "rustfs", ver: "1.0", untuk: "Object storage S3 (Apache-2.0) — bisa jadi tujuan backup", isi: "— (access key dan secret key dibuat otomatis); untuk tujuan backup beri domain pada service apa pun", service: "Console :9001 · API S3 :9000" },
   { id: "gitea", ver: "1.24", untuk: "Git hosting ringan", isi: "URL publik", service: "gitea :3000" },
   { id: "vaultwarden", ver: "1.37", untuk: "Password manager (kompatibel Bitwarden)", isi: "URL publik (HTTPS)", service: "vaultwarden :80" },
   { id: "umami", ver: "2.20", untuk: "Analitik web ramah privasi + PostgreSQL", isi: "—", service: "umami :3000" },
@@ -54,7 +54,7 @@ const CATALOG = [
 const NEXT = [
   { title: "Stack compose", description: "Operasi, env, dan batasan yang juga berlaku untuk template.", href: "/id/docs/compose" },
   { title: "Proxy & domain", description: "Traefik + DNS untuk hostname yang diisi.", href: "/id/docs/domain" },
-  { title: "Backup & restore", description: "Pakai MinIO dari template sebagai tujuan S3.", href: "/id/docs/backup#s3" },
+  { title: "Backup & restore", description: "Pakai RustFS dari template sebagai tujuan S3.", href: "/id/docs/backup#s3" },
   { title: "Project", description: "Tempat stack template tinggal.", href: "/id/docs/project" },
 ]
 
@@ -145,7 +145,7 @@ export default function Page() {
               ["Project & Nama", "Nama jadi slug stack; project compose = aoox-<slug>."],
               [
                 "Hostname per service + HTTPS",
-                "Satu baris per service yang bisa diekspos (mis. MinIO punya dua: Console dan API). Kosongkan bila tidak ingin domain.",
+                "Satu baris per service yang bisa diekspos (mis. RustFS punya dua: Console dan API). Kosongkan bila tidak ingin domain.",
               ],
               [
                 "Port host per service",
@@ -183,7 +183,7 @@ export default function Page() {
         <Step title="Verifikasi">
           <P>
             Buka hostname yang dipasang. Untuk kredensial admin awal (mis.
-            MinIO root password, DB password) lihat env stack di tab{" "}
+            access key dan secret key RustFS, DB password) lihat env stack di tab{" "}
             <strong>Pengaturan</strong> — nilai yang di-generate tersimpan di
             sana.
           </P>
@@ -232,7 +232,7 @@ Variabel    : DB_PASSWORD (kosong → di-generate)
           ["400: variabel wajib kosong", "URL/Host/Domain publik atau email admin (Directus) belum diisi."],
           ["Tautan admin mengarah ke localhost / http", "URL publik tidak sama dengan domain, atau protokol n8n masih http. Perbaiki env stack, deploy ulang."],
           ["Deploy lama di deploying", "Pull image pertama kali. Tunggu; cek Log aksi terakhir untuk progres."],
-          ["MinIO tidak bisa dipakai sebagai tujuan backup", <>Pasang domain/hostname untuk service <em>API S3</em> (port 9000), atau pakai endpoint internal <Code>http://&lt;container&gt;:9000</Code> — stack harus di network <Code>aoox</Code>.</>],
+          ["RustFS tidak bisa dipakai sebagai tujuan backup", <>Beri stack sebuah domain pada service apa pun (konsol boleh) agar masuk ke network <Code>aoox</Code>, lalu pakai <Code>http://&lt;nama container&gt;:9000</Code> sebagai endpoint (path-style aktif, bucket dibuat dulu). Port yang terikat ke <Code>127.0.0.1</Code> tidak terjangkau dari container; port host publik bisa tetapi membuka S3 ke internet.</>],
         ]}
       />
 

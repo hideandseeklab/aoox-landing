@@ -44,7 +44,7 @@ const FAQ_ID: Faq[] = [
       <>
         Bisa, pilih cara build <strong>Nixpacks</strong>: stack dideteksi
         otomatis dan Dockerfile dibuat untukmu. Build pertama lebih lama dan
-        tanpa cache dependensi — <A href="/id/docs/build">detail di Cara build</A>.
+        tanpa cache mount dependensi (layer yang tidak berubah tetap dipakai ulang) — <A href="/id/docs/build">detail di Cara build</A>.
       </>
     ),
   },
@@ -132,7 +132,7 @@ const FAQ_EN: Faq[] = [
       <>
         Yes, pick the <strong>Nixpacks</strong> build method: the stack is
         auto-detected and a Dockerfile is generated for you. The first build
-        is slower and has no dependency cache —{" "}
+        is slower and has no dependency cache mounts (unchanged layers are still reused) —{" "}
         <A href="/docs/build">details in the build docs</A>.
       </>
     ),

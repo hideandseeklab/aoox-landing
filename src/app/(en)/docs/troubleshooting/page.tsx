@@ -212,9 +212,9 @@ const DATABASE: Row[] = [
     "Credentials/DB weren't ready yet, or the disk is full.",
     "Read the error message on the backup row; check the disk strip at the top of the Docker page."],
   [
-    <>Testing an S3 destination: <em>NoSuchBucket</em> / fails against local MinIO</>,
+    <>Testing an S3 destination: <em>NoSuchBucket</em> / fails against a local S3 server</>,
     "The bucket doesn't exist, the region is wrong, or the endpoint uses localhost from inside the container.",
-    <>Create the bucket; use the MinIO container&apos;s name + :9000 as the endpoint.</>,
+    <>Create the bucket; use the S3 container&apos;s name (e.g. RustFS) + :9000 as the endpoint.</>,
   ],
   [
     <>Data browser: 400, only one statement allowed</>,
@@ -439,7 +439,7 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
           ["5000", "Local registry", <Code key="3">REGISTRY_PORT</Code>],
           ["80 / 443", "Reverse proxy (ACME needs 80)", <><Code>PROXY_HTTP_PORT</Code> / <Code>PROXY_HTTPS_PORT</Code></>],
           ["22", "SSH to the host (terminal)", <Code key="5">TERMINAL_SSH_PORT</Code>],
-          ["9000 / 9001", "MinIO from the template (API / Console)", "—"],
+          ["9000 / 9001", "RustFS from the template (S3 API / Console)", "—"],
         ]}
       />
 
