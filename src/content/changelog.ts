@@ -30,6 +30,43 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.0-beta.2",
+    date: "2026-11-07",
+    channel: "beta",
+    groups: [
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Instalasi yang dipin ke tag versi diberi tahu dengan jujur**: \"Apply update\" di kartu Update aoox dinonaktifkan dan `aoox update panel --apply` menolak (keluar dengan kode non-nol), karena `pull` hanya mengambil tag yang sama. Dashboard dan CLI menjelaskan langkah mengganti pin (atur `API_IMAGE` / `WEB_IMAGE` di `.env.dist` atau hapus, lalu `sudo aoox reinstall`).",
+            en: "**A version-pinned install is told honestly what to do**: \"Apply update\" on the Update aoox card is disabled and `aoox update panel --apply` refuses (exits non-zero), because `pull` would only fetch the same tag. The dashboard and the CLI explain how to change the pin (set `API_IMAGE` / `WEB_IMAGE` in `.env.dist` or remove them, then `sudo aoox reinstall`).",
+          },
+          {
+            id: "**`aoox reinstall` selalu membuat backup**: `.env.dist` dan file compose disalin ke `<dir>/backups/<waktu>/` sebelum ada yang diubah, juga saat tidak ada yang perlu ditulis ulang.",
+            en: "**`aoox reinstall` always writes a backup**: `.env.dist` and the compose files are copied to `<dir>/backups/<time>/` before anything changes, even when nothing needs rewriting.",
+          },
+          {
+            id: "**Dokumentasi**: 2 GB dengan swap adalah minimum yang sudah diuji, cara meng-upgrade instalasi yang dipin, dan persyaratan CLI untuk `aoox install`.",
+            en: "**Docs**: 2 GB with swap is the tested minimum, how to upgrade a pinned install, and the CLI requirements for `aoox install`.",
+          },
+          {
+            id: "**Satu migrasi database**: rilis ini punya satu migrasi yang berjalan otomatis saat startup dan hanya menambah dua kolom.",
+            en: "**One database migration**: this release has one migration that runs automatically at startup and only adds two columns.",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "**Tidak ada lagi \"update tersedia\" palsu setelah mengubah pin**: pengecekan update kini menyimpan baseline digest terpisah untuk setiap referensi image, jadi memin atau melepas pin tidak lagi menampilkan update yang tidak bisa diambil `pull`. Pengecekan pertama setelah upgrade hanya membuat baseline baru.",
+            en: "**No more false \"update available\" after pinning or unpinning**: the update check now keeps a separate digest baseline per image reference, so pinning or unpinning no longer shows an update that `pull` could never deliver. The first check after upgrading only sets a fresh baseline.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.0-beta.1",
     date: "2026-11-07",
     channel: "beta",

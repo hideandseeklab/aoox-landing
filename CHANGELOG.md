@@ -8,6 +8,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-beta.2] - 2026-11-07
+
 ### Changed
 
 - **Server size docs (en + id)**: the Choosing a VPS page and the Installation minimum-specs note now say 2 GB with swap is the tested minimum (a cold Nixpacks build takes about 5 minutes; a cold Railpack build can run out of memory) and advise 4 GB or more for Railpack or several databases.
@@ -478,7 +480,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.1...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.2...HEAD
+[0.1.0-beta.2]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.1...v0.1.0-beta.2
 [0.1.0-beta.1]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.0...v0.1.0-beta.1
 [0.1.0-beta.0]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.13...v0.1.0-beta.0
 [0.1.0-alpha.13]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.12...v0.1.0-alpha.13
