@@ -165,7 +165,8 @@ export default function Page() {
       </Ul>
       <Callout title="Minimum specs">
         For a server that runs the panel: 1 vCPU and 2 GB RAM plus swap at
-        the very least, 4 GB or more recommended (see{" "}
+        the very least (2 GB with swap is the tested minimum), 4 GB or more
+        recommended, and advised for Railpack builds or several databases (see{" "}
         <DocLink href="/docs/fresh-vps#choose">Choosing a VPS</DocLink> and{" "}
         <DocLink href="/docs/fresh-vps#basics">adding swap</DocLink>). The idle
         panel stack (PostgreSQL, API, web, proxy and registry) already takes

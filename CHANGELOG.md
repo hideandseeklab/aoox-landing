@@ -10,6 +10,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ### Changed
 
+- **Server size docs (en + id)**: the Choosing a VPS page and the Installation minimum-specs note now say 2 GB with swap is the tested minimum (a cold Nixpacks build takes about 5 minutes; a cold Railpack build can run out of memory) and advise 4 GB or more for Railpack or several databases.
 - **Upgrading docs (en + id)**: a pinned install's Update aoox page disables "Apply update" and `--apply` refuses; how to move the pin, and the republished-tag exception.
 - **CLI docs (`aoox update panel`, `aoox reinstall`)**: a version-pinned install is told why `update panel` does not move it and how to change the pin; `reinstall` is documented as always writing its backup folder (`.env.dist` and compose files). English and Indonesian.
 

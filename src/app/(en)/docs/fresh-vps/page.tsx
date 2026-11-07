@@ -94,7 +94,13 @@ export default function Page() {
         ]}
       />
       <P>
-        These are conservative guidelines, not measured limits. The panel
+        2 GB with swap is the tested minimum. On a 1 vCPU / 2 GB Ubuntu VPS
+        with swap, the panel, proxy, registry, Dockerfile, static and Nixpacks
+        builds, databases, backups, remote servers and single-node Swarm all
+        worked; a cold Nixpacks build took about 5 minutes (a warm one 12
+        seconds), while a cold Railpack build can be killed for lack of memory
+        (exit code 137). Use 4 GB or more for Railpack or several databases.
+        The panel
         itself is three containers (PostgreSQL, the API and the web app); the
         reverse proxy and the local registry are added when you provision them;
         and every build runs on the same machine. On a 1 vCPU / 2 GB VPS the

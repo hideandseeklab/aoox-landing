@@ -163,7 +163,8 @@ export default function Page() {
       </Ul>
       <Callout title="Spesifikasi minimum">
         Untuk server yang menjalankan panel: minimal 1 vCPU dan 2 GB RAM plus
-        swap, disarankan 4 GB atau lebih (lihat{" "}
+        swap (2 GB dengan swap adalah minimum yang sudah diuji), disarankan 4 GB
+        atau lebih, terutama untuk build Railpack atau beberapa database (lihat{" "}
         <DocLink href="/id/docs/vps-baru#pilih">Memilih VPS</DocLink> dan{" "}
         <DocLink href="/id/docs/vps-baru#dasar">menambah swap</DocLink>). Stack
         panel yang menganggur (PostgreSQL, API, web, proxy, dan registry) sudah

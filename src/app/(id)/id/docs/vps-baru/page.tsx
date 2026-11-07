@@ -95,7 +95,13 @@ export default function Page() {
         ]}
       />
       <P>
-        Angka ini panduan yang konservatif, bukan batas yang diukur. Panel
+        RAM 2 GB dengan swap adalah minimum yang sudah diuji. Di VPS Ubuntu
+        1 vCPU / 2 GB dengan swap, panel, proxy, registry, build Dockerfile,
+        static dan Nixpacks, database, backup, server remote, dan Swarm satu
+        node semuanya berjalan; build Nixpacks pertama (dingin) memakan sekitar
+        5 menit (build berikutnya 12 detik), sedangkan build Railpack pertama
+        bisa dimatikan karena kehabisan memori (kode keluar 137). Pakai 4 GB
+        atau lebih untuk Railpack atau beberapa database. Panel
         sendiri tiga container (PostgreSQL, API, dan aplikasi web); reverse
         proxy dan registry lokal ditambahkan saat kamu mengaktifkannya; dan
         setiap build berjalan di mesin yang sama. Di VPS 1 vCPU / 2 GB, stack
