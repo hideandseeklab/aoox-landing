@@ -30,6 +30,68 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.0-beta.1",
+    date: "2026-11-07",
+    channel: "beta",
+    groups: [
+      {
+        kind: "added",
+        items: [
+          {
+            id: "**`PROXY_READ_TIMEOUT` untuk upload besar atau lambat**: Traefik memutus request yang butuh lebih dari 60 detik untuk tiba, sehingga upload besar lewat koneksi lambat gagal. Atur lewat env atau kolom \"Proxy read timeout\" di Infrastructure > Environment; kartu Reverse proxy menampilkan nilai yang berjalan, memperingatkan bila berbeda, dan menawarkan \"Reinstall proxy\".",
+            en: "**`PROXY_READ_TIMEOUT` for large or slow uploads**: Traefik cut requests that took longer than 60 seconds to arrive, so a large upload over a slow connection failed. Set it through the env or the \"Proxy read timeout\" field in Infrastructure > Environment; the Reverse proxy card shows the running value, warns when it differs and offers \"Reinstall proxy\".",
+          },
+          {
+            id: "**Swarm lewat VPN**: `swarm init` menerima alamat listen dan MTU overlay (misalnya 1420 untuk WireGuard), dan port kontrol swarm tidak lagi terbuka di semua interface secara bawaan saat ada alamat advertise.",
+            en: "**Swarm over a VPN**: `swarm init` accepts a listen address and an overlay MTU (for example 1420 for WireGuard), and the swarm control port is no longer open on every interface by default when an advertise address is given.",
+          },
+          {
+            id: "**Task yang crash di node lain dilaporkan**: notifikasi container down (dan inbox) kini menyebut node untuk task service yang gagal di node selain manager.",
+            en: "**Crashed tasks on other swarm nodes are reported**: the container-down notification (and the inbox) now names the node for service tasks that fail on a node other than the manager.",
+          },
+        ],
+      },
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Template MinIO diganti RustFS**: `minio/minio` tidak bisa lagi diunduh dari Docker Hub. Server MinIO yang sudah ada tetap berfungsi sebagai tujuan backup; deskripsi template menjelaskan cara menjadikan RustFS tujuan backup (beri stack sebuah domain, lalu pakai nama container dengan port 9000).",
+            en: "**The MinIO template is replaced by RustFS**: `minio/minio` can no longer be pulled from Docker Hub. Existing MinIO servers keep working as backup destinations; the template description explains how to use RustFS as one (give the stack a domain, then use the container name with port 9000).",
+          },
+          {
+            id: "**Alert dengan tombol aksi memakai satu tata letak**: ikon, judul, dan deskripsi di kiri, tombol di kanan dan rata tengah secara vertikal; di ponsel ditumpuk dengan tombol selebar layar.",
+            en: "**Alerts with an action share one layout**: icon, title and description on the left, the buttons on the right and vertically centred; on a phone they stack with full-width buttons.",
+          },
+          {
+            id: "**Keluar dari swarm memperingatkan bug Docker**: dialog konfirmasi dan alert setelahnya meminta `sudo systemctl restart docker` di server, karena DNS Docker berhenti me-resolve nama container (moby/moby#45144).",
+            en: "**Leaving the swarm warns about a Docker bug**: the confirmation dialog and the alert afterwards ask for `sudo systemctl restart docker` on the server, because Docker's DNS stops resolving container names (moby/moby#45144).",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "**Aplikasi mode service (Swarm) kembali ter-route**: router-nya merujuk middleware dengan namespace yang salah sehingga dibuang Traefik dan domain menjawab 404 (regresi beta.0). Perbaikan berlaku pada deploy berikutnya.",
+            en: "**Applications in service (Swarm) mode are routed again**: their routers referenced middlewares in the wrong namespace, so Traefik dropped them and the domain answered 404 (a beta.0 regression). The fix applies from each application's next deploy.",
+          },
+          {
+            id: "**Menyimpan domain panel kini mengaktifkan HTTPS pada proxy yang sudah berjalan tanpa Let's Encrypt**: proxy dibuat ulang sekali dengan email ACME yang disimpan (sertifikat yang sudah terbit tetap ada), dan aplikasi ter-route tidak terjangkau beberapa detik.",
+            en: "**Saving a panel domain now enables HTTPS on a proxy that was already running without Let's Encrypt**: the proxy is recreated once with the saved ACME email (issued certificates survive), and routed apps are unreachable for a few seconds.",
+          },
+          {
+            id: "**Init dan leave swarm tidak lagi kehilangan responsnya saat panel dibuka lewat domainnya**, dan alert \"restart Docker\" setelah leave tampil dengan benar.",
+            en: "**Swarm init and leave no longer lose their response when the panel is opened through its domain**, and the \"restart Docker\" alert after leaving now shows reliably.",
+          },
+          {
+            id: "**Dokumentasi**: catatan cache Nixpacks diluruskan (build ulang tetap memakai layer Docker yang tidak berubah), serta halaman baru tentang timeout baca proxy, node Swarm lewat VPN, dan RustFS.",
+            en: "**Docs**: the Nixpacks cache wording is corrected (rebuilds still reuse unchanged Docker layers), plus new pages and sections on the proxy read timeout, Swarm nodes over a VPN and RustFS.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.0-beta.0",
     date: "2026-11-03",
     channel: "beta",

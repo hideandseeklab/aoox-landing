@@ -8,6 +8,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0-beta.1] - 2026-11-07
+
 ### Added
 
 - **Docs: Traefik read timeout and large uploads (English and Indonesian)**: the Proxy configuration page has a "Read timeout and large uploads" section (aoox sets no body-size limit, Traefik's 60 s default `readTimeout`, the `PROXY_READ_TIMEOUT` / Environment field, reinstalling the proxy to apply it, every proxy aoox installs, and the limits of a Cloudflare-proxied domain in front).
@@ -470,7 +472,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.0...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.1...HEAD
+[0.1.0-beta.1]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.0...v0.1.0-beta.1
 [0.1.0-beta.0]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.13...v0.1.0-beta.0
 [0.1.0-alpha.13]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.12...v0.1.0-alpha.13
 [0.1.0-alpha.12]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-alpha.11...v0.1.0-alpha.12
