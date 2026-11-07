@@ -348,6 +348,16 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         is refreshed too).
       </P>
       <P>
+        On a pinned install the Update aoox page disables{" "}
+        <strong>Apply update</strong> and explains why: pulling the same tag again
+        would not change the version, and <Code>aoox update panel --apply</Code> /
+        the API answer with a refusal instead of reporting success. To move to a
+        newer version, set <Code>API_IMAGE</Code> and <Code>WEB_IMAGE</Code> to the
+        new tag (or remove both lines to follow <Code>:latest</Code>), then run{" "}
+        <Code>sudo aoox reinstall</Code>. The one exception is a pinned tag that was
+        republished under the same name: that can still be applied.
+      </P>
+      <P>
         <strong>Important limitation</strong>: both <Code>aoox update panel</Code> and
         the &ldquo;Apply update&rdquo; button only run <Code>pull</Code> +{" "}
         <Code>up -d</Code> against the <Code>docker-compose.dist.yml</Code> that

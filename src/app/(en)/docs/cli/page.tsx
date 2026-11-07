@@ -942,6 +942,15 @@ Update available. Run with --apply to apply it.
 $ aoox update panel --apply
 Update applied — the panel will restart for a few seconds to apply it.`}</Pre>
       <P>
+        If the install is pinned to a version tag (<Code>API_IMAGE</Code> /{" "}
+        <Code>WEB_IMAGE</Code> in <Code>.env.dist</Code>), a newer published
+        version is shown but never applied by this command: it prints the
+        latest version and how to move the pin (set both variables to the new
+        tag, or remove them to follow <Code>latest</Code>, then run{" "}
+        <Code>sudo aoox reinstall</Code>), and <Code>--apply</Code> refuses
+        instead of reporting success.
+      </P>
+      <P>
         Same as <Code>aoox domain set</Code>, needs <Code>INSTALL_DIR</Code>{" "}
         set. See <DocLink href="/docs/installation#update">Upgrading</DocLink>{" "}
         for the manual, over-SSH alternative.
@@ -965,7 +974,7 @@ $ sudo aoox reinstall`}</Pre>
         rows={[
           [
             "Backup",
-            <>Files that will change are copied to <Code>&lt;dir&gt;/backups/&lt;timestamp&gt;/</Code> (<Code>.env.dist</Code> stays mode 600).</>,
+            <><Code>.env.dist</Code> and the compose files are always copied to <Code>&lt;dir&gt;/backups/&lt;timestamp&gt;/</Code> before anything changes, even when nothing needs changing (<Code>.env.dist</Code> stays mode 600).</>,
           ],
           [
             "Compose",
@@ -982,8 +991,8 @@ $ sudo aoox reinstall`}</Pre>
         ]}
       />
       <P>
-        Safe to run repeatedly: when nothing needs changing, no file is written
-        and no backup is made — the containers are still refreshed. If{" "}
+        Safe to run repeatedly: when nothing needs changing, no file is rewritten
+        (a backup folder is still made) and the containers are refreshed. If{" "}
         <Code>docker-compose.override.yml</Code> uses the <Code>!override</Code>{" "}
         tag (the option <em>Only allow access through the domain</em>) and the
         host&apos;s Docker Compose is older than 2.24.4, the command stops

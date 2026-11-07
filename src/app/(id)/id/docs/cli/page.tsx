@@ -940,6 +940,15 @@ Update available. Run with --apply to apply it.
 $ aoox update panel --apply
 Update applied — the panel will restart for a few seconds to apply it.`}</Pre>
       <P>
+        Bila instalasi di-pin ke tag versi (<Code>API_IMAGE</Code> /{" "}
+        <Code>WEB_IMAGE</Code> di <Code>.env.dist</Code>), versi baru yang
+        terbit tetap ditampilkan tetapi tidak pernah diterapkan oleh perintah
+        ini: ia mencetak versi terbaru dan cara memindahkan pin (isi kedua
+        variabel dengan tag baru, atau hapus agar mengikuti{" "}
+        <Code>latest</Code>, lalu jalankan <Code>sudo aoox reinstall</Code>),
+        dan <Code>--apply</Code> menolak alih-alih melaporkan berhasil.
+      </P>
+      <P>
         Sama seperti <Code>aoox domain set</Code>, butuh <Code>INSTALL_DIR</Code>{" "}
         terisi. Lihat <DocLink href="/id/docs/instalasi#update">Memperbarui versi</DocLink>{" "}
         untuk cara manual lewat SSH sebagai alternatif.
@@ -963,7 +972,7 @@ $ sudo aoox reinstall`}</Pre>
         rows={[
           [
             "Backup",
-            <>File yang akan berubah disalin ke <Code>&lt;dir&gt;/backups/&lt;waktu&gt;/</Code> (<Code>.env.dist</Code> tetap izin 600).</>,
+            <><Code>.env.dist</Code> dan file compose selalu disalin ke <Code>&lt;dir&gt;/backups/&lt;waktu&gt;/</Code> sebelum ada yang berubah, juga saat tidak ada yang perlu diubah (<Code>.env.dist</Code> tetap izin 600).</>,
           ],
           [
             "Compose",
@@ -981,7 +990,8 @@ $ sudo aoox reinstall`}</Pre>
       />
       <P>
         Aman dijalankan berulang: bila tidak ada yang perlu diubah, tidak ada
-        file yang ditulis dan tidak ada backup — container tetap disegarkan.
+        file yang ditulis ulang (folder backup tetap dibuat) dan container
+        disegarkan.
         Bila <Code>docker-compose.override.yml</Code> memakai tag{" "}
         <Code>!override</Code> (opsi <em>Hanya izinkan akses lewat domain</em>)
         dan Docker Compose di host lebih lama dari 2.24.4, perintah berhenti

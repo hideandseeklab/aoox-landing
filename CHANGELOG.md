@@ -8,6 +8,11 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Changed
+
+- **Upgrading docs (en + id)**: a pinned install's Update aoox page disables "Apply update" and `--apply` refuses; how to move the pin, and the republished-tag exception.
+- **CLI docs (`aoox update panel`, `aoox reinstall`)**: a version-pinned install is told why `update panel` does not move it and how to change the pin; `reinstall` is documented as always writing its backup folder (`.env.dist` and compose files). English and Indonesian.
+
 ## [0.1.0-beta.1] - 2026-11-07
 
 ### Added

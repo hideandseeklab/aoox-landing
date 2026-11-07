@@ -345,6 +345,16 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
         diperbarui).
       </P>
       <P>
+        Pada instalasi yang dikunci ke tag, halaman Update aoox menonaktifkan{" "}
+        <strong>Terapkan update</strong> dan menjelaskan alasannya: menarik tag yang
+        sama lagi tidak mengubah versi, dan <Code>aoox update panel --apply</Code> /
+        API menolak alih-alih melaporkan berhasil. Untuk pindah ke versi yang lebih
+        baru, ubah <Code>API_IMAGE</Code> dan <Code>WEB_IMAGE</Code> ke tag baru (atau
+        hapus kedua baris agar mengikuti <Code>:latest</Code>), lalu jalankan{" "}
+        <Code>sudo aoox reinstall</Code>. Satu pengecualian: tag terkunci yang
+        dipublikasikan ulang dengan nama yang sama tetap bisa diterapkan.
+      </P>
+      <P>
         <strong>Catatan penting</strong>: baik <Code>aoox update panel</Code> maupun tombol
         &ldquo;Terapkan update&rdquo; hanya menjalankan <Code>pull</Code> +{" "}
         <Code>up -d</Code> dengan file <Code>docker-compose.dist.yml</Code> yang
