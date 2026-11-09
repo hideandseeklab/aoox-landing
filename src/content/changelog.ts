@@ -21,7 +21,7 @@ export interface Release {
   version: string
   /** ISO date (from the CHANGELOG.md header). */
   date: string
-  channel: "alpha" | "beta"
+  channel: "alpha" | "beta" | "rc"
   groups: { kind: ChangeKind; items: Highlight[] }[]
 }
 
@@ -29,6 +29,39 @@ export const GITHUB_ORG = "https://github.com/hideandseeklab"
 export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landing"] as const
 
 export const RELEASES: Release[] = [
+  {
+    version: "0.1.0-rc.1",
+    date: "2026-11-09",
+    channel: "rc",
+    groups: [
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Log migrasi saat startup**: di produksi, API kini mencatat migrasi database mana yang berjalan (dan kegagalan migrasi), jadi `docker logs` menunjukkan apa yang diterapkan sebuah upgrade. Query tetap tidak dicatat. Rilis ini tidak punya migrasi baru.",
+            en: "**Migration log at startup**: in production the API now logs which database migrations ran (and any migration failure), so `docker logs` shows what an upgrade applied. Queries are still not logged. This release has no new migration.",
+          },
+          {
+            id: "**Hasil tes koneksi yang seragam**: tombol \"Test\" dan hasilnya sama di kartu DNS provider, secret manager, tujuan S3, server remote, kanal notifikasi, dan registry eksternal (centang hijau, segitiga kuning untuk peringatan, silang merah dengan pesan penyedia).",
+            en: "**One look for connection test results**: the \"Test\" button and its result are the same on the DNS provider, secret manager, S3 destination, remote server, notification channel and external registry cards (green check, amber triangle for a caveat, red cross with the provider's message).",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "**Tidak ada lagi container helper yang tertinggal**: menerapkan domain panel, update instance, atau perubahan environment instance tidak lagi menyisakan container `docker:29-cli` yang berhenti di setiap penerapan. Sisa dari versi lama bisa dihapus dengan `docker rm`.",
+            en: "**No more leftover helper containers**: applying a panel domain, an instance update or instance environment changes no longer leaves a stopped `docker:29-cli` container behind on every apply. Leftovers from older versions can be removed with `docker rm`.",
+          },
+          {
+            id: "**Companion database hanya-domain**: companion yang dipasang dengan domain saja (tanpa host port) kini melaporkan `hostPortBind: null`, bukan `loopback` yang bertentangan dengan `loopbackOnly: false`.",
+            en: "**Domain-only database companion**: a companion installed with a domain only (no host port) now reports `hostPortBind: null` instead of a `loopback` that contradicted `loopbackOnly: false`.",
+          },
+        ],
+      },
+    ],
+  },
   {
     version: "0.1.0-beta.2",
     date: "2026-11-07",

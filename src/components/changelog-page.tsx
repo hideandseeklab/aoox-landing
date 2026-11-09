@@ -19,7 +19,7 @@ const COPY = {
   id: {
     title: "Changelog",
     intro:
-      "Perubahan aoox per rilis — panel (API + dashboard), CLI, dan dokumentasi. aoox kini beta: fitur utama sudah lengkap, tetapi perilaku masih bisa berubah antar rilis. Menemukan bug? Laporkan di GitHub.",
+      "Perubahan aoox per rilis — panel (API + dashboard), CLI, dan dokumentasi. aoox kini release candidate: fitur sudah dibekukan dan hanya perbaikan yang masuk, tetapi perilaku masih bisa berubah sebelum 0.1.0. Menemukan bug? Laporkan di GitHub.",
     latest: "Latest",
     release: "Rilis di GitHub",
     full: "CHANGELOG lengkap",
@@ -28,7 +28,7 @@ const COPY = {
   en: {
     title: "Changelog",
     intro:
-      "What changed in aoox, release by release — the panel (API + dashboard), the CLI, and the docs. aoox is in beta: the main features are in place, but behavior may still change between releases. Found a bug? Report it on GitHub.",
+      "What changed in aoox, release by release — the panel (API + dashboard), the CLI, and the docs. aoox is a release candidate: features are frozen and only fixes go in, but behavior may still change before 0.1.0. Found a bug? Report it on GitHub.",
     latest: "Latest",
     release: "Release on GitHub",
     full: "Full CHANGELOG",
