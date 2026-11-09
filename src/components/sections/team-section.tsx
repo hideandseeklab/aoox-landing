@@ -125,7 +125,7 @@ const COPY: Record<Lang, Copy> = {
       "A member only sees projects they created or were added to; the instance owner and admins see everything.",
     inviteTitle: "Inviting members",
     inviteNote: "No email server — an invite link is generated once, you send it yourself via chat.",
-    more: "More on users & roles (docs in Indonesian)",
+    more: "More on users & roles",
     allowed: "allowed",
     notAllowed: "not allowed",
     roleMeta: ROLE_META_EN,

@@ -339,7 +339,7 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
       <P>
         Database migrations run automatically when the API boots. To pin a
         version, set <Code>API_IMAGE</Code> and <Code>WEB_IMAGE</Code> in{" "}
-        <Code>.env.dist</Code>, e.g. <Code>hideandseeklab/aoox-api:0.1.0-alpha.0</Code>{" "}
+        <Code>.env.dist</Code>, e.g. <Code>hideandseeklab/aoox-api:0.1.0-rc.1</Code>{" "}
         (see the available tags on Docker Hub) — both paths above read the
         same variables. An install pinned to a tag never sees the &ldquo;Update
         available&rdquo; button in the sidebar; the Update aoox page still lists the newest

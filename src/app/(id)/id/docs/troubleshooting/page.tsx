@@ -446,14 +446,24 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
       <P>
         Bila belum teratasi, buka issue di{" "}
         <a
+          href="https://github.com/hideandseeklab/aoox-api/issues/new/choose"
+          target="_blank"
+          rel="noreferrer"
+          className="text-foreground underline underline-offset-4"
+        >
+          GitHub aoox-api ↗
+        </a>
+        . Semua bug masuk ke repositori ini, baik soal dashboard, API, CLI,
+        maupun dokumentasi (
+        <a
           href="https://github.com/hideandseeklab/aoox-api/issues"
           target="_blank"
           rel="noreferrer"
           className="text-foreground underline underline-offset-4"
         >
-          GitLab aoox-api ↗
-        </a>{" "}
-        dengan:
+          issue yang ada
+        </a>
+        ). Sertakan:
       </P>
       <Ul>
         <li>Versi image API/web (kartu Host di Dashboard, atau tag di <Code>.env.dist</Code>) dan versi Docker.</li>

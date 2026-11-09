@@ -55,8 +55,8 @@ const FEATURES_ID: Feature[] = [
     icon: Database,
     title: "Managed database",
     description:
-      "PostgreSQL, MySQL, MariaDB, Redis per project. Referensikan kredensialnya di env, jelajahi tabel dan jalankan query dari dashboard.",
-    tags: ["postgres", "mysql", "redis"],
+      "PostgreSQL (plus pgvector, PostGIS, TimescaleDB), MySQL, MariaDB, MongoDB, Redis, Valkey per project. Referensikan kredensialnya di env, jelajahi tabel dan jalankan query dari dashboard.",
+    tags: ["postgres", "mysql", "mongodb", "redis"],
     href: "/id/docs/database",
   },
   {
@@ -123,8 +123,8 @@ const FEATURES_EN: Feature[] = [
     icon: Database,
     title: "Managed database",
     description:
-      "PostgreSQL, MySQL, MariaDB, Redis per project. Reference credentials in env, browse tables and run queries from the dashboard.",
-    tags: ["postgres", "mysql", "redis"],
+      "PostgreSQL (plus pgvector, PostGIS, TimescaleDB), MySQL, MariaDB, MongoDB, Redis, Valkey per project. Reference credentials in env, browse tables and run queries from the dashboard.",
+    tags: ["postgres", "mysql", "mongodb", "redis"],
     href: "/docs/database",
   },
   {
@@ -173,6 +173,13 @@ const MORE_ID = [
   { label: "2FA, API token dengan scope, audit log", href: "/id/docs/pengguna-peran#akun" },
   { label: "Registry lokal & cleanup disk", href: "/id/docs/registry" },
   { label: "CLI aoox: install, link, deploy", href: "/id/docs/cli" },
+  { label: "Variable set bersama dengan riwayat", href: "/id/docs/variabel" },
+  { label: "DNS Cloudflare dan wildcard DNS-01", href: "/id/docs/dns-cloudflare" },
+  { label: "Sertifikat SSL kustom", href: "/id/docs/sertifikat-ssl" },
+  { label: "Editor konfigurasi Traefik", href: "/id/docs/konfigurasi-proxy" },
+  { label: "Mode perawatan per aplikasi", href: "/id/docs/aplikasi#maintenance" },
+  { label: "Monitor HTTP dan peringatan CPU/RAM", href: "/id/docs/monitoring#http" },
+  { label: "Sumber secret Infisical", href: "/id/docs/environment#secret" },
 ]
 
 const MORE_EN = [
@@ -187,6 +194,13 @@ const MORE_EN = [
   { label: "2FA, scoped API tokens, audit log", href: "/docs/users-roles#account" },
   { label: "Local registry & disk cleanup", href: "/docs/registry" },
   { label: "aoox CLI: install, link, deploy", href: "/docs/cli" },
+  { label: "Shared variable sets with history", href: "/docs/variables" },
+  { label: "Cloudflare DNS and DNS-01 wildcards", href: "/docs/cloudflare-dns" },
+  { label: "Custom SSL certificates", href: "/docs/ssl-certificates" },
+  { label: "Traefik configuration editor", href: "/docs/proxy-configuration" },
+  { label: "Per-application maintenance mode", href: "/docs/applications#maintenance" },
+  { label: "HTTP monitor and CPU/RAM alerts", href: "/docs/monitoring#http" },
+  { label: "Infisical secret source", href: "/docs/environment#secret" },
 ]
 
 const COPY_ID = {

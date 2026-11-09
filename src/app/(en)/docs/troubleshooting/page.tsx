@@ -447,14 +447,24 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
       <P>
         If it&apos;s still not fixed, open an issue on{" "}
         <a
+          href="https://github.com/hideandseeklab/aoox-api/issues/new/choose"
+          target="_blank"
+          rel="noreferrer"
+          className="text-foreground underline underline-offset-4"
+        >
+          GitHub aoox-api ↗
+        </a>
+        . All bugs go to this one repository, whether they concern the dashboard,
+        the API, the CLI or the documentation (
+        <a
           href="https://github.com/hideandseeklab/aoox-api/issues"
           target="_blank"
           rel="noreferrer"
           className="text-foreground underline underline-offset-4"
         >
-          GitLab aoox-api ↗
-        </a>{" "}
-        with:
+          existing issues
+        </a>
+        ). Include:
       </P>
       <Ul>
         <li>The API/web image version (the Host card on the Dashboard, or the tag in <Code>.env.dist</Code>) and the Docker version.</li>

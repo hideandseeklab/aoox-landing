@@ -10,6 +10,9 @@ Indonesian is a translation under `/id` (`/id`, `/id/docs`, `/id/docs/<slug>`, `
 (`/en/**` and the old Indonesian `/docs/<slug>` URLs that no English page reuses) are static redirect pages in
 `src/app/(legacy)/` (see `RedirectStub`); they are `noindex` and left out of the sitemap and the docs nav.
 
+Bugs for any part of aoox (dashboard, API, CLI, docs, this site) are reported at
+[aoox-api issues](https://github.com/hideandseeklab/aoox-api/issues/new/choose).
+
 Related repos: [aoox-api](https://github.com/hideandseeklab/aoox-api) (backend) ·
 [aoox-web](https://github.com/hideandseeklab/aoox-web) (dashboard) ·
 [aoox-cli](https://github.com/hideandseeklab/aoox-cli) (CLI).

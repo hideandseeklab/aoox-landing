@@ -8,6 +8,16 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### UI UX Improvement
+
+- **Home page copy**: the English FAQ no longer says the dashboard and documentation are Indonesian only (the dashboard is English with an Indonesian translation, and every docs page exists in both languages); "(Indonesian)" removed from the docs links in the FAQ and the users and roles section; "GitLab" labels that pointed to GitHub now say GitHub (FAQ, call-to-action section, troubleshooting page); the call-to-action text now describes the one-command install instead of clone and compose.
+- **Features section**: the Managed database card lists MongoDB, Valkey and the PostgreSQL variants, and the "And more" list links to variable sets, Cloudflare DNS and DNS-01 certificates, custom SSL certificates, the Traefik configuration editor, maintenance mode, the HTTP monitor with resource alerts, and the Infisical secret source. English and Indonesian.
+
+### Changed
+
+- **Documentation**: the version examples use 0.1.0-rc.1 (pinned image tag, `aoox update` and `aoox update panel` output, `install-cli.sh` header); the CLI page lists the `--no-terminal-authorize` and `--terminal-ssh-user` flags of `aoox install`; the troubleshooting page says all bugs (dashboard, API, CLI, docs) go to the aoox-api issue tracker. English and Indonesian.
+- **Repository**: README notes where to report bugs; `.github/ISSUE_TEMPLATE/config.yml` turns off blank issues and links to the aoox-api issue forms and security policy.
+
 ## [0.1.0-rc.1] - 2026-11-09
 
 ### Changed

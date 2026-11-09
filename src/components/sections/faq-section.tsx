@@ -193,9 +193,9 @@ const FAQ_EN: Faq[] = [
     q: "Is the dashboard available in English?",
     a: (
       <>
-        Not yet — the dashboard, and all documentation, is Indonesian only for
-        now. This landing page is the first English surface; an English UI is
-        on the roadmap, not shipped.
+        Yes. The dashboard is English by default with an Indonesian
+        translation; switch language from the user menu in the sidebar. The
+        documentation and this site are available in both languages too.
       </>
     ),
   },
@@ -207,7 +207,7 @@ const COPY_ID = {
   description: "Jawaban singkat. Detailnya ada di dokumentasi.",
   moreQuestions: "Masih ada pertanyaan?",
   readDocs: "Baca dokumentasi",
-  openIssue: "Buka issue di GitLab",
+  openIssue: "Buka issue di GitHub",
   items: FAQ_ID,
 }
 
@@ -220,8 +220,8 @@ const COPY: Record<Lang, Copy> = {
     title: "Common questions.",
     description: "Short answers. The full detail is in the docs.",
     moreQuestions: "Still have questions?",
-    readDocs: "Read the docs (Indonesian)",
-    openIssue: "Open an issue on GitLab",
+    readDocs: "Read the docs",
+    openIssue: "Open an issue on GitHub",
     items: FAQ_EN,
   },
 }

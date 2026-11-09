@@ -336,7 +336,7 @@ docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
       <P>
         Migrasi database berjalan otomatis saat API boot. Untuk mengunci versi,
         isi <Code>API_IMAGE</Code> dan <Code>WEB_IMAGE</Code> di{" "}
-        <Code>.env.dist</Code>, mis. <Code>hideandseeklab/aoox-api:0.1.0-alpha.0</Code>{" "}
+        <Code>.env.dist</Code>, mis. <Code>hideandseeklab/aoox-api:0.1.0-rc.1</Code>{" "}
         (lihat tag yang tersedia di Docker Hub) — kedua cara di atas membaca
         variabel yang sama. Instalasi yang mengunci tag tidak akan melihat tombol{" "}
         &ldquo;Update tersedia&rdquo; di sidebar; halaman Update aoox tetap menampilkan

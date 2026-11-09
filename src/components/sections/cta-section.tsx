@@ -16,13 +16,13 @@ const COPY_ID = {
   titleHighlight: "Tinggal deploy.",
   description: (
     <>
-      Clone, isi env, <code className="text-foreground">docker compose up</code> —
-      lalu buka <code className="text-foreground">/setup</code> dan deploy
-      aplikasi pertamamu.
+      Jalankan satu perintah, lalu buka{" "}
+      <code className="text-foreground">/setup</code> untuk membuat owner dan
+      deploy aplikasi pertamamu.
     </>
   ),
   ctaPrimary: "Panduan instalasi",
-  ctaSecondary: "Lihat kode di GitLab",
+  ctaSecondary: "Lihat kode di GitHub",
   points: POINTS_ID,
 }
 
@@ -36,13 +36,13 @@ const COPY: Record<Lang, Copy> = {
     titleHighlight: "Just deploy.",
     description: (
       <>
-        Clone, fill in env, <code className="text-foreground">docker compose up</code> —
-        then open <code className="text-foreground">/setup</code> and deploy
-        your first application.
+        Run one command, then open{" "}
+        <code className="text-foreground">/setup</code> to create the owner and
+        deploy your first application.
       </>
     ),
     ctaPrimary: "Installation guide",
-    ctaSecondary: "See the code on GitLab",
+    ctaSecondary: "See the code on GitHub",
     points: POINTS_EN,
   },
 }

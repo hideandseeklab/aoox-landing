@@ -38,7 +38,7 @@ const COMMANDS = [
   {
     cmd: "aoox install",
     what: "Memasang aoox (postgres + api + web) di VPS baru lewat Docker Compose.",
-    flags: "--web-domain, --api-domain, --acme-email, --admin-email/-name/-password, --dir, --force, --new-secrets, --wipe-data, --confirm-wipe, --yes/-y",
+    flags: "--web-domain, --api-domain, --acme-email, --admin-email/-name/-password, --dir, --force, --new-secrets, --wipe-data, --confirm-wipe, --no-terminal-authorize, --terminal-ssh-user, --yes/-y",
   },
   {
     cmd: "aoox login",
@@ -912,15 +912,15 @@ The panel will restart for a few seconds to apply it — the connection to this 
         alih-alih menebak.
       </P>
       <Pre>{`$ aoox update --check
-Update available: aoox CLI 0.1.0-alpha.7 → 0.1.0-alpha.8
+Update available: aoox CLI 0.1.0-rc.1 → 0.1.0-rc.2
 Run: aoox update
 
 $ aoox update
-==> npm i -g @hideandseeklab/aoox@0.1.0-alpha.8
-Updated aoox CLI 0.1.0-alpha.7 → 0.1.0-alpha.8
+==> npm i -g @hideandseeklab/aoox@0.1.0-rc.2
+Updated aoox CLI 0.1.0-rc.1 → 0.1.0-rc.2
 
 $ aoox update
-aoox CLI 0.1.0-alpha.8 is up to date`}</Pre>
+aoox CLI 0.1.0-rc.2 is up to date`}</Pre>
       <P>
         Kalau registry npm tidak terjangkau, perintah gagal dengan pesan jelas
         (exit status bukan nol).
@@ -932,7 +932,7 @@ aoox CLI 0.1.0-alpha.8 is up to date`}</Pre>
         <Code>aoox-web</Code> di registry, bukan sekadar nomor versi.
       </P>
       <Pre>{`$ aoox update panel
-Running version: 0.1.0-alpha.1
+Running version: 0.1.0-rc.1
   api: hideandseeklab/aoox-api:latest (update available)
   web: hideandseeklab/aoox-web:latest (up to date)
 Update available. Run with --apply to apply it.
