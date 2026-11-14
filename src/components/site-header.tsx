@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { useTheme } from "next-themes"
 import { Menu, Moon, Sun, X } from "lucide-react"
 
+import { AooxLogo } from "@/components/aoox-logo"
 import { Button } from "@/components/ui/button"
 import { langFromPathname, type Lang } from "@/lib/lang"
 import { otherLangPath } from "@/lib/seo"
@@ -40,8 +41,11 @@ function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-4 px-4 sm:px-6">
-        <Link href={lang === "en" ? "/" : "/id"} className="text-sm font-semibold tracking-tight">
-          <span className="text-primary-foreground dark:text-primary">$</span>{" "}
+        <Link
+          href={lang === "en" ? "/" : "/id"}
+          className="flex items-center gap-2 text-sm font-semibold tracking-tight"
+        >
+          <AooxLogo />
           aoox
         </Link>
 

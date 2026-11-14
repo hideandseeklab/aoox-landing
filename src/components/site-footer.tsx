@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
+import { AooxLogo } from "@/components/aoox-logo"
 import { langFromPathname, type Lang } from "@/lib/lang"
 
 type Group = { title: string; links: { label: string; href: string; external?: boolean }[] }
@@ -120,8 +121,11 @@ function SiteFooter() {
     <footer className="text-xs text-muted-foreground">
       <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_repeat(3,1fr)] md:gap-8">
         <div className="flex flex-col gap-3">
-          <Link href={t.home} className="text-sm font-semibold tracking-tight text-foreground">
-            <span className="text-primary-foreground dark:text-primary">$</span>{" "}
+          <Link
+            href={t.home}
+            className="flex w-fit items-center gap-2 text-sm font-semibold tracking-tight text-foreground"
+          >
+            <AooxLogo />
             aoox
           </Link>
           <p className="max-w-xs leading-relaxed">{t.tagline}</p>

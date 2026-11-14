@@ -10,6 +10,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ### UI UX Improvement
 
+- **New aoox logo**: a lime chevron on a square dark tile replaces the `$` mark. The header and footer show the logo icon before "aoox", and the favicon (`icon.svg`, `favicon.ico`), the Apple touch icon and the social preview image (`og.png`) use the new mark.
 - **Home page copy**: the English FAQ no longer says the dashboard and documentation are Indonesian only (the dashboard is English with an Indonesian translation, and every docs page exists in both languages); "(Indonesian)" removed from the docs links in the FAQ and the users and roles section; "GitLab" labels that pointed to GitHub now say GitHub (FAQ, call-to-action section, troubleshooting page); the call-to-action text now describes the one-command install instead of clone and compose.
 - **Features section**: the Managed database card lists MongoDB, Valkey and the PostgreSQL variants, and the "And more" list links to variable sets, Cloudflare DNS and DNS-01 certificates, custom SSL certificates, the Traefik configuration editor, maintenance mode, the HTTP monitor with resource alerts, and the Infisical secret source. English and Indonesian.
 
