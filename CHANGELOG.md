@@ -8,6 +8,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### UI UX Improvement
+
+- **Screenshot gallery on the home page**: a new "what it looks like" section after the hero shows five dashboard screens (projects, deploy with live log, environment, data browser, backups) in tabs with captions. Images follow the site theme (light and dark shots where both exist), are served as responsive WebP (960 and 1600 px, `public/screenshots/`), lazy-loaded with fixed dimensions so nothing shifts, and the tab row scrolls sideways on narrow screens. The Indonesian page uses the Indonesian dashboard shot for the projects overview. English and Indonesian.
+
 ### Fixed
 
 - FAQ "Does data ever leave my server?" (English and Indonesian) was not exact: it now says there is no telemetry and names the only two calls aoox makes on its own (a periodic Docker Hub check for a newer aoox version, and a public IP lookup through api.ipify.org when `PUBLIC_IP` is not set), plus what you configure yourself.

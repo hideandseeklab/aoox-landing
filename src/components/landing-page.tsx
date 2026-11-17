@@ -4,6 +4,7 @@ import { FaqSection } from "@/components/sections/faq-section"
 import { FeaturesSection } from "@/components/sections/features-section"
 import { HeroSection } from "@/components/sections/hero-section"
 import { HowItWorksSection } from "@/components/sections/how-it-works-section"
+import { ScreenshotsSection } from "@/components/sections/screenshots-section"
 import { SelfHostSection } from "@/components/sections/self-host-section"
 import { TeamSection } from "@/components/sections/team-section"
 import { SiteFooter } from "@/components/site-footer"
@@ -17,6 +18,7 @@ function LandingPage({ lang }: { lang: Lang }) {
       <SiteHeader />
       <main>
         <HeroSection lang={lang} />
+        <ScreenshotsSection lang={lang} />
         <FeaturesSection lang={lang} />
         <HowItWorksSection lang={lang} />
         <BuildOptionsSection lang={lang} />
