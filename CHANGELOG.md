@@ -8,6 +8,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Fixed
+
+- FAQ "Does data ever leave my server?" (English and Indonesian) was not exact: it now says there is no telemetry and names the only two calls aoox makes on its own (a periodic Docker Hub check for a newer aoox version, and a public IP lookup through api.ipify.org when `PUBLIC_IP` is not set), plus what you configure yourself.
+
 ## [0.1.0] - 2026-11-17
 
 First stable release of the site and docs. The docs and the changelog page now describe aoox as stable instead of a release candidate.

@@ -94,9 +94,12 @@ const FAQ_ID: Faq[] = [
     q: "Apakah datanya keluar dari server saya?",
     a: (
       <>
-        Tidak ada telemetri dan tidak ada layanan cloud yang dihubungi, kecuali
-        yang kamu atur sendiri: Let&apos;s Encrypt untuk sertifikat, tujuan S3
-        untuk backup, dan kanal notifikasi.
+        Tidak ada telemetri. Panggilan yang dibuat aoox sendiri hanya dua:
+        pengecekan berkala ke Docker Hub untuk versi aoox yang lebih baru, dan
+        pencarian IP publik server lewat api.ipify.org (hanya jika{" "}
+        <code>PUBLIC_IP</code> tidak diisi). Selebihnya adalah yang kamu atur
+        sendiri: pull dari Git dan image, Let&apos;s Encrypt, registry, tujuan
+        S3 untuk backup, kanal notifikasi, penyedia DNS, dan Infisical.
       </>
     ),
   },
@@ -183,9 +186,13 @@ const FAQ_EN: Faq[] = [
     q: "Does data ever leave my server?",
     a: (
       <>
-        No telemetry, no cloud service is contacted, except what you set up
-        yourself: Let&apos;s Encrypt for certificates, an S3 destination for
-        backups, and notification channels.
+        No telemetry. On its own, aoox makes only two calls: a periodic check
+        on Docker Hub for a newer aoox version, and a lookup of your
+        server&apos;s public IP through api.ipify.org (only when{" "}
+        <code>PUBLIC_IP</code> is not set). Everything else is what you set up
+        yourself: Git and image pulls, Let&apos;s Encrypt, registries, S3
+        backup destinations, notification channels, a DNS provider, and
+        Infisical.
       </>
     ),
   },
