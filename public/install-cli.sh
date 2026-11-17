@@ -14,9 +14,10 @@
 #   npm install -g @hideandseeklab/aoox   # needs Node.js 22+
 #
 # Env vars (all optional):
-#   AOOX_VERSION       Pin a specific CLI version, e.g. "0.1.0-rc.1"
-#                       (default: the latest GitHub release, prereleases
-#                       included — the CLI hasn't had a stable release yet).
+#   AOOX_VERSION       Pin a specific CLI version, e.g. "0.1.0" (any version,
+#                       pre-releases like "0.2.0-rc.1" included). Default: the
+#                       newest STABLE GitHub release; pre-releases are never
+#                       picked automatically, pin them explicitly.
 #   AOOX_CLI_BASE_URL  Fetch assets from this base URL instead of GitHub
 #                       Releases (for local testing against a private mirror;
 #                       skips the "find latest version" GitHub API call).
@@ -36,7 +37,7 @@
 set -eu
 
 REPO="hideandseeklab/aoox-cli"
-GITHUB_RELEASES_API="https://api.github.com/repos/$REPO/releases"
+GITHUB_LATEST_API="https://api.github.com/repos/$REPO/releases/latest"
 GITHUB_DOWNLOAD_BASE="https://github.com/$REPO/releases/download"
 
 log() { printf '==> %s\n' "$1"; }
@@ -113,19 +114,19 @@ elif [ -n "${AOOX_VERSION:-}" ]; then
   VERSION="${AOOX_VERSION#v}"
   ASSET_BASE="$GITHUB_DOWNLOAD_BASE/v$VERSION"
 else
-  # `/releases/latest` only ever returns the newest *non-prerelease* — aoox
-  # has never had one, so that endpoint is useless here. `/releases` (plural)
-  # lists every release newest-first regardless of prerelease status; taking
-  # the first "tag_name" field is enough without a JSON parser, since GitHub
-  # guarantees that ordering. This is the one network call in this script
-  # that isn't a plain file download, and the only place a GitHub API rate
-  # limit could bite (60 unauthenticated requests/hour per IP) — pin
-  # AOOX_VERSION to skip it entirely.
-  log "Looking up the latest aoox release (pre-releases included)"
-  releases_json="$(fetch_to_stdout "$GITHUB_RELEASES_API")" ||
-    die "could not reach the GitHub API to find the latest release. Set AOOX_VERSION=<version> to install a specific version instead."
-  tag="$(printf '%s' "$releases_json" | grep -m1 '"tag_name"' | sed -E 's/.*"tag_name":[[:space:]]*"([^"]+)".*/\1/')"
-  [ -n "$tag" ] || die "could not determine the latest release tag from the GitHub API response."
+  # `/releases/latest` returns the newest release that is neither a
+  # pre-release nor a draft (the release workflow marks any version with a
+  # "-" label as a pre-release), so a later 0.2.0-rc.1 is never picked by
+  # default. The body is a single release object, so the first "tag_name"
+  # field is the one we want, no JSON parser needed. This is the one network
+  # call in this script that isn't a plain file download, and the only place a
+  # GitHub API rate limit could bite (60 unauthenticated requests/hour per IP)
+  # — pin AOOX_VERSION to skip it entirely.
+  log "Looking up the latest stable aoox release"
+  release_json="$(fetch_to_stdout "$GITHUB_LATEST_API")" ||
+    die "could not find a stable aoox release (no stable release exists yet, or the GitHub API is unreachable or rate-limited). Set AOOX_VERSION=<version> to install a specific version, pre-releases included."
+  tag="$(printf '%s' "$release_json" | grep -m1 '"tag_name"' | sed -E 's/.*"tag_name":[[:space:]]*"([^"]+)".*/\1/')"
+  [ -n "$tag" ] || die "could not determine the latest stable release tag from the GitHub API response. Set AOOX_VERSION=<version> to install a specific version."
   VERSION="${tag#v}"
   ASSET_BASE="$GITHUB_DOWNLOAD_BASE/$tag"
 fi

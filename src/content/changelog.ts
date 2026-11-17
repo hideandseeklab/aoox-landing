@@ -21,7 +21,7 @@ export interface Release {
   version: string
   /** ISO date (from the CHANGELOG.md header). */
   date: string
-  channel: "alpha" | "beta" | "rc"
+  channel: "alpha" | "beta" | "rc" | "stable"
   groups: { kind: ChangeKind; items: Highlight[] }[]
 }
 
@@ -29,6 +29,56 @@ export const GITHUB_ORG = "https://github.com/hideandseeklab"
 export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landing"] as const
 
 export const RELEASES: Release[] = [
+  {
+    version: "0.1.0",
+    date: "2026-11-17",
+    channel: "stable",
+    groups: [
+      {
+        kind: "added",
+        items: [
+          {
+            id: "**Ini rilis stabil pertama aoox.** Fiturnya sama dengan 0.1.0-rc.1; rilis ini menambah logo baru, formulir laporan bug, dan perbaikan dokumentasi. Selama masih di bawah 1.0.0, rilis minor tetap bisa membawa perubahan yang tidak kompatibel, jadi baca changelog sebelum upgrade.",
+            en: "**This is the first stable aoox release.** The features are those of 0.1.0-rc.1; this release adds the new logo, bug report forms and documentation fixes. While aoox is below 1.0.0, a minor release may still include breaking changes, so read the changelog before upgrading.",
+          },
+          {
+            id: "**Formulir isu GitHub** (laporan bug dan permintaan fitur) untuk semua komponen aoox: repositori aoox-api menjadi satu-satunya tempat laporan bug untuk API, dashboard, CLI, dan dokumentasi.",
+            en: "**GitHub issue forms** (bug report and feature request) for every aoox component: the aoox-api repository is the single place to report bugs for the API, dashboard, CLI and docs.",
+          },
+        ],
+      },
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Logo aoox baru**: chevron hijau limau pada ubin gelap persegi menggantikan tanda `$` di dalam lingkaran, di favicon, ikon sidebar dashboard, header dan footer situs, serta gambar pratinjau sosial.",
+            en: "**New aoox logo**: a lime chevron on a square dark tile replaces the `$` mark in a circle, in the favicons, the dashboard sidebar icon, the site header and footer, and the social preview image.",
+          },
+          {
+            id: "**npm `latest` hanya untuk versi stabil**: dengan adanya versi stabil, pre-release CLI berikutnya terbit di tag channel sendiri (`rc`, `beta`) dan tidak lagi dipasang oleh `npm i -g @hideandseeklab/aoox` biasa.",
+            en: "**npm `latest` is for stable versions only**: now that a stable version exists, later CLI pre-releases are published under their own channel tag (`rc`, `beta`) and a plain `npm i -g @hideandseeklab/aoox` no longer installs them.",
+          },
+          {
+            id: "**Docker `latest` dan installer CLI hanya mengikuti versi stabil**: tag `latest` image `aoox-api`/`aoox-web` dan `install-cli.sh` tanpa `AOOX_VERSION` kini hanya memilih rilis stabil; pre-release (mis. `0.2.0-rc.1`) harus dipin secara eksplisit.",
+            en: "**Docker `latest` and the CLI install script now only follow stable releases**: the `latest` tag of the `aoox-api`/`aoox-web` images and `install-cli.sh` without `AOOX_VERSION` pick stable releases only; pre-releases (for example `0.2.0-rc.1`) must be pinned explicitly.",
+          },
+          {
+            id: "**Dokumentasi dan beranda**: contoh versi memakai 0.1.0; FAQ tidak lagi menyebut dashboard dan dokumentasi hanya berbahasa Indonesia; label \"GitLab\" yang menunjuk ke GitHub diperbaiki; daftar fitur menyebut MongoDB, Valkey, variabel set, DNS Cloudflare, sertifikat SSL kustom, editor konfigurasi Traefik, mode maintenance, monitor HTTP, dan sumber secret Infisical.",
+            en: "**Docs and home page**: version examples use 0.1.0; the FAQ no longer says the dashboard and docs are Indonesian only; \"GitLab\" labels that pointed to GitHub are fixed; the feature list mentions MongoDB, Valkey, variable sets, Cloudflare DNS, custom SSL certificates, the Traefik configuration editor, maintenance mode, the HTTP monitor and the Infisical secret source.",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "Satu tes runner deployment tidak lagi gagal di runner CI yang sibuk (ia menunggu batas waktu, bukan jumlah putaran event loop yang tetap).",
+            en: "A deployment-runner test no longer fails on a busy CI runner (it waits on a time limit instead of a fixed number of event-loop turns).",
+          },
+        ],
+      },
+    ],
+  },
   {
     version: "0.1.0-rc.1",
     date: "2026-11-09",

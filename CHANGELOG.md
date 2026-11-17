@@ -8,6 +8,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-17
+
+First stable release of the site and docs. The docs and the changelog page now describe aoox as stable instead of a release candidate.
+
 ### UI UX Improvement
 
 - **New aoox logo**: a lime chevron on a square dark tile replaces the `$` mark. The header and footer show the logo icon before "aoox", and the favicon (`icon.svg`, `favicon.ico`), the Apple touch icon and the social preview image (`og.png`) use the new mark.
@@ -16,8 +20,11 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ### Changed
 
-- **Documentation**: the version examples use 0.1.0-rc.1 (pinned image tag, `aoox update` and `aoox update panel` output, `install-cli.sh` header); the CLI page lists the `--no-terminal-authorize` and `--terminal-ssh-user` flags of `aoox install`; the troubleshooting page says all bugs (dashboard, API, CLI, docs) go to the aoox-api issue tracker. English and Indonesian.
+- **Changelog page**: the release type accepts a `stable` channel (shown as a badge like alpha, beta and rc), and the intro text now says aoox is stable as of 0.1.0 while still pre-1.0 (minor releases may break). Entry for 0.1.0 added to the product changelog.
+- **CLI docs and `install-cli.sh`**: the `aoox update` section says stable versions take npm `latest` and pre-releases their own channel tag; the sample output uses 0.1.0 and 0.1.1.
+- **Documentation**: the version examples use 0.1.0 (pinned image tag, `aoox update` and `aoox update panel` output, `install-cli.sh` header); the CLI page lists the `--no-terminal-authorize` and `--terminal-ssh-user` flags of `aoox install`; the troubleshooting page says all bugs (dashboard, API, CLI, docs) go to the aoox-api issue tracker. English and Indonesian.
 - **Repository**: README notes where to report bugs; `.github/ISSUE_TEMPLATE/config.yml` turns off blank issues and links to the aoox-api issue forms and security policy.
+- **`install-cli.sh`**: without `AOOX_VERSION` the script now installs the newest *stable* CLI release (GitHub `/releases/latest`, which skips pre-releases) instead of the newest release of any kind; pin a pre-release with `AOOX_VERSION=<version>`. It stops with a clear message when no stable release exists or the GitHub API cannot be reached.
 
 ## [0.1.0-rc.1] - 2026-11-09
 
@@ -497,7 +504,8 @@ Versions below 1.0.0 may include breaking changes in a minor release.
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-rc.1...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-rc.1...v0.1.0
 [0.1.0-rc.1]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.2...v0.1.0-rc.1
 [0.1.0-beta.2]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.1...v0.1.0-beta.2
 [0.1.0-beta.1]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.0...v0.1.0-beta.1

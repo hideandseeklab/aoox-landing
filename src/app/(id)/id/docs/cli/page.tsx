@@ -904,23 +904,24 @@ The panel will restart for a few seconds to apply it — the connection to this 
         Mencari versi terbaru di npm (tanpa login, tanpa panel). Semua dist-tag npm menjadi kandidat: instalasi pre-release ditawari
         versi terbaru apa pun labelnya (alpha, lalu beta, lalu rc), sedangkan
         instalasi stabil hanya melihat versi stabil dan tidak pernah pindah ke
-        pre-release. Selama belum ada versi stabil, pre-release terbit di tag{" "}
-        <Code>latest</Code>, sehingga <Code>npm i -g @hideandseeklab/aoox</Code>{" "}
-        memasang yang terbaru. Kalau CLI dipasang lewat npm, ia menjalankan{" "}
+        pre-release. Versi stabil terbit di tag <Code>latest</Code>, sehingga{" "}
+        <Code>npm i -g @hideandseeklab/aoox</Code> memasang versi stabil terbaru;
+        pre-release punya tag channel sendiri (mis. <Code>rc</Code>) dan tidak
+        pernah mengambil <Code>latest</Code>. Kalau CLI dipasang lewat npm, ia menjalankan{" "}
         <Code>npm i -g @hideandseeklab/aoox@&lt;versi&gt;</Code> untukmu; untuk
         tarball standalone atau source checkout ia mencetak perintah persisnya
         alih-alih menebak.
       </P>
       <Pre>{`$ aoox update --check
-Update available: aoox CLI 0.1.0-rc.1 → 0.1.0-rc.2
+Update available: aoox CLI 0.1.0 → 0.1.1
 Run: aoox update
 
 $ aoox update
-==> npm i -g @hideandseeklab/aoox@0.1.0-rc.2
-Updated aoox CLI 0.1.0-rc.1 → 0.1.0-rc.2
+==> npm i -g @hideandseeklab/aoox@0.1.1
+Updated aoox CLI 0.1.0 → 0.1.1
 
 $ aoox update
-aoox CLI 0.1.0-rc.2 is up to date`}</Pre>
+aoox CLI 0.1.1 is up to date`}</Pre>
       <P>
         Kalau registry npm tidak terjangkau, perintah gagal dengan pesan jelas
         (exit status bukan nol).
@@ -932,7 +933,7 @@ aoox CLI 0.1.0-rc.2 is up to date`}</Pre>
         <Code>aoox-web</Code> di registry, bukan sekadar nomor versi.
       </P>
       <Pre>{`$ aoox update panel
-Running version: 0.1.0-rc.1
+Running version: 0.1.0
   api: hideandseeklab/aoox-api:latest (update available)
   web: hideandseeklab/aoox-web:latest (up to date)
 Update available. Run with --apply to apply it.
