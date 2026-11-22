@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react"
 import {
   Callout,
   Code,
+  DocLink,
   DocPage,
   H2,
   P,
@@ -46,7 +47,7 @@ const RECIPES = [
 ]
 
 const NEXT = [
-  { title: "Notifikasi", description: "Kabar job gagal/timeout ke channel pilihanmu.", href: "/id/docs/notifikasi" },
+  { title: "Notifikasi", description: "Kabar job dimulai, berhasil, gagal, dan pulih ke channel pilihanmu.", href: "/id/docs/notifikasi" },
   { title: "Environment variables", description: "Env yang diwarisi job.", href: "/id/docs/environment" },
   { title: "Mount", description: "Volume yang bisa diakses job.", href: "/id/docs/mount" },
   { title: "Backup & restore", description: "Untuk backup pakai fitur bawaan, bukan job.", href: "/id/docs/backup" },
@@ -145,6 +146,16 @@ export default function Page() {
               ],
               ["Target", "Di container / Container terpisah."],
               ["Timeout (detik)", "Default 600. Ditegakkan di dalam container."],
+              [
+                "Notifikasi",
+                <>
+                  <strong>Hanya saat gagal</strong> (default),{" "}
+                  <strong>Saat selesai</strong> (run yang berhasil juga) atau{" "}
+                  <strong>Saat mulai dan selesai</strong> (awal setiap run
+                  juga). Bisa diubah nanti dari kolom Notifikasi di baris job.
+                  Lihat <DocLink href="#notifikasi">Notifikasi</DocLink>.
+                </>,
+              ],
             ]}
           />
         </Step>
@@ -209,8 +220,8 @@ export default function Page() {
         </li>
         <li>
           Status run: <Code>success</Code> (exit 0) / <Code>failed</Code> (exit
-          ≠ 0) / <Code>timeout</Code>. Gagal atau timeout mengirim notifikasi{" "}
-          <Code>jobFailure</Code> bila diaktifkan.
+          ≠ 0) / <Code>timeout</Code>. Gagal atau timeout selalu mengirim
+          notifikasi job gagal (lihat di bawah).
         </li>
         <li>
           Output stdout+stderr disimpan sampai 64 KB per run; 50 run terakhir
@@ -226,6 +237,51 @@ export default function Page() {
           <em>Di container</em> menjalankan exec di task yang ada{" "}
           <strong>di host</strong> — Engine API tidak bisa exec ke task di node
           lain.
+        </li>
+      </Ul>
+
+      <H2 id="notifikasi">Notifikasi</H2>
+      <P>
+        Setiap job punya pengaturan <strong>Notifikasi</strong>, jadi job yang
+        berjalan tiap menit tidak membanjiri channel dan daftar Notifikasi
+        kecuali kamu memintanya.
+      </P>
+      <Table
+        head={["Notifikasi", "Dimulai", "Berhasil", "Gagal / timeout"]}
+        rows={[
+          ["Hanya saat gagal (default)", "—", "—", "ya"],
+          ["Saat selesai", "—", "ya", "ya"],
+          ["Saat mulai dan selesai", "ya", "ya", "ya"],
+        ]}
+      />
+      <Ul>
+        <li>
+          Run yang berhasil tepat setelah run sebelumnya dari job yang sama
+          gagal atau timeout selalu mengirim satu pesan{" "}
+          <strong>pulih</strong>, apa pun pengaturannya (menggantikan pesan
+          berhasil untuk run itu). Pesan ini lewat toggle{" "}
+          <strong>Job gagal</strong> di channel, sama seperti pesan pulih
+          server dan monitor HTTP.
+        </li>
+        <li>
+          Pesan memuat job, aplikasi/database/stack (dan service-nya),
+          project, pemicu (manual atau terjadwal), status, durasi, exit code,
+          dan perintahnya. Hanya pesan gagal yang memuat 500 karakter terakhir
+          output (rahasia disamarkan seperti di riwayat run); daftar
+          Notifikasi tidak pernah menampilkan output.
+        </li>
+        <li>
+          Channel hanya menerimanya bila toggle <strong>Job dimulai</strong>,{" "}
+          <strong>Job berhasil</strong>, atau <strong>Job gagal</strong>{" "}
+          aktif (semuanya aktif secara default: pengaturan per job yang
+          menentukan). Payload webhook membawa <Code>event</Code>{" "}
+          <Code>job.started</Code>, <Code>job.success</Code>,{" "}
+          <Code>job.failure</Code>, atau <Code>job.recovered</Code>.
+        </li>
+        <li>
+          Tick cron yang dilewati (run sebelumnya masih berjalan) dan 409 saat
+          Run tidak mengirim apa pun. Channel yang gagal tidak pernah
+          menggagalkan run.
         </li>
       </Ul>
 

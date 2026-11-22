@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react"
 import {
   Callout,
   Code,
+  DocLink,
   DocPage,
   H2,
   P,
@@ -46,7 +47,7 @@ const RECIPES = [
 ]
 
 const NEXT = [
-  { title: "Notifications", description: "Job failure/timeout alerts to a channel of your choice.", href: "/docs/notifications" },
+  { title: "Notifications", description: "Job start, success, failure and recovery messages to a channel of your choice.", href: "/docs/notifications" },
   { title: "Environment variables", description: "The env a job inherits.", href: "/docs/environment" },
   { title: "Mounts", description: "Volumes a job can access.", href: "/docs/mount" },
   { title: "Backup & restore", description: "Use the built-in backup features instead of a job.", href: "/docs/backup" },
@@ -145,6 +146,16 @@ export default function Page() {
               ],
               ["Target", "In the container / Separate container."],
               ["Timeout (seconds)", "Default 600. Enforced inside the container."],
+              [
+                "Notify",
+                <>
+                  <strong>Failures only</strong> (default),{" "}
+                  <strong>When finished</strong> (also successful runs) or{" "}
+                  <strong>Start and finish</strong> (also the start of each
+                  run). Can be changed later from the Notify column of the
+                  job row. See <DocLink href="#notifications">Notifications</DocLink>.
+                </>,
+              ],
             ]}
           />
         </Step>
@@ -210,8 +221,8 @@ export default function Page() {
         </li>
         <li>
           Run status: <Code>success</Code> (exit 0) / <Code>failed</Code> (exit
-          ≠ 0) / <Code>timeout</Code>. A failure or timeout sends a{" "}
-          <Code>jobFailure</Code> notification if enabled.
+          ≠ 0) / <Code>timeout</Code>. A failure or timeout always sends a
+          job failure notification (see below).
         </li>
         <li>
           Stdout+stderr output is kept up to 64 KB per run; the last 50 runs per
@@ -227,6 +238,49 @@ export default function Page() {
           <em>In the container</em> execs into a task that exists{" "}
           <strong>on the host</strong> — the Engine API can&apos;t exec into a task
           on another node.
+        </li>
+      </Ul>
+
+      <H2 id="notifications">Notifications</H2>
+      <P>
+        Each job has a <strong>Notify</strong> setting, so a job that runs
+        every minute does not flood your channels and the Notifications list
+        unless you ask for it.
+      </P>
+      <Table
+        head={["Notify", "Started", "Succeeded", "Failed / timed out"]}
+        rows={[
+          ["Failures only (default)", "—", "—", "yes"],
+          ["When finished", "—", "yes", "yes"],
+          ["Start and finish", "yes", "yes", "yes"],
+        ]}
+      />
+      <Ul>
+        <li>
+          A run that succeeds right after a failed or timed-out run of the
+          same job always sends one <strong>recovered</strong> message,
+          whatever the setting (it replaces the success message for that
+          run). It goes through the <strong>Job failure</strong> toggle of a
+          channel, like the recovery messages of servers and HTTP monitors.
+        </li>
+        <li>
+          Messages carry the job, its application/database/stack (and
+          service), project, trigger (manual or scheduled), status, duration,
+          exit code and the command. Only failure messages carry the last 500
+          characters of output (secrets masked as in the run history); the
+          Notifications list never shows output.
+        </li>
+        <li>
+          A channel receives them only with its <strong>Job started</strong>,{" "}
+          <strong>Job succeeded</strong> or <strong>Job failure</strong>{" "}
+          toggle on (all on by default: the per-job setting is the opt-in).
+          Webhook payloads carry <Code>event</Code>{" "}
+          <Code>job.started</Code>, <Code>job.success</Code>,{" "}
+          <Code>job.failure</Code> or <Code>job.recovered</Code>.
+        </li>
+        <li>
+          A skipped cron tick (the previous run is still going) and a 409 on
+          Run send nothing. A failing channel never fails the run.
         </li>
       </Ul>
 

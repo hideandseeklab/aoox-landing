@@ -8,6 +8,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Added
+
+- Docs (English and Indonesian): **job run notifications**. The Scheduled jobs page has a Notifications section (the per-job Notify setting with a table of what each level sends, the always-on "recovered" message, message contents, toggles and webhook `event` names, and that skipped ticks send nothing) and the Notify field in the new-job table; the Notifications page lists the new Job started and Job succeeded toggles and the updated Job failure row.
+
 ### UI UX Improvement
 
 - **Screenshot gallery on the home page**: a new "what it looks like" section after the hero shows five dashboard screens (projects, deploy with live log, environment, data browser, backups) in tabs with captions. Images follow the site theme (light and dark shots where both exist), are served as responsive WebP (960 and 1600 px, `public/screenshots/`), lazy-loaded with fixed dimensions so nothing shifts, and the tab row scrolls sideways on narrow screens. The Indonesian page uses the Indonesian dashboard shot for the projects overview. English and Indonesian.

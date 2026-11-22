@@ -44,7 +44,7 @@ const FLOW = [
 const NEXT = [
   { title: "Deploy & rollback", description: "Event deploy sukses/gagal.", href: "/id/docs/deploy" },
   { title: "Backup & restore", description: "Event backup gagal.", href: "/id/docs/backup" },
-  { title: "Scheduled jobs", description: "Event job gagal/timeout.", href: "/id/docs/jobs" },
+  { title: "Scheduled jobs", description: "Event job dimulai, berhasil, gagal, dan pulih.", href: "/id/docs/jobs" },
   { title: "Monitoring", description: "Aturan deteksi container mati.", href: "/id/docs/monitoring#container-mati" },
   { title: "Domain & TLS", description: "Cek DNS manual dan watcher-nya.", href: "/id/docs/domain" },
 ]
@@ -142,7 +142,9 @@ export default function Page() {
           ["Deploy sukses", "Deployment aplikasi berakhir success (termasuk rollback).", "Aplikasi, project, image, durasi, tautan ke halaman aplikasi."],
           ["Deploy gagal", "Deployment aplikasi atau stack compose gagal.", "Sama + potongan pesan error (500 karakter)."],
           ["Backup gagal", "Backup database/volume (manual atau terjadwal) gagal, termasuk gagal unggah ke S3.", "Database/aplikasi, pemicu (manual/terjadwal), error."],
-          ["Job gagal", "Scheduled job berstatus failed atau timeout.", "Nama job, perintah (200 karakter), 500 karakter terakhir output."],
+          ["Job gagal", <>Run job (manual atau terjadwal) berakhir failed atau timeout, untuk setiap job. Juga satu pesan &ldquo;pulih&rdquo; saat run berhasil tepat setelah run yang gagal.</>, "Job, aplikasi/database/stack, project, pemicu, status, durasi, exit code, perintah (200 karakter); 500 karakter terakhir output hanya pada kegagalan."],
+          [<>Job dimulai <Code key="6">(aktif default)</Code></>, <>Run job dimulai, hanya untuk job dengan pengaturan <strong>Notifikasi</strong> <em>Saat mulai dan selesai</em> (lihat <DocLink href="/id/docs/jobs#notifikasi">Scheduled jobs</DocLink>).</>, "Job, aplikasi/database/stack, project, pemicu, perintah; tanpa output."],
+          [<>Job berhasil <Code key="7">(aktif default)</Code></>, <>Run job berhasil, hanya untuk job dengan pengaturan <strong>Notifikasi</strong> <em>Saat selesai</em> atau <em>Saat mulai dan selesai</em>.</>, "Job, pemilik, project, pemicu, durasi, exit code, perintah; tanpa output."],
           ["Container mati", "Container aplikasi/database berhenti tak terduga — lihat aturan di Monitoring. Berlaku juga untuk aplikasi di server remote.", "Nama container, exit code, apakah sedang restart; nama server bila di server remote."],
           ["Disk hampir penuh", <>Pemakaian filesystem Docker melewati ambang (default 90 %, <Code>DISK_ALERT_PERCENT</Code>); diperiksa sekali sehari.</>, "Persentase terpakai, ambang, ruang tersisa."],
           ["Sertifikat gagal", "Traefik gagal menerbitkan/memperbarui sertifikat sebuah domain (diperiksa tiap 10 menit).", "Domain dan pesan error dari ACME."],

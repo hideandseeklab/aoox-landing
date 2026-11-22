@@ -44,7 +44,7 @@ const FLOW = [
 const NEXT = [
   { title: "Deploy & rollback", description: "Deploy success/failure events.", href: "/docs/deploy" },
   { title: "Backup & restore", description: "The backup-failure event.", href: "/docs/backup" },
-  { title: "Scheduled jobs", description: "Job failure/timeout events.", href: "/docs/jobs" },
+  { title: "Scheduled jobs", description: "Job start, success, failure and recovery events.", href: "/docs/jobs" },
   { title: "Monitoring", description: "The container-down detection rules.", href: "/docs/monitoring#container-down" },
   { title: "Domain & TLS", description: "Manual DNS checks and the watcher.", href: "/docs/domain" },
 ]
@@ -144,7 +144,9 @@ export default function Page() {
           ["Deploy success", "An application deployment ends in success (including rollback).", "Application, project, image, duration, a link to the application page."],
           ["Deploy failure", "An application or compose stack deployment fails.", "Same, plus a snippet of the error message (500 characters)."],
           ["Backup failure", "A database/volume backup (manual or scheduled) fails, including a failed S3 upload.", "Database/application, trigger (manual/scheduled), error."],
-          ["Job failure", "A scheduled job ends up failed or timeout.", "Job name, command (200 characters), the last 500 characters of output."],
+          ["Job failure", <>A job run (manual or scheduled) ends failed or timed out, for every job. Also one &ldquo;recovered&rdquo; message when a run succeeds right after a failed one.</>, "Job, application/database/stack, project, trigger, status, duration, exit code, command (200 characters); the last 500 characters of output on failures only."],
+          [<>Job started <Code key="6">(on by default)</Code></>, <>A job run starts, only for jobs whose <strong>Notify</strong> setting is <em>Start and finish</em> (see <DocLink href="/docs/jobs#notifications">Scheduled jobs</DocLink>).</>, "Job, application/database/stack, project, trigger, command; never output."],
+          [<>Job succeeded <Code key="7">(on by default)</Code></>, <>A job run succeeds, only for jobs whose <strong>Notify</strong> setting is <em>When finished</em> or <em>Start and finish</em>.</>, "Job, owner, project, trigger, duration, exit code, command; never output."],
           ["Container down", "An application/database container stops unexpectedly — see the rules under Monitoring. Also applies to applications on a remote server.", "Container name, exit code, whether it's restarting; the server name for a remote server."],
           ["Disk almost full", <>Docker filesystem usage crosses a threshold (default 90%, <Code>DISK_ALERT_PERCENT</Code>); checked once a day.</>, "Percentage used, threshold, space remaining."],
           ["Certificate failure", "Traefik fails to issue/renew a domain's certificate (checked every 10 minutes).", "The domain and the ACME error message."],
