@@ -243,6 +243,41 @@ Memori 512 → limit keras 512 MiB, tanpa swap (MemorySwap = Memory)`}</Pre>
         </li>
       </Ul>
 
+      <H2 id="storage">Penyimpanan per resource</H2>
+      <P>
+        Halaman Overview aplikasi (tab Deploy), database, dan stack compose
+        punya kartu <strong>Penyimpanan</strong>: total disk yang dipakai
+        resource itu beserta rinciannya. Angkanya diukur saat halaman dibuka,
+        tidak di-polling; tombol <strong>Segarkan</strong> mengukur ulang.
+      </P>
+      <Table
+        head={["Baris", "Isinya", "Masuk total"]}
+        rows={[
+          ["Volume", "Volume bernama: volume data database, volume dan volume file bersama dari mount-nya, checkout stack, dan volume yang dideklarasikan di file compose. Volume yang dihapus manual tidak ditampilkan.", "Ya"],
+          ["Layer container", "Layer tulis tiap container (container aplikasi, container blue/green dan preview-nya, alat admin database). Ditampilkan per container.", "Ya"],
+          ["Backup", "Jumlah file backup berstatus sukses yang dicatat aoox (backup database, backup volume).", "Ya"],
+          ["Image", "Image yang dijalankan aplikasi.", "Tidak: layer dipakai bersama oleh image dan aplikasi lain"],
+        ]}
+      />
+      <Ul>
+        <li>
+          Satu <Code>docker system df</Code> per daemon menjawab semuanya.
+          Hasilnya di-cache <strong>60 detik</strong>, jadi angka bisa
+          tertinggal hingga semenit; kartu menunjukkan kapan terakhir diukur.
+        </li>
+        <li>
+          Semua anggota proyek bisa melihatnya, termasuk viewer: ukuran bukan
+          data. Ukuran yang tidak bisa dihitung Docker tampil sebagai strip
+          dan dihitung nol dalam total.
+        </li>
+        <li>
+          Jika daemon Docker tidak terjangkau, kartu menyampaikannya alih-alih
+          menampilkan angka. Aplikasi di{" "}
+          <DocLink href="/docs/remote-servers">server remote</DocLink> diukur
+          di daemon server tersebut.
+        </li>
+      </Ul>
+
       <H2 id="container-mati">Deteksi container mati</H2>
       <P>
         API menjaga stream <Code>docker events</Code> (<Code>die</Code>)

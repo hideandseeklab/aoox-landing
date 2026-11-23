@@ -10,6 +10,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ### Added
 
+- Docs (English and Indonesian): the Monitoring page has a **Storage per resource** section describing the new Storage card (what is counted, the cached 60-second measurement, viewers, an unreachable daemon).
 - Docs (English and Indonesian): **job run notifications**. The Scheduled jobs page has a Notifications section (the per-job Notify setting with a table of what each level sends, the always-on "recovered" message, message contents, toggles and webhook `event` names, and that skipped ticks send nothing) and the Notify field in the new-job table; the Notifications page lists the new Job started and Job succeeded toggles and the updated Job failure row.
 - Docs (English and Indonesian): the generic webhook payload section mentions the new `fields` list (the readable details other channels show, such as a job's command and output tail).
 

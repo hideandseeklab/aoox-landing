@@ -251,6 +251,41 @@ Memory 512 → hard limit of 512 MiB, no swap (MemorySwap = Memory)`}</Pre>
         </li>
       </Ul>
 
+      <H2 id="storage">Storage per resource</H2>
+      <P>
+        The Overview of an application (its Deploy tab), a database and a
+        compose stack has a <strong>Storage</strong> card: the total disk the
+        resource uses and a breakdown. It is measured when the page opens, not
+        polled; the <strong>Refresh</strong> button measures again.
+      </P>
+      <Table
+        head={["Row", "What it is", "In the total"]}
+        rows={[
+          ["Volume", "Named volumes: the data volume of a database, the volumes and the shared files volume of its mounts, a stack’s checkout and the volumes declared in its compose file. A volume you deleted by hand is simply absent.", "Yes"],
+          ["Container layer", "The writable layer of each container (an application’s container, its blue/green and preview containers, a database’s admin tool). Shown per container.", "Yes"],
+          ["Backups", "The sum of the successful backup files aoox recorded (database backups, volume backups).", "Yes"],
+          ["Image", "The image the application runs.", "No: layers are shared between images and applications"],
+        ]}
+      />
+      <Ul>
+        <li>
+          One <Code>docker system df</Code> per daemon answers all of it. The
+          result is cached for <strong>60 seconds</strong>, so a figure can be
+          up to a minute old; the card says when it was measured.
+        </li>
+        <li>
+          Any project member can read it, viewers included: sizes are not
+          data. A size Docker cannot compute is shown as a dash and counts as
+          zero in the total.
+        </li>
+        <li>
+          If the Docker daemon cannot be reached the card says so instead of
+          showing numbers. Applications on a{" "}
+          <DocLink href="/docs/remote-servers">remote server</DocLink> are
+          measured on that server&apos;s daemon.
+        </li>
+      </Ul>
+
       <H2 id="container-down">Detecting a dead container</H2>
       <P>
         The API keeps a <Code>docker events</Code> stream (<Code>die</Code>)
