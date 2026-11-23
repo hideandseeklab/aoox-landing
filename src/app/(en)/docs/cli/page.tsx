@@ -1004,12 +1004,12 @@ The panel will restart for a few seconds to apply it — the connection to this 
         command to run instead of guessing.
       </P>
       <Pre>{`$ aoox update --check
-Update available: aoox CLI 0.1.0 → 0.1.1
+Update available: aoox CLI 0.1.1 → 0.1.2
 Run: aoox update
 
 $ aoox update
-==> npm i -g @hideandseeklab/aoox@0.1.1
-Updated aoox CLI 0.1.0 → 0.1.1
+==> npm i -g @hideandseeklab/aoox@0.1.2
+Updated aoox CLI 0.1.1 → 0.1.2
 
 $ aoox update
 aoox CLI 0.1.1 is up to date`}</Pre>
@@ -1025,7 +1025,7 @@ aoox CLI 0.1.1 is up to date`}</Pre>
         version number.
       </P>
       <Pre>{`$ aoox update panel
-Running version: 0.1.0
+Running version: 0.1.1
   api: hideandseeklab/aoox-api:latest (update available)
   web: hideandseeklab/aoox-web:latest (up to date)
 Update available. Run with --apply to apply it.

@@ -30,6 +30,63 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.1",
+    date: "2026-11-23",
+    channel: "stable",
+    groups: [
+      {
+        kind: "added",
+        items: [
+          {
+            id: "**Alamat internal antar aplikasi**: `${{app.<appName>.url|host|port}}` di env membiarkan satu aplikasi project memanggil aplikasi lain di project yang sama lewat nama container, tanpa domain dan tanpa host port. Kartu **Internal address** di tab Domains menampilkan alamat dan referensinya.",
+            en: "**Internal address between applications**: `${{app.<appName>.url|host|port}}` in env lets an application call another application of the same project by container name, with no domain and no host port. The **Internal address** card on the Domains tab shows the address and the reference.",
+          },
+          {
+            id: "**Restore backup ke database baru**: tombol di setiap backup database yang berhasil membuat database baru (engine, varian, dan tag yang sama) dan memulihkan backup ke dalamnya; database sumber tidak disentuh.",
+            en: "**Restore a backup into a new database**: a button on every successful database backup creates a new database (same engine, variant and tag) and restores the backup into it; the source database is never touched.",
+          },
+          {
+            id: "**`aoox logs` dan `aoox exec`** di CLI: ikuti log container aplikasi, database, atau service compose stack (atau log build deployment), dan buka shell interaktif di dalamnya.",
+            en: "**`aoox logs` and `aoox exec`** in the CLI: follow the container logs of an application, a database or a compose stack service (or a deployment build log), and open an interactive shell in it.",
+          },
+          {
+            id: "**Pemakaian disk per resource**: kartu Storage di aplikasi, database, dan compose stack menampilkan volume, layer container, image, dan file backup.",
+            en: "**Disk use per resource**: a Storage card on applications, databases and compose stacks shows volumes, container layers, the image and backup files.",
+          },
+          {
+            id: "**Notifikasi job run**: setiap job punya setelan Notify (hanya gagal, saat selesai, atau mulai dan selesai); job yang berhasil setelah gagal selalu mengirim satu pesan \"pulih\".",
+            en: "**Job run notifications**: each job has a Notify setting (failures only, when finished, or start and finish); a job that succeeds after a failure always sends one \"recovered\" message.",
+          },
+          {
+            id: "**Urutan variabel bisa diubah** di editor env: seret baris, atau pakai keyboard atau menu Move; urutan tersimpan di teks `KEY=VALUE`. Dashboard juga memperingatkan sebelum Anda meninggalkan perubahan variabel yang belum disimpan.",
+            en: "**Variables can be reordered** in the env editor: drag a row, or use the keyboard or the Move menu; the order is saved in the `KEY=VALUE` text. The dashboard also warns before you leave unsaved variable changes.",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "**Log container aplikasi kini disamarkan**: nilai env yang dicetak aplikasi tidak lagi terbaca oleh viewer project; nilai bawaan image (mis. `NGINX_VERSION`) tidak ikut disamarkan.",
+            en: "**Application container logs are masked**: env values an application prints can no longer be read by a project viewer; values baked into the image (for example `NGINX_VERSION`) are not masked.",
+          },
+          {
+            id: "**Halaman tetap terbuka saat Docker mati**: dashboard, daftar project, halaman aplikasi, database, stack, dan proxy, serta daftar backup, menampilkan pemberitahuan alih-alih error 500.",
+            en: "**Pages open while Docker is down**: the dashboard, the project list, the application, database, stack and proxy pages and the backup lists show a notice instead of a 500 error.",
+          },
+          {
+            id: "**Restore backup TimescaleDB** kini berjalan di antara `timescaledb_pre_restore()` dan `timescaledb_post_restore()`.",
+            en: "**Restoring a TimescaleDB backup** now runs between `timescaledb_pre_restore()` and `timescaledb_post_restore()`.",
+          },
+          {
+            id: "**Log deployment dan log container tanpa socket realtime**: tab Deploy dan Logs membaca lewat HTTP saat socket tidak tersedia, alih-alih menggantung di \"Loading…\". Menghapus backup, destinasi backup, domain, atau node swarm kini meminta konfirmasi.",
+            en: "**Deployment and container logs without the realtime socket**: the Deploy and Logs tabs read over HTTP when the socket is unavailable instead of hanging on \"Loading…\". Deleting a backup, a backup destination, a domain or a swarm node now asks for confirmation.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.0",
     date: "2026-11-17",
     channel: "stable",

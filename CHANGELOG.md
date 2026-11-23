@@ -8,6 +8,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-23
+
+Documentation and site updates for the new features of 0.1.1: the internal address reference, restoring a backup into a new database, `aoox logs` and `aoox exec`, storage per resource and job run notifications, plus a screenshot gallery on the home page.
+
 ### Added
 
 - Docs (English and Indonesian): **calling another application of the project** with `${{app.<appName>.url|host|port}}` on the Environment variables page (same project only, resolved at container create, which deploy-mode and server combinations work, compose stacks), plus mentions on the Compose and Variables pages.
@@ -17,13 +21,13 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 - Docs (English and Indonesian): **job run notifications**. The Scheduled jobs page has a Notifications section (the per-job Notify setting with a table of what each level sends, the always-on "recovered" message, message contents, toggles and webhook `event` names, and that skipped ticks send nothing) and the Notify field in the new-job table; the Notifications page lists the new Job started and Job succeeded toggles and the updated Job failure row.
 - Docs (English and Indonesian): the generic webhook payload section mentions the new `fields` list (the readable details other channels show, such as a job's command and output tail).
 
-### UI UX Improvement
-
-- **Screenshot gallery on the home page**: a new "what it looks like" section after the hero shows five dashboard screens (projects, deploy with live log, environment, data browser, backups) in tabs with captions. Images follow the site theme (light and dark shots where both exist), are served as responsive WebP (960 and 1600 px, `public/screenshots/`), lazy-loaded with fixed dimensions so nothing shifts, and the tab row scrolls sideways on narrow screens. The Indonesian page uses the Indonesian dashboard shot for the projects overview. English and Indonesian.
-
 ### Fixed
 
 - FAQ "Does data ever leave my server?" (English and Indonesian) was not exact: it now says there is no telemetry and names the only two calls aoox makes on its own (a periodic Docker Hub check for a newer aoox version, and a public IP lookup through api.ipify.org when `PUBLIC_IP` is not set), plus what you configure yourself.
+
+### UI UX Improvement
+
+- **Screenshot gallery on the home page**: a new "what it looks like" section after the hero shows five dashboard screens (projects, deploy with live log, environment, data browser, backups) in tabs with captions. Images follow the site theme (light and dark shots where both exist), are served as responsive WebP (960 and 1600 px, `public/screenshots/`), lazy-loaded with fixed dimensions so nothing shifts, and the tab row scrolls sideways on narrow screens. The Indonesian page uses the Indonesian dashboard shot for the projects overview. English and Indonesian.
 
 ## [0.1.0] - 2026-11-17
 
@@ -521,7 +525,8 @@ First stable release of the site and docs. The docs and the changelog page now d
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-rc.1...v0.1.0
 [0.1.0-rc.1]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.2...v0.1.0-rc.1
 [0.1.0-beta.2]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.1...v0.1.0-beta.2
