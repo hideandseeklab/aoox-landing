@@ -210,8 +210,11 @@ export default function Page() {
         The <strong>Webhook</strong> channel sends a <Code>POST</Code> with{" "}
         <Code>Content-Type: application/json</Code>. Common fields:{" "}
         <Code>title</Code>, <Code>level</Code> (<Code>success</Code> /{" "}
-        <Code>failure</Code> / <Code>info</Code>), <Code>url</Code>, plus
-        event-specific fields:
+        <Code>failure</Code> / <Code>info</Code>), <Code>url</Code>,{" "}
+        <Code>fields</Code> (a list of <Code>{"{label, value}"}</Code>: the
+        same details the other channels show, such as a job&apos;s command
+        and output tail or the log lines of an application error; left out of
+        the examples below), plus event-specific fields:
       </P>
       <Pre title="deployment.started">{`{
   "title": "Deployment started: shop",

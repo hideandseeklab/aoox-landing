@@ -208,8 +208,11 @@ export default function Page() {
         Channel <strong>Webhook</strong> mengirim <Code>POST</Code> dengan{" "}
         <Code>Content-Type: application/json</Code>. Field umum:{" "}
         <Code>title</Code>, <Code>level</Code> (<Code>success</Code> /{" "}
-        <Code>failure</Code> / <Code>info</Code>), <Code>url</Code>, lalu
-        field khusus event:
+        <Code>failure</Code> / <Code>info</Code>), <Code>url</Code>,{" "}
+        <Code>fields</Code> (daftar <Code>{"{label, value}"}</Code>: detail
+        yang sama dengan yang tampil di channel lain, misalnya command dan
+        potongan output job atau baris log error aplikasi; tidak ditampilkan
+        pada contoh di bawah), lalu field khusus event:
       </P>
       <Pre title="deployment.started">{`{
   "title": "Deployment started: shop",
