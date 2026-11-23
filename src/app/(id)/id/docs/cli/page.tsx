@@ -111,6 +111,16 @@ const COMMANDS = [
     flags: "--set/-s, --env/-e, --app, --stack, --file, --quiet/-q, --url/-u, --token/-t",
   },
   {
+    cmd: "aoox logs",
+    what: "Menampilkan log container aplikasi, database terkelola, atau service compose stack; --follow terus mengalir, --deployment menampilkan log build deployment.",
+    flags: "--app, --database, --stack (ID atau nama), --project, --service, --follow/-f, --tail, --deployment, --timestamps, --url/-u, --token/-t",
+  },
+  {
+    cmd: "aoox exec",
+    what: "Membuka shell interaktif (bash, atau sh) di container aplikasi, database terkelola, atau service compose stack; berakhir dengan exit code shell.",
+    flags: "--app, --database, --stack (ID atau nama), --project, --service, --url/-u, --token/-t",
+  },
+  {
     cmd: "aoox registry push",
     what: "Push image lokal yang sudah ada ke registry; menolak versi yang sudah ada di sana.",
     flags: "--yes/-y, --registry, --force",
@@ -761,6 +771,88 @@ aoox  Injecting 5 variables from backend/development (no links, no own env)`}</P
           banyak, perintah berhenti dan mendaftarkannya; tidak pernah menebak.
         </li>
       </Ul>
+
+      <H2 id="logs-exec">Log dan shell (aoox logs, aoox exec)</H2>
+      <P>
+        <Code>aoox logs</Code> menampilkan log container dan{" "}
+        <Code>aoox exec</Code> membuka shell interaktif, seperti{" "}
+        <Code>docker logs</Code> dan <Code>docker exec -it</Code> — tetapi lewat
+        panel, jadi Anda tidak perlu akses SSH ke server. Keduanya berlaku untuk
+        aplikasi, database terkelola, dan service dari compose stack.
+      </P>
+      <Pre title="Memilih target">{`$ aoox logs                              # aplikasi yang ditautkan dengan aoox link
+$ aoox logs --app web --project shop     # aplikasi, lewat nama (atau ID)
+$ aoox logs --database main-db           # database terkelola
+$ aoox logs --stack blog --service web   # satu service dari compose stack`}</Pre>
+      <P>
+        <Code>--app</Code>, <Code>--database</Code> dan <Code>--stack</Code>{" "}
+        menerima ID atau nama (nama dicocokkan tanpa membedakan huruf besar/kecil)
+        dan tidak bisa dipakai bersamaan. Tanpa salah satunya, perintah memakai
+        aplikasi yang ditautkan oleh <Code>aoox link</Code>. Jika dua resource
+        bernama sama, perintah mendaftarkannya dan meminta{" "}
+        <Code>--project &lt;nama&gt;</Code> (atau ID). <Code>--service</Code>{" "}
+        hanya untuk stack dan boleh dilewati bila stack hanya punya satu service;
+        jika lebih, perintah mendaftarkannya.
+      </P>
+      <H3>aoox logs</H3>
+      <Pre title="Contoh">{`$ aoox logs --tail 50                    # 50 baris terakhir, lalu selesai
+$ aoox logs -f                           # terus mengalir; Ctrl+C menghentikan (exit code 130)
+$ aoox logs --database main-db -f
+$ aoox logs --deployment latest          # log build deployment terbaru
+$ aoox logs --deployment 6c1f…           # deployment tertentu; mengikuti selama berjalan`}</Pre>
+      <Ul>
+        <li>
+          <Code>--tail N</Code> (default 200, maksimal 5000) adalah jumlah baris
+          terakhir yang ditampilkan lebih dulu. Tanpa <Code>-f</Code> perintah
+          mencetaknya lalu selesai; dengan <Code>-f</Code> perintah terus
+          mengalir.
+        </li>
+        <li>
+          Timestamp Docker di depan tiap baris dihilangkan; pertahankan dengan{" "}
+          <Code>--timestamps</Code>.
+        </li>
+        <li>
+          <Code>--deployment &lt;id|latest&gt;</Code> (khusus aplikasi) menampilkan
+          log build sebuah deployment dan mengikutinya sampai selesai; exit code
+          1 jika deployment gagal.
+        </li>
+      </Ul>
+      <H3>aoox exec</H3>
+      <Pre title="Contoh">{`$ aoox exec                              # shell di aplikasi yang tertaut
+$ aoox exec --database main-db
+$ aoox exec --stack blog --service web`}</Pre>
+      <P>
+        Shell-nya <Code>bash</Code> bila image memilikinya, jika tidak{" "}
+        <Code>sh</Code> (image tanpa shell sama sekali, misalnya distroless,
+        akan memberi tahu). Ketikan Anda diteruskan apa adanya ke shell di
+        container, jadi Ctrl+C menghentikan perintah di sana dan Ctrl+D
+        mengakhiri shell; ukuran terminal mengikuti jendela Anda. Perintah
+        berakhir dengan exit code shell tersebut. Perintah ini butuh terminal
+        sungguhan dan menolak berjalan dengan input atau output yang di-pipe.
+      </P>
+      <H3>Siapa boleh apa</H3>
+      <Table
+        head={["", "Log", "Shell"]}
+        rows={[
+          ["Aplikasi", "Semua anggota (viewer dan token read-only juga)", "Developer ke atas; tidak dengan token read-only"],
+          ["Service compose stack", "Semua anggota; nilai rahasia dari environment container itu sendiri ditutup", "Developer ke atas; tidak dengan token read-only"],
+          ["Database terkelola", "Developer ke atas: log engine bisa mengutip data yang tidak boleh dibaca viewer", "Developer ke atas; tidak dengan token read-only (shell database = akses penuh ke data)"],
+        ]}
+      />
+      <P>
+        Project yang tidak bisa Anda lihat dijawab seolah tidak ada. Membuka
+        shell dicatat di audit log. Database dan stack selalu berjalan di host;
+        untuk aplikasi di server remote koneksi lewat panel ke server itu, dan
+        untuk service swarm Anda mendapat task yang berjalan di node panel
+        sendiri.
+      </P>
+      <Callout>
+        Koneksinya adalah websocket yang hanya diterima panel dari alamat
+        dashboard, jadi CLI mengirim alamat yang Anda berikan ke{" "}
+        <Code>aoox login</Code>. Login yang disimpan CLI lama belum memilikinya:
+        jalankan <Code>aoox login</Code> lagi (atau beri{" "}
+        <Code>--url &lt;alamat dashboard&gt;</Code>).
+      </Callout>
 
       <H2 id="registry-images">Build &amp; push image (aoox registry)</H2>
       <P>

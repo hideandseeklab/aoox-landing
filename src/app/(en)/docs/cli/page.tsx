@@ -76,6 +76,16 @@ const COMMANDS = [
     flags: "--set/-s, --env/-e, --app, --stack, --file, --quiet/-q, --url/-u, --token/-t",
   },
   {
+    cmd: "aoox logs",
+    what: "Shows the container logs of an application, a managed database or a compose stack service; --follow keeps streaming, --deployment shows a deployment's build log.",
+    flags: "--app, --database, --stack (ID or name), --project, --service, --follow/-f, --tail, --deployment, --timestamps, --url/-u, --token/-t",
+  },
+  {
+    cmd: "aoox exec",
+    what: "Opens an interactive shell (bash, else sh) in the container of an application, a managed database or a compose stack service; exits with the shell's exit code.",
+    flags: "--app, --database, --stack (ID or name), --project, --service, --url/-u, --token/-t",
+  },
+  {
     cmd: "aoox domain set",
     what: "Sets a custom domain for the panel itself (dashboard + API) without SSH.",
     flags: "--web, --api, --acme-email, --[no-]domain-only",
@@ -760,6 +770,86 @@ aoox  Injecting 5 variables from backend/development (no links, no own env)`}</P
           candidates exist, the command stops and lists them; it never guesses.
         </li>
       </Ul>
+
+      <H2 id="logs-exec">Logs and a shell (aoox logs, aoox exec)</H2>
+      <P>
+        <Code>aoox logs</Code> shows the container logs and <Code>aoox exec</Code>{" "}
+        opens an interactive shell, like <Code>docker logs</Code> and{" "}
+        <Code>docker exec -it</Code> — but through the panel, so you need no SSH
+        access to the server. They work for applications, managed databases and
+        the services of a compose stack.
+      </P>
+      <Pre title="Choosing the target">{`$ aoox logs                              # the application linked with aoox link
+$ aoox logs --app web --project shop     # an application, by name (or ID)
+$ aoox logs --database main-db           # a managed database
+$ aoox logs --stack blog --service web   # one service of a compose stack`}</Pre>
+      <P>
+        <Code>--app</Code>, <Code>--database</Code> and <Code>--stack</Code>{" "}
+        take an ID or a name (names are matched without regard to case) and
+        exclude each other. Without any of them the command uses the application
+        linked by <Code>aoox link</Code>. If two resources share a name, the
+        command lists them and asks for <Code>--project &lt;name&gt;</Code> (or
+        the ID). <Code>--service</Code> is for stacks only and may be left out
+        when the stack has a single service; with several it lists them.
+      </P>
+      <H3>aoox logs</H3>
+      <Pre title="Examples">{`$ aoox logs --tail 50                    # the last 50 lines, then exit
+$ aoox logs -f                           # keep streaming; Ctrl+C stops (exit code 130)
+$ aoox logs --database main-db -f
+$ aoox logs --deployment latest          # the build log of the newest deployment
+$ aoox logs --deployment 6c1f…           # a specific deployment; follows while it runs`}</Pre>
+      <Ul>
+        <li>
+          <Code>--tail N</Code> (default 200, at most 5000) is how many of the
+          last lines come first. Without <Code>-f</Code> the command prints them
+          and ends; with <Code>-f</Code> it keeps streaming.
+        </li>
+        <li>
+          Docker&apos;s timestamp in front of each line is removed; keep it with{" "}
+          <Code>--timestamps</Code>.
+        </li>
+        <li>
+          <Code>--deployment &lt;id|latest&gt;</Code> (applications only) shows the
+          build log of a deployment instead and follows it until it finishes; the
+          exit code is 1 when the deployment failed.
+        </li>
+      </Ul>
+      <H3>aoox exec</H3>
+      <Pre title="Examples">{`$ aoox exec                              # a shell in the linked application
+$ aoox exec --database main-db
+$ aoox exec --stack blog --service web`}</Pre>
+      <P>
+        The shell is <Code>bash</Code> when the image has it, otherwise{" "}
+        <Code>sh</Code> (an image with no shell at all, such as a distroless one,
+        says so). Your keystrokes go to the remote shell as they are, so Ctrl+C
+        interrupts the remote command and Ctrl+D ends the shell; the terminal
+        size follows your window. The command ends with the exit code of the
+        shell. It needs a real terminal and refuses to run with piped input or
+        output.
+      </P>
+      <H3>Who may do what</H3>
+      <Table
+        head={["", "Logs", "Shell"]}
+        rows={[
+          ["Application", "Every member (viewers and read-only tokens too)", "Developer or higher; not with a read-only token"],
+          ["Compose stack service", "Every member; secret values of the container's own environment are masked", "Developer or higher; not with a read-only token"],
+          ["Managed database", "Developer or higher: engine logs can quote data a viewer may not read", "Developer or higher; not with a read-only token (a database shell is full data access)"],
+        ]}
+      />
+      <P>
+        A project you cannot see answers as if it did not exist. Opening a shell
+        is recorded in the audit log. Databases and stacks always run on the
+        host; for an application on a remote server the connection goes through
+        the panel to that server, and for a swarm service you get a task running
+        on the panel&apos;s own node.
+      </P>
+      <Callout>
+        The connection is a websocket that the panel only accepts from the
+        dashboard&apos;s address, so the CLI sends the address you gave to{" "}
+        <Code>aoox login</Code>. A login saved by an older CLI does not have it:
+        run <Code>aoox login</Code> again (or pass{" "}
+        <Code>--url &lt;dashboard address&gt;</Code>).
+      </Callout>
 
       <H2 id="registry-images">Build &amp; push images (aoox registry)</H2>
       <P>
