@@ -331,8 +331,14 @@ curl -s http://localhost:3001/auth/setup-status
       <Pre>{`aoox update panel            # cek saja
 aoox update panel --apply    # terapkan kalau ada update`}</Pre>
       <P>Manual lewat SSH, kalau <Code>INSTALL_DIR</Code> belum diisi:</P>
-      <Pre>{`docker compose -f docker-compose.dist.yml --env-file .env.dist pull
-docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
+      <Pre>{`docker compose -f docker-compose.dist.yml --env-file .env.dist pull api web
+docker compose -f docker-compose.dist.yml --env-file .env.dist up -d --no-deps api web`}</Pre>
+      <P>
+        Update hanya menarik dan membuat ulang service <Code>api</Code> dan{" "}
+        <Code>web</Code>. Container PostgreSQL milik panel tidak di-pull maupun
+        di-restart, jadi versinya hanya berubah kalau Anda sendiri mengubah
+        file compose.
+      </P>
       <P>
         Migrasi database berjalan otomatis saat API boot. Untuk mengunci versi,
         isi <Code>API_IMAGE</Code> dan <Code>WEB_IMAGE</Code> di{" "}

@@ -1077,7 +1077,7 @@ $ sudo aoox reinstall`}</Pre>
           ],
           [
             "Restart",
-            <><Code>docker compose pull</Code> then <Code>up -d --force-recreate</Code>, using the same compose file list as the running stack. Volumes (the database) are not touched. It then waits for the API to be healthy and prints a summary.</>,
+            <><Code>docker compose pull api web</Code>, then <Code>up -d --force-recreate --no-deps api web</Code>, then a plain <Code>up -d</Code> that only changes what differs (the panel database container is restarted only if its own definition changed), using the same compose file list as the running stack. Volumes (the database) are not touched. It then waits for the API to be healthy and prints a summary.</>,
           ],
         ]}
       />

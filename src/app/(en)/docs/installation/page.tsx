@@ -334,8 +334,14 @@ curl -s http://localhost:3001/auth/setup-status
       <Pre>{`aoox update panel            # check only
 aoox update panel --apply    # apply if an update is available`}</Pre>
       <P>Manual, over SSH, if <Code>INSTALL_DIR</Code> isn&apos;t set:</P>
-      <Pre>{`docker compose -f docker-compose.dist.yml --env-file .env.dist pull
-docker compose -f docker-compose.dist.yml --env-file .env.dist up -d`}</Pre>
+      <Pre>{`docker compose -f docker-compose.dist.yml --env-file .env.dist pull api web
+docker compose -f docker-compose.dist.yml --env-file .env.dist up -d --no-deps api web`}</Pre>
+      <P>
+        An update only pulls and recreates the <Code>api</Code> and{" "}
+        <Code>web</Code> services. The panel&apos;s own PostgreSQL container is
+        not pulled or restarted, so its version only changes when you change
+        the compose file yourself.
+      </P>
       <P>
         Database migrations run automatically when the API boots. To pin a
         version, set <Code>API_IMAGE</Code> and <Code>WEB_IMAGE</Code> in{" "}

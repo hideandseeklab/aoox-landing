@@ -1077,7 +1077,7 @@ $ sudo aoox reinstall`}</Pre>
           ],
           [
             "Jalankan ulang",
-            <><Code>docker compose pull</Code> lalu <Code>up -d --force-recreate</Code> memakai daftar file compose yang sama dengan stack yang sedang berjalan. Volume (database) tidak disentuh. Lalu menunggu API sehat dan mencetak ringkasan.</>,
+            <><Code>docker compose pull api web</Code>, lalu <Code>up -d --force-recreate --no-deps api web</Code>, lalu <Code>up -d</Code> biasa yang hanya mengubah yang berbeda (container database panel baru di-restart bila definisinya sendiri berubah), memakai daftar file compose yang sama dengan stack yang sedang berjalan. Volume (database) tidak disentuh. Lalu menunggu API sehat dan mencetak ringkasan.</>,
           ],
         ]}
       />

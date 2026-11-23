@@ -8,6 +8,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+### Fixed
+
+- Docs (English and Indonesian): the update steps (manual commands, CLI reinstall row) now say an update pulls and recreates only `api` and `web`, and that the panel database container is left alone.
+
 ## [0.1.1] - 2026-11-23
 
 Documentation and site updates for the new features of 0.1.1: the internal address reference, restoring a backup into a new database, `aoox logs` and `aoox exec`, storage per resource and job run notifications, plus a screenshot gallery on the home page.
