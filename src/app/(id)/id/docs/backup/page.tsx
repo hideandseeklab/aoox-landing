@@ -171,6 +171,37 @@ export default function Page() {
         </Step>
       </Steps>
 
+      <H3>Pulihkan ke database baru</H3>
+      <P>
+        Untuk menguji backup, menggandakan database, atau memulihkan tanpa
+        menimpa apa pun, pulihkan ke database <strong>baru</strong>: tombol{" "}
+        <strong>Pulihkan ke database baru</strong> pada baris backup yang
+        berhasil (developer ke atas; viewer tidak melihatnya). Pilih nama dan
+        proyek (bawaan: proyek yang sama; hanya proyek yang boleh Anda ubah
+        yang tampil). aoox membuat database dengan engine, varian, dan versi
+        yang sama, memberinya password sendiri, memulihkan backup ke dalamnya
+        di latar belakang, lalu menandainya <em>running</em> setelah selesai.
+        Database sumber tidak disentuh, dan mount, aplikasi admin, serta
+        jadwal backup tidak ikut disalin. Seperti restore biasa, file ditarik
+        dulu dari S3 bila salinan lokalnya sudah tidak ada.
+      </P>
+      <Table
+        head={["Engine", "Pulihkan ke database baru"]}
+        rows={[
+          ["PostgreSQL", "Didukung untuk backup satu database. Dump tidak membawa nama database, jadi masuk ke database baru."],
+          ["MySQL / MariaDB", "Didukung untuk backup satu database, alasannya sama."],
+          ["MongoDB", "Didukung. Arsip dipetakan dari nama database sumber ke yang baru; pada backup semua database, database lain tetap memakai namanya."],
+          ["Redis / Valkey", "Didukung. Snapshot dipasang di volume data yang baru."],
+          ["PostgreSQL / MySQL / MariaDB, backup semua database", "Tidak didukung (tombol nonaktif). Login server baru akan diganti dengan yang lama, atau nama database lama dibuat ulang tanpa akses, sehingga database baru kosong. Pulihkan backup satu database, atau pulihkan ke database aslinya."],
+        ]}
+      />
+      <P>
+        Bila pemulihan gagal, database baru tetap berstatus <em>error</em>{" "}
+        dengan pesan <Code>Restore of backup … failed: …</Code>. Tidak bisa
+        dicoba ulang (itu hanya akan menjalankan database kosong): hapus lalu
+        pulihkan lagi.
+      </P>
+
       <H2 id="volume">Backup volume aplikasi</H2>
       <P>
         Halaman aplikasi<PathArrow />tab <strong>Mount</strong> <PathArrow />bagian{" "}

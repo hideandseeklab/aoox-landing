@@ -175,6 +175,37 @@ export default function Page() {
         </Step>
       </Steps>
 
+      <H3>Restore to a new database</H3>
+      <P>
+        To check a backup, clone a database, or recover without overwriting
+        anything, restore it into a <strong>new</strong> database: the{" "}
+        <strong>Restore to new database</strong> button on a successful backup
+        row (developers and above; viewers don&apos;t see it). Choose a name
+        and a project (default: the same project; only projects where you can
+        write are listed). aoox creates a database with the same engine,
+        variant, and version, gives it its own password, restores the backup
+        into it in the background, and marks it <em>running</em> when done.
+        The source database is never touched, and mounts, the admin app, and
+        the backup schedule are not copied. Like any backup restore, it
+        pulls the file back from S3 first when the local copy is gone.
+      </P>
+      <Table
+        head={["Engine", "Restore to new database"]}
+        rows={[
+          ["PostgreSQL", "Supported for single-database backups. The dump has no database name, so it lands in the new database."],
+          ["MySQL / MariaDB", "Supported for single-database backups, same reason."],
+          ["MongoDB", "Supported. The archive is remapped from the source database name to the new one; for all-databases backups the other databases keep their names."],
+          ["Redis / Valkey", "Supported. The snapshot is installed in the new data volume."],
+          ["PostgreSQL / MySQL / MariaDB, all-databases backup", "Not supported (the button is disabled). It would replace the new server login with the old one, or recreate the old database names without access, leaving the new database empty. Restore a single-database backup, or restore it into its own database."],
+        ]}
+      />
+      <P>
+        If the restore fails, the new database stays in{" "}
+        <em>error</em> with the message <Code>Restore of backup … failed: …</Code>.
+        It can&apos;t be retried (that would only start an empty database):
+        delete it and restore again.
+      </P>
+
       <H2 id="volume">Application volume backups</H2>
       <P>
         Application page<PathArrow /><strong>Mount</strong> tab<PathArrow />the{" "}
