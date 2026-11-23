@@ -216,7 +216,7 @@ API_URL=https://api.example.com/v1`}</Pre>
           <Code>{"${{project.KEY}}"}</Code> no longer exists: it is refused with
           &quot;was renamed to <Code>{"${{vars.KEY}}"}</Code>&quot;. The upgrade
           rewrites existing references for you.{" "}
-          <Code>{"${{database.…}}"}</Code> and <Code>{"${{secret.…}}"}</Code> work
+          <Code>{"${{database.…}}"}</Code>, <Code>{"${{app.…}}"}</Code> and <Code>{"${{secret.…}}"}</Code> work
           as before (see <DocLink href="/docs/environment#references">Environment variables</DocLink>).
         </li>
       </Ul>

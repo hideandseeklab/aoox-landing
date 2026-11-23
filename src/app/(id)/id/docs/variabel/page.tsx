@@ -218,7 +218,7 @@ API_URL=https://api.example.com/v1`}</Pre>
           <Code>{"${{project.KEY}}"}</Code> sudah tidak ada: ditolak dengan pesan
           bahwa namanya diganti menjadi <Code>{"${{vars.KEY}}"}</Code>. Proses
           upgrade menulis ulang referensi yang ada untukmu.{" "}
-          <Code>{"${{database.…}}"}</Code> dan <Code>{"${{secret.…}}"}</Code> tetap
+          <Code>{"${{database.…}}"}</Code>, <Code>{"${{app.…}}"}</Code> dan <Code>{"${{secret.…}}"}</Code> tetap
           seperti sebelumnya (lihat <DocLink href="/id/docs/environment#referensi">Environment variables</DocLink>).
         </li>
       </Ul>

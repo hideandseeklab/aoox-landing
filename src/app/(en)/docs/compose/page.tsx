@@ -119,7 +119,11 @@ export default function Page() {
                 "Environment variables",
                 <>
                   Supports <Code>{"${{vars.KEY}}"}</Code> (from the stack&apos;s linked variable set environments, in order; the stack&apos;s own env wins) and{" "}
-                  <Code>{"${{database.<slug>.url}}"}</Code>.
+                  <Code>{"${{database.<slug>.url}}"}</Code>, and{" "}
+                  <Code>{"${{app.<appName>.url}}"}</Code> for an application of
+                  the same project on the aoox host (the service must be on the{" "}
+                  <Code>aoox</Code> network; see{" "}
+                  <DocLink href="/docs/environment#app-references">Environment variables</DocLink>).
                 </>,
               ],
             ]}

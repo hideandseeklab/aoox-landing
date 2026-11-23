@@ -117,7 +117,11 @@ export default function Page() {
                 "Environment variables",
                 <>
                   Mendukung <Code>{"${{vars.KEY}}"}</Code> (dari environment set variabel yang ditautkan ke stack, berurutan; env stack sendiri menang) dan{" "}
-                  <Code>{"${{database.<slug>.url}}"}</Code>.
+                  <Code>{"${{database.<slug>.url}}"}</Code>, serta{" "}
+                  <Code>{"${{app.<appName>.url}}"}</Code> untuk aplikasi di project
+                  yang sama pada host aoox (service harus ada di jaringan{" "}
+                  <Code>aoox</Code>; lihat{" "}
+                  <DocLink href="/id/docs/environment#referensi-aplikasi">Environment variables</DocLink>).
                 </>,
               ],
             ]}

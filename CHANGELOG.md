@@ -10,6 +10,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ### Added
 
+- Docs (English and Indonesian): **calling another application of the project** with `${{app.<appName>.url|host|port}}` on the Environment variables page (same project only, resolved at container create, which deploy-mode and server combinations work, compose stacks), plus mentions on the Compose and Variables pages.
 - Docs (English and Indonesian): the Backup & restore page has a **Restore to a new database** section (the button on a successful database backup row, what is copied and what is not, the per-engine support table, whole-server SQL backups refused, and a failed restore ending in `error` without retry).
 - Docs (English and Indonesian): the CLI page has a **Logs and a shell** section for `aoox logs` and `aoox exec` (choosing an application, database or compose stack service, following logs, deployment build logs, the shell, who may do what) and both commands in the command table.
 - Docs (English and Indonesian): the Monitoring page has a **Storage per resource** section describing the new Storage card (what is counted, the cached 60-second measurement, viewers, an unreachable daemon).

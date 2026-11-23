@@ -29,7 +29,7 @@ export const metadata: Metadata = pageMetadata({
 const SUMMARY = [
   { k: "Lapisan", v: "Set variabel tertaut + sumber secret + env aplikasi" },
   { k: "Diterapkan", v: "Saat container dibuat, bukan saat build" },
-  { k: "Referensi", v: "${{vars.KEY}} · ${{database.<slug>.url}}" },
+  { k: "Referensi", v: "${{vars.KEY}} · ${{database.<slug>.url}} · ${{app.<nama>.url}}" },
 ]
 
 const RESOLVE = [
@@ -175,8 +175,54 @@ EMPTY=`}</Pre>
             <Code key="8">{"${{database.<slug>.url:<nama>}}"}</Code>,
             "Database lain di server yang sama (mis. yang dibuat lewat query CREATE DATABASE): host/user/password sama, hanya bagian nama database yang berbeda.",
           ],
+          [
+            <Code key="9">{"${{app.<appName>.url}}"}</Code>,
+            <>Alamat internal aplikasi lain di project yang sama: <Code>http://aoox-app-&lt;appName&gt;:&lt;port container&gt;</Code>. Juga <Code>.host</Code> (nama container) dan <Code>.port</Code> (port container-nya). Lihat <a href="#referensi-aplikasi">di bawah</a>.</>,
+          ],
         ]}
       />
+      <a id="referensi-aplikasi" className="block" />
+      <H3>Memanggil aplikasi lain di project</H3>
+      <P>
+        Aplikasi web bisa memanggil aplikasi API di project yang sama lewat
+        nama container-nya, tanpa domain dan tanpa port host di API. Tulis{" "}
+        <Code>{"API_URL=${{app.api.url}}"}</Code> di env aplikasi web, dengan{" "}
+        <Code>api</Code> mewakili <strong>app name</strong> API (slug dengan
+        akhiran acak, mis. <Code>api-8jw08d</Code>). Salin alamat dan referensi
+        siap pakai dari kartu <strong>Alamat internal</strong> di tab Domain
+        milik API.
+      </P>
+      <Ul>
+        <li>
+          Hanya aplikasi di <strong>project yang sama</strong> yang dikenali;
+          selainnya dianggap referensi tak dikenal. Aplikasi boleh merujuk
+          dirinya sendiri.
+        </li>
+        <li>
+          Alamat diselesaikan ke port container <em>saat ini</em> ketika
+          container dibuat, jadi setelah port container API diubah, deploy ulang
+          aplikasi yang merujuknya.
+        </li>
+        <li>
+          Kedua sisi harus berbagi jaringan Docker: dua aplikasi mode container
+          biasa di server yang sama (host aoox atau server remote yang sama),
+          atau dua aplikasi service Swarm. Container biasa tidak bisa menjangkau
+          service Swarm (dan sebaliknya), dan aplikasi di server berbeda tidak
+          berbagi jaringan. Kombinasi ini ditolak dengan penjelasan (
+          <strong>400</strong> saat menyimpan, deployment gagal saat deploy)
+          alih-alih memberi alamat yang tidak bisa tersambung.
+        </li>
+        <li>
+          Stack compose juga bisa memakainya, untuk aplikasi di host aoox dengan
+          mode container biasa. Service stack harus ada di jaringan{" "}
+          <Code>aoox</Code>, yang ditambahkan aoox ke service yang punya domain;
+          untuk service lain, deklarasikan jaringan eksternal <Code>aoox</Code>{" "}
+          di file compose.
+        </li>
+        <li>
+          Hanya berfungsi antar-container, bukan dari browser, dan bukan rahasia.
+        </li>
+      </Ul>
       <H3>Contoh lengkap</H3>
       <Pre title="shared/production (environment set variabel yang ditautkan ke aplikasi)">{`APP_ENV=production
 SENTRY_DSN=https://abc@sentry.example.com/1`}</Pre>

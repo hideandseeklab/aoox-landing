@@ -29,7 +29,7 @@ export const metadata: Metadata = pageMetadata({
 const SUMMARY = [
   { k: "Layers", v: "Linked variable sets + secret source + application env" },
   { k: "Applied", v: "When the container is created, not at build time" },
-  { k: "References", v: "${{vars.KEY}} · ${{database.<slug>.url}}" },
+  { k: "References", v: "${{vars.KEY}} · ${{database.<slug>.url}} · ${{app.<name>.url}}" },
 ]
 
 const RESOLVE = [
@@ -176,8 +176,56 @@ EMPTY=`}</Pre>
             <Code key="8">{"${{database.<slug>.url:<name>}}"}</Code>,
             "Another database on the same server (e.g. one created via a CREATE DATABASE query): same host/user/password, only the database name differs.",
           ],
+          [
+            <Code key="9">{"${{app.<appName>.url}}"}</Code>,
+            <>The internal address of another application of the same project: <Code>http://aoox-app-&lt;appName&gt;:&lt;container port&gt;</Code>. Also <Code>.host</Code> (the container name) and <Code>.port</Code> (its container port). See <a href="#app-references">below</a>.</>,
+          ],
         ]}
       />
+      <a id="app-references" className="block" />
+      <H3>Calling another application of the project</H3>
+      <P>
+        A web app can call an API app of the same project by its container
+        name, with no domain and no published host port on the API. Put{" "}
+        <Code>{"API_URL=${{app.api.url}}"}</Code> in the web app&apos;s env,
+        where <Code>api</Code> stands for the API&apos;s <strong>app name</strong>
+        (the slug with a random suffix, e.g. <Code>api-8jw08d</Code>). Copy
+        the ready-made address and reference from the{" "}
+        <strong>Internal address</strong> card on the API&apos;s Domains tab.
+      </P>
+      <Ul>
+        <li>
+          Only applications of the <strong>same project</strong> resolve;
+          anything else is an unknown reference. An application may reference
+          itself.
+        </li>
+        <li>
+          The address is resolved to the <em>current</em> container port when
+          the container is created, so after you change the API&apos;s
+          container port, redeploy the apps that reference it.
+        </li>
+        <li>
+          Both sides must share a Docker network: two plain-container
+          applications on the same server (the aoox host or the same remote
+          server), or two Swarm service applications. A plain container
+          cannot reach a Swarm service (or the reverse), and applications on
+          different servers do not share a network. These combinations are
+          refused with an explanation (<strong>400</strong> when saving, a
+          failed deployment at deploy time) instead of giving you an address
+          that cannot connect.
+        </li>
+        <li>
+          Compose stacks can use it too, for applications on the aoox host in
+          plain-container mode. A stack service must be on the{" "}
+          <Code>aoox</Code> network, which aoox adds to services that have a
+          domain; for other services declare the external <Code>aoox</Code>{" "}
+          network in the compose file.
+        </li>
+        <li>
+          It works between containers, not from a browser, and it is not a
+          secret.
+        </li>
+      </Ul>
       <H3>A full example</H3>
       <Pre title="shared/production (a variable set environment linked to the app)">{`APP_ENV=production
 SENTRY_DSN=https://abc@sentry.example.com/1`}</Pre>
