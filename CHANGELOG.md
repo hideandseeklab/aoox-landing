@@ -8,6 +8,10 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-11-24
+
+Documentation updates: panel updates and `aoox reinstall` only touch `api` and `web`, and `aoox reinstall` pulls before it backs up or rewrites files.
+
 ### Fixed
 
 - Docs (English and Indonesian): the update steps (manual commands, CLI reinstall row) now say an update pulls and recreates only `api` and `web`, and that the panel database container is left alone.
@@ -530,7 +534,8 @@ First stable release of the site and docs. The docs and the changelog page now d
   previews, registry, webhooks, user roles, the CLI, and troubleshooting.
 - Static export + automatic deploy to GitHub Pages on every push to `main`.
 
-[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-rc.1...v0.1.0
 [0.1.0-rc.1]: https://github.com/hideandseeklab/aoox-landing/compare/v0.1.0-beta.2...v0.1.0-rc.1

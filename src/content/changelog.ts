@@ -30,6 +30,43 @@ export const CHANGELOG_REPOS = ["aoox-api", "aoox-web", "aoox-cli", "aoox-landin
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.2",
+    date: "2026-11-24",
+    channel: "stable",
+    groups: [
+      {
+        kind: "changed",
+        items: [
+          {
+            id: "**Tombol cek update image dan pemberitahuan versi baru lebih menonjol** di tab Deploy aplikasi berbasis image: tombol cek berupa tombol sekunder dengan spinner dan waktu pengecekan terakhir, dan pemberitahuan versi baru menampilkan tag lama ke tag baru dengan \"Switch and deploy\" sebagai tombol utama.",
+            en: "**The image update check button and the newer-version notice stand out** on the Deploy tab of an image application: the check is a filled secondary button with a spinner and the time of the last check, and the notice shows the current to new tag with \"Switch and deploy\" as the primary button.",
+          },
+          {
+            id: "**Update panel dan `aoox reinstall` hanya menyentuh `api` dan `web`**: PostgreSQL milik panel tidak lagi di-pull atau dibuat ulang saat update panel, apply domain, atau apply environment instance. `aoox reinstall` melakukan pull lebih dulu dari salinan sementara, sehingga pull yang gagal tidak mengubah apa pun di disk, dan hanya membuat ulang postgres jika definisinya berubah.",
+            en: "**Panel updates and `aoox reinstall` only touch `api` and `web`**: the panel's own PostgreSQL is no longer pulled or recreated by a panel update, a domain apply or an instance environment apply. `aoox reinstall` pulls first from a staged copy, so a failed pull changes nothing on disk, and recreates postgres only when its definition changed.",
+          },
+        ],
+      },
+      {
+        kind: "fixed",
+        items: [
+          {
+            id: "**Setiap job terjadwal kini berjalan sekali per tick**: sebelumnya penjadwal terdaftar belasan kali sehingga setiap cron berjalan berulang, dan pembersihan disk malam hari mencatat \"Cleanup is already running\".",
+            en: "**Every scheduled job now runs once per tick**: the scheduler used to be registered a dozen times, so every cron fired repeatedly and the nightly disk cleanup logged \"Cleanup is already running\".",
+          },
+          {
+            id: "**Destinasi S3 yang tidak terjangkau tidak lagi menggantung**: menghapus project dengan purge, menghapus backup, dan menguji destinasi kini dibatasi waktu; purge berhenti mencoba destinasi yang sudah mati alih-alih menunggu lebih dari 16 menit.",
+            en: "**An unreachable S3 destination no longer hangs things**: deleting a project with purge, deleting backups and testing a destination are now time-bounded, and purge stops trying a dead destination instead of waiting 16 minutes or more.",
+          },
+          {
+            id: "**Log aplikasi di Docker Swarm (mode service) gagal tertutup**: jika service tidak bisa dibaca, log tidak dibuka (error di socket, 502 di HTTP) karena keluarannya tidak bisa disamarkan.",
+            en: "**Application logs in Docker Swarm service mode fail closed**: when the service cannot be read, no log stream is opened (an error on the socket, 502 over HTTP), because the output cannot be masked.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.1",
     date: "2026-11-23",
     channel: "stable",

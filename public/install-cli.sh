@@ -14,7 +14,7 @@
 #   npm install -g @hideandseeklab/aoox   # needs Node.js 22+
 #
 # Env vars (all optional):
-#   AOOX_VERSION       Pin a specific CLI version, e.g. "0.1.1" (any version,
+#   AOOX_VERSION       Pin a specific CLI version, e.g. "0.1.2" (any version,
 #                       pre-releases like "0.2.0-rc.1" included). Default: the
 #                       newest STABLE GitHub release; pre-releases are never
 #                       picked automatically, pin them explicitly.
