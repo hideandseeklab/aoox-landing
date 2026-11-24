@@ -1065,7 +1065,7 @@ $ sudo aoox reinstall`}</Pre>
         rows={[
           [
             "Backup",
-            <><Code>.env.dist</Code> dan file compose selalu disalin ke <Code>&lt;dir&gt;/backups/&lt;waktu&gt;/</Code> sebelum ada yang berubah, juga saat tidak ada yang perlu diubah (<Code>.env.dist</Code> tetap izin 600).</>,
+            <><Code>.env.dist</Code> dan file compose selalu disalin ke <Code>&lt;dir&gt;/backups/&lt;waktu&gt;/</Code> sebelum ada file yang ditulis ulang, juga saat tidak ada yang perlu diubah (<Code>.env.dist</Code> tetap izin 600). Pull image berjalan lebih dulu (lihat Restart), jadi bila gagal tidak ada yang di-backup atau ditulis ulang.</>,
           ],
           [
             "Compose",
@@ -1077,7 +1077,7 @@ $ sudo aoox reinstall`}</Pre>
           ],
           [
             "Jalankan ulang",
-            <><Code>docker compose pull api web</Code>, lalu <Code>up -d --force-recreate --no-deps api web</Code>, lalu <Code>up -d</Code> biasa yang hanya mengubah yang berbeda (container database panel baru di-restart bila definisinya sendiri berubah), memakai daftar file compose yang sama dengan stack yang sedang berjalan. Volume (database) tidak disentuh. Lalu menunggu API sehat dan mencetak ringkasan.</>,
+            <>Mulai dengan <Code>docker compose pull api web</Code> (dari salinan sementara file baru, jadi registry yang tidak terjangkau tidak mengubah apa pun di disk), lalu, setelah backup dan penulisan ulang, <Code>up -d --force-recreate --no-deps api web</Code>, lalu <Code>up -d</Code> biasa yang hanya mengubah yang berbeda (container database panel baru di-restart bila definisinya sendiri berubah), memakai daftar file compose yang sama dengan stack yang sedang berjalan. Volume (database) tidak disentuh. Lalu menunggu API sehat dan mencetak ringkasan.</>,
           ],
         ]}
       />

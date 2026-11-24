@@ -11,6 +11,7 @@ Versions below 1.0.0 may include breaking changes in a minor release.
 ### Fixed
 
 - Docs (English and Indonesian): the update steps (manual commands, CLI reinstall row) now say an update pulls and recreates only `api` and `web`, and that the panel database container is left alone.
+- Docs (English and Indonesian): the `aoox reinstall` table now says the image pull runs first and a failed pull changes nothing on disk.
 
 ## [0.1.1] - 2026-11-23
 

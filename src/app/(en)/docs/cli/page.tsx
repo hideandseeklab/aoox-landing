@@ -1065,7 +1065,7 @@ $ sudo aoox reinstall`}</Pre>
         rows={[
           [
             "Backup",
-            <><Code>.env.dist</Code> and the compose files are always copied to <Code>&lt;dir&gt;/backups/&lt;timestamp&gt;/</Code> before anything changes, even when nothing needs changing (<Code>.env.dist</Code> stays mode 600).</>,
+            <><Code>.env.dist</Code> and the compose files are always copied to <Code>&lt;dir&gt;/backups/&lt;timestamp&gt;/</Code> before any file is rewritten, even when nothing needs changing (<Code>.env.dist</Code> stays mode 600). The image pull runs first (see Restart), so if it fails nothing is backed up or rewritten.</>,
           ],
           [
             "Compose",
@@ -1077,7 +1077,7 @@ $ sudo aoox reinstall`}</Pre>
           ],
           [
             "Restart",
-            <><Code>docker compose pull api web</Code>, then <Code>up -d --force-recreate --no-deps api web</Code>, then a plain <Code>up -d</Code> that only changes what differs (the panel database container is restarted only if its own definition changed), using the same compose file list as the running stack. Volumes (the database) are not touched. It then waits for the API to be healthy and prints a summary.</>,
+            <>First <Code>docker compose pull api web</Code> (from a temporary copy of the new files, so an unreachable registry changes nothing on disk), then, after the backup and rewrite, <Code>up -d --force-recreate --no-deps api web</Code>, then a plain <Code>up -d</Code> that only changes what differs (the panel database container is restarted only if its own definition changed), using the same compose file list as the running stack. Volumes (the database) are not touched. It then waits for the API to be healthy and prints a summary.</>,
           ],
         ]}
       />
